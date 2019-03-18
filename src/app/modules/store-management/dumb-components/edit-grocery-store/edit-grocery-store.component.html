@@ -1,0 +1,6 @@
+<ion-title>{{ groceryStore.name}}</ion-title>
+<ion-content>
+  <app-grocery-store-aisles [groceryStore]="groceryStore"  (notifyNewStoreAisleRequested)="onNotifyNewStoreAisleRequest($event)"></app-grocery-store-aisles>
+  <app-grocery-store-sections></app-grocery-store-sections>
+  <app-grocery-store-items></app-grocery-store-items>
+</ion-content>

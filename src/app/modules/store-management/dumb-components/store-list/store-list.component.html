@@ -1,0 +1,36 @@
+<!--<ul *ngFor="let groceryStore of groceryStores">-->
+  <!--<li>{{groceryStore.name}}</li>-->
+<!--</ul>-->
+<!--<ion-header>-->
+  <!--<p>Manage Stores-->
+<!--</ion-header>-->
+<!--<ion-content>-->
+<ion-card *ngFor="let groceryStore of groceryStores">
+  <!--<ion-card-title></ion-card-title>-->
+  <ion-item-sliding>
+    <ion-item>
+      <ion-label (click)="editGroceryStore(groceryStore)">{{groceryStore.name}}</ion-label>
+    </ion-item>
+    <ion-item-options side="end">
+      <!--<ion-item-option (click)="edit(groceryStore)">Edit</ion-item-option>-->
+      <ion-item-option color="danger" (click)="remove(groceryStore)">Delete</ion-item-option>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-card>
+<ion-card *ngIf="enteringStoreName">
+  <ion-row>
+    <ion-input placeholder="Enter store name" id="newStoreNameInput" [(ngModel)]="newGroceryStoreName"></ion-input>
+  <ion-button size="small" (click)="onAddStoreDoneClick()">Done</ion-button>
+  <ion-button size="small" (click)="onCancelAddStoreClick()">Cancel</ion-button>
+  </ion-row>
+</ion-card>
+<ion-button *ngIf="!enteringStoreName" shape="round" fill="outline" (click)="onAddStoreClick()">Add
+  <!--<ion-icon slot="start" md="ios-add-circle-outline" ></ion-icon>-->
+  <!--<app-new-store></app-new-store>-->
+</ion-button>
+
+  <!--<ul *ngFor="let groceryStore of groceryStores">-->
+    <!--<li>{{groceryStore.name}}</li>-->
+  <!--</ul>-->
+<!--</ion-content>-->
+

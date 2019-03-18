@@ -1,0 +1,10 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button>Back</ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <app-edit-grocery-store [groceryStore]="groceryStore$ | async" (notifyNewStoreAisleRequested)="onNotifyNewStoreAisleRequest($event)"></app-edit-grocery-store>
+</ion-content>
