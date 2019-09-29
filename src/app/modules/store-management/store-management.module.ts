@@ -8,7 +8,6 @@ import {StoreManagementEffects} from './store/store-management.effects';
 import * as fromReducers from './store/store-management.reducers';
 import {IonicModule} from '@ionic/angular';
 import {CommonModule} from '@angular/common';
-import {PantryDataService} from '../../services/pantry-data.service';
 import {StoreManagementRoutes} from './store-management.routes';
 import {FormsModule} from '@angular/forms';
 import { EditSelectedGroceryStoreComponent } from './smart-components/edit-selected-grocery-store/edit-selected-grocery-store.component';
@@ -16,6 +15,7 @@ import { GroceryStoreAislesComponent } from './dumb-components/grocery-store-ais
 import { GroceryStoreSectionsComponent } from './grocery-store-sections/grocery-store-sections.component';
 import { GroceryStoreItemsComponent } from './grocery-store-items/grocery-store-items.component';
 import { EditGroceryStoreComponent } from './dumb-components/edit-grocery-store/edit-grocery-store.component';
+import {AddGrocreyStoreComponent} from './dumb-components/add-grocery-store/add-grocery-store';
 
 @NgModule({
   imports: [
@@ -33,10 +33,11 @@ import { EditGroceryStoreComponent } from './dumb-components/edit-grocery-store/
     GroceryStoreAislesComponent,
     GroceryStoreSectionsComponent,
     GroceryStoreItemsComponent,
-    EditGroceryStoreComponent
+    EditGroceryStoreComponent,
+    AddGrocreyStoreComponent
   ],
   providers: [
-    PantryDataService
+    // FakePantryDataService
   ]
 })
 

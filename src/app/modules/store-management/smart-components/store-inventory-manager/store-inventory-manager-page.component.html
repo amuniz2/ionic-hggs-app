@@ -1,9 +1,15 @@
-<ion-content>
+<ion-header>
   <h2>Stores</h2>
-  <app-store-list [groceryStores] = "(groceryStores$ | async)" (notifyNewStoreRequested)="onNotifyNewStoreRequest($event)"
+</ion-header>
+<ion-content>
+  <app-store-list [groceryStores] = "(groceryStores$ | async)"
  (notifyDeleteStoreRequested)="onDeleteStoreRequest($event)" >
   </app-store-list>
 </ion-content>
+<ion-footer>
+  <app-add-grocery-store (notifyNewStoreRequested)="onNotifyNewStoreRequest($event)"></app-add-grocery-store>
+</ion-footer>
+
 <!--<ion-card>-->
   <!--<ion-card-content>list should display below</ion-card-content>-->
 <!--</ion-card>-->

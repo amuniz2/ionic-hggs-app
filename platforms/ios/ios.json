@@ -47,6 +47,10 @@
             {
               "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"CDVIonicKeyboard\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"SQLitePlugin\"><param name=\"ios-package\" value=\"SQLitePlugin\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -70,6 +74,9 @@
       "PACKAGE_NAME": "io.ionic.starter"
     },
     "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-sqlite-storage": {
       "PACKAGE_NAME": "io.ionic.starter"
     }
   },
@@ -122,6 +129,14 @@
       "clobbers": [
         "window.Keyboard"
       ]
+    },
+    {
+      "id": "cordova-sqlite-storage.SQLitePlugin",
+      "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+      "pluginId": "cordova-sqlite-storage",
+      "clobbers": [
+        "SQLitePlugin"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -130,6 +145,7 @@
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-ionic-webview": "3.1.2",
-    "cordova-plugin-ionic-keyboard": "2.1.3"
+    "cordova-plugin-ionic-keyboard": "2.1.3",
+    "cordova-sqlite-storage": "3.2.0"
   }
 }

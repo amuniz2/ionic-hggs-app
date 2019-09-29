@@ -1,0 +1,11 @@
+<ion-card *ngIf="enteringStoreName">
+  <ion-row>
+    <ion-input placeholder="Enter store name" id="newStoreNameInput" [(ngModel)]="newGroceryStoreName"></ion-input>
+    <ion-button size="small" (click)="onAddStoreDoneClick()">Done</ion-button>
+    <ion-button size="small" (click)="onCancelAddStoreClick()">Cancel</ion-button>
+  </ion-row>
+</ion-card>
+<ion-button *ngIf="!enteringStoreName" shape="round" fill="outline" (click)="onAddStoreClick()">Add
+  <!--<ion-icon slot="start" md="ios-add-circle-outline" ></ion-icon>-->
+  <!--<app-new-store></app-new-store>-->
+</ion-button>

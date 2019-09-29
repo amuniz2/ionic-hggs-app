@@ -4,6 +4,7 @@ export interface AppState {
   isOffline: boolean;
   deviceDetails: any;
   version: string;
+  initializationError: string;
   // appReducer: (AppState, AppActions) => AppState;
   // storeManagementState: StoreManagementState;
 }

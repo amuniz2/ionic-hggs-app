@@ -26,6 +26,9 @@
 		A9341EEDE1484338B29C4213 /* IONAssetHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 476B6B975B254686BF3A0BE7 /* IONAssetHandler.m */; };
 		A7C16ECF35AB427C837DAF26 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E090C2005D4AEA910DA53A /* WebKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D1DED06EBCB94F32B8294113 /* CDVIonicKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EEE4C43A3234D46BD7A3876 /* CDVIonicKeyboard.m */; };
+		ADDC7D7E0F9F44929E824773 /* SQLitePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A2A66F6791741E9A2BD0247 /* SQLitePlugin.m */; };
+		524D3EAD55604052B95B1C32 /* PSPDFThreadSafeMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F926031DE9C42F297516619 /* PSPDFThreadSafeMutableDictionary.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		B51DD4614E5746839BE2EBF8 /* sqlite3.c in Resources */ = {isa = PBXBuildFile; fileRef = AA9C1E05DDE246D195A42F17 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-w -DSQLITE_THREADSAFE=1 -DSQLITE_DEFAULT_SYNCHRONOUS=3 -DSQLITE_DEFAULT_MEMSTATUS=0 -DSQLITE_OMIT_DECLTYPE -DSQLITE_OMIT_DEPRECATED -DSQLITE_OMIT_PROGRESS_CALLBACK -DSQLITE_OMIT_SHARED_CACHE -DSQLITE_TEMP_STORE=2 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -DSQLITE_DEFAULT_PAGE_SIZE=1024"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +88,12 @@
 		C1E090C2005D4AEA910DA53A /* WebKit.framework */ = {isa = PBXFileReference; name = "WebKit.framework"; path = "System/Library/Frameworks/WebKit.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		8EEE4C43A3234D46BD7A3876 /* CDVIonicKeyboard.m */ = {isa = PBXFileReference; name = "CDVIonicKeyboard.m"; path = "cordova-plugin-ionic-keyboard/CDVIonicKeyboard.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		C05C16401E0541C4AB3DA39D /* CDVIonicKeyboard.h */ = {isa = PBXFileReference; name = "CDVIonicKeyboard.h"; path = "cordova-plugin-ionic-keyboard/CDVIonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		5A2A66F6791741E9A2BD0247 /* SQLitePlugin.m */ = {isa = PBXFileReference; name = "SQLitePlugin.m"; path = "cordova-sqlite-storage/SQLitePlugin.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		1F926031DE9C42F297516619 /* PSPDFThreadSafeMutableDictionary.m */ = {isa = PBXFileReference; name = "PSPDFThreadSafeMutableDictionary.m"; path = "cordova-sqlite-storage/PSPDFThreadSafeMutableDictionary.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		AA9C1E05DDE246D195A42F17 /* sqlite3.c */ = {isa = PBXFileReference; name = "sqlite3.c"; path = "cordova-sqlite-storage/sqlite3.c"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A5CA9F3F941D430E8AF81EB2 /* SQLitePlugin.h */ = {isa = PBXFileReference; name = "SQLitePlugin.h"; path = "cordova-sqlite-storage/SQLitePlugin.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		D29173469F3E4C14BF2DEB02 /* PSPDFThreadSafeMutableDictionary.h */ = {isa = PBXFileReference; name = "PSPDFThreadSafeMutableDictionary.h"; path = "cordova-sqlite-storage/PSPDFThreadSafeMutableDictionary.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		792E2C4B005E4698A85E12B1 /* sqlite3.h */ = {isa = PBXFileReference; name = "sqlite3.h"; path = "cordova-sqlite-storage/sqlite3.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,6 +217,12 @@
 				0E18A75A5F7A49869D826892 /* IONAssetHandler.h */,
 				8EEE4C43A3234D46BD7A3876 /* CDVIonicKeyboard.m */,
 				C05C16401E0541C4AB3DA39D /* CDVIonicKeyboard.h */,
+				5A2A66F6791741E9A2BD0247 /* SQLitePlugin.m */,
+				1F926031DE9C42F297516619 /* PSPDFThreadSafeMutableDictionary.m */,
+				AA9C1E05DDE246D195A42F17 /* sqlite3.c */,
+				A5CA9F3F941D430E8AF81EB2 /* SQLitePlugin.h */,
+				D29173469F3E4C14BF2DEB02 /* PSPDFThreadSafeMutableDictionary.h */,
+				792E2C4B005E4698A85E12B1 /* sqlite3.h */,
 			);
 			name = Plugins;
 			path = "MyApp/Plugins";
@@ -329,6 +344,9 @@
 				F7418003DC064D3D99E7071B /* CDVWKProcessPoolFactory.m in Sources */,
 				A9341EEDE1484338B29C4213 /* IONAssetHandler.m in Sources */,
 				D1DED06EBCB94F32B8294113 /* CDVIonicKeyboard.m in Sources */,
+				ADDC7D7E0F9F44929E824773 /* SQLitePlugin.m in Sources */,
+				524D3EAD55604052B95B1C32 /* PSPDFThreadSafeMutableDictionary.m in Sources */,
+				B51DD4614E5746839BE2EBF8 /* sqlite3.c in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

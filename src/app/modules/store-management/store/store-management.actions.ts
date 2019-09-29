@@ -1,6 +1,8 @@
 import {Action, Store} from '@ngrx/store';
 import {GroceryStore} from '../model/grocery-store';
-import {DeleteStoreRequest, NavigateToEditStoreRequest, NewGroceryStoreRequest} from '../dumb-components/store-list/store-list.component';
+import {DeleteGroceryStoreRequest,
+  NavigateToEditStoreRequest,
+  NewGroceryStoreRequest} from '../dumb-components/store-list/store-list.component';
 import {StoreAisle} from '../dumb-components/grocery-store-aisles/grocery-store-aisles.component';
 
 export enum StoreManagerActionTypes {
@@ -17,6 +19,7 @@ export enum StoreManagerActionTypes {
   UpdateStore = '[Store Manager] Update',
   DeleteStore = '[Store Manager] Delete',
   DeleteStoreFailed = '[Store Manager] Delete Store failed',
+  DeleteStoreSucceeded = '[Store Manager] Delete Store succeeded',
   AddStoreAisle = '[Store Manager] Add Store Aisle',
   AddStoreAisleFailed = '[Store Manager] Add Store Aisle Failed',
   StoreAisleAdded = '[Store Manager] Aisle Added',
@@ -49,7 +52,7 @@ export class NavigateToStoreDetailsPage implements Action {
 // }
 
 export class StoresLoadedSuccessfully implements  Action {
-  constructor(public payload: { groceryStores: GroceryStore[]}) {
+  constructor(public groceryStores: GroceryStore[]) {
   }
   readonly type = StoreManagerActionTypes.StoresLoadedSuccessfully;
 }
@@ -69,6 +72,13 @@ export class StoreCreated implements Action {
 
   constructor(public payload: GroceryStore ) {}
 }
+
+export class DeleteStoreSucceeded implements Action {
+  constructor(public id: number) {
+  }
+  readonly type = StoreManagerActionTypes.DeleteStoreSucceeded;
+}
+
 export class CreateStoreFailed implements Action {
   constructor(public error: Error) {
   }
@@ -77,13 +87,16 @@ export class CreateStoreFailed implements Action {
 
 export class DeleteStore implements Action {
   readonly type = StoreManagerActionTypes.DeleteStore;
-  constructor(public deleteGroceryStorePayload: DeleteStoreRequest) {}
+  constructor(public deleteGroceryStorePayload: DeleteGroceryStoreRequest) {
+    console.log ('created DeleteStore action with ');
+    console.log(deleteGroceryStorePayload);
+  }
 }
 
 export class StoreDeleted implements Action {
   readonly type = StoreManagerActionTypes.StoreDeleted;
 
-  constructor(public payload: GroceryStore ) {}
+  constructor(public id: number ) {}
 }
 
 export class DeleteStoreFailed implements Action {
@@ -140,6 +153,7 @@ export type StoreManagementActions =
   NavigatedToStoreListPage
   | NavigateToStoreDetailsPage
   | CreateStore
+  | CreateStoreFailed
   | StoreCreated
   | DeleteStore
   | StoreDeleted
@@ -149,4 +163,5 @@ export type StoreManagementActions =
   | StoreAisleAdded
   | AddStoreAisleFailed
   | RemoveStoreAisle
-  | StoreAisleRemoved;
+  | StoreAisleRemoved
+  | LoadGroceryStoresFailed;

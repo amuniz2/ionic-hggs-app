@@ -9,7 +9,7 @@ export interface NewGroceryStoreRequest {
   name: string;
 }
 
-export interface DeleteStoreRequest {
+export interface DeleteGroceryStoreRequest {
   id: number;
 }
 
@@ -23,16 +23,15 @@ export interface NavigateToEditStoreRequest {
   styleUrls: ['./store-list.component.scss']
 })
 export class StoreListComponent implements OnInit {
-  @Output()
-  notifyNewStoreRequested: EventEmitter<NewGroceryStoreRequest> = new EventEmitter();
 
   @Output()
-  notifyDeleteStoreRequested: EventEmitter<DeleteStoreRequest> = new EventEmitter();
+  notifyDeleteStoreRequested: EventEmitter<DeleteGroceryStoreRequest> = new EventEmitter();
+
+  @Input()
+  groceryStoresLoading: boolean;
 
   @Input()
   groceryStores: GroceryStore[];
-  newGroceryStoreName: string;
-  enteringStoreName: boolean;
 
   constructor(private router: Router, private store: Store<AppState>) {
     // this.groceryStores = [];
@@ -45,28 +44,12 @@ export class StoreListComponent implements OnInit {
     console.log(this.groceryStores);
   }
 
-  onAddStoreClick() {
-    this.newGroceryStoreName = '';
-    this.enteringStoreName = true;
-    // this.notify.emit('Create new store');
-  }
-
-  onCancelAddStoreClick() {
-    this.enteringStoreName = false;
-    this.newGroceryStoreName = '';
-  }
-
-  onAddStoreDoneClick() {
-    this.notifyNewStoreRequested.emit({ name: this.newGroceryStoreName});
-    this.enteringStoreName = false;
-    this.newGroceryStoreName = '';
-  }
-
   editGroceryStore(item: GroceryStore) {
     this.store.dispatch( new NavigateToStoreDetailsPage({ id: item.id } ));
     // item.close();
   }
   remove(item: GroceryStore) {
+    console.log(`emitting notification that store delete is requested ${item.id}`);
     this.notifyDeleteStoreRequested.emit({ id: item.id});
   }
 }

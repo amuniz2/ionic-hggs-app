@@ -12,6 +12,7 @@ export const reducers: ActionReducerMap<AppState> = {
   isOffline: (isOffline) => isOffline,
   version: (version) => version,
   deviceDetails: (deviceDetails) => deviceDetails,
+  initializationError: (error) => error,
   // appReducer: appReducers
 };
 
@@ -20,11 +21,12 @@ export const initialAppState: AppState = {
   deviceDetails: {},
   version: '1.0',
   isReady: false,
+  initializationError: ''
 };
 
 export function appRootReducers(state: AppState = initialAppState, action: AppActions): AppState {
   switch (action.type) {
-    case AppActionTypes.StartAppInitializer:
+    case AppActionTypes.FinishAppInitializer:
       return {
         ...state,
         isReady: true,

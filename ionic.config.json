@@ -1,7 +1,13 @@
 {
-  "name": "ionic-first-app",
+  "name": "hggs-app",
   "integrations": {
     "cordova": {}
   },
-  "type": "angular"
+  "type": "angular",
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ]
 }

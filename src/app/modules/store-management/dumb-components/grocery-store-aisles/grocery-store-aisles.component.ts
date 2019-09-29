@@ -3,7 +3,7 @@ import {GroceryStore} from '../../model/grocery-store';
 import {NavigateToStoreDetailsPage} from '../../store/store-management.actions';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
-import {DeleteStoreRequest, NewGroceryStoreRequest} from '../store-list/store-list.component';
+import {DeleteGroceryStoreRequest, NewGroceryStoreRequest} from '../store-list/store-list.component';
 
 export interface StoreAisle {
   groceryStoreId: number;
