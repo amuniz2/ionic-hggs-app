@@ -1,13 +1,10 @@
 <ion-card>
   <ion-card-content>
-  <!--<ion-card-header>-->
-    <ion-item>
-      <ion-label slot="start">Aisles</ion-label>
-      <ion-button *ngIf="!enteringStoreAisle" shape="round" fill="outline" size="small" (click)="onAddStoreAisleClick()">Add
-        <ion-icon name="md-add-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
-  <!--</ion-card-header>-->
+<!--    <ion-item>-->
+<!--      <ion-button *ngIf="!enteringStoreAisle" shape="round" fill="outline" size="small" (click)="onAddStoreAisleClick()">Add-->
+<!--        <ion-icon name="md-add-circle-outline"></ion-icon>-->
+<!--      </ion-button>-->
+<!--    </ion-item>-->
     <ion-list *ngIf="groceryStore.aisles">
       <ion-item *ngFor="let groceryAisle of groceryStore.aisles">
         <ion-item-sliding>
@@ -29,6 +26,12 @@
         <ion-button size="small" (click)="onCancelAddStoreAisleClick()">Cancel</ion-button>
       </ion-row>
     </ion-card>
-
   </ion-card-content>
+  <ion-row class="cardfooter">
+    <ion-col>
+      <ion-button *ngIf="!enteringStoreAisle" shape="round" fill="outline" size="small" (click)="onAddStoreAisleClick()">Add
+        <ion-icon name="md-add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
 </ion-card>

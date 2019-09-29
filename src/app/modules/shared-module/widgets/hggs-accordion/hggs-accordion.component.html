@@ -1,0 +1,19 @@
+<h2 (click)="toggleAccordion()">
+  {{ sectionName }}
+  <span *ngIf="isSectionOpen">&#9650;</span>
+  <span *ngIf="!isSectionOpen">&#9660;</span>
+</h2>
+
+<!--<div-->
+<!--  [ngClass]="this.isSectionOpen ? 'active' : 'inactive'">-->
+<!--&lt;!&ndash;  <section class="image-wrapper">&ndash;&gt;-->
+<!--&lt;!&ndash;    <img [src]="image">&ndash;&gt;-->
+<!--&lt;!&ndash;  </section>&ndash;&gt;-->
+<!--  <p>{{ description }}</p>-->
+<!--  <ion-button-->
+<!--    type="button"-->
+<!--    color="primary"-->
+<!--    fill="solid"-->
+<!--    size="default"-->
+<!--    (click)="broadcastName(sectionName)">Console log me!</ion-button>-->
+<!--</div>-->

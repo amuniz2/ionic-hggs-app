@@ -907,7 +907,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--&lt;!&ndash;The content below is only a placeholder and can be replaced.&ndash;&gt;-->\n<!--<div style=\"text-align:center\">-->\n  <!--<h1>-->\n    <!--Welcome to {{ title }}!-->\n  <!--</h1>-->\n  <!--<img width=\"16\" alt=\"Angular Logo\" src=\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==\">-->\n<!--</div>-->\n<!--<div class=\"container\">-->\n  <!--<router-outlet></router-outlet>-->\n<!--</div>  -->\n<ion-app>\n  <ion-router-outlet></ion-router-outlet>\n</ion-app>\n"
+module.exports = "<!--&lt;!&ndash;The content below is only a placeholder and can be replaced.&ndash;&gt;-->\r\n<!--<div style=\"text-align:center\">-->\r\n  <!--<h1>-->\r\n    <!--Welcome to {{ title }}!-->\r\n  <!--</h1>-->\r\n  <!--<img width=\"16\" alt=\"Angular Logo\" src=\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==\">-->\r\n<!--</div>-->\r\n<!--<div class=\"container\">-->\r\n  <!--<router-outlet></router-outlet>-->\r\n<!--</div>  -->\r\n<ion-app>\r\n  <ion-router-outlet></ion-router-outlet>\r\n</ion-app>\r\n"
 
 /***/ }),
 
@@ -1006,6 +1006,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_db_helper__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./services/db-helper */ "./src/app/services/db-helper.ts");
 /* harmony import */ var _services_pantry_data_service__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./services/pantry-data.service */ "./src/app/services/pantry-data.service.ts");
 /* harmony import */ var _ionic_native_sqlite_ngx__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic-native/sqlite/ngx */ "./node_modules/@ionic-native/sqlite/ngx/index.js");
+/* harmony import */ var _modules_shared_module_shared_module__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./modules/shared-module/shared.module */ "./src/app/modules/shared-module/shared.module.ts");
+
 
 
 
@@ -1043,6 +1045,7 @@ var AppModule = /** @class */ (function () {
                 // StoreModule.forRoot(reducers, { metaReducers, initialState: initialAppState }),
                 _ngrx_effects__WEBPACK_IMPORTED_MODULE_7__["EffectsModule"].forRoot([]),
                 _ionic_angular__WEBPACK_IMPORTED_MODULE_6__["IonicModule"].forRoot(),
+                _modules_shared_module_shared_module__WEBPACK_IMPORTED_MODULE_19__["SharedModule"],
                 _modules_store_management_store_management_module__WEBPACK_IMPORTED_MODULE_15__["StoreManagementModule"],
                 _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_11__["StoreDevtoolsModule"].instrument({
                     maxAge: 25,
@@ -1056,7 +1059,8 @@ var AppModule = /** @class */ (function () {
                 _services_db_helper__WEBPACK_IMPORTED_MODULE_16__["PantryDbHelper"],
                 _ionic_native_sqlite_ngx__WEBPACK_IMPORTED_MODULE_18__["SQLite"]
             ],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]],
+            schemas: [_angular_core__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_ELEMENTS_SCHEMA"]]
         })
     ], AppModule);
     return AppModule;
@@ -1073,7 +1077,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--<ion-header>-->\n  <!--<ion-toolbar>-->\n    <!--<ion-title>-->\n      <!--Ionic Blank-->\n    <!--</ion-title>-->\n  <!--</ion-toolbar>-->\n<!--</ion-header>-->\n\n<!--<ion-content>-->\n  <!--<div class=\"ion-padding\">-->\n    <!--The world is your oyster.-->\n    <!--<p>If you get lost, the <a target=\"_blank\" rel=\"noopener\" href=\"https://ionicframework.com/docs/\">docs</a> will be your guide.</p>-->\n  <!--</div>-->\n  <!--<h2><a  [routerLink]=\"['/stores/manage']\"> Manage Stores </a></h2>-->\n\n<!--</ion-content>-->\n<ion-header>\n  <h2>Here are some links to help you start: </h2>\n</ion-header>\n<ion-content>\n      <a  [routerLink]=\"['/stores/manage']\"> {{manageStoresLabel}} </a>\n</ion-content>\n<!--<ion-router-outlet></ion-router-outlet>-->\n"
+module.exports = "<!--<ion-header>-->\r\n  <!--<ion-toolbar>-->\r\n    <!--<ion-title>-->\r\n      <!--Ionic Blank-->\r\n    <!--</ion-title>-->\r\n  <!--</ion-toolbar>-->\r\n<!--</ion-header>-->\r\n\r\n<!--<ion-content>-->\r\n  <!--<div class=\"ion-padding\">-->\r\n    <!--The world is your oyster.-->\r\n    <!--<p>If you get lost, the <a target=\"_blank\" rel=\"noopener\" href=\"https://ionicframework.com/docs/\">docs</a> will be your guide.</p>-->\r\n  <!--</div>-->\r\n  <!--<h2><a  [routerLink]=\"['/stores/manage']\"> Manage Stores </a></h2>-->\r\n\r\n<!--</ion-content>-->\r\n<ion-header>\r\n  <h2>Here are some links to help you start: </h2>\r\n</ion-header>\r\n<ion-content>\r\n      <a  [routerLink]=\"['/stores/manage']\"> {{manageStoresLabel}} </a>\r\n</ion-content>\r\n<!--<ion-router-outlet></ion-router-outlet>-->\r\n"
 
 /***/ }),
 
@@ -1120,6 +1124,127 @@ var HomePageComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/modules/shared-module/shared.module.ts":
+/*!********************************************************!*\
+  !*** ./src/app/modules/shared-module/shared.module.ts ***!
+  \********************************************************/
+/*! exports provided: SharedModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SharedModule", function() { return SharedModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _widgets_hggs_accordion_hggs_accordion_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./widgets/hggs-accordion/hggs-accordion.component */ "./src/app/modules/shared-module/widgets/hggs-accordion/hggs-accordion.component.ts");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+
+
+
+
+
+var SharedModule = /** @class */ (function () {
+    function SharedModule() {
+    }
+    SharedModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [_widgets_hggs_accordion_hggs_accordion_component__WEBPACK_IMPORTED_MODULE_3__["HggsAccordionComponent"]],
+            imports: [
+                _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
+                _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"],
+            ],
+            exports: [_widgets_hggs_accordion_hggs_accordion_component__WEBPACK_IMPORTED_MODULE_3__["HggsAccordionComponent"]],
+            schemas: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["CUSTOM_ELEMENTS_SCHEMA"]]
+        })
+    ], SharedModule);
+    return SharedModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/modules/shared-module/widgets/hggs-accordion/hggs-accordion.component.html":
+/*!********************************************************************************************!*\
+  !*** ./src/app/modules/shared-module/widgets/hggs-accordion/hggs-accordion.component.html ***!
+  \********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h2 (click)=\"toggleAccordion()\">\n  {{ sectionName }}\n  <span *ngIf=\"isSectionOpen\">&#9650;</span>\n  <span *ngIf=\"!isSectionOpen\">&#9660;</span>\n</h2>\n\n<!--<div-->\n<!--  [ngClass]=\"this.isSectionOpen ? 'active' : 'inactive'\">-->\n<!--&lt;!&ndash;  <section class=\"image-wrapper\">&ndash;&gt;-->\n<!--&lt;!&ndash;    <img [src]=\"image\">&ndash;&gt;-->\n<!--&lt;!&ndash;  </section>&ndash;&gt;-->\n<!--  <p>{{ description }}</p>-->\n<!--  <ion-button-->\n<!--    type=\"button\"-->\n<!--    color=\"primary\"-->\n<!--    fill=\"solid\"-->\n<!--    size=\"default\"-->\n<!--    (click)=\"broadcastName(sectionName)\">Console log me!</ion-button>-->\n<!--</div>-->\n"
+
+/***/ }),
+
+/***/ "./src/app/modules/shared-module/widgets/hggs-accordion/hggs-accordion.component.scss":
+/*!********************************************************************************************!*\
+  !*** ./src/app/modules/shared-module/widgets/hggs-accordion/hggs-accordion.component.scss ***!
+  \********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "h2 {\n  cursor: pointer;\n  position: relative;\n  padding: 1em 0.35em;\n  font-size: 1.35em;\n  font-family: Verdana;\n  border-bottom: 1px solid #d2d2d2;\n  margin: 0;\n  /* Define the style rules for the 'arrow icons' */ }\n  h2 span {\n    position: absolute;\n    right: 1em;\n    top: 1.2em;\n    font-size: 0.95em; }\n  /* Here we define the actual 'menu' and its 'options' */\n  .image-wrapper {\n  margin: 0 auto 2em auto;\n  width: 20%; }\n  .image-wrapper img {\n    display: block;\n    margin: auto; }\n  p {\n  line-height: 1.2em;\n  margin: 0 0 1em 0;\n  font-family: Verdana;\n  font-size: 1rem; }\n  div {\n  position: relative;\n  padding: 2em;\n  background: #e6e6e6;\n  border-bottom: 1px solid #d2d2d2; }\n  div ion-button {\n    position: absolute;\n    bottom: 20px;\n    right: 20px; }\n  /* Following classes display/hide the 'menu'\r\n// based on the state change detection in the\r\n// component class */\n  .active {\n  display: block; }\n  .inactive {\n  display: none; }\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9zaGFyZWQtbW9kdWxlL3dpZGdldHMvaGdncy1hY2NvcmRpb24vQzpcXFByb2plY3RzXFxpb25pY1xcaGdncy1hcHAvc3JjXFxhcHBcXG1vZHVsZXNcXHNoYXJlZC1tb2R1bGVcXHdpZGdldHNcXGhnZ3MtYWNjb3JkaW9uXFxoZ2dzLWFjY29yZGlvbi5jb21wb25lbnQuc2NzcyIsInNyYy9hcHAvbW9kdWxlcy9zaGFyZWQtbW9kdWxlL3dpZGdldHMvaGdncy1hY2NvcmRpb24vaGdncy1hY2NvcmRpb24uY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxlQUFlO0VBQ2Ysa0JBQWtCO0VBQ2xCLG1CQUFtQjtFQUNuQixpQkFBaUI7RUFDakIsb0JBQW9CO0VBQ3BCLGdDQUE0QztFQUM1QyxTQUFTO0VBR1QsaURBQUEsRUFBa0Q7RUFWcEQ7SUFZSSxrQkFBa0I7SUFDbEIsVUFBVTtJQUNWLFVBQVU7SUFDVixpQkFBaUIsRUFBQTtFQUtyQix1REFBQTtFQUNBO0VBQ0UsdUJBQXVCO0VBQ3ZCLFVBQVUsRUFBQTtFQUZaO0lBS0ksY0FBYztJQUNkLFlBQVksRUFBQTtFQUtoQjtFQUNFLGtCQUFrQjtFQUNsQixpQkFBaUI7RUFDakIsb0JBQW9CO0VBQ3BCLGVBQWUsRUFBQTtFQUlqQjtFQUNFLGtCQUFrQjtFQUNsQixZQUFZO0VBQ1osbUJBQWtDO0VBQ2xDLGdDQUErQyxFQUFBO0VBSmpEO0lBUUksa0JBQWtCO0lBQ2xCLFlBQVk7SUFDWixXQUFXLEVBQUE7RUFLZjs7b0JDZG9CO0VEaUJwQjtFQUNFLGNBQ0YsRUFBQTtFQUVBO0VBQ0UsYUFBYSxFQUFBIiwiZmlsZSI6InNyYy9hcHAvbW9kdWxlcy9zaGFyZWQtbW9kdWxlL3dpZGdldHMvaGdncy1hY2NvcmRpb24vaGdncy1hY2NvcmRpb24uY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJoMiB7XHJcbiAgY3Vyc29yOiBwb2ludGVyO1xyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuICBwYWRkaW5nOiAxZW0gMC4zNWVtO1xyXG4gIGZvbnQtc2l6ZTogMS4zNWVtO1xyXG4gIGZvbnQtZmFtaWx5OiBWZXJkYW5hO1xyXG4gIGJvcmRlci1ib3R0b206IDFweCBzb2xpZCByZ2JhKDIxMCwyMTAsMjEwLDEpO1xyXG4gIG1hcmdpbjogMDtcclxuXHJcblxyXG4gIC8qIERlZmluZSB0aGUgc3R5bGUgcnVsZXMgZm9yIHRoZSAnYXJyb3cgaWNvbnMnICovXHJcbiAgc3BhbiB7XHJcbiAgICBwb3NpdGlvbjogYWJzb2x1dGU7XHJcbiAgICByaWdodDogMWVtO1xyXG4gICAgdG9wOiAxLjJlbTtcclxuICAgIGZvbnQtc2l6ZTogMC45NWVtO1xyXG4gIH1cclxufVxyXG5cclxuXHJcbi8qIEhlcmUgd2UgZGVmaW5lIHRoZSBhY3R1YWwgJ21lbnUnIGFuZCBpdHMgJ29wdGlvbnMnICovXHJcbi5pbWFnZS13cmFwcGVyIHtcclxuICBtYXJnaW46IDAgYXV0byAyZW0gYXV0bztcclxuICB3aWR0aDogMjAlO1xyXG5cclxuICBpbWcge1xyXG4gICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICBtYXJnaW46IGF1dG87XHJcbiAgfVxyXG59XHJcblxyXG5cclxucCB7XHJcbiAgbGluZS1oZWlnaHQ6IDEuMmVtO1xyXG4gIG1hcmdpbjogMCAwIDFlbSAwO1xyXG4gIGZvbnQtZmFtaWx5OiBWZXJkYW5hO1xyXG4gIGZvbnQtc2l6ZTogMXJlbTtcclxufVxyXG5cclxuXHJcbmRpdiB7XHJcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xyXG4gIHBhZGRpbmc6IDJlbTtcclxuICBiYWNrZ3JvdW5kOiByZ2JhKDIzMCwgMjMwLCAyMzAsIDEpO1xyXG4gIGJvcmRlci1ib3R0b206IDFweCBzb2xpZCByZ2JhKDIxMCwgMjEwLCAyMTAsIDEpO1xyXG5cclxuXHJcbiAgaW9uLWJ1dHRvbiB7XHJcbiAgICBwb3NpdGlvbjogYWJzb2x1dGU7XHJcbiAgICBib3R0b206IDIwcHg7XHJcbiAgICByaWdodDogMjBweDtcclxuICB9XHJcblxyXG59XHJcblxyXG4vKiBGb2xsb3dpbmcgY2xhc3NlcyBkaXNwbGF5L2hpZGUgdGhlICdtZW51J1xyXG4vLyBiYXNlZCBvbiB0aGUgc3RhdGUgY2hhbmdlIGRldGVjdGlvbiBpbiB0aGVcclxuLy8gY29tcG9uZW50IGNsYXNzICovXHJcbi5hY3RpdmUge1xyXG4gIGRpc3BsYXk6IGJsb2NrXHJcbn1cclxuXHJcbi5pbmFjdGl2ZSB7XHJcbiAgZGlzcGxheTogbm9uZTtcclxufVxyXG4iLCJoMiB7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICBwYWRkaW5nOiAxZW0gMC4zNWVtO1xuICBmb250LXNpemU6IDEuMzVlbTtcbiAgZm9udC1mYW1pbHk6IFZlcmRhbmE7XG4gIGJvcmRlci1ib3R0b206IDFweCBzb2xpZCAjZDJkMmQyO1xuICBtYXJnaW46IDA7XG4gIC8qIERlZmluZSB0aGUgc3R5bGUgcnVsZXMgZm9yIHRoZSAnYXJyb3cgaWNvbnMnICovIH1cbiAgaDIgc3BhbiB7XG4gICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgIHJpZ2h0OiAxZW07XG4gICAgdG9wOiAxLjJlbTtcbiAgICBmb250LXNpemU6IDAuOTVlbTsgfVxuXG4vKiBIZXJlIHdlIGRlZmluZSB0aGUgYWN0dWFsICdtZW51JyBhbmQgaXRzICdvcHRpb25zJyAqL1xuLmltYWdlLXdyYXBwZXIge1xuICBtYXJnaW46IDAgYXV0byAyZW0gYXV0bztcbiAgd2lkdGg6IDIwJTsgfVxuICAuaW1hZ2Utd3JhcHBlciBpbWcge1xuICAgIGRpc3BsYXk6IGJsb2NrO1xuICAgIG1hcmdpbjogYXV0bzsgfVxuXG5wIHtcbiAgbGluZS1oZWlnaHQ6IDEuMmVtO1xuICBtYXJnaW46IDAgMCAxZW0gMDtcbiAgZm9udC1mYW1pbHk6IFZlcmRhbmE7XG4gIGZvbnQtc2l6ZTogMXJlbTsgfVxuXG5kaXYge1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gIHBhZGRpbmc6IDJlbTtcbiAgYmFja2dyb3VuZDogI2U2ZTZlNjtcbiAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkICNkMmQyZDI7IH1cbiAgZGl2IGlvbi1idXR0b24ge1xuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgICBib3R0b206IDIwcHg7XG4gICAgcmlnaHQ6IDIwcHg7IH1cblxuLyogRm9sbG93aW5nIGNsYXNzZXMgZGlzcGxheS9oaWRlIHRoZSAnbWVudSdcclxuLy8gYmFzZWQgb24gdGhlIHN0YXRlIGNoYW5nZSBkZXRlY3Rpb24gaW4gdGhlXHJcbi8vIGNvbXBvbmVudCBjbGFzcyAqL1xuLmFjdGl2ZSB7XG4gIGRpc3BsYXk6IGJsb2NrOyB9XG5cbi5pbmFjdGl2ZSB7XG4gIGRpc3BsYXk6IG5vbmU7IH1cbiJdfQ== */"
+
+/***/ }),
+
+/***/ "./src/app/modules/shared-module/widgets/hggs-accordion/hggs-accordion.component.ts":
+/*!******************************************************************************************!*\
+  !*** ./src/app/modules/shared-module/widgets/hggs-accordion/hggs-accordion.component.ts ***!
+  \******************************************************************************************/
+/*! exports provided: HggsAccordionComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HggsAccordionComponent", function() { return HggsAccordionComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+;
+var HggsAccordionComponent = /** @class */ (function () {
+    function HggsAccordionComponent() {
+        this.change = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.isSectionOpen = false;
+        this.description = '';
+    }
+    HggsAccordionComponent.prototype.ngOnInit = function () {
+    };
+    HggsAccordionComponent.prototype.toggleAccordion = function () {
+        this.isSectionOpen = !this.isSectionOpen;
+        this.change.emit({ sectionName: this.sectionName, isOpen: this.isSectionOpen });
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
+    ], HggsAccordionComponent.prototype, "sectionName", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
+    ], HggsAccordionComponent.prototype, "description", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
+    ], HggsAccordionComponent.prototype, "image", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+    ], HggsAccordionComponent.prototype, "change", void 0);
+    HggsAccordionComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-hggs-accordion',
+            template: __webpack_require__(/*! ./hggs-accordion.component.html */ "./src/app/modules/shared-module/widgets/hggs-accordion/hggs-accordion.component.html"),
+            styles: [__webpack_require__(/*! ./hggs-accordion.component.scss */ "./src/app/modules/shared-module/widgets/hggs-accordion/hggs-accordion.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], HggsAccordionComponent);
+    return HggsAccordionComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/modules/store-management/dumb-components/add-grocery-store/add-grocery-store.component.html":
 /*!*************************************************************************************************************!*\
   !*** ./src/app/modules/store-management/dumb-components/add-grocery-store/add-grocery-store.component.html ***!
@@ -1127,7 +1252,7 @@ var HomePageComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-card *ngIf=\"enteringStoreName\">\n  <ion-row>\n    <ion-input placeholder=\"Enter store name\" id=\"newStoreNameInput\" [(ngModel)]=\"newGroceryStoreName\"></ion-input>\n    <ion-button size=\"small\" (click)=\"onAddStoreDoneClick()\">Done</ion-button>\n    <ion-button size=\"small\" (click)=\"onCancelAddStoreClick()\">Cancel</ion-button>\n  </ion-row>\n</ion-card>\n<ion-button *ngIf=\"!enteringStoreName\" shape=\"round\" fill=\"outline\" (click)=\"onAddStoreClick()\">Add\n  <!--<ion-icon slot=\"start\" md=\"ios-add-circle-outline\" ></ion-icon>-->\n  <!--<app-new-store></app-new-store>-->\n</ion-button>\n"
+module.exports = "<ion-card *ngIf=\"enteringStoreName\">\r\n  <ion-row>\r\n    <ion-input placeholder=\"Enter store name\" id=\"newStoreNameInput\" [(ngModel)]=\"newGroceryStoreName\"></ion-input>\r\n    <ion-button size=\"small\" (click)=\"onAddStoreDoneClick()\">Done</ion-button>\r\n    <ion-button size=\"small\" (click)=\"onCancelAddStoreClick()\">Cancel</ion-button>\r\n  </ion-row>\r\n</ion-card>\r\n<ion-button *ngIf=\"!enteringStoreName\" shape=\"round\" fill=\"outline\" (click)=\"onAddStoreClick()\">Add\r\n  <!--<ion-icon slot=\"start\" md=\"ios-add-circle-outline\" ></ion-icon>-->\r\n  <!--<app-new-store></app-new-store>-->\r\n</ion-button>\r\n"
 
 /***/ }),
 
@@ -1201,7 +1326,7 @@ var AddGrocreyStoreComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-title>{{ groceryStore.name}}</ion-title>\n<ion-content>\n  <app-grocery-store-aisles [groceryStore]=\"groceryStore\"  (notifyNewStoreAisleRequested)=\"onNotifyNewStoreAisleRequest($event)\"></app-grocery-store-aisles>\n  <app-grocery-store-sections></app-grocery-store-sections>\n  <app-grocery-store-items></app-grocery-store-items>\n</ion-content>\n"
+module.exports = "<ion-title>{{ groceryStore.name}}</ion-title>\r\n<ion-content>\r\n  <app-hggs-accordion [sectionName]=\"aislesSection.label\" [description]=\"\" (change)=\"captureName($event)\">\r\n  </app-hggs-accordion>\r\n    <app-grocery-store-aisles *ngIf=\"aislesSection.isOpen$ | async\" [groceryStore]=\"groceryStore\"  (notifyNewStoreAisleRequested)=\"onNotifyNewStoreAisleRequest($event)\"></app-grocery-store-aisles>\r\n  <app-grocery-store-sections></app-grocery-store-sections>\r\n  <app-grocery-store-items></app-grocery-store-items>\r\n</ion-content>\r\n"
 
 /***/ }),
 
@@ -1228,10 +1353,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EditGroceryStoreComponent", function() { return EditGroceryStoreComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+
 
 
 var EditGroceryStoreComponent = /** @class */ (function () {
     function EditGroceryStoreComponent() {
+        this.aislesSection = {
+            label: 'Aisles',
+            isOpen$: Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(false)
+        };
         this.notifyNewStoreAisleRequested = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
     }
     EditGroceryStoreComponent.prototype.ngOnInit = function () {
@@ -1239,6 +1370,18 @@ var EditGroceryStoreComponent = /** @class */ (function () {
     EditGroceryStoreComponent.prototype.onNotifyNewStoreAisleRequest = function ($event) {
         this.notifyNewStoreAisleRequested.emit($event);
     };
+    EditGroceryStoreComponent.prototype.captureName = function ($event) {
+        console.log('in CaptureName, event is: ');
+        console.log($event);
+        console.log("label is " + this.aislesSection.label);
+        if ($event.sectionName === this.aislesSection.label) {
+            this.aislesSection.isOpen$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])($event.isOpen);
+        }
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], EditGroceryStoreComponent.prototype, "groceryAislesSectionIsOpen", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
@@ -1269,7 +1412,7 @@ var EditGroceryStoreComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-card>\n  <ion-card-content>\n  <!--<ion-card-header>-->\n    <ion-item>\n      <ion-label slot=\"start\">Aisles</ion-label>\n      <ion-button *ngIf=\"!enteringStoreAisle\" shape=\"round\" fill=\"outline\" size=\"small\" (click)=\"onAddStoreAisleClick()\">Add\n        <ion-icon name=\"md-add-circle-outline\"></ion-icon>\n      </ion-button>\n    </ion-item>\n  <!--</ion-card-header>-->\n    <ion-list *ngIf=\"groceryStore.aisles\">\n      <ion-item *ngFor=\"let groceryAisle of groceryStore.aisles\">\n        <ion-item-sliding>\n          <ion-item>\n            <ion-label (click)=\"editStoreAisle(groceryAisle)\">{{groceryAisle}}</ion-label>\n          </ion-item>\n          <ion-item-options side=\"end\">\n            <!--<ion-item-option (click)=\"edit(groceryStore)\">Edit</ion-item-option>-->\n            <ion-item-option color=\"danger\" (click)=\"remove(groceryAisle)\">Delete</ion-item-option>\n          </ion-item-options>\n        </ion-item-sliding>\n    </ion-item>\n    </ion-list>\n    <ion-label *ngIf=\"groceryStore.aisles?.length === 0 && !enteringStoreAisle\">No Aisles Defined</ion-label>\n    <ion-card *ngIf=\"enteringStoreAisle\">\n      <ion-row>\n        <ion-input placeholder=\"Enter store name\" id=\"newStoreAisleInput\" [(ngModel)]=\"newStoreAisle\"></ion-input>\n        <ion-button size=\"small\" (click)=\"onAddStoreAisleDoneClick()\">Done</ion-button>\n        <ion-button size=\"small\" (click)=\"onCancelAddStoreAisleClick()\">Cancel</ion-button>\n      </ion-row>\n    </ion-card>\n\n  </ion-card-content>\n</ion-card>\n"
+module.exports = "<ion-card>\r\n  <ion-card-content>\r\n<!--    <ion-item>-->\r\n<!--      <ion-button *ngIf=\"!enteringStoreAisle\" shape=\"round\" fill=\"outline\" size=\"small\" (click)=\"onAddStoreAisleClick()\">Add-->\r\n<!--        <ion-icon name=\"md-add-circle-outline\"></ion-icon>-->\r\n<!--      </ion-button>-->\r\n<!--    </ion-item>-->\r\n    <ion-list *ngIf=\"groceryStore.aisles\">\r\n      <ion-item *ngFor=\"let groceryAisle of groceryStore.aisles\">\r\n        <ion-item-sliding>\r\n          <ion-item>\r\n            <ion-label (click)=\"editStoreAisle(groceryAisle)\">{{groceryAisle}}</ion-label>\r\n          </ion-item>\r\n          <ion-item-options side=\"end\">\r\n            <!--<ion-item-option (click)=\"edit(groceryStore)\">Edit</ion-item-option>-->\r\n            <ion-item-option color=\"danger\" (click)=\"remove(groceryAisle)\">Delete</ion-item-option>\r\n          </ion-item-options>\r\n        </ion-item-sliding>\r\n    </ion-item>\r\n    </ion-list>\r\n    <ion-label *ngIf=\"groceryStore.aisles?.length === 0 && !enteringStoreAisle\">No Aisles Defined</ion-label>\r\n    <ion-card *ngIf=\"enteringStoreAisle\">\r\n      <ion-row>\r\n        <ion-input placeholder=\"Enter store name\" id=\"newStoreAisleInput\" [(ngModel)]=\"newStoreAisle\"></ion-input>\r\n        <ion-button size=\"small\" (click)=\"onAddStoreAisleDoneClick()\">Done</ion-button>\r\n        <ion-button size=\"small\" (click)=\"onCancelAddStoreAisleClick()\">Cancel</ion-button>\r\n      </ion-row>\r\n    </ion-card>\r\n  </ion-card-content>\r\n  <ion-row class=\"cardfooter\">\r\n    <ion-col>\r\n      <ion-button *ngIf=\"!enteringStoreAisle\" shape=\"round\" fill=\"outline\" size=\"small\" (click)=\"onAddStoreAisleClick()\">Add\r\n        <ion-icon name=\"md-add-circle-outline\"></ion-icon>\r\n      </ion-button>\r\n    </ion-col>\r\n  </ion-row>\r\n</ion-card>\r\n"
 
 /***/ }),
 
@@ -1363,7 +1506,7 @@ var GroceryStoreAislesComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--<ul *ngFor=\"let groceryStore of groceryStores\">-->\n  <!--<li>{{groceryStore.name}}</li>-->\n<!--</ul>-->\n<!--<ion-header>-->\n  <!--<p>Manage Stores-->\n<!--</ion-header>-->\n<!--<ion-content>-->\n<ion-list *ngIf=\"!groceryStoresLoading else showSpinner;\">\n  <ion-card *ngFor=\"let groceryStore of groceryStores\">\n    <!--<ion-card-title></ion-card-title>-->\n    <ion-item-sliding>\n      <ion-item>\n        <ion-label (click)=\"editGroceryStore(groceryStore)\">{{groceryStore.name}}</ion-label>\n      </ion-item>\n      <ion-item-options side=\"end\">\n        <!--<ion-item-option (click)=\"edit(groceryStore)\">Edit</ion-item-option>-->\n        <ion-item-option color=\"danger\" (click)=\"remove(groceryStore)\">Delete</ion-item-option>\n      </ion-item-options>\n    </ion-item-sliding>\n  </ion-card>\n</ion-list>\n<ng-template #showSpinner>\n  <p>stores are loading...</p>\n</ng-template>\n"
+module.exports = "<!--<ul *ngFor=\"let groceryStore of groceryStores\">-->\r\n  <!--<li>{{groceryStore.name}}</li>-->\r\n<!--</ul>-->\r\n<!--<ion-header>-->\r\n  <!--<p>Manage Stores-->\r\n<!--</ion-header>-->\r\n<!--<ion-content>-->\r\n<ion-list *ngIf=\"!groceryStoresLoading else showSpinner;\">\r\n  <ion-card *ngFor=\"let groceryStore of groceryStores\">\r\n    <!--<ion-card-title></ion-card-title>-->\r\n    <ion-item-sliding>\r\n      <ion-item>\r\n        <ion-label (click)=\"editGroceryStore(groceryStore)\">{{groceryStore.name}}</ion-label>\r\n      </ion-item>\r\n      <ion-item-options side=\"end\">\r\n        <!--<ion-item-option (click)=\"edit(groceryStore)\">Edit</ion-item-option>-->\r\n        <ion-item-option color=\"danger\" (click)=\"remove(groceryStore)\">Delete</ion-item-option>\r\n      </ion-item-options>\r\n    </ion-item-sliding>\r\n  </ion-card>\r\n</ion-list>\r\n<ng-template #showSpinner>\r\n  <p>stores are loading...</p>\r\n</ng-template>\r\n"
 
 /***/ }),
 
@@ -1453,7 +1596,7 @@ var StoreListComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  grocery-store-items works!\n</p>\n"
+module.exports = "<p>\r\n  grocery-store-items works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -1509,7 +1652,7 @@ var GroceryStoreItemsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  grocery-store-sections works!\n</p>\n"
+module.exports = "<p>\r\n  grocery-store-sections works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -1565,7 +1708,7 @@ var GroceryStoreSectionsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button>Back</ion-back-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n<ion-content>\n  <app-edit-grocery-store [groceryStore]=\"groceryStore$ | async\" (notifyNewStoreAisleRequested)=\"onNotifyNewStoreAisleRequest($event)\"></app-edit-grocery-store>\n</ion-content>\n"
+module.exports = "<ion-header>\r\n  <ion-toolbar>\r\n    <ion-buttons slot=\"start\">\r\n      <ion-back-button>Back</ion-back-button>\r\n    </ion-buttons>\r\n  </ion-toolbar>\r\n</ion-header>\r\n<ion-content>\r\n  <app-edit-grocery-store [groceryStore]=\"groceryStore$ | async\"\r\n                          (notifyNewStoreAisleRequested)=\"onNotifyNewStoreAisleRequest($event)\">\r\n  </app-edit-grocery-store>\r\n</ion-content>\r\n"
 
 /***/ }),
 
@@ -1616,6 +1759,9 @@ var EditSelectedGroceryStoreComponent = /** @class */ (function () {
     EditSelectedGroceryStoreComponent.prototype.onNotifyNewStoreAisleRequest = function ($event) {
         this.store.dispatch(new _store_store_management_actions__WEBPACK_IMPORTED_MODULE_5__["AddStoreAisle"]($event));
     };
+    EditSelectedGroceryStoreComponent.prototype.onSectionStatusChanged = function ($event) {
+        this.aislesSectionIsOpen = $event.isOpen;
+    };
     EditSelectedGroceryStoreComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-edit-selected-grocery-store',
@@ -1638,7 +1784,7 @@ var EditSelectedGroceryStoreComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <h2>Stores</h2>\n</ion-header>\n<ion-content>\n  <app-store-list [groceryStores] = \"(groceryStores$ | async)\"\n (notifyDeleteStoreRequested)=\"onDeleteStoreRequest($event)\" >\n  </app-store-list>\n</ion-content>\n<ion-footer>\n  <app-add-grocery-store (notifyNewStoreRequested)=\"onNotifyNewStoreRequest($event)\"></app-add-grocery-store>\n</ion-footer>\n\n<!--<ion-card>-->\n  <!--<ion-card-content>list should display below</ion-card-content>-->\n<!--</ion-card>-->\n"
+module.exports = "<ion-header>\r\n  <h2>Stores</h2>\r\n</ion-header>\r\n<ion-content>\r\n  <app-store-list [groceryStores] = \"(groceryStores$ | async)\"\r\n (notifyDeleteStoreRequested)=\"onDeleteStoreRequest($event)\" >\r\n  </app-store-list>\r\n</ion-content>\r\n<ion-footer>\r\n  <app-add-grocery-store (notifyNewStoreRequested)=\"onNotifyNewStoreRequest($event)\"></app-add-grocery-store>\r\n</ion-footer>\r\n\r\n<!--<ion-card>-->\r\n  <!--<ion-card-content>list should display below</ion-card-content>-->\r\n<!--</ion-card>-->\r\n"
 
 /***/ }),
 
@@ -1740,6 +1886,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _grocery_store_items_grocery_store_items_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./grocery-store-items/grocery-store-items.component */ "./src/app/modules/store-management/grocery-store-items/grocery-store-items.component.ts");
 /* harmony import */ var _dumb_components_edit_grocery_store_edit_grocery_store_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./dumb-components/edit-grocery-store/edit-grocery-store.component */ "./src/app/modules/store-management/dumb-components/edit-grocery-store/edit-grocery-store.component.ts");
 /* harmony import */ var _dumb_components_add_grocery_store_add_grocery_store__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./dumb-components/add-grocery-store/add-grocery-store */ "./src/app/modules/store-management/dumb-components/add-grocery-store/add-grocery-store.ts");
+/* harmony import */ var _shared_module_shared_module__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../shared-module/shared.module */ "./src/app/modules/shared-module/shared.module.ts");
+
 
 
 
@@ -1770,7 +1918,8 @@ var StoreManagementModule = /** @class */ (function () {
                 _ngrx_store__WEBPACK_IMPORTED_MODULE_4__["StoreModule"].forFeature('storeManagement', _store_store_management_reducers__WEBPACK_IMPORTED_MODULE_8__["groceryStoresReducer"]),
                 _ngrx_effects__WEBPACK_IMPORTED_MODULE_5__["EffectsModule"].forFeature([_store_store_management_effects__WEBPACK_IMPORTED_MODULE_7__["StoreManagementEffects"]]),
                 _ionic_angular__WEBPACK_IMPORTED_MODULE_9__["IonicModule"],
-                _angular_forms__WEBPACK_IMPORTED_MODULE_12__["FormsModule"]
+                _angular_forms__WEBPACK_IMPORTED_MODULE_12__["FormsModule"],
+                _shared_module_shared_module__WEBPACK_IMPORTED_MODULE_19__["SharedModule"]
             ],
             declarations: [
                 _smart_components_store_inventory_manager_store_inventory_manager_page_component__WEBPACK_IMPORTED_MODULE_3__["StoreInventoryManagerPageComponent"],

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
@@ -16,6 +16,7 @@ import {StoreManagementModule} from './modules/store-management/store-management
 import {PantryDbHelper} from './services/db-helper';
 import {PantryDataService} from './services/pantry-data.service';
 import {SQLite} from '@ionic-native/sqlite/ngx';
+import {SharedModule} from './modules/shared-module/shared.module';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import {SQLite} from '@ionic-native/sqlite/ngx';
     // StoreModule.forRoot(reducers, { metaReducers, initialState: initialAppState }),
     EffectsModule.forRoot([]),
     IonicModule.forRoot(),
+    SharedModule,
     StoreManagementModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
@@ -39,12 +41,13 @@ import {SQLite} from '@ionic-native/sqlite/ngx';
     })
   ],
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     StatusBar,
     [{provide: 'IPantryDataService', useClass: PantryDataService}],
     PantryDbHelper,
     SQLite
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

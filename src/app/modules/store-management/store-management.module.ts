@@ -16,6 +16,7 @@ import { GroceryStoreSectionsComponent } from './grocery-store-sections/grocery-
 import { GroceryStoreItemsComponent } from './grocery-store-items/grocery-store-items.component';
 import { EditGroceryStoreComponent } from './dumb-components/edit-grocery-store/edit-grocery-store.component';
 import {AddGrocreyStoreComponent} from './dumb-components/add-grocery-store/add-grocery-store';
+import {SharedModule} from '../shared-module/shared.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import {AddGrocreyStoreComponent} from './dumb-components/add-grocery-store/add-
     StoreModule.forFeature('storeManagement', fromReducers.groceryStoresReducer),
     EffectsModule.forFeature([StoreManagementEffects]),
     IonicModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ],
   declarations: [
     StoreInventoryManagerPageComponent,

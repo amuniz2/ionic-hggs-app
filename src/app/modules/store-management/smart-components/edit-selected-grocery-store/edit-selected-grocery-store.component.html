@@ -6,5 +6,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <app-edit-grocery-store [groceryStore]="groceryStore$ | async" (notifyNewStoreAisleRequested)="onNotifyNewStoreAisleRequest($event)"></app-edit-grocery-store>
+  <app-edit-grocery-store [groceryStore]="groceryStore$ | async"
+                          (notifyNewStoreAisleRequested)="onNotifyNewStoreAisleRequest($event)">
+  </app-edit-grocery-store>
 </ion-content>

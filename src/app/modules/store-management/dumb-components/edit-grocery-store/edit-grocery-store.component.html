@@ -1,6 +1,8 @@
 <ion-title>{{ groceryStore.name}}</ion-title>
 <ion-content>
-  <app-grocery-store-aisles [groceryStore]="groceryStore"  (notifyNewStoreAisleRequested)="onNotifyNewStoreAisleRequest($event)"></app-grocery-store-aisles>
+  <app-hggs-accordion [sectionName]="aislesSection.label" [description]="" (change)="captureName($event)">
+  </app-hggs-accordion>
+    <app-grocery-store-aisles *ngIf="aislesSection.isOpen$ | async" [groceryStore]="groceryStore"  (notifyNewStoreAisleRequested)="onNotifyNewStoreAisleRequest($event)"></app-grocery-store-aisles>
   <app-grocery-store-sections></app-grocery-store-sections>
   <app-grocery-store-items></app-grocery-store-items>
 </ion-content>

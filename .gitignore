@@ -171,3 +171,7 @@ typings/
 # map files
 *compiled.js
 *.js.map
+
+#platform build folders
+android/build
+android/app/build
