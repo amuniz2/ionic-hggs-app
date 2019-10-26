@@ -1172,7 +1172,7 @@ var SharedModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2 (click)=\"toggleAccordion()\">\n  {{ sectionName }}\n  <span *ngIf=\"isSectionOpen\">&#9650;</span>\n  <span *ngIf=\"!isSectionOpen\">&#9660;</span>\n</h2>\n\n<!--<div-->\n<!--  [ngClass]=\"this.isSectionOpen ? 'active' : 'inactive'\">-->\n<!--&lt;!&ndash;  <section class=\"image-wrapper\">&ndash;&gt;-->\n<!--&lt;!&ndash;    <img [src]=\"image\">&ndash;&gt;-->\n<!--&lt;!&ndash;  </section>&ndash;&gt;-->\n<!--  <p>{{ description }}</p>-->\n<!--  <ion-button-->\n<!--    type=\"button\"-->\n<!--    color=\"primary\"-->\n<!--    fill=\"solid\"-->\n<!--    size=\"default\"-->\n<!--    (click)=\"broadcastName(sectionName)\">Console log me!</ion-button>-->\n<!--</div>-->\n"
+module.exports = "<h2 (click)=\"toggleAccordion()\">\r\n  {{ sectionName }}\r\n  <span *ngIf=\"isSectionOpen\">&#9650;</span>\r\n  <span *ngIf=\"!isSectionOpen\">&#9660;</span>\r\n</h2>\r\n\r\n<!--<div-->\r\n<!--  [ngClass]=\"this.isSectionOpen ? 'active' : 'inactive'\">-->\r\n<!--&lt;!&ndash;  <section class=\"image-wrapper\">&ndash;&gt;-->\r\n<!--&lt;!&ndash;    <img [src]=\"image\">&ndash;&gt;-->\r\n<!--&lt;!&ndash;  </section>&ndash;&gt;-->\r\n<!--  <p>{{ description }}</p>-->\r\n<!--  <ion-button-->\r\n<!--    type=\"button\"-->\r\n<!--    color=\"primary\"-->\r\n<!--    fill=\"solid\"-->\r\n<!--    size=\"default\"-->\r\n<!--    (click)=\"broadcastName(sectionName)\">Console log me!</ion-button>-->\r\n<!--</div>-->\r\n"
 
 /***/ }),
 
@@ -1371,9 +1371,6 @@ var EditGroceryStoreComponent = /** @class */ (function () {
         this.notifyNewStoreAisleRequested.emit($event);
     };
     EditGroceryStoreComponent.prototype.captureName = function ($event) {
-        console.log('in CaptureName, event is: ');
-        console.log($event);
-        console.log("label is " + this.aislesSection.label);
         if ($event.sectionName === this.aislesSection.label) {
             this.aislesSection.isOpen$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])($event.isOpen);
         }
@@ -2757,31 +2754,14 @@ var PantryDbHelper = /** @class */ (function () {
         var _this = this;
         return this.connect().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["mergeMap"])(function (success) { return _this.deleteGroceryStoreById(id); }));
     };
-    PantryDbHelper.prototype.addGroceryStore1 = function (name) {
+    PantryDbHelper.prototype.addGroceryStoreAisle = function (groceryStoreId, aisle) {
         var _this = this;
-        return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
-            _this.openOrCreateDb().then(function (result) {
-                console.log("openOrCreateDb returned " + result);
-                if (result) {
-                    _this.insertGroceryStorePromise(name).then(function (rowsAffected) {
-                        if (rowsAffected === 1) {
-                            _this.queryGroceryStoreByNamePromise(name).then(function (groceryStore) {
-                                observer.next(groceryStore);
-                                observer.complete();
-                            });
-                        }
-                        else {
-                            observer.error(new Error("Unable to add grocery store " + name));
-                        } // else
-                    }).catch(function (err) {
-                        console.log('error in addGroceryStore insert statement.');
-                        console.log(err);
-                        observer.error(err);
-                    }); // insert then
-                } // if (result
-            }).catch(function (err) { return observer.error(err); }); // open or create then
-        }); // end of constructor
-    }; // function
+        return this.connect().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["mergeMap"])(function (success) { return _this.insertGroceryStoreAisle(groceryStoreId, aisle); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["switchMap"])(function (rowsAffected) {
+            if (rowsAffected > 1) {
+                return _this.queryGroceryStoreById(groceryStoreId);
+            }
+        }));
+    };
     PantryDbHelper.prototype.queryGroceryStores = function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var groceryStores, data, i, err_1;
@@ -2881,13 +2861,22 @@ var PantryDbHelper = /** @class */ (function () {
             });
         });
     };
-    PantryDbHelper.prototype.insertGroceryStore1 = function (groceryStoreName) {
+    PantryDbHelper.prototype.insertGroceryStoreAisle = function (groceryStoreId, aisle) {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
+            _this.insertGroceryStoreAislePromise(groceryStoreId, aisle).then(function (rowsAffected) {
+                observer.next(rowsAffected);
+                observer.complete();
+            }).catch(function (err) { return observer.error(err); });
+        });
+    };
+    PantryDbHelper.prototype.insertGroceryStoreAislePromise = function (groceryStoreId, aisle) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var insertSql, data, err_4;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        insertSql = "INSERT INTO\n     " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].NAME + "\n     (" + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.STORE_NAME + ")\n      VALUES('" + groceryStoreName + "')";
+                        insertSql = "INSERT INTO\n     " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].NAME + "\n     (" + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.GROCERY_AISLE + ", " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.STORE_ID + ")\n      VALUES('" + aisle + "', " + groceryStoreId + ")";
                         console.log('executing: ' + insertSql);
                         _a.label = 1;
                     case 1:
@@ -2895,11 +2884,11 @@ var PantryDbHelper = /** @class */ (function () {
                         return [4 /*yield*/, this.db.executeSql(insertSql, [])];
                     case 2:
                         data = _a.sent();
-                        console.log("returning " + data + " from insertGroceryStore");
+                        console.log("returning " + data + " from insertGroceryStoreAislePromise");
                         return [2 /*return*/, data.rowsAffected];
                     case 3:
                         err_4 = _a.sent();
-                        console.log("Error inserting grocery store " + groceryStoreName);
+                        console.log("Error inserting grocery store aisle " + aisle);
                         console.log(err_4);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
@@ -2911,6 +2900,15 @@ var PantryDbHelper = /** @class */ (function () {
         var _this = this;
         return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
             _this.queryGroceryStoreByNamePromise(name).then(function (groceryStore) {
+                observer.next(groceryStore);
+                observer.complete();
+            }).catch(function (err) { return observer.error(err); });
+        });
+    };
+    PantryDbHelper.prototype.queryGroceryStoreById = function (id) {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
+            _this.queryGroceryStoreByIdPromise(name).then(function (groceryStore) {
                 observer.next(groceryStore);
                 observer.complete();
             }).catch(function (err) { return observer.error(err); });
@@ -2948,6 +2946,38 @@ var PantryDbHelper = /** @class */ (function () {
             });
         });
     };
+    PantryDbHelper.prototype.queryGroceryStoreByIdPromise = function (id) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var sqlQueryById, data, err_6;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        console.log("In queryGroceryStoreById " + id);
+                        sqlQueryById = "SELECT * from " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].NAME + " INNER JOIN " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].NAME + " ON " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].NAME + "." + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.STORE_ID + " = " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].NAME + "." + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.ID + "\n\n      WHERE " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].NAME + "." + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.ID + " = '" + id + "'";
+                        console.log("running query: " + sqlQueryById);
+                        return [4 /*yield*/, this.db.executeSql(sqlQueryById, [])];
+                    case 1:
+                        data = _a.sent();
+                        if (data.rows.length > 0) {
+                            console.log('at least 1 row returned, converting first row to groceryStore');
+                            return [2 /*return*/, PantryDbHelper_1.rowToGroceryStore(data.rows.item(0))];
+                        }
+                        else {
+                            console.log('no groceryStore returned for query store by name');
+                            return [2 /*return*/, null];
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_6 = _a.sent();
+                        console.log('Error querying store by name');
+                        console.log(err_6);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     var PantryDbHelper_1;
     PantryDbHelper = PantryDbHelper_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_5__["Injectable"])(),
@@ -2971,10 +3001,8 @@ var PantryDbHelper = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PantryDataService", function() { return PantryDataService; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _db_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./db-helper */ "./src/app/services/db-helper.ts");
-
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _db_helper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./db-helper */ "./src/app/services/db-helper.ts");
 
 
 
@@ -3003,20 +3031,21 @@ var PantryDataService = /** @class */ (function () {
         return this.dbHelper.deleteGroceryStore(deleteStoreRequest.id);
     };
     PantryDataService.prototype.addGroceryStoreAisle = function (newStoreAisleRequest) {
-        var i;
-        var groceryStore;
-        for (i = 0; i < this.groceryStores.length; i++) {
-            if (this.groceryStores[i].id === newStoreAisleRequest.groceryStoreId) {
-                groceryStore = this.groceryStores[i];
-                break;
-            }
-        }
-        groceryStore.aisles.push(newStoreAisleRequest.aisle);
-        return Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])(groceryStore);
+        return this.dbHelper.addGroceryStoreAisle(newStoreAisleRequest.groceryStoreId, newStoreAisleRequest.aisle);
+        // let i: number;
+        // let groceryStore: GroceryStore;
+        // for (i = 0; i < this.groceryStores.length; i++) {
+        //   if (this.groceryStores[i].id === newStoreAisleRequest.groceryStoreId) {
+        //     groceryStore = this.groceryStores[i];
+        //     break;
+        //   }
+        // }
+        // groceryStore.aisles.push(newStoreAisleRequest.aisle);
+        // return of(groceryStore);
     };
     PantryDataService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_db_helper__WEBPACK_IMPORTED_MODULE_3__["PantryDbHelper"]])
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_db_helper__WEBPACK_IMPORTED_MODULE_2__["PantryDbHelper"]])
     ], PantryDataService);
     return PantryDataService;
 }());

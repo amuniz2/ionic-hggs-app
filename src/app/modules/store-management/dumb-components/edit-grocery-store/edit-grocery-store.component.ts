@@ -1,10 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../model/grocery-store';
 import {StoreAisle} from '../grocery-store-aisles/grocery-store-aisles.component';
-import {NewGroceryStoreRequest} from '../store-list/store-list.component';
-import * as fromActions from '../../store/store-management.actions';
-import {CollapsedStatusChangedEvent} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
 import {Observable, of} from 'rxjs';
+import {CollapsedStatusChangedEvent} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
 
 interface PageSection {
   label: string;
@@ -45,9 +43,6 @@ export class EditGroceryStoreComponent implements OnInit {
   }
 
   public captureName($event: CollapsedStatusChangedEvent) {
-    console.log('in CaptureName, event is: ');
-    console.log($event);
-    console.log(`label is ${this.aislesSection.label}`)
     if ($event.sectionName === this.aislesSection.label) {
       this.aislesSection.isOpen$ = of($event.isOpen);
     }

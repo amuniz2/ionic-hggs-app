@@ -39,15 +39,16 @@ export class PantryDataService implements IPantryDataService {
   }
 
   public addGroceryStoreAisle(newStoreAisleRequest: StoreAisle): Observable<GroceryStore> {
-    let i: number;
-    let groceryStore: GroceryStore;
-    for (i = 0; i < this.groceryStores.length; i++) {
-      if (this.groceryStores[i].id === newStoreAisleRequest.groceryStoreId) {
-        groceryStore = this.groceryStores[i];
-        break;
-      }
-    }
-    groceryStore.aisles.push(newStoreAisleRequest.aisle);
-    return of(groceryStore);
+    return this.dbHelper.addGroceryStoreAisle(newStoreAisleRequest.groceryStoreId, newStoreAisleRequest.aisle);
+    // let i: number;
+    // let groceryStore: GroceryStore;
+    // for (i = 0; i < this.groceryStores.length; i++) {
+    //   if (this.groceryStores[i].id === newStoreAisleRequest.groceryStoreId) {
+    //     groceryStore = this.groceryStores[i];
+    //     break;
+    //   }
+    // }
+    // groceryStore.aisles.push(newStoreAisleRequest.aisle);
+    // return of(groceryStore);
   }
 }

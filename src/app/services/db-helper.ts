@@ -4,7 +4,7 @@ import {AppState} from '../store/app.state';
 import {Store} from '@ngrx/store';
 import {DatabaseOpenFailed} from '../store';
 import * as pantrySchema from './pantry-db-schema';
-import {PantryItemTable, StoreTable} from './pantry-db-schema';
+import {PantryItemTable, StoreGroceryAisleTable, StoreTable} from './pantry-db-schema';
 import {SQLite, SQLiteObject} from '@ionic-native/sqlite/ngx';
 import {Injectable} from '@angular/core';
 import {mergeMap, switchMap} from 'rxjs/operators';
@@ -323,30 +323,16 @@ export class PantryDbHelper {
       mergeMap((success) => this.deleteGroceryStoreById(id))
     );
   }
-  public addGroceryStore1(name: string): Observable<GroceryStore> {
-    return new Observable<GroceryStore>((observer) => {
-      this.openOrCreateDb().then((result) => {
-        console.log(`openOrCreateDb returned ${result}`);
-        if (result) {
-          this.insertGroceryStorePromise(name).then((rowsAffected) => {
-            if (rowsAffected === 1) {
-              this.queryGroceryStoreByNamePromise(name).then((groceryStore) => {
-                observer.next(groceryStore);
-                observer.complete();
-              });
-            } else {
-              observer.error(new Error(`Unable to add grocery store ${name}`));
-            }  // else
-          }).catch((err) => {
-            console.log('error in addGroceryStore insert statement.');
-            console.log(err);
-            observer.error(err);
-          }); // insert then
-        } // if (result
-       }).catch((err) => observer.error(err)); // open or create then
-      }); // end of constructor
-    } // function
-
+  public addGroceryStoreAisle(groceryStoreId: number, aisle: string): Observable<GroceryStore> {
+    return this.connect().pipe(
+      mergeMap((success) => this.insertGroceryStoreAisle(groceryStoreId, aisle)),
+      switchMap((rowsAffected) => {
+        if (rowsAffected > 1) {
+          return this.queryGroceryStoreById(groceryStoreId);
+        }
+      })
+    );
+  }
   private async queryGroceryStores(): Promise<GroceryStore[]> {
     const groceryStores: GroceryStore[] = [];
     try {
@@ -407,18 +393,26 @@ export class PantryDbHelper {
     }
   }
 
-  private async insertGroceryStore1(groceryStoreName: string): Promise<number> {
+  private insertGroceryStoreAisle(groceryStoreId: number, aisle: string): Observable<number> {
+    return new Observable<number>((observer) => {
+      this.insertGroceryStoreAislePromise(groceryStoreId, aisle).then((rowsAffected) => {
+        observer.next(rowsAffected);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+  private async insertGroceryStoreAislePromise(groceryStoreId: number, aisle: string): Promise<number> {
     const insertSql = `INSERT INTO
-     ${pantrySchema.StoreTable.NAME}
-     (${pantrySchema.StoreTable.COLS.STORE_NAME})
-      VALUES(\'${groceryStoreName}\')`;
+     ${pantrySchema.StoreGroceryAisleTable.NAME}
+     (${pantrySchema.StoreGroceryAisleTable.COLS.GROCERY_AISLE}, ${pantrySchema.StoreGroceryAisleTable.COLS.STORE_ID})
+      VALUES(\'${aisle}\', ${groceryStoreId})`;
     console.log('executing: ' + insertSql);
     try {
       const data = await this.db.executeSql(insertSql, []);
-      console.log(`returning ${data} from insertGroceryStore`);
+      console.log(`returning ${data} from insertGroceryStoreAislePromise`);
       return data.rowsAffected;
     } catch (err) {
-      console.log(`Error inserting grocery store ${groceryStoreName}`);
+      console.log(`Error inserting grocery store aisle ${aisle}`);
       console.log(err);
     }
   }
@@ -432,12 +426,43 @@ export class PantryDbHelper {
     });
   }
 
+  private queryGroceryStoreById(id: number): Observable<GroceryStore> {
+    return new Observable<GroceryStore>((observer) => {
+      this.queryGroceryStoreByIdPromise(name).then((groceryStore) => {
+        observer.next(groceryStore);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
   private async queryGroceryStoreByNamePromise(name: string): Promise<GroceryStore> {
     try {
       console.log(`In queryGroceryStoreByName ${name}`);
       const sqlQueryByName = `SELECT * from ${pantrySchema.StoreTable.NAME} WHERE ${pantrySchema.StoreTable.COLS.STORE_NAME} = \'${name}\'`;
       console.log(`running query: ${sqlQueryByName}`);
       const data = await this.db.executeSql(sqlQueryByName, []);
+      if (data.rows.length > 0) {
+        console.log('at least 1 row returned, converting first row to groceryStore');
+        return PantryDbHelper.rowToGroceryStore(data.rows.item(0));
+      } else {
+        console.log('no groceryStore returned for query store by name');
+        return null;
+      }
+    } catch (err) {
+      console.log('Error querying store by name');
+      console.log(err);
+      return null;
+    }
+  }
+
+  private async queryGroceryStoreByIdPromise(id: number): Promise<GroceryStore> {
+    try {
+      console.log(`In queryGroceryStoreById ${id}`);
+      // tslint:disable-next-line:max-line-length
+      const sqlQueryById = `SELECT * from ${pantrySchema.StoreTable.NAME} INNER JOIN ${pantrySchema.StoreGroceryAisleTable.NAME} ON ${pantrySchema.StoreGroceryAisleTable.NAME}.${StoreGroceryAisleTable.COLS.STORE_ID} = ${pantrySchema.StoreTable.NAME}.${StoreTable.COLS.ID}\n
+      WHERE ${pantrySchema.StoreTable.NAME}.${pantrySchema.StoreTable.COLS.ID} = \'${id}\'`;
+      console.log(`running query: ${sqlQueryById}`);
+      const data = await this.db.executeSql(sqlQueryById, []);
       if (data.rows.length > 0) {
         console.log('at least 1 row returned, converting first row to groceryStore');
         return PantryDbHelper.rowToGroceryStore(data.rows.item(0));
