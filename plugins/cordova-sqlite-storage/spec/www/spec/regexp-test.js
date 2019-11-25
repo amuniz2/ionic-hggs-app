@@ -49,7 +49,7 @@ var mytests = function() {
           // explicit database location:
           return window.sqlitePlugin.openDatabase({name: name, location: 'default'});
         }
-      }
+      };
 
       it(suiteName + 'Simple REGEXP test',
         function(done) {
@@ -89,8 +89,8 @@ var mytests = function() {
         }, MYTIMEOUT);
 
     });
-  };
-}
+  }
+};
 
 if (window.hasBrowser) mytests();
 else exports.defineAutoTests = mytests;

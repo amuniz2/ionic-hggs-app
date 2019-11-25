@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button>Back</ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <app-edit-pantry-item-details [pantryItem]="pantryItem$ | async" [isNewItem] = "isNewItem" [error]="error$ | async"
+    (notifySavePantryItemRequested)="savePantryItemChanges($event)"
+    (notifyAddPantryItemRequested)="addPantryItem($event)"
+  (notifyAddPantryItemLocationRequest)="addPantryItemLocation($event)">
+<!--                          (notifyNewPantryItemLocationRequested)="onNotifyNewPantryItemLocationRequest($event)"-->
+<!--                          (notifyDeletePantryItemLocationRequested) ="onDeletePantryItemLocationRequest($event)"-->
+<!--                          (notifyExpandLocations)="onNotifyExpandLocations($event)"-->
+<!--                          (notifyExpandSections)="onNotifyExpandSections($event)"-->
+
+  </app-edit-pantry-item-details>
+</ion-content>

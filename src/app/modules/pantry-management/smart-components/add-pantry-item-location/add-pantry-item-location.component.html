@@ -1,0 +1,47 @@
+<ion-header>
+  <h2>Pantry Item Location</h2>
+</ion-header>
+<ion-content>
+<!--  <app-location [groceryStores]="groceryStores$ | async" (notifySelectedGroceryStoreChanged)="onChangeGroceryStore($event)"></app-location>-->
+  <ion-list>
+    <ion-list-header> Single Location </ion-list-header>
+    <form [formGroup]="locationForm" (ngSubmit)="onSubmit(locationForm.value)">"
+      <ion-label>Store</ion-label>
+      <app-grocery-store-location-store [formControl]="locationStore" [groceryStores]="groceryStores$ | async"
+                                        [selectedGroceryStore]="getSelectedGroceryStore() | async"
+                                        (selectedGroceryStoreChange)="onChangeLocationGroceryStore($event)"></app-grocery-store-location-store>
+      <ion-label>{{AisleLabel}}</ion-label>
+      <app-grocery-store-location-aisle-or-section  [formControl]="locationAisle"
+        [groceryStoreAislesOrSections]="groceryStoreAisles$ | async"
+        [label] = "AisleLabel"
+        (aisleOrSectionChange)="onChangeAisle($event)">
+      </app-grocery-store-location-aisle-or-section>
+      <ion-label>{{SectionLabel}}</ion-label>
+      <app-grocery-store-location-aisle-or-section
+        [formControl]="locationSection"
+        [groceryStoreAislesOrSections]="groceryStoreSections$ | async"
+        [label] = "SectionLabel"
+        (aisleOrSectionChange)="onChangeSection($event)">
+      </app-grocery-store-location-aisle-or-section>
+      <button class="button" type="submit">Save</button>
+    </form>
+
+<!--    <ion-item>-->
+<!--      <ion-select id="groceryStoreSelectionControl" placeholder="Select Grocery Store"  [(ngModel)]="selectedGroceryStoreId" (ionChange)="onChangeGroceryStoreSelected($event)">-->
+<!--        <ion-select-option *ngFor="let groceryStore of groceryStores" value="{{groceryStore.id}}">{{groceryStore.name}}</ion-select-option>-->
+<!--      </ion-select>-->
+<!--    </ion-item>-->
+<!--    <ion-item>-->
+<!--      <ion-select  placeholder="Select Grocery Store Aisle">-->
+<!--        <ion-label>Grocery Store Aisle</ion-label>-->
+<!--        <ion-select-option *ngFor="let groceryStoreAisle of selectedGroceryStore?.aisles" value="groceryStoreAisle">groceryStoreAisle</ion-select-option>-->
+<!--      </ion-select>-->
+<!--    </ion-item>-->
+<!--    <ion-item>-->
+<!--      <ion-select  placeholder="Select Grocery Store Section">-->
+<!--        <ion-label>Grocery Store Section</ion-label>-->
+<!--        <ion-select-option *ngFor="let groceryStoreSection of selectedGroceryStore?.sections" value="groceryStoreSection">groceryStoreSection</ion-select-option>-->
+<!--      </ion-select>-->
+<!--    </ion-item>-->
+  </ion-list>
+</ion-content>

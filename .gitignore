@@ -175,3 +175,9 @@ typings/
 #platform build folders
 android/build
 android/app/build
+
+platforms/browser/www/*.js
+platforms/android/.gradle/*.*
+platforms/android/app/build/
+platforms/platforms/android/app/build/
+www/

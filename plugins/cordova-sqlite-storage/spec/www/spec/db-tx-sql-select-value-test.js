@@ -69,7 +69,7 @@ var mytests = function() {
         } else {
           return window.sqlitePlugin.openDatabase({name: name, location: 0});
         }
-      }
+      };
 
       it(suiteName + 'US-ASCII String manipulation results test',
         function(done) {
@@ -1877,7 +1877,7 @@ var mytests = function() {
 
   }
 
-}
+};
 
 if (window.hasBrowser) mytests();
 else exports.defineAutoTests = mytests;

@@ -92,7 +92,7 @@ Keyboard.disableScroll = function (disable) {
 
 Keyboard.setResizeMode = function (mode) {
     exec(null, null, "Keyboard", "setResizeMode", [mode]);
-}
+};
 
 Keyboard.isVisible = false;
 

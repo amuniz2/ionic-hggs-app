@@ -2,7 +2,15 @@
 <ion-content>
   <app-hggs-accordion [sectionName]="aislesSection.label" [description]="" (change)="captureName($event)">
   </app-hggs-accordion>
-    <app-grocery-store-aisles *ngIf="aislesSection.isOpen$ | async" [groceryStore]="groceryStore"  (notifyNewStoreAisleRequested)="onNotifyNewStoreAisleRequest($event)"></app-grocery-store-aisles>
-  <app-grocery-store-sections></app-grocery-store-sections>
+  <app-grocery-store-aisles *ngIf="aislesSection.isOpen$ | async"
+                            [groceryStore]="groceryStore"
+                            (notifyNewStoreAisleRequested)="onNotifyNewStoreAisleRequest($event)"
+                            (notifyDeleteStoreAisleRequested)="onNotifyDeleteStoreAisleRequest($event)"></app-grocery-store-aisles>
+  <app-hggs-accordion [sectionName]="grocerySectionsSection.label" [description]="" (change)="captureName($event)">
+  </app-hggs-accordion>
+  <app-grocery-store-sections *ngIf="grocerySectionsSection.isOpen$ | async"
+                              [groceryStore]="groceryStore"
+                            (notifyNewGroceryStoreSectionRequested)="onNotifyNewStoreGrocerySectionRequest($event)"
+                            (notifyDeleteGroceryStoreSectionRequested)="onNotifyDeleteGroceryStoreSectionRequest($event)"></app-grocery-store-sections>
   <app-grocery-store-items></app-grocery-store-items>
 </ion-content>

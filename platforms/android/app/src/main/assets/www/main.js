@@ -1201,7 +1201,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 
 
-;
 var HggsAccordionComponent = /** @class */ (function () {
     function HggsAccordionComponent() {
         this.change = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
@@ -1326,7 +1325,7 @@ var AddGrocreyStoreComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-title>{{ groceryStore.name}}</ion-title>\r\n<ion-content>\r\n  <app-hggs-accordion [sectionName]=\"aislesSection.label\" [description]=\"\" (change)=\"captureName($event)\">\r\n  </app-hggs-accordion>\r\n    <app-grocery-store-aisles *ngIf=\"aislesSection.isOpen$ | async\" [groceryStore]=\"groceryStore\"  (notifyNewStoreAisleRequested)=\"onNotifyNewStoreAisleRequest($event)\"></app-grocery-store-aisles>\r\n  <app-grocery-store-sections></app-grocery-store-sections>\r\n  <app-grocery-store-items></app-grocery-store-items>\r\n</ion-content>\r\n"
+module.exports = "<ion-title>{{ groceryStore.name}}</ion-title>\r\n<ion-content>\r\n  <app-hggs-accordion [sectionName]=\"aislesSection.label\" [description]=\"\" (change)=\"captureName($event)\">\r\n  </app-hggs-accordion>\r\n  <app-grocery-store-aisles *ngIf=\"aislesSection.isOpen$ | async\"\r\n                            [groceryStore]=\"groceryStore\"\r\n                            (notifyNewStoreAisleRequested)=\"onNotifyNewStoreAisleRequest($event)\"\r\n                            (notifyDeleteStoreAisleRequested)=\"onNotifyDeleteStoreAisleRequest($event)\"></app-grocery-store-aisles>\r\n  <app-hggs-accordion [sectionName]=\"grocerySectionsSection.label\" [description]=\"\" (change)=\"captureName($event)\">\r\n  </app-hggs-accordion>\r\n  <app-grocery-store-sections *ngIf=\"grocerySectionsSection.isOpen$ | async\"\r\n                              [groceryStore]=\"groceryStore\"\r\n                            (notifyNewGroceryStoreSectionRequested)=\"onNotifyNewStoreGrocerySectionRequest($event)\"\r\n                            (notifyDeleteGroceryStoreSectionRequested)=\"onNotifyDeleteGroceryStoreSectionRequest($event)\"></app-grocery-store-sections>\r\n  <app-grocery-store-items></app-grocery-store-items>\r\n</ion-content>\r\n"
 
 /***/ }),
 
@@ -1363,16 +1362,43 @@ var EditGroceryStoreComponent = /** @class */ (function () {
             label: 'Aisles',
             isOpen$: Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(false)
         };
+        this.grocerySectionsSection = {
+            label: 'Grocery Sections',
+            isOpen$: Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(false)
+        };
         this.notifyNewStoreAisleRequested = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.notifyDeleteStoreAisleRequested = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.notifyNewGroceryStoreSectionRequested = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.notifyDeleteGroceryStoreSectionRequested = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.notifyExpandAisles = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.notifyExpandSections = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
     }
     EditGroceryStoreComponent.prototype.ngOnInit = function () {
     };
     EditGroceryStoreComponent.prototype.onNotifyNewStoreAisleRequest = function ($event) {
         this.notifyNewStoreAisleRequested.emit($event);
     };
+    EditGroceryStoreComponent.prototype.onNotifyDeleteStoreAisleRequest = function ($event) {
+        this.notifyDeleteStoreAisleRequested.emit($event);
+    };
+    EditGroceryStoreComponent.prototype.onNotifyNewStoreGrocerySectionRequest = function ($event) {
+        this.notifyNewGroceryStoreSectionRequested.emit($event);
+    };
+    EditGroceryStoreComponent.prototype.onNotifyDeleteGroceryStoreSectionRequest = function ($event) {
+        this.notifyDeleteGroceryStoreSectionRequested.emit($event);
+    };
     EditGroceryStoreComponent.prototype.captureName = function ($event) {
         if ($event.sectionName === this.aislesSection.label) {
             this.aislesSection.isOpen$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])($event.isOpen);
+            if ($event.isOpen && this.groceryStore.aisles.length === 0) {
+                this.notifyExpandAisles.emit(this.groceryStore.id);
+            }
+        }
+        else if ($event.sectionName === this.grocerySectionsSection.label) {
+            this.grocerySectionsSection.isOpen$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])($event.isOpen);
+            if ($event.isOpen && this.groceryStore.sections.length === 0) {
+                this.notifyExpandSections.emit(this.groceryStore.id);
+            }
         }
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -1387,6 +1413,26 @@ var EditGroceryStoreComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
     ], EditGroceryStoreComponent.prototype, "notifyNewStoreAisleRequested", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+    ], EditGroceryStoreComponent.prototype, "notifyDeleteStoreAisleRequested", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+    ], EditGroceryStoreComponent.prototype, "notifyNewGroceryStoreSectionRequested", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+    ], EditGroceryStoreComponent.prototype, "notifyDeleteGroceryStoreSectionRequested", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+    ], EditGroceryStoreComponent.prototype, "notifyExpandAisles", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+    ], EditGroceryStoreComponent.prototype, "notifyExpandSections", void 0);
     EditGroceryStoreComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-edit-grocery-store',
@@ -1409,7 +1455,7 @@ var EditGroceryStoreComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-card>\r\n  <ion-card-content>\r\n<!--    <ion-item>-->\r\n<!--      <ion-button *ngIf=\"!enteringStoreAisle\" shape=\"round\" fill=\"outline\" size=\"small\" (click)=\"onAddStoreAisleClick()\">Add-->\r\n<!--        <ion-icon name=\"md-add-circle-outline\"></ion-icon>-->\r\n<!--      </ion-button>-->\r\n<!--    </ion-item>-->\r\n    <ion-list *ngIf=\"groceryStore.aisles\">\r\n      <ion-item *ngFor=\"let groceryAisle of groceryStore.aisles\">\r\n        <ion-item-sliding>\r\n          <ion-item>\r\n            <ion-label (click)=\"editStoreAisle(groceryAisle)\">{{groceryAisle}}</ion-label>\r\n          </ion-item>\r\n          <ion-item-options side=\"end\">\r\n            <!--<ion-item-option (click)=\"edit(groceryStore)\">Edit</ion-item-option>-->\r\n            <ion-item-option color=\"danger\" (click)=\"remove(groceryAisle)\">Delete</ion-item-option>\r\n          </ion-item-options>\r\n        </ion-item-sliding>\r\n    </ion-item>\r\n    </ion-list>\r\n    <ion-label *ngIf=\"groceryStore.aisles?.length === 0 && !enteringStoreAisle\">No Aisles Defined</ion-label>\r\n    <ion-card *ngIf=\"enteringStoreAisle\">\r\n      <ion-row>\r\n        <ion-input placeholder=\"Enter store name\" id=\"newStoreAisleInput\" [(ngModel)]=\"newStoreAisle\"></ion-input>\r\n        <ion-button size=\"small\" (click)=\"onAddStoreAisleDoneClick()\">Done</ion-button>\r\n        <ion-button size=\"small\" (click)=\"onCancelAddStoreAisleClick()\">Cancel</ion-button>\r\n      </ion-row>\r\n    </ion-card>\r\n  </ion-card-content>\r\n  <ion-row class=\"cardfooter\">\r\n    <ion-col>\r\n      <ion-button *ngIf=\"!enteringStoreAisle\" shape=\"round\" fill=\"outline\" size=\"small\" (click)=\"onAddStoreAisleClick()\">Add\r\n        <ion-icon name=\"md-add-circle-outline\"></ion-icon>\r\n      </ion-button>\r\n    </ion-col>\r\n  </ion-row>\r\n</ion-card>\r\n"
+module.exports = "<ion-card>\r\n  <ion-card-content>\r\n    <ion-list *ngIf=\"groceryStore?.aisles\">\r\n      <ion-item *ngFor=\"let groceryAisle of groceryStore.aisles\">\r\n        <ion-item-sliding>\r\n          <ion-item>\r\n            <ion-label (click)=\"editStoreAisle(groceryAisle)\">{{groceryAisle}}</ion-label>\r\n          </ion-item>\r\n          <ion-item-options side=\"end\">\r\n            <!--<ion-item-option (click)=\"edit(groceryStore)\">Edit</ion-item-option>-->\r\n            <ion-item-option color=\"danger\" (click)=\"remove(groceryAisle)\">Delete</ion-item-option>\r\n          </ion-item-options>\r\n        </ion-item-sliding>\r\n    </ion-item>\r\n    </ion-list>\r\n    <ion-label *ngIf=\"groceryStore?.aisles?.length === 0 && !enteringStoreAisle\">No Aisles Defined</ion-label>\r\n    <ion-card *ngIf=\"enteringStoreAisle\">\r\n      <ion-row>\r\n        <ion-input placeholder=\"Enter aisle name\" id=\"newStoreAisleInput\" [(ngModel)]=\"newStoreAisle\"></ion-input>\r\n        <ion-button size=\"small\" (click)=\"onAddStoreAisleDoneClick()\">Done</ion-button>\r\n        <ion-button size=\"small\" (click)=\"onCancelAddStoreAisleClick()\">Cancel</ion-button>\r\n      </ion-row>\r\n    </ion-card>\r\n  </ion-card-content>\r\n  <ion-row class=\"cardfooter\">\r\n    <ion-col>\r\n      <ion-button *ngIf=\"!enteringStoreAisle\" shape=\"round\" fill=\"outline\" size=\"small\" (click)=\"onAddStoreAisleClick()\">Add\r\n        <ion-icon name=\"md-add-circle-outline\"></ion-icon>\r\n      </ion-button>\r\n    </ion-col>\r\n  </ion-row>\r\n</ion-card>\r\n"
 
 /***/ }),
 
@@ -1447,11 +1493,12 @@ var GroceryStoreAislesComponent = /** @class */ (function () {
         this.notifyDeleteStoreAisleRequested = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
     }
     GroceryStoreAislesComponent.prototype.ngOnInit = function () {
+        console.log('GroceryStore in aisles component');
+        console.log(this.groceryStore);
     };
     GroceryStoreAislesComponent.prototype.onAddStoreAisleClick = function () {
         this.newStoreAisle = '';
         this.enteringStoreAisle = true;
-        // this.notify.emit('Create new store');
     };
     GroceryStoreAislesComponent.prototype.onCancelAddStoreAisleClick = function () {
         this.enteringStoreAisle = false;
@@ -1467,6 +1514,7 @@ var GroceryStoreAislesComponent = /** @class */ (function () {
         // item.close();
     };
     GroceryStoreAislesComponent.prototype.remove = function (item) {
+        console.log('emitting notifyDeleteStoreAisleRequested');
         this.notifyDeleteStoreAisleRequested.emit({ groceryStoreId: this.groceryStore.id, aisle: item });
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -1490,6 +1538,158 @@ var GroceryStoreAislesComponent = /** @class */ (function () {
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["Store"]])
     ], GroceryStoreAislesComponent);
     return GroceryStoreAislesComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/modules/store-management/dumb-components/grocery-store-items/grocery-store-items.component.html":
+/*!*****************************************************************************************************************!*\
+  !*** ./src/app/modules/store-management/dumb-components/grocery-store-items/grocery-store-items.component.html ***!
+  \*****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\r\n  grocery-store-items works!\r\n</p>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/modules/store-management/dumb-components/grocery-store-items/grocery-store-items.component.scss":
+/*!*****************************************************************************************************************!*\
+  !*** ./src/app/modules/store-management/dumb-components/grocery-store-items/grocery-store-items.component.scss ***!
+  \*****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvc3RvcmUtbWFuYWdlbWVudC9kdW1iLWNvbXBvbmVudHMvZ3JvY2VyeS1zdG9yZS1pdGVtcy9ncm9jZXJ5LXN0b3JlLWl0ZW1zLmNvbXBvbmVudC5zY3NzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/modules/store-management/dumb-components/grocery-store-items/grocery-store-items.component.ts":
+/*!***************************************************************************************************************!*\
+  !*** ./src/app/modules/store-management/dumb-components/grocery-store-items/grocery-store-items.component.ts ***!
+  \***************************************************************************************************************/
+/*! exports provided: GroceryStoreItemsComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroceryStoreItemsComponent", function() { return GroceryStoreItemsComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var GroceryStoreItemsComponent = /** @class */ (function () {
+    function GroceryStoreItemsComponent() {
+    }
+    GroceryStoreItemsComponent.prototype.ngOnInit = function () {
+    };
+    GroceryStoreItemsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-grocery-store-items',
+            template: __webpack_require__(/*! ./grocery-store-items.component.html */ "./src/app/modules/store-management/dumb-components/grocery-store-items/grocery-store-items.component.html"),
+            styles: [__webpack_require__(/*! ./grocery-store-items.component.scss */ "./src/app/modules/store-management/dumb-components/grocery-store-items/grocery-store-items.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], GroceryStoreItemsComponent);
+    return GroceryStoreItemsComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component.html":
+/*!***********************************************************************************************************************!*\
+  !*** ./src/app/modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component.html ***!
+  \***********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<ion-card>\r\n  <ion-card-content>\r\n    <ion-list *ngIf=\"groceryStore?.sections\">\r\n      <ion-item *ngFor=\"let grocerySection of groceryStore.sections\">\r\n        <ion-item-sliding>\r\n          <ion-item>\r\n            <ion-label (click)=\"editStoreSection(grocerySection)\">{{grocerySection}}</ion-label>\r\n          </ion-item>\r\n          <ion-item-options side=\"end\">\r\n            <!--<ion-item-option (click)=\"edit(groceryStore)\">Edit</ion-item-option>-->\r\n            <ion-item-option color=\"danger\" (click)=\"remove(grocerySection)\">Delete</ion-item-option>\r\n          </ion-item-options>\r\n        </ion-item-sliding>\r\n      </ion-item>\r\n    </ion-list>\r\n    <ion-label *ngIf=\"groceryStore?.sections?.length === 0 && !enteringGroceryStoreSection\">No sections Defined</ion-label>\r\n    <ion-card *ngIf=\"enteringGroceryStoreSection\">\r\n      <ion-row>\r\n        <ion-input placeholder=\"Enter section name\" id=\"newStoreSectionInput\" [(ngModel)]=\"newGroceryStoreSection\"></ion-input>\r\n        <ion-button size=\"small\" (click)=\"onAddGroceryStoreSectionDoneClick()\">Done</ion-button>\r\n        <ion-button size=\"small\" (click)=\"onCancelAddGroceryStoreSectionClick()\">Cancel</ion-button>\r\n      </ion-row>\r\n    </ion-card>\r\n  </ion-card-content>\r\n  <ion-row class=\"cardfooter\">\r\n    <ion-col>\r\n      <ion-button *ngIf=\"!enteringGroceryStoreSection\" shape=\"round\" fill=\"outline\" size=\"small\" (click)=\"onAddGroceryStoreSectionClick()\">Add\r\n        <ion-icon name=\"md-add-circle-outline\"></ion-icon>\r\n      </ion-button>\r\n    </ion-col>\r\n  </ion-row>\r\n</ion-card>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component.scss":
+/*!***********************************************************************************************************************!*\
+  !*** ./src/app/modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component.scss ***!
+  \***********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvc3RvcmUtbWFuYWdlbWVudC9kdW1iLWNvbXBvbmVudHMvZ3JvY2VyeS1zdG9yZS1zZWN0aW9ucy9ncm9jZXJ5LXN0b3JlLXNlY3Rpb25zLmNvbXBvbmVudC5zY3NzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component.ts":
+/*!*********************************************************************************************************************!*\
+  !*** ./src/app/modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component.ts ***!
+  \*********************************************************************************************************************/
+/*! exports provided: GroceryStoreSectionsComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroceryStoreSectionsComponent", function() { return GroceryStoreSectionsComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+
+
+
+var GroceryStoreSectionsComponent = /** @class */ (function () {
+    function GroceryStoreSectionsComponent(store) {
+        this.store = store;
+        this.notifyNewGroceryStoreSectionRequested = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.notifyDeleteGroceryStoreSectionRequested = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+    }
+    GroceryStoreSectionsComponent.prototype.ngOnInit = function () {
+        console.log('GroceryStore in sections component');
+        console.log(this.groceryStore);
+    };
+    GroceryStoreSectionsComponent.prototype.onAddGroceryStoreSectionClick = function () {
+        this.newGroceryStoreSection = '';
+        this.enteringGroceryStoreSection = true;
+    };
+    GroceryStoreSectionsComponent.prototype.onCancelAddGroceryStoreSectionClick = function () {
+        this.enteringGroceryStoreSection = false;
+        this.newGroceryStoreSection = '';
+    };
+    GroceryStoreSectionsComponent.prototype.onAddGroceryStoreSectionDoneClick = function () {
+        this.notifyNewGroceryStoreSectionRequested.emit({ groceryStoreId: this.groceryStore.id, section: this.newGroceryStoreSection });
+        this.enteringGroceryStoreSection = false;
+        this.newGroceryStoreSection = '';
+    };
+    GroceryStoreSectionsComponent.prototype.editStoreSection = function (name) {
+        // this.store.dispatch( new NavigateToStoreDetailsPage({ id: item.id } ));
+        // item.close();
+    };
+    GroceryStoreSectionsComponent.prototype.remove = function (item) {
+        console.log('emitting notifyDeleteGroceryStoreSectionRequested');
+        this.notifyDeleteGroceryStoreSectionRequested.emit({ groceryStoreId: this.groceryStore.id, section: item });
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+    ], GroceryStoreSectionsComponent.prototype, "notifyNewGroceryStoreSectionRequested", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+    ], GroceryStoreSectionsComponent.prototype, "notifyDeleteGroceryStoreSectionRequested", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], GroceryStoreSectionsComponent.prototype, "groceryStore", void 0);
+    GroceryStoreSectionsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-grocery-store-sections',
+            template: __webpack_require__(/*! ./grocery-store-sections.component.html */ "./src/app/modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component.html"),
+            styles: [__webpack_require__(/*! ./grocery-store-sections.component.scss */ "./src/app/modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["Store"]])
+    ], GroceryStoreSectionsComponent);
+    return GroceryStoreSectionsComponent;
 }());
 
 
@@ -1586,118 +1786,6 @@ var StoreListComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/modules/store-management/grocery-store-items/grocery-store-items.component.html":
-/*!*************************************************************************************************!*\
-  !*** ./src/app/modules/store-management/grocery-store-items/grocery-store-items.component.html ***!
-  \*************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<p>\r\n  grocery-store-items works!\r\n</p>\r\n"
-
-/***/ }),
-
-/***/ "./src/app/modules/store-management/grocery-store-items/grocery-store-items.component.scss":
-/*!*************************************************************************************************!*\
-  !*** ./src/app/modules/store-management/grocery-store-items/grocery-store-items.component.scss ***!
-  \*************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvc3RvcmUtbWFuYWdlbWVudC9ncm9jZXJ5LXN0b3JlLWl0ZW1zL2dyb2Nlcnktc3RvcmUtaXRlbXMuY29tcG9uZW50LnNjc3MifQ== */"
-
-/***/ }),
-
-/***/ "./src/app/modules/store-management/grocery-store-items/grocery-store-items.component.ts":
-/*!***********************************************************************************************!*\
-  !*** ./src/app/modules/store-management/grocery-store-items/grocery-store-items.component.ts ***!
-  \***********************************************************************************************/
-/*! exports provided: GroceryStoreItemsComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroceryStoreItemsComponent", function() { return GroceryStoreItemsComponent; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-
-
-var GroceryStoreItemsComponent = /** @class */ (function () {
-    function GroceryStoreItemsComponent() {
-    }
-    GroceryStoreItemsComponent.prototype.ngOnInit = function () {
-    };
-    GroceryStoreItemsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'app-grocery-store-items',
-            template: __webpack_require__(/*! ./grocery-store-items.component.html */ "./src/app/modules/store-management/grocery-store-items/grocery-store-items.component.html"),
-            styles: [__webpack_require__(/*! ./grocery-store-items.component.scss */ "./src/app/modules/store-management/grocery-store-items/grocery-store-items.component.scss")]
-        }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
-    ], GroceryStoreItemsComponent);
-    return GroceryStoreItemsComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/modules/store-management/grocery-store-sections/grocery-store-sections.component.html":
-/*!*******************************************************************************************************!*\
-  !*** ./src/app/modules/store-management/grocery-store-sections/grocery-store-sections.component.html ***!
-  \*******************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<p>\r\n  grocery-store-sections works!\r\n</p>\r\n"
-
-/***/ }),
-
-/***/ "./src/app/modules/store-management/grocery-store-sections/grocery-store-sections.component.scss":
-/*!*******************************************************************************************************!*\
-  !*** ./src/app/modules/store-management/grocery-store-sections/grocery-store-sections.component.scss ***!
-  \*******************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL21vZHVsZXMvc3RvcmUtbWFuYWdlbWVudC9ncm9jZXJ5LXN0b3JlLXNlY3Rpb25zL2dyb2Nlcnktc3RvcmUtc2VjdGlvbnMuY29tcG9uZW50LnNjc3MifQ== */"
-
-/***/ }),
-
-/***/ "./src/app/modules/store-management/grocery-store-sections/grocery-store-sections.component.ts":
-/*!*****************************************************************************************************!*\
-  !*** ./src/app/modules/store-management/grocery-store-sections/grocery-store-sections.component.ts ***!
-  \*****************************************************************************************************/
-/*! exports provided: GroceryStoreSectionsComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroceryStoreSectionsComponent", function() { return GroceryStoreSectionsComponent; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-
-
-var GroceryStoreSectionsComponent = /** @class */ (function () {
-    function GroceryStoreSectionsComponent() {
-    }
-    GroceryStoreSectionsComponent.prototype.ngOnInit = function () {
-    };
-    GroceryStoreSectionsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'app-grocery-store-sections',
-            template: __webpack_require__(/*! ./grocery-store-sections.component.html */ "./src/app/modules/store-management/grocery-store-sections/grocery-store-sections.component.html"),
-            styles: [__webpack_require__(/*! ./grocery-store-sections.component.scss */ "./src/app/modules/store-management/grocery-store-sections/grocery-store-sections.component.scss")]
-        }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
-    ], GroceryStoreSectionsComponent);
-    return GroceryStoreSectionsComponent;
-}());
-
-
-
-/***/ }),
-
 /***/ "./src/app/modules/store-management/smart-components/edit-selected-grocery-store/edit-selected-grocery-store.component.html":
 /*!**********************************************************************************************************************************!*\
   !*** ./src/app/modules/store-management/smart-components/edit-selected-grocery-store/edit-selected-grocery-store.component.html ***!
@@ -1705,7 +1793,7 @@ var GroceryStoreSectionsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\r\n  <ion-toolbar>\r\n    <ion-buttons slot=\"start\">\r\n      <ion-back-button>Back</ion-back-button>\r\n    </ion-buttons>\r\n  </ion-toolbar>\r\n</ion-header>\r\n<ion-content>\r\n  <app-edit-grocery-store [groceryStore]=\"groceryStore$ | async\"\r\n                          (notifyNewStoreAisleRequested)=\"onNotifyNewStoreAisleRequest($event)\">\r\n  </app-edit-grocery-store>\r\n</ion-content>\r\n"
+module.exports = "<ion-header>\r\n  <ion-toolbar>\r\n    <ion-buttons slot=\"start\">\r\n      <ion-back-button>Back</ion-back-button>\r\n    </ion-buttons>\r\n  </ion-toolbar>\r\n</ion-header>\r\n<ion-content>\r\n  <app-edit-grocery-store [groceryStore]=\"groceryStore$ | async\"\r\n                          (notifyNewStoreAisleRequested)=\"onNotifyNewStoreAisleRequest($event)\"\r\n                          (notifyDeleteStoreAisleRequested) =\"onDeleteStoreAisleRequest($event)\"\r\n                          (notifyExpandAisles)=\"onNotifyExpandAisles($event)\"\r\n                          (notifyNewGroceryStoreSectionRequested)=\"onNotifyNewGrocerStoreSectionRequest($event)\"\r\n                          (notifyDeleteGroceryStoreSectionRequested) =\"onDeleteGroceryStoreSectionRequest($event)\"\r\n                          (notifyExpandSections)=\"onNotifyExpandSections($event)\">\r\n  </app-edit-grocery-store>\r\n</ion-content>\r\n"
 
 /***/ }),
 
@@ -1750,14 +1838,30 @@ var EditSelectedGroceryStoreComponent = /** @class */ (function () {
         this.groceryStoreId = this.router.getCurrentNavigation().extras.queryParams.id;
     }
     EditSelectedGroceryStoreComponent.prototype.ngOnInit = function () {
+        this.store.dispatch(new _store_store_management_actions__WEBPACK_IMPORTED_MODULE_5__["NavigatedToStoreDetailsPage"](this.groceryStoreId));
         this.groceryStore$ = this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_4__["select"])(Object(_store_store_management_selectors__WEBPACK_IMPORTED_MODULE_3__["selectGroceryStore"])(this.groceryStoreId)));
+        this.groceryStoreAisles$ = this.store.pipe(Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_4__["select"])(Object(_store_store_management_selectors__WEBPACK_IMPORTED_MODULE_3__["selectGroceryStoreAisles"])(this.groceryStoreId)));
         // this.store.dispatch(new fromActions.NavigatedToStoreDetailsPage())
     };
     EditSelectedGroceryStoreComponent.prototype.onNotifyNewStoreAisleRequest = function ($event) {
         this.store.dispatch(new _store_store_management_actions__WEBPACK_IMPORTED_MODULE_5__["AddStoreAisle"]($event));
     };
-    EditSelectedGroceryStoreComponent.prototype.onSectionStatusChanged = function ($event) {
-        this.aislesSectionIsOpen = $event.isOpen;
+    EditSelectedGroceryStoreComponent.prototype.onDeleteStoreAisleRequest = function ($event) {
+        console.log("dispatching delete store aisle event: " + $event.aisle);
+        this.store.dispatch(new _store_store_management_actions__WEBPACK_IMPORTED_MODULE_5__["DeleteStoreAisle"]($event));
+    };
+    EditSelectedGroceryStoreComponent.prototype.onNotifyExpandAisles = function ($event) {
+        this.store.dispatch(new _store_store_management_actions__WEBPACK_IMPORTED_MODULE_5__["GetGroceryStoreAisles"]($event));
+    };
+    EditSelectedGroceryStoreComponent.prototype.onNotifyNewGrocerStoreSectionRequest = function ($event) {
+        this.store.dispatch(new _store_store_management_actions__WEBPACK_IMPORTED_MODULE_5__["AddGroceryStoreSection"]($event));
+    };
+    EditSelectedGroceryStoreComponent.prototype.onDeleteGroceryStoreSectionRequest = function ($event) {
+        console.log("dispatching delete store aisle event: " + $event.section);
+        this.store.dispatch(new _store_store_management_actions__WEBPACK_IMPORTED_MODULE_5__["DeleteGroceryStoreSection"]($event));
+    };
+    EditSelectedGroceryStoreComponent.prototype.onNotifyExpandSections = function ($event) {
+        this.store.dispatch(new _store_store_management_actions__WEBPACK_IMPORTED_MODULE_5__["GetGroceryStoreSections"]($event));
     };
     EditSelectedGroceryStoreComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -1781,7 +1885,7 @@ var EditSelectedGroceryStoreComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\r\n  <h2>Stores</h2>\r\n</ion-header>\r\n<ion-content>\r\n  <app-store-list [groceryStores] = \"(groceryStores$ | async)\"\r\n (notifyDeleteStoreRequested)=\"onDeleteStoreRequest($event)\" >\r\n  </app-store-list>\r\n</ion-content>\r\n<ion-footer>\r\n  <app-add-grocery-store (notifyNewStoreRequested)=\"onNotifyNewStoreRequest($event)\"></app-add-grocery-store>\r\n</ion-footer>\r\n\r\n<!--<ion-card>-->\r\n  <!--<ion-card-content>list should display below</ion-card-content>-->\r\n<!--</ion-card>-->\r\n"
+module.exports = "<ion-header>\r\n  <h2>Stores</h2>\r\n</ion-header>\r\n<ion-content>\r\n  <app-store-list [groceryStores] = \"(groceryStores$ | async)\"\r\n (notifyDeleteStoreRequested)=\"onDeleteStoreRequest($event)\" >\r\n  </app-store-list>\r\n</ion-content>\r\n<ion-footer>\r\n  <app-add-grocery-store (notifyNewStoreRequested)=\"onNotifyNewStoreRequest($event)\"></app-add-grocery-store>\r\n</ion-footer>\r\n"
 
 /***/ }),
 
@@ -1879,8 +1983,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _smart_components_edit_selected_grocery_store_edit_selected_grocery_store_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./smart-components/edit-selected-grocery-store/edit-selected-grocery-store.component */ "./src/app/modules/store-management/smart-components/edit-selected-grocery-store/edit-selected-grocery-store.component.ts");
 /* harmony import */ var _dumb_components_grocery_store_aisles_grocery_store_aisles_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./dumb-components/grocery-store-aisles/grocery-store-aisles.component */ "./src/app/modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles.component.ts");
-/* harmony import */ var _grocery_store_sections_grocery_store_sections_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./grocery-store-sections/grocery-store-sections.component */ "./src/app/modules/store-management/grocery-store-sections/grocery-store-sections.component.ts");
-/* harmony import */ var _grocery_store_items_grocery_store_items_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./grocery-store-items/grocery-store-items.component */ "./src/app/modules/store-management/grocery-store-items/grocery-store-items.component.ts");
+/* harmony import */ var _dumb_components_grocery_store_sections_grocery_store_sections_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./dumb-components/grocery-store-sections/grocery-store-sections.component */ "./src/app/modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component.ts");
+/* harmony import */ var _dumb_components_grocery_store_items_grocery_store_items_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./dumb-components/grocery-store-items/grocery-store-items.component */ "./src/app/modules/store-management/dumb-components/grocery-store-items/grocery-store-items.component.ts");
 /* harmony import */ var _dumb_components_edit_grocery_store_edit_grocery_store_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./dumb-components/edit-grocery-store/edit-grocery-store.component */ "./src/app/modules/store-management/dumb-components/edit-grocery-store/edit-grocery-store.component.ts");
 /* harmony import */ var _dumb_components_add_grocery_store_add_grocery_store__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./dumb-components/add-grocery-store/add-grocery-store */ "./src/app/modules/store-management/dumb-components/add-grocery-store/add-grocery-store.ts");
 /* harmony import */ var _shared_module_shared_module__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../shared-module/shared.module */ "./src/app/modules/shared-module/shared.module.ts");
@@ -1923,8 +2027,8 @@ var StoreManagementModule = /** @class */ (function () {
                 _dumb_components_store_list_store_list_component__WEBPACK_IMPORTED_MODULE_6__["StoreListComponent"],
                 _smart_components_edit_selected_grocery_store_edit_selected_grocery_store_component__WEBPACK_IMPORTED_MODULE_13__["EditSelectedGroceryStoreComponent"],
                 _dumb_components_grocery_store_aisles_grocery_store_aisles_component__WEBPACK_IMPORTED_MODULE_14__["GroceryStoreAislesComponent"],
-                _grocery_store_sections_grocery_store_sections_component__WEBPACK_IMPORTED_MODULE_15__["GroceryStoreSectionsComponent"],
-                _grocery_store_items_grocery_store_items_component__WEBPACK_IMPORTED_MODULE_16__["GroceryStoreItemsComponent"],
+                _dumb_components_grocery_store_sections_grocery_store_sections_component__WEBPACK_IMPORTED_MODULE_15__["GroceryStoreSectionsComponent"],
+                _dumb_components_grocery_store_items_grocery_store_items_component__WEBPACK_IMPORTED_MODULE_16__["GroceryStoreItemsComponent"],
                 _dumb_components_edit_grocery_store_edit_grocery_store_component__WEBPACK_IMPORTED_MODULE_17__["EditGroceryStoreComponent"],
                 _dumb_components_add_grocery_store_add_grocery_store__WEBPACK_IMPORTED_MODULE_18__["AddGrocreyStoreComponent"]
             ],
@@ -2004,7 +2108,7 @@ var selectAllGroceryStores = (_a = groceryStoreAdapter.getSelectors(), _a.select
 /*!****************************************************************************!*\
   !*** ./src/app/modules/store-management/store/store-management.actions.ts ***!
   \****************************************************************************/
-/*! exports provided: StoreManagerActionTypes, NavigatedToStoreListPage, NavigateToStoreDetailsPage, StoresLoadedSuccessfully, LoadGroceryStoresFailed, CreateStore, StoreCreated, DeleteStoreSucceeded, CreateStoreFailed, DeleteStore, StoreDeleted, DeleteStoreFailed, AddStoreAisle, RemoveStoreAisle, StoreAisleAdded, AddStoreAisleFailed, StoreAisleRemoved, SelectStore, UpdateStore, SelectStoreAisle, UpdateStoreAisle */
+/*! exports provided: StoreManagerActionTypes, NavigatedToStoreListPage, NavigateToStoreDetailsPage, NavigatedToStoreDetailsPage, StoresLoadedSuccessfully, LoadGroceryStoresFailed, CreateStore, StoreCreated, DeleteStoreSucceeded, CreateStoreFailed, DeleteStore, StoreDeleted, DeleteStoreFailed, AddStoreAisle, DeleteStoreAisle, GetGroceryStoreAisles, AddGroceryStoreSection, DeleteGroceryStoreSection, GetGroceryStoreSections, RemoveStoreAisle, GroceryStoreAislesLoaded, GroceryStoreSectionsLoaded, GetStoreAislesFailed, GetStoreSectionsFailed, StoreAisleAdded, GroceryStoreAisleDeleted, AddStoreAisleFailed, GroceryStoreSectionAdded, AddGroceryStoreSectionFailed, DeleteStoreAisleFailed, DeleteGroceryStoreSectionFailed, GroceryStoreSectionDeleted, SelectStore, UpdateStore, SelectStoreAisle, UpdateStoreAisle */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2012,6 +2116,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoreManagerActionTypes", function() { return StoreManagerActionTypes; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NavigatedToStoreListPage", function() { return NavigatedToStoreListPage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NavigateToStoreDetailsPage", function() { return NavigateToStoreDetailsPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NavigatedToStoreDetailsPage", function() { return NavigatedToStoreDetailsPage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoresLoadedSuccessfully", function() { return StoresLoadedSuccessfully; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoadGroceryStoresFailed", function() { return LoadGroceryStoresFailed; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CreateStore", function() { return CreateStore; });
@@ -2022,10 +2127,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoreDeleted", function() { return StoreDeleted; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeleteStoreFailed", function() { return DeleteStoreFailed; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddStoreAisle", function() { return AddStoreAisle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeleteStoreAisle", function() { return DeleteStoreAisle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetGroceryStoreAisles", function() { return GetGroceryStoreAisles; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddGroceryStoreSection", function() { return AddGroceryStoreSection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeleteGroceryStoreSection", function() { return DeleteGroceryStoreSection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetGroceryStoreSections", function() { return GetGroceryStoreSections; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RemoveStoreAisle", function() { return RemoveStoreAisle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroceryStoreAislesLoaded", function() { return GroceryStoreAislesLoaded; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroceryStoreSectionsLoaded", function() { return GroceryStoreSectionsLoaded; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetStoreAislesFailed", function() { return GetStoreAislesFailed; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetStoreSectionsFailed", function() { return GetStoreSectionsFailed; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoreAisleAdded", function() { return StoreAisleAdded; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroceryStoreAisleDeleted", function() { return GroceryStoreAisleDeleted; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddStoreAisleFailed", function() { return AddStoreAisleFailed; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoreAisleRemoved", function() { return StoreAisleRemoved; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroceryStoreSectionAdded", function() { return GroceryStoreSectionAdded; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddGroceryStoreSectionFailed", function() { return AddGroceryStoreSectionFailed; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeleteStoreAisleFailed", function() { return DeleteStoreAisleFailed; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeleteGroceryStoreSectionFailed", function() { return DeleteGroceryStoreSectionFailed; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroceryStoreSectionDeleted", function() { return GroceryStoreSectionDeleted; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SelectStore", function() { return SelectStore; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UpdateStore", function() { return UpdateStore; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SelectStoreAisle", function() { return SelectStoreAisle; });
@@ -2038,6 +2157,7 @@ var StoreManagerActionTypes;
     StoreManagerActionTypes["CreateStoreFailed"] = "[Store Manager] Create Store failed";
     StoreManagerActionTypes["NavigatedToStoreListPage"] = "[Store Manager] Store List Page";
     StoreManagerActionTypes["NavigateToStoreDetailsPage"] = "[Store Manager] Navigate to Store Details Page";
+    StoreManagerActionTypes["NavigatedToStoreDetailsPage"] = "[Store Manager] Navigated to Store Details Page";
     StoreManagerActionTypes["StoresLoadedSuccessfully"] = "[Store Manager] Stores Loaded Successfully";
     StoreManagerActionTypes["StoreCreated"] = "[Store Manager] Created";
     StoreManagerActionTypes["StoreDeleted"] = "[Store Manager] Deleted";
@@ -2047,15 +2167,27 @@ var StoreManagerActionTypes;
     StoreManagerActionTypes["DeleteStoreFailed"] = "[Store Manager] Delete Store failed";
     StoreManagerActionTypes["DeleteStoreSucceeded"] = "[Store Manager] Delete Store succeeded";
     StoreManagerActionTypes["AddStoreAisle"] = "[Store Manager] Add Store Aisle";
+    StoreManagerActionTypes["GetStoreAisles"] = "[Store Manager] Get Store Aisles";
+    StoreManagerActionTypes["GroceryStoreAislesLoaded"] = "[Store Manager] Store Aisles Loaded";
+    StoreManagerActionTypes["GroceryStoreSectionsLoaded"] = "[Store Manager] Store Sections Loaded";
+    StoreManagerActionTypes["GetGroceryStoreAislesFailed"] = "[Store Manager] Store Aisles Failed To Load";
+    StoreManagerActionTypes["GetGroceryStoreSectionsFailed"] = "[Store Manager] Store Sections Failed To Load";
     StoreManagerActionTypes["AddStoreAisleFailed"] = "[Store Manager] Add Store Aisle Failed";
+    StoreManagerActionTypes["DeleteStoreAisleFailed"] = "[Store Manager] Delete Store Aisle Failed";
     StoreManagerActionTypes["StoreAisleAdded"] = "[Store Manager] Aisle Added";
-    StoreManagerActionTypes["StoreAisleRemoved"] = "[Store Manager] Aisle Removed";
     StoreManagerActionTypes["UpdateStoreAisle"] = "[Store Manager] Update Aisle";
     StoreManagerActionTypes["SelectStoreAisle"] = "[Store Manager] Select Aisle";
     StoreManagerActionTypes["DeleteStoreAisle"] = "[Store Manager] Delete Aisle";
-    StoreManagerActionTypes["CreateStoreSection"] = "[Store Manager] Create Grocery Section";
+    StoreManagerActionTypes["GroceryStoreAisleDeleted"] = "[Store Manager] Delete Aisle Succeeded";
+    StoreManagerActionTypes["GetGroceryStoreSections"] = "[Store Manager] Get Grocery Store Sections";
+    StoreManagerActionTypes["AddGroceryStoreSection"] = "[Store Manager] Add Grocery Store Section";
+    StoreManagerActionTypes["DeleteGroceryStoreAisleFailed"] = "[Store Manager] Delete Aisle Failed";
+    StoreManagerActionTypes["DeleteGroceryStoreSection"] = "[Store Manager] Delete Grocery Story Section";
+    StoreManagerActionTypes["GroceryStoreSectionDeleted"] = "[Store Manager] Delete Grocery Section Succeeded";
+    StoreManagerActionTypes["DeleteGroceryStoreSectionFailed"] = "[Store Manager] Delete Grocery Store Section Failed";
+    StoreManagerActionTypes["AddGroceryStoreSectionFailed"] = "[Store Manager] Add Grocery Store Section Failed";
+    StoreManagerActionTypes["GroceryStoreSectionAdded"] = "[Store Manager] Grocery Store Section Added";
     StoreManagerActionTypes["UpdateStoreSection"] = "[Store Manager] Update Aisle";
-    StoreManagerActionTypes["DeleteStoreSection"] = "[Store Manager] Delete Aisle";
     StoreManagerActionTypes["SelectStoreSection"] = "[Store Manager] Select Aisle";
     StoreManagerActionTypes["CreateStoreLocation"] = "[Store Manager] Create Location";
     StoreManagerActionTypes["UpdateStoreLocation"] = "[Store Manager] Update Location";
@@ -2075,6 +2207,14 @@ var NavigateToStoreDetailsPage = /** @class */ (function () {
         this.type = StoreManagerActionTypes.NavigateToStoreDetailsPage;
     }
     return NavigateToStoreDetailsPage;
+}());
+
+var NavigatedToStoreDetailsPage = /** @class */ (function () {
+    function NavigatedToStoreDetailsPage(groceryStoreId) {
+        this.groceryStoreId = groceryStoreId;
+        this.type = StoreManagerActionTypes.NavigatedToStoreDetailsPage;
+    }
+    return NavigatedToStoreDetailsPage;
 }());
 
 // export class NavigateToEditStore implements Action {
@@ -2163,12 +2303,84 @@ var AddStoreAisle = /** @class */ (function () {
     return AddStoreAisle;
 }());
 
+var DeleteStoreAisle = /** @class */ (function () {
+    function DeleteStoreAisle(deleteStoreAisleRequest) {
+        this.deleteStoreAisleRequest = deleteStoreAisleRequest;
+        this.type = StoreManagerActionTypes.DeleteStoreAisle;
+    }
+    return DeleteStoreAisle;
+}());
+
+var GetGroceryStoreAisles = /** @class */ (function () {
+    function GetGroceryStoreAisles(groceryStoreId) {
+        this.groceryStoreId = groceryStoreId;
+        this.type = StoreManagerActionTypes.GetStoreAisles;
+    }
+    return GetGroceryStoreAisles;
+}());
+
+var AddGroceryStoreSection = /** @class */ (function () {
+    function AddGroceryStoreSection(newGroceryStoreSectionRequest) {
+        this.newGroceryStoreSectionRequest = newGroceryStoreSectionRequest;
+        this.type = StoreManagerActionTypes.AddGroceryStoreSection;
+    }
+    return AddGroceryStoreSection;
+}());
+
+var DeleteGroceryStoreSection = /** @class */ (function () {
+    function DeleteGroceryStoreSection(deleteGroceryStoreSectionRequest) {
+        this.deleteGroceryStoreSectionRequest = deleteGroceryStoreSectionRequest;
+        this.type = StoreManagerActionTypes.DeleteGroceryStoreSection;
+    }
+    return DeleteGroceryStoreSection;
+}());
+
+var GetGroceryStoreSections = /** @class */ (function () {
+    function GetGroceryStoreSections(groceryStoreId) {
+        this.groceryStoreId = groceryStoreId;
+        this.type = StoreManagerActionTypes.GetGroceryStoreSections;
+    }
+    return GetGroceryStoreSections;
+}());
+
 var RemoveStoreAisle = /** @class */ (function () {
     function RemoveStoreAisle(deleteStoreAisleRequest) {
         this.deleteStoreAisleRequest = deleteStoreAisleRequest;
         this.type = StoreManagerActionTypes.DeleteStoreAisle;
     }
     return RemoveStoreAisle;
+}());
+
+var GroceryStoreAislesLoaded = /** @class */ (function () {
+    function GroceryStoreAislesLoaded(payload) {
+        this.payload = payload;
+        this.type = StoreManagerActionTypes.GroceryStoreAislesLoaded;
+    }
+    return GroceryStoreAislesLoaded;
+}());
+
+var GroceryStoreSectionsLoaded = /** @class */ (function () {
+    function GroceryStoreSectionsLoaded(payload) {
+        this.payload = payload;
+        this.type = StoreManagerActionTypes.GroceryStoreSectionsLoaded;
+    }
+    return GroceryStoreSectionsLoaded;
+}());
+
+var GetStoreAislesFailed = /** @class */ (function () {
+    function GetStoreAislesFailed(error) {
+        this.error = error;
+        this.type = StoreManagerActionTypes.GetGroceryStoreAislesFailed;
+    }
+    return GetStoreAislesFailed;
+}());
+
+var GetStoreSectionsFailed = /** @class */ (function () {
+    function GetStoreSectionsFailed(error) {
+        this.error = error;
+        this.type = StoreManagerActionTypes.GetGroceryStoreSectionsFailed;
+    }
+    return GetStoreSectionsFailed;
 }());
 
 var StoreAisleAdded = /** @class */ (function () {
@@ -2179,6 +2391,14 @@ var StoreAisleAdded = /** @class */ (function () {
     return StoreAisleAdded;
 }());
 
+var GroceryStoreAisleDeleted = /** @class */ (function () {
+    function GroceryStoreAisleDeleted(payload) {
+        this.payload = payload;
+        this.type = StoreManagerActionTypes.GroceryStoreAisleDeleted;
+    }
+    return GroceryStoreAisleDeleted;
+}());
+
 var AddStoreAisleFailed = /** @class */ (function () {
     function AddStoreAisleFailed(error) {
         this.error = error;
@@ -2187,12 +2407,44 @@ var AddStoreAisleFailed = /** @class */ (function () {
     return AddStoreAisleFailed;
 }());
 
-var StoreAisleRemoved = /** @class */ (function () {
-    function StoreAisleRemoved(payload) {
+var GroceryStoreSectionAdded = /** @class */ (function () {
+    function GroceryStoreSectionAdded(payload) {
         this.payload = payload;
-        this.type = StoreManagerActionTypes.StoreAisleRemoved;
+        this.type = StoreManagerActionTypes.GroceryStoreSectionAdded;
     }
-    return StoreAisleRemoved;
+    return GroceryStoreSectionAdded;
+}());
+
+var AddGroceryStoreSectionFailed = /** @class */ (function () {
+    function AddGroceryStoreSectionFailed(error) {
+        this.error = error;
+        this.type = StoreManagerActionTypes.AddGroceryStoreSectionFailed;
+    }
+    return AddGroceryStoreSectionFailed;
+}());
+
+var DeleteStoreAisleFailed = /** @class */ (function () {
+    function DeleteStoreAisleFailed(error) {
+        this.error = error;
+        this.type = StoreManagerActionTypes.DeleteStoreAisleFailed;
+    }
+    return DeleteStoreAisleFailed;
+}());
+
+var DeleteGroceryStoreSectionFailed = /** @class */ (function () {
+    function DeleteGroceryStoreSectionFailed(error) {
+        this.error = error;
+        this.type = StoreManagerActionTypes.DeleteGroceryStoreSectionFailed;
+    }
+    return DeleteGroceryStoreSectionFailed;
+}());
+
+var GroceryStoreSectionDeleted = /** @class */ (function () {
+    function GroceryStoreSectionDeleted(payload) {
+        this.payload = payload;
+        this.type = StoreManagerActionTypes.GroceryStoreSectionDeleted;
+    }
+    return GroceryStoreSectionDeleted;
 }());
 
 var SelectStore = /** @class */ (function () {
@@ -2284,9 +2536,43 @@ var StoreManagementEffects = /** @class */ (function () {
             _this.router.navigate([_this.router.url, 'store-details'], navigationExtras);
         }));
         this.addNewStoreAisle$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_store_management_actions__WEBPACK_IMPORTED_MODULE_2__["StoreManagerActionTypes"].AddStoreAisle), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMap"])(function (payload) {
-            return _this.storeManagementService.addGroceryStoreAisle(payload.newStoreAisleRequest).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["tap"])(function (modStore) {
-                console.log("modified store: " + modStore);
-            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (modifiedGroceryStore) { return new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["StoreAisleAdded"](modifiedGroceryStore); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["catchError"])(function (error) { return [new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["AddStoreAisleFailed"](error)]; }));
+            return _this.storeManagementService.addGroceryStoreAisle(payload.newStoreAisleRequest).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["tap"])(function (aisleAdded) {
+                console.log("aisleAdded: " + aisleAdded);
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (aisleAdded) { return new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["StoreAisleAdded"]({ groceryStoreId: payload.newStoreAisleRequest.groceryStoreId, newAisle: aisleAdded }); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["catchError"])(function (error) { return [new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["AddStoreAisleFailed"](error)]; }));
+        }));
+        this.deleteStoreAisle$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_store_management_actions__WEBPACK_IMPORTED_MODULE_2__["StoreManagerActionTypes"].DeleteStoreAisle), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMap"])(function (payload) {
+            return _this.storeManagementService.deleteGroceryStoreAisle(payload.deleteStoreAisleRequest).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["tap"])(function (aisleDeleted) {
+                console.log("aisleDeleted: " + aisleDeleted);
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (aisleDeleted) { return new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["GroceryStoreAisleDeleted"]({
+                groceryStoreId: payload.deleteStoreAisleRequest.groceryStoreId,
+                aisle: payload.deleteStoreAisleRequest.aisle
+            }); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["catchError"])(function (error) { return [new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["DeleteStoreAisleFailed"](error)]; }));
+        }));
+        this.getStoreAisles$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_store_management_actions__WEBPACK_IMPORTED_MODULE_2__["StoreManagerActionTypes"].GetStoreAisles), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMap"])(function (payload) {
+            return _this.storeManagementService.getGroceryStoreAisles(payload.groceryStoreId).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["tap"])(function (aisles) {
+                console.log("aisles: " + aisles);
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (aisles) { return new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["GroceryStoreAislesLoaded"]({ groceryStoreId: payload.groceryStoreId, aisles: aisles }); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["catchError"])(function (error) { return [new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["GetStoreAislesFailed"](error)]; }));
+        }));
+        this.addNewGroceryStoreSection$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_store_management_actions__WEBPACK_IMPORTED_MODULE_2__["StoreManagerActionTypes"].AddGroceryStoreSection), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMap"])(function (payload) {
+            return _this.storeManagementService.addGroceryStoreSection(payload.newGroceryStoreSectionRequest).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["tap"])(function (sectionAdded) {
+                console.log("sectionAdded: " + sectionAdded);
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (sectionAdded) { return new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["GroceryStoreSectionAdded"]({
+                groceryStoreId: payload.newGroceryStoreSectionRequest.groceryStoreId,
+                newSection: sectionAdded
+            }); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["catchError"])(function (error) { return [new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["AddGroceryStoreSectionFailed"](error)]; }));
+        }));
+        this.deleteGrocerStoreSection$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_store_management_actions__WEBPACK_IMPORTED_MODULE_2__["StoreManagerActionTypes"].DeleteGroceryStoreSection), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMap"])(function (payload) {
+            return _this.storeManagementService.deleteGroceryStoreSection(payload.deleteGroceryStoreSectionRequest).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["tap"])(function (sectionDeleted) {
+                console.log("sectionDeleted: " + sectionDeleted);
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (sectionDeleted) { return new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["GroceryStoreSectionDeleted"]({
+                groceryStoreId: payload.deleteGroceryStoreSectionRequest.groceryStoreId,
+                section: payload.deleteGroceryStoreSectionRequest.section
+            }); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["catchError"])(function (error) { return [new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["DeleteGroceryStoreSectionFailed"](error)]; }));
+        }));
+        this.getGroceryStoreSections$ = this.actions$.pipe(Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["ofType"])(_store_management_actions__WEBPACK_IMPORTED_MODULE_2__["StoreManagerActionTypes"].GetGroceryStoreSections), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["switchMap"])(function (payload) {
+            return _this.storeManagementService.getGroceryStoreSections(payload.groceryStoreId).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["tap"])(function (sections) {
+                console.log("sections: " + sections);
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (sections) { return new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["GroceryStoreSectionsLoaded"]({ groceryStoreId: payload.groceryStoreId, sections: sections }); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["catchError"])(function (error) { return [new _store_management_actions__WEBPACK_IMPORTED_MODULE_2__["GetStoreAislesFailed"](error)]; }));
         }));
     }
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -2309,6 +2595,26 @@ var StoreManagementEffects = /** @class */ (function () {
         Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["Effect"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
     ], StoreManagementEffects.prototype, "addNewStoreAisle$", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["Effect"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], StoreManagementEffects.prototype, "deleteStoreAisle$", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["Effect"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], StoreManagementEffects.prototype, "getStoreAisles$", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["Effect"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], StoreManagementEffects.prototype, "addNewGroceryStoreSection$", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["Effect"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], StoreManagementEffects.prototype, "deleteGrocerStoreSection$", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_ngrx_effects__WEBPACK_IMPORTED_MODULE_4__["Effect"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], StoreManagementEffects.prototype, "getGroceryStoreSections$", void 0);
     StoreManagementEffects = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])('IPantryDataService')),
@@ -2336,6 +2642,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _store_management_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store-management.actions */ "./src/app/modules/store-management/store/store-management.actions.ts");
 /* harmony import */ var _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./grocery-store.adapter */ "./src/app/modules/store-management/store/grocery-store.adapter.ts");
+/* harmony import */ var _store_management_selectors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store-management.selectors */ "./src/app/modules/store-management/store/store-management.selectors.ts");
+
 
 
 
@@ -2350,8 +2658,6 @@ function groceryStoresReducer(state, action) {
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state.groceryStores, { loading: true, error: null }) });
         case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].StoreCreated: {
             // const { id, name } = action.payload;
-            console.log('reducing state after StoreCreated. payload: ');
-            console.log(action.payload);
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_2__["groceryStoreAdapter"].addOne(action.payload, state.groceryStores), { error: null }) });
         }
         case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].StoreDeleted:
@@ -2366,14 +2672,67 @@ function groceryStoresReducer(state, action) {
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_2__["groceryStoreAdapter"].addAll(action.groceryStores, state.groceryStores), { loading: false, error: null }) });
         case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].LoadGroceryStoresFailed:
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state.groceryStores, { loading: false, error: action.error }) });
-        case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].StoreAisleAdded:
-            // const { id, name } = action.payload;
-            {
-                return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_2__["groceryStoreAdapter"].updateOne({
-                        changes: { aisles: action.payload.aisles },
-                        id: action.payload.id
-                    }, state.groceryStores) });
-            }
+        case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].NavigatedToStoreDetailsPage:
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { selectedGroceryStoreId: action.groceryStoreId });
+        case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].StoreAisleAdded: {
+            var groceryStore = Object(_store_management_selectors__WEBPACK_IMPORTED_MODULE_3__["getGroceryStore"])(state.groceryStores, action.payload.groceryStoreId);
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_2__["groceryStoreAdapter"].updateOne({
+                    changes: {
+                        aisles: groceryStore.aisles.concat([
+                            action.payload.newAisle
+                        ])
+                    },
+                    id: action.payload.groceryStoreId,
+                }, state.groceryStores), { loading: false, error: null }) });
+        }
+        case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].GroceryStoreAisleDeleted: {
+            var groceryStore = Object(_store_management_selectors__WEBPACK_IMPORTED_MODULE_3__["getGroceryStore"])(state.groceryStores, action.payload.groceryStoreId);
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_2__["groceryStoreAdapter"].updateOne({
+                    changes: {
+                        aisles: groceryStore.aisles.filter(function (item) { return item !== action.payload.aisle; })
+                    },
+                    id: action.payload.groceryStoreId,
+                }, state.groceryStores), { loading: false, error: null }) });
+        }
+        case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].GroceryStoreAislesLoaded: {
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_2__["groceryStoreAdapter"].updateOne({
+                    changes: {
+                        aisles: action.payload.aisles
+                    },
+                    id: action.payload.groceryStoreId,
+                }, state.groceryStores), { loading: false, error: null }) });
+        }
+        case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].GroceryStoreSectionsLoaded: {
+            var groceryStore = Object(_store_management_selectors__WEBPACK_IMPORTED_MODULE_3__["getGroceryStore"])(state.groceryStores, action.payload.groceryStoreId);
+            console.log("grocery store in reducer: " + groceryStore);
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_2__["groceryStoreAdapter"].updateOne({
+                    changes: {
+                        sections: action.payload.sections
+                    },
+                    id: action.payload.groceryStoreId,
+                }, state.groceryStores), { loading: false, error: null }) });
+        }
+        case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].GroceryStoreSectionAdded: {
+            var groceryStore = Object(_store_management_selectors__WEBPACK_IMPORTED_MODULE_3__["getGroceryStore"])(state.groceryStores, action.payload.groceryStoreId);
+            console.log("grocery store in reducer: " + JSON.stringify(groceryStore));
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_2__["groceryStoreAdapter"].updateOne({
+                    changes: {
+                        sections: groceryStore.sections.concat([
+                            action.payload.newSection
+                        ])
+                    },
+                    id: action.payload.groceryStoreId,
+                }, state.groceryStores), { loading: false, error: null }) });
+        }
+        case _store_management_actions__WEBPACK_IMPORTED_MODULE_1__["StoreManagerActionTypes"].GroceryStoreSectionDeleted: {
+            var groceryStore = Object(_store_management_selectors__WEBPACK_IMPORTED_MODULE_3__["getGroceryStore"])(state.groceryStores, action.payload.groceryStoreId);
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, state, { groceryStores: tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_2__["groceryStoreAdapter"].updateOne({
+                    changes: {
+                        sections: groceryStore.sections.filter(function (item) { return item !== action.payload.section; })
+                    },
+                    id: action.payload.groceryStoreId,
+                }, state.groceryStores), { loading: false, error: null }) });
+        }
         default: return state;
     }
 }
@@ -2391,7 +2750,7 @@ function groceryStoresReducer(state, action) {
 /*!******************************************************************************!*\
   !*** ./src/app/modules/store-management/store/store-management.selectors.ts ***!
   \******************************************************************************/
-/*! exports provided: getStoreManagementState, getGroceryStoresState, selectGroceryStoreEntities, selectGroceryStoreIds, selectGroceryStoreCount, selectAllGroceryStores, selectGroceryStore, selectGroceryStoresLoading */
+/*! exports provided: getStoreManagementState, getGroceryStoresState, selectGroceryStoreEntities, selectGroceryStoreIds, selectGroceryStoreCount, selectAllGroceryStores, selectGroceryStore, selectGroceryStoreAisles, selectGroceryStoresLoading, getGroceryStore */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2403,7 +2762,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectGroceryStoreCount", function() { return selectGroceryStoreCount; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectAllGroceryStores", function() { return selectAllGroceryStores; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectGroceryStore", function() { return selectGroceryStore; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectGroceryStoreAisles", function() { return selectGroceryStoreAisles; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectGroceryStoresLoading", function() { return selectGroceryStoresLoading; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGroceryStore", function() { return getGroceryStore; });
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./grocery-store.adapter */ "./src/app/modules/store-management/store/grocery-store.adapter.ts");
 
@@ -2415,7 +2776,9 @@ var selectGroceryStoreIds = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["cre
 var selectGroceryStoreCount = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getGroceryStoresState, _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_1__["groceryStoreCount"]);
 var selectAllGroceryStores = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getGroceryStoresState, _grocery_store_adapter__WEBPACK_IMPORTED_MODULE_1__["selectAllGroceryStores"]);
 var selectGroceryStore = function (id) { return Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(selectAllGroceryStores, function (state) { return state.find(function (store) { return store.id === id; }); }); };
+var selectGroceryStoreAisles = function (id) { return Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(selectGroceryStore(id), function (state) { return state.aisles; }); };
 var selectGroceryStoresLoading = Object(_ngrx_store__WEBPACK_IMPORTED_MODULE_0__["createSelector"])(getGroceryStoresState, function (state) { return state.loading; });
+var getGroceryStore = function (state, id) { return state.entities[id]; };
 
 
 /***/ }),
@@ -2457,8 +2820,12 @@ var PantryDbHelper = /** @class */ (function () {
     PantryDbHelper.BuildForeignKeyConstraintDefinition = function (columnName, referenceTableName, foreignKeyColumnName) {
         return "FOREIGN KEY(" + columnName + ") REFERENCES " + referenceTableName + "(" + foreignKeyColumnName + ")";
     };
-    PantryDbHelper.BuildUniqueConstraint = function (constraintName, columnName) {
-        return "CONSTRAINT " + constraintName + " UNIQUE (" + columnName + ")";
+    PantryDbHelper.BuildUniqueConstraint = function (constraintName) {
+        var columnNames = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            columnNames[_i - 1] = arguments[_i];
+        }
+        return "CONSTRAINT " + constraintName + " UNIQUE (" + columnNames + ")";
     };
     // helpers
     PantryDbHelper.rowToGroceryStore = function (row) {
@@ -2467,10 +2834,10 @@ var PantryDbHelper = /** @class */ (function () {
         console.log(row);
         return {
             name: row[_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.STORE_NAME],
-            aisles: null,
-            sections: null,
+            aisles: [],
+            sections: [],
             id: row[_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.ID],
-            locations: null
+            locations: []
         };
     };
     PantryDbHelper.prototype.connect = function () {
@@ -2517,15 +2884,18 @@ var PantryDbHelper = /** @class */ (function () {
                     case 0:
                         sectionColumnDefinitions = _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.GROCERY_SECTION + ' TEXT NOT NULL, ' +
                             _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.STORE_ID + ' INT, ' +
-                            PantryDbHelper_1.BuildForeignKeyConstraintDefinition(_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.STORE_ID, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.ID);
+                            PantryDbHelper_1.BuildForeignKeyConstraintDefinition(_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.STORE_ID, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.ID) + ' ' +
+                            PantryDbHelper_1.BuildUniqueConstraint(_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.STORE_ID, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.GROCERY_SECTION);
                         aisleColumnDefinitions = _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.GROCERY_AISLE + ' TEXT NOT NULL, ' +
                             _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.STORE_ID + ' INTEGER, ' +
-                            PantryDbHelper_1.BuildForeignKeyConstraintDefinition(_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.STORE_ID, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.ID);
+                            PantryDbHelper_1.BuildForeignKeyConstraintDefinition(_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.STORE_ID, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.ID) + ' ' +
+                            PantryDbHelper_1.BuildUniqueConstraint(_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.STORE_ID, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.GROCERY_AISLE);
                         locationColumnDefinitions = _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["LocationTable"].COLS.ID + ' INTEGER PRIMARY KEY ASC, ' +
                             _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["LocationTable"].COLS.SECTION_NAME + ', ' +
                             _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["LocationTable"].COLS.STORE_ID + ' INTEGER, ' +
                             _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["LocationTable"].COLS.AISLE + ', ' +
-                            PantryDbHelper_1.BuildForeignKeyConstraintDefinition(_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["LocationTable"].COLS.STORE_ID, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.ID);
+                            PantryDbHelper_1.BuildForeignKeyConstraintDefinition(_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["LocationTable"].COLS.STORE_ID, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreTable"].COLS.ID) + ' ' +
+                            PantryDbHelper_1.BuildUniqueConstraint(_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["LocationTable"].NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["LocationTable"].COLS.STORE_ID, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["LocationTable"].COLS.SECTION_NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["LocationTable"].COLS.AISLE);
                         pantryItemLocationColumnDefinitions = _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["PantryItemLocationTable"].COLS.LOCATION_ID + ' INTEGER, ' +
                             _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["PantryItemLocationTable"].COLS.PANTRY_ITEM_ID + ' INTEGER, ' +
                             PantryDbHelper_1.BuildForeignKeyConstraintDefinition(_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["PantryItemLocationTable"].COLS.PANTRY_ITEM_ID, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["PantryItemTable"].NAME, _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["PantryItemTable"].COLS.ID) + ', ' +
@@ -2744,6 +3114,30 @@ var PantryDbHelper = /** @class */ (function () {
             });
         });
     };
+    PantryDbHelper.prototype.getGroceryStoreAisles = function (groceryStoreId) {
+        return this.queryGroceryStoreAisles(groceryStoreId);
+    };
+    PantryDbHelper.prototype.getGroceryStoreSections = function (groceryStoreId) {
+        return this.queryGroceryStoreSections(groceryStoreId);
+    };
+    // public getGroceryStoreSections(groceryStoreId: number): Observable<string[]> {
+    //   return new Observable<string[]>((observer) => {
+    //       this.openOrCreateDb().then((result) => {
+    //         console.log(`openOrCreateDb returned ${result}`);
+    //         if (result) {
+    //           this.queryGroceryStoreSections(groceryStoreId).then((sections) => {
+    //             console.log('returning observable for sections');
+    //             observer.next(sections);
+    //             observer.complete();
+    //           }).catch((err) => observer.error(err));
+    //         }
+    //       }).catch((err) => {
+    //         console.log('error in call to openOrCreateDb');
+    //         observer.error(err);
+    //       });
+    //     }
+    //   );
+    // }
     PantryDbHelper.prototype.addGroceryStore = function (name) {
         var _this = this;
         return this.connect().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["mergeMap"])(function (success) { return _this.insertGroceryStore(name); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["switchMap"])(function (id) {
@@ -2754,13 +3148,21 @@ var PantryDbHelper = /** @class */ (function () {
         var _this = this;
         return this.connect().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["mergeMap"])(function (success) { return _this.deleteGroceryStoreById(id); }));
     };
+    PantryDbHelper.prototype.deleteGroceryStoreAisle = function (id, aisle) {
+        var _this = this;
+        return this.connect().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["mergeMap"])(function (success) { return success ? _this.deleteStoreAisle(id, aisle) : Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])(false); }));
+    };
+    PantryDbHelper.prototype.deleteGroceryStoreSection = function (id, grocerySection) {
+        var _this = this;
+        return this.connect().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["mergeMap"])(function (success) { return success ? _this.deleteStoreSection(id, grocerySection) : Object(rxjs__WEBPACK_IMPORTED_MODULE_1__["of"])(false); }));
+    };
     PantryDbHelper.prototype.addGroceryStoreAisle = function (groceryStoreId, aisle) {
         var _this = this;
-        return this.connect().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["mergeMap"])(function (success) { return _this.insertGroceryStoreAisle(groceryStoreId, aisle); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["switchMap"])(function (rowsAffected) {
-            if (rowsAffected > 1) {
-                return _this.queryGroceryStoreById(groceryStoreId);
-            }
-        }));
+        return this.connect().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["mergeMap"])(function (success) { return _this.insertGroceryStoreAisle(groceryStoreId, aisle); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["map"])(function (newAisle) { return newAisle; }));
+    };
+    PantryDbHelper.prototype.addGroceryStoreSection = function (groceryStoreId, section) {
+        var _this = this;
+        return this.connect().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["mergeMap"])(function (success) { return _this.insertGroceryStoreSection(groceryStoreId, section); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["map"])(function (newSection) { return newSection; }));
     };
     PantryDbHelper.prototype.queryGroceryStores = function () {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
@@ -2792,10 +3194,46 @@ var PantryDbHelper = /** @class */ (function () {
             });
         });
     };
+    PantryDbHelper.prototype.queryGroceryStoreAisles = function (id) {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
+            _this.queryGroceryStoreAislesPromise(id).then(function (aisles) {
+                observer.next(aisles);
+                observer.complete();
+            }).catch(function (err) { return observer.error(err); });
+        });
+    };
+    PantryDbHelper.prototype.queryGroceryStoreSections = function (id) {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
+            _this.queryGroceryStoreSectionsPromise(id).then(function (sections) {
+                observer.next(sections);
+                observer.complete();
+            }).catch(function (err) { return observer.error(err); });
+        });
+    };
     PantryDbHelper.prototype.deleteGroceryStoreById = function (id) {
         var _this = this;
         return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
             _this.deleteGroceryStorePromise(id).then(function (rowsAffected) {
+                observer.next(rowsAffected > 0);
+                observer.complete();
+            }).catch(function (err) { return observer.error(err); });
+        });
+    };
+    PantryDbHelper.prototype.deleteStoreAisle = function (id, aisle) {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
+            _this.deleteGroceryStoreAislePromise(id, aisle).then(function (rowsAffected) {
+                observer.next(rowsAffected > 0);
+                observer.complete();
+            }).catch(function (err) { return observer.error(err); });
+        });
+    };
+    PantryDbHelper.prototype.deleteStoreSection = function (id, section) {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
+            _this.deleteGroceryStoreSectionPromise(id, section).then(function (rowsAffected) {
                 observer.next(rowsAffected > 0);
                 observer.complete();
             }).catch(function (err) { return observer.error(err); });
@@ -2826,6 +3264,57 @@ var PantryDbHelper = /** @class */ (function () {
             });
         });
     };
+    PantryDbHelper.prototype.deleteGroceryStoreAislePromise = function (id, aisle) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var deleteSql, data, err_3;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        deleteSql = "DELETE FROM " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].NAME + "\n     WHERE " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.STORE_ID + " = " + id + " and\n      " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.GROCERY_AISLE + " = '" + aisle + "'";
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.db.executeSql(deleteSql, [])];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, data.rowsAffected];
+                    case 3:
+                        err_3 = _a.sent();
+                        console.log("Error deleting grocery store aisle " + aisle);
+                        console.log(err_3);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /*
+     todo: combine aisle and section tables into single table with column denoting if it section or aisle
+    */
+    PantryDbHelper.prototype.deleteGroceryStoreSectionPromise = function (id, section) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var deleteSql, data, err_4;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        deleteSql = "DELETE FROM " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].NAME + "\n     WHERE " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.STORE_ID + " = " + id + " and\n      " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.GROCERY_SECTION + " = '" + section + "'";
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.db.executeSql(deleteSql, [])];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, data.rowsAffected];
+                    case 3:
+                        err_4 = _a.sent();
+                        console.log("Error deleting grocery store section " + section);
+                        console.log(err_4);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
     PantryDbHelper.prototype.insertGroceryStore = function (groceryStoreName) {
         var _this = this;
         return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
@@ -2835,9 +3324,39 @@ var PantryDbHelper = /** @class */ (function () {
             }).catch(function (err) { return observer.error(err); });
         });
     };
+    PantryDbHelper.prototype.insertGroceryStoreAisle = function (groceryStoreId, aisle) {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
+            _this.insertGroceryStoreAislePromise(groceryStoreId, aisle).then(function (rowsAffected) {
+                console.log(rowsAffected + " aisle rows affected");
+                if (rowsAffected > 0) {
+                    observer.next(aisle);
+                }
+                observer.complete();
+            }).catch(function (err) {
+                console.log(err);
+                return observer.error(err);
+            });
+        });
+    };
+    PantryDbHelper.prototype.insertGroceryStoreSection = function (groceryStoreId, section) {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
+            _this.insertGroceryStoreSectionPromise(groceryStoreId, section).then(function (rowsAffected) {
+                console.log(rowsAffected + " aisle rows affected");
+                if (rowsAffected > 0) {
+                    observer.next(section);
+                }
+                observer.complete();
+            }).catch(function (err) {
+                console.log(err);
+                return observer.error(err);
+            });
+        });
+    };
     PantryDbHelper.prototype.insertGroceryStorePromise = function (groceryStoreName) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var insertSql, data, err_3;
+            var insertSql, data, err_5;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2852,44 +3371,57 @@ var PantryDbHelper = /** @class */ (function () {
                         console.log("returning " + data + " from insertGroceryStore");
                         return [2 /*return*/, data.rowsAffected];
                     case 3:
-                        err_3 = _a.sent();
+                        err_5 = _a.sent();
                         console.log("Error inserting grocery store " + groceryStoreName);
-                        console.log(err_3);
+                        console.log(err_5);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    PantryDbHelper.prototype.insertGroceryStoreAisle = function (groceryStoreId, aisle) {
-        var _this = this;
-        return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
-            _this.insertGroceryStoreAislePromise(groceryStoreId, aisle).then(function (rowsAffected) {
-                observer.next(rowsAffected);
-                observer.complete();
-            }).catch(function (err) { return observer.error(err); });
-        });
-    };
     PantryDbHelper.prototype.insertGroceryStoreAislePromise = function (groceryStoreId, aisle) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var insertSql, data, err_4;
+            var insertSql, data, err_6;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         insertSql = "INSERT INTO\n     " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].NAME + "\n     (" + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.GROCERY_AISLE + ", " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.STORE_ID + ")\n      VALUES('" + aisle + "', " + groceryStoreId + ")";
-                        console.log('executing: ' + insertSql);
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, this.db.executeSql(insertSql, [])];
                     case 2:
                         data = _a.sent();
-                        console.log("returning " + data + " from insertGroceryStoreAislePromise");
                         return [2 /*return*/, data.rowsAffected];
                     case 3:
-                        err_4 = _a.sent();
+                        err_6 = _a.sent();
                         console.log("Error inserting grocery store aisle " + aisle);
-                        console.log(err_4);
+                        console.log(err_6);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    PantryDbHelper.prototype.insertGroceryStoreSectionPromise = function (groceryStoreId, section) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var insertSql, data, err_7;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        insertSql = "INSERT INTO\n     " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].NAME + "\n     (" + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.GROCERY_SECTION + ", " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.STORE_ID + ")\n      VALUES('" + section + "', " + groceryStoreId + ")";
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.db.executeSql(insertSql, [])];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, data.rowsAffected];
+                    case 3:
+                        err_7 = _a.sent();
+                        console.log("Error inserting grocery store section " + section);
+                        console.log(err_7);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }
@@ -2908,7 +3440,7 @@ var PantryDbHelper = /** @class */ (function () {
     PantryDbHelper.prototype.queryGroceryStoreById = function (id) {
         var _this = this;
         return new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
-            _this.queryGroceryStoreByIdPromise(name).then(function (groceryStore) {
+            _this.queryGroceryStoreByIdPromise(id).then(function (groceryStore) {
                 observer.next(groceryStore);
                 observer.complete();
             }).catch(function (err) { return observer.error(err); });
@@ -2916,7 +3448,7 @@ var PantryDbHelper = /** @class */ (function () {
     };
     PantryDbHelper.prototype.queryGroceryStoreByNamePromise = function (name) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var sqlQueryByName, data, err_5;
+            var sqlQueryByName, data, err_8;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2937,9 +3469,9 @@ var PantryDbHelper = /** @class */ (function () {
                         }
                         return [3 /*break*/, 3];
                     case 2:
-                        err_5 = _a.sent();
+                        err_8 = _a.sent();
                         console.log('Error querying store by name');
-                        console.log(err_5);
+                        console.log(err_8);
                         return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
@@ -2948,7 +3480,7 @@ var PantryDbHelper = /** @class */ (function () {
     };
     PantryDbHelper.prototype.queryGroceryStoreByIdPromise = function (id) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var sqlQueryById, data, err_6;
+            var sqlQueryById, data, err_9;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2964,14 +3496,86 @@ var PantryDbHelper = /** @class */ (function () {
                             return [2 /*return*/, PantryDbHelper_1.rowToGroceryStore(data.rows.item(0))];
                         }
                         else {
-                            console.log('no groceryStore returned for query store by name');
+                            console.log('no groceryStore returned for query store by id');
                             return [2 /*return*/, null];
                         }
                         return [3 /*break*/, 3];
                     case 2:
-                        err_6 = _a.sent();
+                        err_9 = _a.sent();
                         console.log('Error querying store by name');
-                        console.log(err_6);
+                        console.log(err_9);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    PantryDbHelper.prototype.queryGroceryStoreAislesPromise = function (id) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var ret, sqlQueryAisles, data, i, err_10;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        ret = [];
+                        console.log("In queryGroceryStoreAislesPromise " + id);
+                        sqlQueryAisles = "SELECT * from " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].NAME + " WHERE " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.STORE_ID + " = '" + id + "'";
+                        console.log("running query: " + sqlQueryAisles);
+                        return [4 /*yield*/, this.db.executeSql(sqlQueryAisles, [])];
+                    case 1:
+                        data = _a.sent();
+                        if (data.rows.length > 0) {
+                            console.log('at least 1 row returned, converting first row to grocery aisle');
+                            for (i = 0; i < data.rows.length; i++) {
+                                ret.push(data.rows.item(i)[_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGroceryAisleTable"].COLS.GROCERY_AISLE]);
+                            }
+                            return [2 /*return*/, ret];
+                        }
+                        else {
+                            console.log('no aisles returned for query store by id');
+                            return [2 /*return*/, []];
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_10 = _a.sent();
+                        console.log('Error querying store aisles by id');
+                        console.log(err_10);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    PantryDbHelper.prototype.queryGroceryStoreSectionsPromise = function (id) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var ret, sqlQueryGrocerySections, data, i, err_11;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        ret = [];
+                        console.log("In queryGroceryStoreSectionsPromise " + id);
+                        sqlQueryGrocerySections = "SELECT * from " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].NAME + " WHERE " + _pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.STORE_ID + " = '" + id + "'";
+                        console.log("running query: " + sqlQueryGrocerySections);
+                        return [4 /*yield*/, this.db.executeSql(sqlQueryGrocerySections, [])];
+                    case 1:
+                        data = _a.sent();
+                        if (data.rows.length > 0) {
+                            console.log('at least 1 row returned, converting first row to grocery section');
+                            for (i = 0; i < data.rows.length; i++) {
+                                ret.push(data.rows.item(i)[_pantry_db_schema__WEBPACK_IMPORTED_MODULE_3__["StoreGrocerySectionTable"].COLS.GROCERY_SECTION]);
+                            }
+                            return [2 /*return*/, ret];
+                        }
+                        else {
+                            console.log('no grocery sections returned for query store by id');
+                            return [2 /*return*/, []];
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_11 = _a.sent();
+                        console.log('Error querying store sections by id');
+                        console.log(err_11);
                         return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
@@ -3021,6 +3625,14 @@ var PantryDataService = /** @class */ (function () {
         console.log('Calling dbHelper.getAllGroceryStores()');
         return this.dbHelper.getAllGroceryStores();
     };
+    PantryDataService.prototype.getGroceryStoreAisles = function (groceryStoreId) {
+        console.log('Calling dbHelper.getGroceryStoreAisles()');
+        return this.dbHelper.getGroceryStoreAisles(groceryStoreId);
+    };
+    PantryDataService.prototype.getGroceryStoreSections = function (groceryStoreId) {
+        console.log('Calling dbHelper.getGroceryStoreSections()');
+        return this.dbHelper.getGroceryStoreSections(groceryStoreId);
+    };
     PantryDataService.prototype.addGroceryStore = function (newStoreRequest) {
         console.log("adding: " + JSON.stringify(newStoreRequest));
         var newStore$ = this.dbHelper.addGroceryStore(newStoreRequest.name);
@@ -3030,18 +3642,17 @@ var PantryDataService = /** @class */ (function () {
     PantryDataService.prototype.deleteGroceryStore = function (deleteStoreRequest) {
         return this.dbHelper.deleteGroceryStore(deleteStoreRequest.id);
     };
+    PantryDataService.prototype.deleteGroceryStoreAisle = function (deleteStoreAisleRequest) {
+        return this.dbHelper.deleteGroceryStoreAisle(deleteStoreAisleRequest.groceryStoreId, deleteStoreAisleRequest.aisle);
+    };
+    PantryDataService.prototype.deleteGroceryStoreSection = function (deleteStoreSectionRequest) {
+        return this.dbHelper.deleteGroceryStoreSection(deleteStoreSectionRequest.groceryStoreId, deleteStoreSectionRequest.section);
+    };
     PantryDataService.prototype.addGroceryStoreAisle = function (newStoreAisleRequest) {
         return this.dbHelper.addGroceryStoreAisle(newStoreAisleRequest.groceryStoreId, newStoreAisleRequest.aisle);
-        // let i: number;
-        // let groceryStore: GroceryStore;
-        // for (i = 0; i < this.groceryStores.length; i++) {
-        //   if (this.groceryStores[i].id === newStoreAisleRequest.groceryStoreId) {
-        //     groceryStore = this.groceryStores[i];
-        //     break;
-        //   }
-        // }
-        // groceryStore.aisles.push(newStoreAisleRequest.aisle);
-        // return of(groceryStore);
+    };
+    PantryDataService.prototype.addGroceryStoreSection = function (newGroceryStoreSectionRequest) {
+        return this.dbHelper.addGroceryStoreSection(newGroceryStoreSectionRequest.groceryStoreId, newGroceryStoreSectionRequest.section);
     };
     PantryDataService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),

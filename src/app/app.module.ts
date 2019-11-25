@@ -13,10 +13,12 @@ import {CommonModule} from '@angular/common';
 import {RouteReuseStrategy, RouterModule} from '@angular/router';
 import {HomePageComponent} from './home/home.page';
 import {StoreManagementModule} from './modules/store-management/store-management.module';
-import {PantryDbHelper} from './services/db-helper';
+import {PantryDbHelper} from './services/db/db-helper';
 import {PantryDataService} from './services/pantry-data.service';
 import {SQLite} from '@ionic-native/sqlite/ngx';
 import {SharedModule} from './modules/shared-module/shared.module';
+import {MySqlCommands} from './services/db/my-sql-commands';
+import {FakePantryDataService} from './services/fake-pantry-data.service';
 
 
 @NgModule({
@@ -29,7 +31,8 @@ import {SharedModule} from './modules/shared-module/shared.module';
     CommonModule,
     RouterModule,
     AppRoutingModule,
-    StoreModule.forRoot({applicationState: appRootReducers}),
+    StoreModule.forRoot({app: appRootReducers}),
+    // StoreModule.forFeature('app', appRootReducers),
     // StoreModule.forRoot(reducers, { metaReducers, initialState: initialAppState }),
     EffectsModule.forRoot([]),
     IonicModule.forRoot(),
@@ -43,8 +46,10 @@ import {SharedModule} from './modules/shared-module/shared.module';
   providers: [
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     StatusBar,
-    [{provide: 'IPantryDataService', useClass: PantryDataService}],
+    // [{provide: 'IPantryDataService', useClass: PantryDataService}],
+    [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
     PantryDbHelper,
+    MySqlCommands,
     SQLite
   ],
   bootstrap: [AppComponent],

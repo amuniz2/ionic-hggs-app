@@ -1,10 +1,12 @@
 import {Inject, Injectable} from '@angular/core';
 import {
-  AddStoreAisleFailed,
-  CreateStoreFailed, DeleteStoreFailed,
-  LoadGroceryStoresFailed, NavigateToStoreDetailsPage, StoreAisleAdded, StoreCreated, StoreDeleted, StoreManagementActions,
+  DeleteStoreFailed,
+  NavigateToStoreDetailsPage,
+  StoreCreated,
+  StoreDeleted,
+  StoreManagementActions,
   StoreManagerActionTypes,
-  StoresLoadedSuccessfully
+  CreateStoreFailed
 } from './store-management.actions';
 import {Store} from '@ngrx/store';
 import {Actions, Effect, ofType} from '@ngrx/effects';
@@ -26,22 +28,6 @@ export class StoreManagementEffects {
   //   ofType( 'FIRST_ACTION' ),
   //   mapTo( new SecondAction() )
   // );
-
-  @Effect()
-  public loadGroceryStores$ = this.actions$.pipe(
-    ofType(StoreManagerActionTypes.NavigatedToStoreListPage),
-    tap(() => console.log('calling stateManagementService.getGroceryStores()')),
-    switchMap(() => {
-        return this.storeManagementService.getGroceryStores().pipe(
-          tap((stores) => {
-            console.log('dispatching StoresLoadedSuccessfully action');
-            console.log(stores);
-          }),
-          map(data => new StoresLoadedSuccessfully(data)),
-          catchError(error => [new LoadGroceryStoresFailed(error)])
-        );
-    })
-  );
 
   @Effect()
   public addNewGroceryStore$ = this.actions$.pipe(
@@ -81,17 +67,8 @@ export class StoreManagementEffects {
       this.router.navigate([this.router.url, 'store-details'], navigationExtras);
     }));
 
-  @Effect()
-  public addNewStoreAisle$ = this.actions$.pipe(
-    ofType(StoreManagerActionTypes.AddStoreAisle),
-    switchMap((payload) => {
-      return this.storeManagementService.addGroceryStoreAisle(payload.newStoreAisleRequest).pipe(
-        tap((modStore) => {
-          console.log(`modified store: ${modStore}`);
-        }),
-        map(modifiedGroceryStore => new StoreAisleAdded(modifiedGroceryStore)),
-        catchError(error => [new AddStoreAisleFailed(error)])
-      );
-    }));
-
+  // @Effect()
+  // public storeAisleAdded$ = this.action$.pipe(
+  //   ofType(StoreManagerActionTypes.StoreAisleAdded),
+  //   map((payload) => new LoadGroceryStoreAisles())); // (app action)
 }

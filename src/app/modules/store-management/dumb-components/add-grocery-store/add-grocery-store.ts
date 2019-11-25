@@ -6,7 +6,7 @@ import {NewGroceryStoreRequest} from '../store-list/store-list.component';
   templateUrl: './add-grocery-store.component.html',
   styleUrls: ['./add-grocery-store.component.scss']
 })
-export class AddGrocreyStoreComponent implements OnInit {
+export class AddGroceryStoreComponent implements OnInit {
   @Output()
   notifyNewStoreRequested: EventEmitter<NewGroceryStoreRequest> = new EventEmitter();
 

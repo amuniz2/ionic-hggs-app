@@ -1,0 +1,28 @@
+<ion-header *ngIf="isNewItem">
+  <ion-title>New Item</ion-title>
+<!--  <ng-template #existingItem>-->
+<!--    <ion-title>{{ pantryItem.name}}</ion-title>-->
+<!--  </ng-template>-->
+</ion-header>
+<ion-content>
+  <ion-input *ngIf="isNewItem; else existingItem" placeholder="Enter name" id="newPantryItemNameInput" [(ngModel)]="pantryItemName"></ion-input>
+  <ng-template #existingItem>
+    <ion-input id="pantryItemNameInput" [(ngModel)]="pantryItemName"></ion-input>
+  </ng-template>
+
+  <ion-input placeholder="Enter description" id="newPantryItemDescriptionInput" [(ngModel)]="pantryItemDescription"></ion-input>
+
+  <app-hggs-accordion [sectionName]="locationsSection.label" [description]="" (change)="toggleLocationsSection($event)">
+  </app-hggs-accordion>
+  <app-pantry-item-locations *ngIf="locationsSection.isOpen$ | async"
+                            [pantryItem]="pantryItem"
+                            (notifyNewPantryItemLocationRequested)="onNotifyNewLocationRequest($event)"
+                            (notifyDeletePantryItemLocationRequested)="onNotifyDeleteLocationRequest($event)"></app-pantry-item-locations>
+  <ion-textarea *ngIf="error">{{error.message}}</ion-textarea>
+  <ion-footer>
+    <ion-button shape="round" fill="outline" (click)="onSaveClick()">Save
+      <!--<ion-icon slot="start" md="ios-add-circle-outline" ></ion-icon>-->
+      <!--<app-new-store></app-new-store>-->
+    </ion-button>
+  </ion-footer>
+</ion-content>

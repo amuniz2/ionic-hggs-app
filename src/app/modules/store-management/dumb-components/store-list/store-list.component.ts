@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GroceryStore} from '../../model/grocery-store';
-import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
+import {GroceryStore} from '../../../../model/grocery-store';
+import {Router} from '@angular/router';
 import {NavigateToStoreDetailsPage} from '../../store/store-management.actions';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';

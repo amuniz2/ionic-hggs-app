@@ -1,14 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GroceryStore} from '../../model/grocery-store';
+import {GroceryStore} from '../../../../model/grocery-store';
 import {StoreAisle} from '../grocery-store-aisles/grocery-store-aisles.component';
 import {Observable, of} from 'rxjs';
-import {CollapsedStatusChangedEvent} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
-
-interface PageSection {
-  label: string;
-  isOpen$: Observable<boolean>;
-}
-
+import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
+import {StoreSection} from '../grocery-store-sections/grocery-store-sections.component';
 
 @Component({
   selector: 'app-edit-grocery-store',
@@ -24,7 +19,11 @@ export class EditGroceryStoreComponent implements OnInit {
     label: 'Aisles',
     isOpen$: of(false)
   };
-  grocerySectionsSection: PageSection;
+  grocerySectionsSection: PageSection = {
+    label: 'Grocery Sections',
+    isOpen$: of(false)
+  };
+
   inventorySection: PageSection;
 
   @Input()
@@ -32,6 +31,21 @@ export class EditGroceryStoreComponent implements OnInit {
 
   @Output()
   notifyNewStoreAisleRequested: EventEmitter<StoreAisle> = new EventEmitter();
+
+  @Output()
+  notifyDeleteStoreAisleRequested: EventEmitter<StoreAisle> = new EventEmitter();
+
+  @Output()
+  notifyNewGroceryStoreSectionRequested: EventEmitter<StoreSection> = new EventEmitter();
+
+  @Output()
+  notifyDeleteGroceryStoreSectionRequested: EventEmitter<StoreSection> = new EventEmitter();
+
+  @Output()
+  notifyExpandAisles: EventEmitter<number> = new EventEmitter();
+
+  @Output()
+  notifyExpandSections: EventEmitter<number> = new EventEmitter();
 
   constructor() { }
 
@@ -42,9 +56,28 @@ export class EditGroceryStoreComponent implements OnInit {
     this.notifyNewStoreAisleRequested.emit($event);
   }
 
+  onNotifyDeleteStoreAisleRequest($event: StoreAisle) {
+    this.notifyDeleteStoreAisleRequested.emit($event);
+  }
+
+  onNotifyNewStoreGrocerySectionRequest($event: StoreSection) {
+    this.notifyNewGroceryStoreSectionRequested.emit($event);
+  }
+
+  onNotifyDeleteGroceryStoreSectionRequest($event: StoreSection) {
+    this.notifyDeleteGroceryStoreSectionRequested.emit($event);
+  }
   public captureName($event: CollapsedStatusChangedEvent) {
     if ($event.sectionName === this.aislesSection.label) {
       this.aislesSection.isOpen$ = of($event.isOpen);
+      if ($event.isOpen && this.groceryStore.aisles.length === 0) {
+        this.notifyExpandAisles.emit(this.groceryStore.id);
+      }
+    } else if ($event.sectionName === this.grocerySectionsSection.label) {
+      this.grocerySectionsSection.isOpen$ = of($event.isOpen);
+      if ($event.isOpen && this.groceryStore.sections.length === 0) {
+        this.notifyExpandSections.emit(this.groceryStore.id);
+      }
     }
   }
 }

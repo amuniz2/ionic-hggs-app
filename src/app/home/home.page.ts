@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePageComponent {
-public manageStoresLabel = 'Manage Stores';
+  public manageStoresLabel = 'Stores';
+  public managePantryItemsLabel = 'Pantry Items';
 }

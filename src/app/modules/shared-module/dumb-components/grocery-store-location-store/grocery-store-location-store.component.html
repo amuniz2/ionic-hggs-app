@@ -1,0 +1,5 @@
+<ion-item>
+  <ion-select id="groceryStoreSelectionControl" placeholder="Select Grocery Store"  [(ngModel)]="selectedGroceryStoreId" (ionChange)="onChangeGroceryStoreSelected($event)">
+    <ion-select-option *ngFor="let groceryStore of groceryStores" value="{{groceryStore.id}}">{{groceryStore.name}}</ion-select-option>
+  </ion-select>
+</ion-item>

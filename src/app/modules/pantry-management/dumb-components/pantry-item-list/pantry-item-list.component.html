@@ -1,0 +1,15 @@
+<ion-list *ngIf="!pantryItemsLoading else showSpinner;">
+  <ion-card *ngFor="let pantryItem of pantryItems">
+    <ion-item-sliding>
+      <ion-item>
+        <ion-label (click)="editPantryItem(pantryItem)">{{pantryItem.name}}</ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="remove(pantryItem)">Delete</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-card>
+</ion-list>
+<ng-template #showSpinner>
+  <p>pantry items are loading...</p>
+</ng-template>

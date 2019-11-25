@@ -1,23 +1,145 @@
 import {Action} from '@ngrx/store';
+import {PantryItem} from '../../../model/pantry-item';
+import {DeletePantryItemRequest, NavigateToEditPantryItemRequest} from '../dumb-components/pantry-item-list/pantry-item-list.component';
+import {NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
+import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 
-export enum GroceryItemActionTypes {
+export enum PantryActionTypes {
+  PantryLoadedSuccessfully = '[Pantry] Loaded',
+  PantryLoadFailed = '[Pantry] Load Failed',
   SelectGroceryItem = '[Grocery Item] Select',
   UpdateGroceryItem = '[Grocery Item] Update',
-  DeleteGroceryItem = '[Grocery Item] Delete',
-  CreateGroceryItem = '[Grocery Item] Create',
-  GroceryItemCreated = '[Grocery Item] Created',
-  AddStoreLocation = '[Grocery Item] Add Store Location',
-  RemoveStoreLocation = '[Grocery Item] Remove Store Location',
+  CreateItem = '[Pantry Item] Create',
+  CreateItemFailed = '[Pantry Item] Create Failed',
+  DeletePantryItemFailed = '[Pantry Item] Delete Failed',
+  DeletePantryItem = '[Pantry item] Delete',
+  ItemCreated = '[Pantry Item] Created',
+  PantryItemDeleted = '[Pantry Item] Deleted',
+  NavigatedToPantryPage = '[Pantry] Navigated to',
+  NavigateToPantryItemPage = '[Pantry Item] Navigate to',
+  NavigatedToPantryItemPage = '[Pantry Item] Navigated to',
+  AddPantryItemLocation = '[Pantry Item] add location',
+  AddPantryItemLocationRequest = '[Pantry Item] add location requested',
+  SavePantryItem = '[Pantry Item] Save',
+  SavePantryItemFailed = '[Pantry Item] Save Failed',
+  SavePantryItemSucceeded = '[Pantry Item] Save Succeeded',
+  SaveNewPantryItem = '[Pantry Item] Save New Requested',
 }
 
-export class CreateGroceryItem implements Action {
-  readonly type = GroceryItemActionTypes.CreateGroceryItem;
+export class AddPantryItemLocationRequest implements Action {
+  readonly type = PantryActionTypes.AddPantryItemLocationRequest;
+
+  constructor(public request: NewItemLocationRequest) {}
 }
 
-export class GroceryItemCreated implements Action {
-  readonly type = GroceryItemActionTypes.GroceryItemCreated;
+export class AddPantryItemLocation implements Action {
+  readonly type = PantryActionTypes.AddPantryItemLocation;
+
+  constructor(public pantryItemId: number, public location: GroceryStoreLocation) {}
 }
 
-export type StoreManagementActions =
-  CreateGroceryItem
-  | GroceryItemCreated;
+export class CreatePantryItem implements Action {
+  readonly type = PantryActionTypes.CreateItem;
+
+  constructor(public pantryItemRequest: NavigateToEditPantryItemRequest) {}
+}
+
+export class NavigateToPantryItemPage implements Action {
+  readonly type = PantryActionTypes.NavigateToPantryItemPage;
+
+  constructor(public pantryItemRequest: NavigateToEditPantryItemRequest) {}
+}
+
+export class CreateItemFailed implements Action {
+  readonly type = PantryActionTypes.CreateItemFailed;
+
+  constructor(public item: PantryItem, public error: Error) {}
+}
+
+export class DeletePantryItemFailed implements Action {
+  readonly type = PantryActionTypes.DeletePantryItemFailed;
+
+  constructor(public error: Error) {}
+}
+
+export class DeletePantryItem implements Action {
+  readonly type = PantryActionTypes.DeletePantryItem;
+  constructor(public deletePantryItemRequest: DeletePantryItemRequest) {}
+}
+
+export class ItemCreated implements Action {
+  readonly type = PantryActionTypes.ItemCreated;
+  constructor(public pantryItem: PantryItem) {
+  }
+}
+
+export class PantryItemDeleted implements Action {
+  readonly type = PantryActionTypes.PantryItemDeleted;
+  constructor(public id: number) {
+  }
+}
+
+export class NavigatedToPantryPage implements Action {
+  readonly type = PantryActionTypes.NavigatedToPantryPage;
+}
+
+export class NavigatedToPantryItemPage implements Action {
+  readonly type = PantryActionTypes.NavigatedToPantryItemPage;
+
+  constructor(public pantryItemId: number) {}
+}
+
+export class PantryLoadedSuccessfully implements Action {
+  readonly type = PantryActionTypes.PantryLoadedSuccessfully;
+
+  constructor(public pantryItems: PantryItem[]) {}
+}
+
+export class PantryLoadFailed implements Action {
+  readonly type = PantryActionTypes.PantryLoadFailed;
+
+  constructor(public error: Error) {}
+}
+
+export class SavePantryItem implements Action {
+  readonly type = PantryActionTypes.SavePantryItem;
+
+  constructor(public pantryItem: PantryItem) {}
+}
+
+export class SaveNewPantryItem implements Action {
+  readonly type = PantryActionTypes.SaveNewPantryItem;
+
+  constructor(public pantryItem: PantryItem) {}
+}
+
+export class SavePantryItemSucceeded implements Action {
+  readonly type = PantryActionTypes.SavePantryItemSucceeded;
+
+  constructor(public pantryItem: PantryItem) {}
+}
+
+export class SavePantryItemFailed implements Action {
+  readonly type = PantryActionTypes.SavePantryItemFailed;
+
+  constructor(public error: Error, public item: PantryItem) {}
+}
+
+export type PantryActions =
+  CreatePantryItem
+  | AddPantryItemLocationRequest
+  | CreateItemFailed
+  | DeletePantryItemFailed
+  | DeletePantryItem
+  | DeletePantryItemFailed
+  | ItemCreated
+  | PantryItemDeleted
+  | NavigatedToPantryPage
+  | NavigatedToPantryItemPage
+  | NavigateToPantryItemPage
+  | PantryLoadedSuccessfully
+  | PantryLoadFailed
+  | SaveNewPantryItem
+  | SavePantryItem
+  | SavePantryItemFailed
+  | SavePantryItemSucceeded;

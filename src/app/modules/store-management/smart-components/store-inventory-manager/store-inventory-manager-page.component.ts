@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {select, Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
-import * as fromSelectors from '../../store/store-management.selectors';
-import {GroceryStore} from '../../model/grocery-store';
+import * as fromSelectors from '../../../../store/store-management.selectors';
+import {GroceryStore} from '../../../../model/grocery-store';
 import * as fromActions from '../../store/store-management.actions';
 import {AppState} from '../../../../store/app.state';
 import {DeleteGroceryStoreRequest, NewGroceryStoreRequest} from '../../dumb-components/store-list/store-list.component';
-import {selectGroceryStoresLoading} from '../../store/store-management.selectors';
+import {selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
+import {LoadGroceryStores} from '../../../../store';
 
 @Component({
   selector: 'app-store-inventory-manager',
@@ -24,9 +25,9 @@ export class StoreInventoryManagerPageComponent implements OnInit {
 
   ngOnInit() {
     // dispatch action that list has been navigated to
-    console.log('dispatching NavigatedToStoreListPage');
-    this.store.dispatch(new fromActions.NavigatedToStoreListPage());
-    this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading)
+    console.log('dispatching LoadGroceryStores');
+    this.store.dispatch(new LoadGroceryStores());
+    this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     this.groceryStores$ = this.store.select(fromSelectors.selectAllGroceryStores);
   }
 

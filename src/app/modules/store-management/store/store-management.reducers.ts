@@ -1,7 +1,8 @@
 import {StoreManagementActions, StoreManagerActionTypes} from './store-management.actions';
-import * as fromAdapter from './grocery-store.adapter';
-import {EntityState} from '@ngrx/entity';
-import {GroceryStore} from '../model/grocery-store';
+import * as fromAppAdapter from '../../../store/grocery-store.adapter';
+import {getGroceryStore} from '../../../store/store-management.selectors';
+import {AppState} from '../../../store/app.state';
+import {initialAppState} from '../../../store/app.reducers';
 // export interface GroceryStoreAisle {
 //   aisle: string;
 //   storeId: number;
@@ -11,47 +12,36 @@ import {GroceryStore} from '../model/grocery-store';
 //   section: string;
 //   storeId: number;
 // }
-export interface GroceryStoresState extends EntityState<GroceryStore> {
-  loading: boolean;
-  error: Error;
-}
 
 export interface StoreManagementState {
   selectedGroceryStoreId: number | null;
-  groceryStores: GroceryStoresState;
+  // groceryStores: GroceryStoresState;
 }
 
-export const initialStoreManagementState: StoreManagementState = {
+export const initialGroceryStoreManagementState: StoreManagementState = {
   selectedGroceryStoreId: null,
-  groceryStores: {
-    ...fromAdapter.groceryStoreAdapter.getInitialState(),
-    loading: false,
-    error: null
-  }
 };
 
-export function groceryStoresReducer(state = initialStoreManagementState, action: StoreManagementActions): StoreManagementState  {
+export function groceryStoresReducer(state = initialGroceryStoreManagementState, action: StoreManagementActions): StoreManagementState  {
     switch (action.type) {
-      case StoreManagerActionTypes.NavigatedToStoreListPage:
-        return {
-          ...state,
-          groceryStores: {
-            ...state.groceryStores,
-            loading: true,
-            error: null
-          }
-        };
+      // case StoreManagerActionTypes.LoadGroceryStores:
+      //   return {
+      //     ...state,
+      //     groceryStores: {
+      //       ...state.groceryStores,
+      //       loading: true,
+      //       error: null
+      //     }
+      //   };
 
       case StoreManagerActionTypes.StoreCreated: {
         // const { id, name } = action.payload;
-        console.log('reducing state after StoreCreated. payload: ');
-        console.log(action.payload);
         return {
           ...state,
-          groceryStores: {
-            ...fromAdapter.groceryStoreAdapter.addOne(action.payload, state.groceryStores),
-            error: null
-          },
+          // groceryStores: {
+          //   ...fromAppAdapter.sharedGroceryStoreAdapter.addOne(action.groceryStore, state.groceryStores),
+          //   error: null
+          // },
         };
       }
 
@@ -59,10 +49,10 @@ export function groceryStoresReducer(state = initialStoreManagementState, action
         // const { id, name } = action.payload;
         return {
           ...state,
-          groceryStores: {
-            ...fromAdapter.groceryStoreAdapter.removeOne(action.id, state.groceryStores),
-            error: null
-          },
+          // groceryStores: {
+          //   ...fromAppAdapter.sharedGroceryStoreAdapter.removeOne(action.id, state.groceryStores),
+          //   error: null
+          // },
           // selectedGroceryStoreId:
         };
 
@@ -70,62 +60,30 @@ export function groceryStoresReducer(state = initialStoreManagementState, action
         // const { id, name } = action.payload;
         return {
           ...state,
-          groceryStores: {
-            ...state.groceryStores,
-            error: action.error
-          },
+          // groceryStores: {
+          //   ...state.groceryStores,
+          //   error: action.error
+          // },
           // selectedGroceryStoreId:
         };
 
       case StoreManagerActionTypes.CreateStoreFailed:
         return {
           ...state,
-          groceryStores: {
-            ...state.groceryStores,
-            loading: false,
-            error: action.error
-          },
+          // groceryStores: {
+          //   ...state.groceryStores,
+          //   loading: false,
+          //   error: action.error
+          // },
         };
 
-      case StoreManagerActionTypes.StoresLoadedSuccessfully:
+      case StoreManagerActionTypes.NavigatedToStoreDetailsPage:
         return {
           ...state,
-          groceryStores: {
-            ...fromAdapter.groceryStoreAdapter.addAll(action.groceryStores, state.groceryStores),
-            loading: false,
-            error: null
-          },
+          selectedGroceryStoreId: action.groceryStoreId
         };
 
-      case StoreManagerActionTypes.LoadGroceryStoresFailed:
-        return {
-          ...state,
-          groceryStores: {
-            ...state.groceryStores,
-            loading: false,
-            error: action.error
-          },
-        };
-
-      case StoreManagerActionTypes.StoreAisleAdded:
-        // const { id, name } = action.payload;
-      {
-        return {
-          ...state,
-          groceryStores: fromAdapter.groceryStoreAdapter.updateOne(
-            {
-              changes: {aisles: action.payload.aisles},
-              id: action.payload.id
-            }, state.groceryStores)
-        };
-      }
       default: return state;
     }
-}
 
-// const manageGroceryStoresFeatureState = createFeatureSelector<StoreManagementState>('storeManagementState');
-//
-// export const getGroceryStores = createSelector(
-//   manageGroceryStoresFeatureState,
-//   state => state.groceryStoresState
-// );
+}

@@ -12,18 +12,19 @@ import {StoreManagementRoutes} from './store-management.routes';
 import {FormsModule} from '@angular/forms';
 import { EditSelectedGroceryStoreComponent } from './smart-components/edit-selected-grocery-store/edit-selected-grocery-store.component';
 import { GroceryStoreAislesComponent } from './dumb-components/grocery-store-aisles/grocery-store-aisles.component';
-import { GroceryStoreSectionsComponent } from './grocery-store-sections/grocery-store-sections.component';
-import { GroceryStoreItemsComponent } from './grocery-store-items/grocery-store-items.component';
+import { GroceryStoreSectionsComponent } from './dumb-components/grocery-store-sections/grocery-store-sections.component';
+import { GroceryStoreItemsComponent } from './dumb-components/grocery-store-items/grocery-store-items.component';
 import { EditGroceryStoreComponent } from './dumb-components/edit-grocery-store/edit-grocery-store.component';
-import {AddGrocreyStoreComponent} from './dumb-components/add-grocery-store/add-grocery-store';
+import {AddGroceryStoreComponent} from './dumb-components/add-grocery-store/add-grocery-store';
 import {SharedModule} from '../shared-module/shared.module';
+import {AppEffects} from '../../store/app.effects';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(StoreManagementRoutes),
     StoreModule.forFeature('storeManagement', fromReducers.groceryStoresReducer),
-    EffectsModule.forFeature([StoreManagementEffects]),
+    EffectsModule.forFeature([AppEffects, StoreManagementEffects]),
     IonicModule,
     FormsModule,
     SharedModule
@@ -36,7 +37,7 @@ import {SharedModule} from '../shared-module/shared.module';
     GroceryStoreSectionsComponent,
     GroceryStoreItemsComponent,
     EditGroceryStoreComponent,
-    AddGrocreyStoreComponent
+    AddGroceryStoreComponent
   ],
   providers: [
     // FakePantryDataService

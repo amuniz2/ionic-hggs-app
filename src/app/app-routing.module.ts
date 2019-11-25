@@ -6,6 +6,8 @@ const routes: Routes = [
   // { path: 'manage-stores', component: StoreListComponent  },
   { path: 'stores',
     loadChildren: './modules/store-management/store-management.module#StoreManagementModule'},
+  { path: 'pantry-items',
+    loadChildren: './modules/pantry-management/pantry-management.module#PantryManagementModule'},
   { path: 'home', component: HomePageComponent},
   { path: '', redirectTo: 'home', pathMatch: 'full'},
   // { path: '', redirectTo: 'manage-stores', pathMatch: 'full'},

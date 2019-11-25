@@ -1,18 +1,16 @@
-import {Action, Store} from '@ngrx/store';
-import {GroceryStore} from '../model/grocery-store';
+import {Action} from '@ngrx/store';
+import {GroceryStore} from '../../../model/grocery-store';
 import {DeleteGroceryStoreRequest,
   NavigateToEditStoreRequest,
   NewGroceryStoreRequest} from '../dumb-components/store-list/store-list.component';
 import {StoreAisle} from '../dumb-components/grocery-store-aisles/grocery-store-aisles.component';
+import {StoreSection} from '../dumb-components/grocery-store-sections/grocery-store-sections.component';
 
 export enum StoreManagerActionTypes {
-  LoadGroceryStoresFailed = '[Store Manager] Load Grocery Stores failed',
-  LoadStores = '[Store Manager] Load Stores',
   CreateStore = '[Store Manager] Create',
   CreateStoreFailed = '[Store Manager] Create Store failed',
-  NavigatedToStoreListPage = '[Store Manager] Store List Page',
   NavigateToStoreDetailsPage = '[Store Manager] Navigate to Store Details Page',
-  StoresLoadedSuccessfully = '[Store Manager] Stores Loaded Successfully',
+  NavigatedToStoreDetailsPage = '[Store Manager] Navigated to Store Details Page',
   StoreCreated = '[Store Manager] Created',
   StoreDeleted = '[Store Manager] Deleted',
   SelectStore = '[Store Manager] Select',
@@ -20,25 +18,10 @@ export enum StoreManagerActionTypes {
   DeleteStore = '[Store Manager] Delete',
   DeleteStoreFailed = '[Store Manager] Delete Store failed',
   DeleteStoreSucceeded = '[Store Manager] Delete Store succeeded',
-  AddStoreAisle = '[Store Manager] Add Store Aisle',
-  AddStoreAisleFailed = '[Store Manager] Add Store Aisle Failed',
-  StoreAisleAdded = '[Store Manager] Aisle Added',
-  StoreAisleRemoved = '[Store Manager] Aisle Removed',
+  GetGroceryStoreAislesFailed =  '[Store Manager] Store Aisles Failed To Load',
+  GetGroceryStoreSectionsFailed =  '[Store Manager] Store Sections Failed To Load',
   UpdateStoreAisle = '[Store Manager] Update Aisle',
   SelectStoreAisle = '[Store Manager] Select Aisle',
-  DeleteStoreAisle = '[Store Manager] Delete Aisle',
-  CreateStoreSection = '[Store Manager] Create Grocery Section',
-  UpdateStoreSection = '[Store Manager] Update Aisle',
-  DeleteStoreSection = '[Store Manager] Delete Aisle',
-  SelectStoreSection = '[Store Manager] Select Aisle',
-  CreateStoreLocation = '[Store Manager] Create Location',
-  UpdateStoreLocation = '[Store Manager] Update Location',
-  DeleteStoreLocation = '[Store Manager] Delete Location',
-  SelectStoreLocation = '[Store Manager] Select Location',
-}
-
-export class NavigatedToStoreListPage implements Action {
-  readonly type = StoreManagerActionTypes.NavigatedToStoreListPage;
 }
 
 export class NavigateToStoreDetailsPage implements Action {
@@ -46,22 +29,16 @@ export class NavigateToStoreDetailsPage implements Action {
   constructor(public navigateToEditStorePayload: NavigateToEditStoreRequest) {}
 }
 
+export class NavigatedToStoreDetailsPage implements Action {
+  readonly type = StoreManagerActionTypes.NavigatedToStoreDetailsPage;
+  constructor(public groceryStoreId: number) {}
+}
+
 // export class NavigateToEditStore implements Action {
 //   readonly type = StoreManagerActionTypes.NavigateToEditStorePageRequest;
 //   constructor(public navigateToEditStorePayload: NavigateToEditStoreRequest) {}
 // }
 
-export class StoresLoadedSuccessfully implements  Action {
-  constructor(public groceryStores: GroceryStore[]) {
-  }
-  readonly type = StoreManagerActionTypes.StoresLoadedSuccessfully;
-}
-
-export class LoadGroceryStoresFailed implements Action {
-  constructor(public error: Error) {
-  }
-  readonly type = StoreManagerActionTypes.LoadGroceryStoresFailed;
-}
 export class CreateStore implements Action {
   readonly type = StoreManagerActionTypes.CreateStore;
   constructor(public createGroceryStorePayload: NewGroceryStoreRequest) {}
@@ -70,7 +47,7 @@ export class CreateStore implements Action {
 export class StoreCreated implements Action {
   readonly type = StoreManagerActionTypes.StoreCreated;
 
-  constructor(public payload: GroceryStore ) {}
+  constructor(public groceryStore: GroceryStore ) {}
 }
 
 export class DeleteStoreSucceeded implements Action {
@@ -105,33 +82,19 @@ export class DeleteStoreFailed implements Action {
   readonly type = StoreManagerActionTypes.DeleteStoreFailed;
 }
 
-export class AddStoreAisle implements Action {
-  readonly type = StoreManagerActionTypes.AddStoreAisle;
-  constructor(public newStoreAisleRequest: StoreAisle) {
-  }
-}
-export class RemoveStoreAisle implements Action {
-  readonly type = StoreManagerActionTypes.DeleteStoreAisle;
-  constructor(public deleteStoreAisleRequest: StoreAisle) {
-  }
-}
 
-export class StoreAisleAdded implements Action {
-  readonly type = StoreManagerActionTypes.StoreAisleAdded;
-
-  constructor(public payload: GroceryStore ) {}
-}
-export class AddStoreAisleFailed implements Action {
+export class GetStoreAislesFailed implements Action {
   constructor(public error: Error) {
   }
-  readonly type = StoreManagerActionTypes.AddStoreAisleFailed;
+  readonly type = StoreManagerActionTypes.GetGroceryStoreAislesFailed;
 }
 
-export class StoreAisleRemoved implements Action {
-  readonly type = StoreManagerActionTypes.StoreAisleRemoved;
-
-  constructor(public payload: StoreAisle ) {}
+export class GetStoreSectionsFailed implements Action {
+  constructor(public error: Error) {
+  }
+  readonly type = StoreManagerActionTypes.GetGroceryStoreSectionsFailed;
 }
+
 
 export class SelectStore implements Action {
   readonly type = StoreManagerActionTypes.SelectStore;
@@ -150,18 +113,11 @@ export class UpdateStoreAisle implements Action {
 }
 
 export type StoreManagementActions =
-  NavigatedToStoreListPage
-  | NavigateToStoreDetailsPage
   | CreateStore
   | CreateStoreFailed
-  | StoreCreated
   | DeleteStore
-  | StoreDeleted
   | DeleteStoreFailed
-  | StoresLoadedSuccessfully
-  | AddStoreAisle
-  | StoreAisleAdded
-  | AddStoreAisleFailed
-  | RemoveStoreAisle
-  | StoreAisleRemoved
-  | LoadGroceryStoresFailed;
+  | NavigateToStoreDetailsPage
+  | NavigatedToStoreDetailsPage
+  | StoreCreated
+  | StoreDeleted;

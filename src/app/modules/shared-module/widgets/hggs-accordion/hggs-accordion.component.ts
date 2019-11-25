@@ -1,9 +1,16 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Observable} from 'rxjs';
 
 export interface CollapsedStatusChangedEvent {
-  sectionName: string,
-  isOpen: boolean
-};
+  sectionName: string;
+  isOpen: boolean;
+}
+
+export interface PageSection {
+  label: string;
+  isOpen$: Observable<boolean>;
+}
+
 
 @Component({
   selector: 'app-hggs-accordion',

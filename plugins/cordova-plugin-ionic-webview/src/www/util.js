@@ -25,6 +25,6 @@ var WebView = {
   persistServerBasePath: function() {
     exec(null, null, 'IonicWebView', 'persistServerBasePath', []);
   }
-}
+};
 
 module.exports = WebView;

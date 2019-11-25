@@ -1,9 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GroceryStore} from '../../model/grocery-store';
-import {NavigateToStoreDetailsPage} from '../../store/store-management.actions';
+import {GroceryStore} from '../../../../model/grocery-store';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
-import {DeleteGroceryStoreRequest, NewGroceryStoreRequest} from '../store-list/store-list.component';
 
 export interface StoreAisle {
   groceryStoreId: number;
@@ -31,11 +29,12 @@ export class GroceryStoreAislesComponent implements OnInit {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
+    console.log('GroceryStore in aisles component');
+    console.log(this.groceryStore);
   }
   onAddStoreAisleClick() {
     this.newStoreAisle = '';
     this.enteringStoreAisle = true;
-    // this.notify.emit('Create new store');
   }
 
   onCancelAddStoreAisleClick() {
@@ -54,6 +53,7 @@ export class GroceryStoreAislesComponent implements OnInit {
     // item.close();
   }
   remove(item: string) {
+    console.log('emitting notifyDeleteStoreAisleRequested');
     this.notifyDeleteStoreAisleRequested.emit({ groceryStoreId: this.groceryStore.id, aisle: item});
   }
 }
