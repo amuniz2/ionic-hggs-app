@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
-import {Observable} from 'rxjs';
-import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
+import {ControlContainer, FormControl} from '@angular/forms';
 
 export interface GroceryStoreSelected {
   id: number;
@@ -13,6 +12,7 @@ export interface GroceryStoreSelected {
   styleUrls: ['./grocery-store-location-store.component.scss']
 })
 export class GroceryStoreLocationStoreComponent implements OnInit {
+
   @Input()
   groceryStores: GroceryStore[];
 
@@ -22,8 +22,10 @@ export class GroceryStoreLocationStoreComponent implements OnInit {
   @Output()
   selectedGroceryStoreChange: EventEmitter<GroceryStoreSelected> = new EventEmitter<GroceryStoreSelected>();
   selectedGroceryStoreId: number | null;
+  selectGroceryStoreControl = new FormControl();
 
-  constructor() { }
+  constructor(public controlContainer: ControlContainer) {
+  }
 
   ngOnInit() {
   }

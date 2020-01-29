@@ -23,8 +23,8 @@ import { AddPantryItemLocationComponent } from './smart-components/add-pantry-it
     StoreModule.forFeature('pantryManagement', fromReducers.pantryReducer),
     EffectsModule.forFeature([PantryEffects]),
     IonicModule,
-    FormsModule,
     SharedModule,
+    FormsModule,
     ReactiveFormsModule
   ],
   declarations: [

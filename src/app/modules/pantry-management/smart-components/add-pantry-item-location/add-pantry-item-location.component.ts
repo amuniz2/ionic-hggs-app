@@ -12,7 +12,7 @@ import {GroceryStoreSelected} from '../../../shared-module/dumb-components/groce
 import {selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
 // tslint:disable-next-line:max-line-length
 import {GroceryStoreAisleOrSectionSelected} from '../../../shared-module/dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-add-pantry-item-location',
@@ -33,17 +33,19 @@ export class AddPantryItemLocationComponent implements OnInit {
   locationAisle = new FormControl('');
   locationSection =  new FormControl('');
 
-  locationForm = new FormGroup({
-    locationStore: this.locationStore,
-    locationAisle: this.locationAisle,
-    locationSection:  this.locationSection
-  });
+  locationForm: FormGroup;
+  // = new FormGroup({
+  //   locationStore: this.locationStore,
+  //   locationAisle: this.locationAisle,
+  //   locationSection:  this.locationSection,
+  //   selectGroceryStoreControl: new FormControl('')
+  // });
 
   groceryStoreLocation: GroceryStoreLocation;
   private groceryStoresLoading$: Observable<boolean>;
 
 //  selectedGroceryStoreId: number = null;
-  constructor(private store: Store<AppState>, @Inject('IPantryDataService') private pantryDataService: IPantryDataService) {
+  constructor(private store: Store<AppState>, @Inject('IPantryDataService') private pantryDataService: IPantryDataService, private fb: FormBuilder) {
     this.store.dispatch(new LoadGroceryStores());
     this.groceryStoreLocation = {
       id: null,
@@ -51,6 +53,12 @@ export class AddPantryItemLocationComponent implements OnInit {
       section: '',
       storeId: null
     };
+
+    this.locationForm = this.fb.group({
+      locationStore: [''],
+      locationAisle: [''],
+      locationSection: ['']
+    })
   }
 
   ngOnInit() {
@@ -89,7 +97,8 @@ export class AddPantryItemLocationComponent implements OnInit {
     console.log(this.groceryStoreLocation);
     console.log('LocationForm: ');
     console.log(this.locationForm);
-    // this.store.dispatch(new AddItemLocation(this.groceryStoreLocation));
+    // if (this.locationForm.valid)
+    //   this.store.dispatch(new AddItemLocation(this.groceryStoreLocation));
     // return to previous form
   }
 }

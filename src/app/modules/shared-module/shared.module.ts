@@ -7,6 +7,7 @@ import { LocationComponent } from './dumb-components/location/location.component
 import { GroceryStoreLocationStoreComponent } from './dumb-components/grocery-store-location-store/grocery-store-location-store.component';
 // tslint:disable-next-line:max-line-length
 import { GroceryStoreLocationAisleOrSectionComponent } from './dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,8 @@ import { GroceryStoreLocationAisleOrSectionComponent } from './dumb-components/g
   imports: [
     CommonModule,
     IonicModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   exports: [HggsAccordionComponent, LocationComponent, GroceryStoreLocationStoreComponent, GroceryStoreLocationAisleOrSectionComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

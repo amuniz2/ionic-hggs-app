@@ -7,18 +7,20 @@
     <ion-list-header> Single Location </ion-list-header>
     <form [formGroup]="locationForm" (ngSubmit)="onSubmit(locationForm.value)">"
       <ion-label>Store</ion-label>
-      <app-grocery-store-location-store [formControl]="locationStore" [groceryStores]="groceryStores$ | async"
+      <app-grocery-store-location-store [formGroup]="locationForm" [groceryStores]="groceryStores$ | async"
                                         [selectedGroceryStore]="getSelectedGroceryStore() | async"
                                         (selectedGroceryStoreChange)="onChangeLocationGroceryStore($event)"></app-grocery-store-location-store>
       <ion-label>{{AisleLabel}}</ion-label>
-      <app-grocery-store-location-aisle-or-section  [formControl]="locationAisle"
+      <app-grocery-store-location-aisle-or-section  [formGroup]="locationForm"
+                                                    [inputControlName] = "'locationAisle'"
         [groceryStoreAislesOrSections]="groceryStoreAisles$ | async"
         [label] = "AisleLabel"
         (aisleOrSectionChange)="onChangeAisle($event)">
       </app-grocery-store-location-aisle-or-section>
       <ion-label>{{SectionLabel}}</ion-label>
       <app-grocery-store-location-aisle-or-section
-        [formControl]="locationSection"
+        [formGroup]="locationForm"
+        [inputControlName] = "'locationSection'"
         [groceryStoreAislesOrSections]="groceryStoreSections$ | async"
         [label] = "SectionLabel"
         (aisleOrSectionChange)="onChangeSection($event)">

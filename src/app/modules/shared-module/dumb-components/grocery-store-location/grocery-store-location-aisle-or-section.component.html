@@ -1,5 +1,9 @@
+<ng-container [formGroup]="controlContainer.control">
 <ion-item>
-  <ion-select id="aisleSelectionControl" placeholder="Select Grocery Store {{label}}"   (ionChange)="onChangeAisleOrSection($event)">
-    <ion-select-option *ngFor="let storeAisle of groceryStoreAislesOrSections" value="{{storeAisle}}">{{storeAisle}}</ion-select-option>
-  </ion-select>
-</ion-item>
+    <ion-select id="aisleSelectionControl" placeholder="Select Grocery Store {{label}}"
+                [formControlName]="inputControlName" (ionChange)="onChangeAisleOrSection($event)">
+      <ion-select-option *ngFor="let storeAisle of groceryStoreAislesOrSections" value="{{storeAisle}}">{{storeAisle}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+</ng-container>
+

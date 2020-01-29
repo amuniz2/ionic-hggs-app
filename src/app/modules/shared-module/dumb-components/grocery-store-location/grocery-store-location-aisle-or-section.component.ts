@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStoreSelected} from '../grocery-store-location-store/grocery-store-location-store.component';
+import {ControlContainer, FormControl} from '@angular/forms';
 export interface GroceryStoreAisleOrSectionSelected {
   name: string;
 }
@@ -9,6 +10,9 @@ export interface GroceryStoreAisleOrSectionSelected {
   styleUrls: ['./grocery-store-location-aisle-or-section.component.scss']
 })
 export class GroceryStoreLocationAisleOrSectionComponent implements OnInit {
+
+  @Input()
+  inputControlName: string;
 
   @Input()
   label: string;
@@ -22,7 +26,8 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit {
 
   @Input()
   selectedGroceryStoreAisleOrSection: string;
-  constructor() { }
+
+  constructor(private controlContainer: ControlContainer) { }
 
   ngOnInit() {
   }
