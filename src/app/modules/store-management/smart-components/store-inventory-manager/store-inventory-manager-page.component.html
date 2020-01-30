@@ -1,5 +1,10 @@
 <ion-header>
-  <h2>Stores</h2>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button>Back</ion-back-button>
+    </ion-buttons>
+    <h2>Stores</h2>
+  </ion-toolbar>
 </ion-header>
 <ion-content>
   <app-store-list [groceryStores] = "(groceryStores$ | async)"
