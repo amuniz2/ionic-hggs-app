@@ -3,9 +3,11 @@ import {GroceryStore} from '../../model/grocery-store';
 import {AppState} from '../../store/app.state';
 import {Store} from '@ngrx/store';
 import {Injectable} from '@angular/core';
-import {map, mergeMap, switchMap, tap} from 'rxjs/operators';
+import {map, mergeMap, switchMap} from 'rxjs/operators';
 import {PantryItem} from '../../model/pantry-item';
 import {MySqlCommands} from './my-sql-commands';
+import {GroceryStoreLocation} from '../../model/grocery-store-location';
+import {PantryItemLocation} from '../../model/PantryItemLocation';
 
 @Injectable()
 export class PantryDbHelper {
@@ -68,10 +70,11 @@ export class PantryDbHelper {
     return this.queryGroceryStoreSections(groceryStoreId);
   }
 
+
   public addGroceryStore(name: string): Observable<GroceryStore> {
     return this.connect().pipe(
-      mergeMap((success) => this.insertGroceryStore(name)),
-      switchMap((id) => {
+      mergeMap(( _ ) => this.insertGroceryStore(name)),
+      switchMap(( _ ) => {
         return this.queryGroceryStoreByName(name);
       })
     );
@@ -253,6 +256,68 @@ export class PantryDbHelper {
     return new Observable<boolean>((observer) => {
       this.mySqlCommands.updatePantryItem(pantryItem).then((result) => {
         observer.next(result);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
+  public addPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Observable<boolean> {
+    return this.connect().pipe(
+      mergeMap((success) => this.insertPantryItemLocation(pantryItemId, groceryStoreLocationId)),
+      switchMap((rowsAffected) => {
+        return of(rowsAffected > 0);
+      })
+    );
+  }
+
+  public addGroceryStoreLocation(newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
+    return this.connect().pipe(
+      mergeMap((success) => this.insertGroceryStoreLocation(newLocation.storeId, newLocation.aisle, newLocation.section)),
+      switchMap(( _ ) => {
+        return this.queryGroceryStoreLocation(newLocation.storeId, newLocation.aisle, newLocation.section);
+      })
+    );
+  }
+
+  public insertPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Observable<number> {
+    return new Observable<number>((observer) => {
+      this.mySqlCommands.insertPantryItemLocation(pantryItemId, groceryStoreLocationId).then((rowsAffected) => {
+        observer.next(rowsAffected);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
+  public insertGroceryStoreLocation(storeId: number, aisle: string, section: string): Observable<number> {
+    return new Observable<number>((observer) => {
+      this.mySqlCommands.insertGroceryStoreLocation(storeId, aisle, section).then((rowsAffected) => {
+        observer.next(rowsAffected);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
+  public queryGroceryStoreLocationById(id: number): Observable<GroceryStoreLocation> {
+    return new Observable<GroceryStoreLocation>((observer) => {
+      this.mySqlCommands.queryGroceryStoreLocationById(id).then((groceryStoreLocation) => {
+        observer.next(groceryStoreLocation);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
+  public queryGroceryStoreLocation(storeId: number, aisle: string, section: string): Observable<GroceryStoreLocation> {
+    return new Observable<GroceryStoreLocation>((observer) => {
+      this.mySqlCommands.queryGroceryStoreLocation(storeId, aisle, section).then((groceryStoreLocation) => {
+        observer.next(groceryStoreLocation);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+  public queryPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Observable<PantryItemLocation> {
+    return new Observable<PantryItemLocation>((observer) => {
+      this.mySqlCommands.queryPantryItemLocation(pantryItemId, groceryStoreLocationId).then((pantryItemLocation) => {
+        observer.next(pantryItemLocation);
         observer.complete();
       }).catch((err) => observer.error(err));
     });

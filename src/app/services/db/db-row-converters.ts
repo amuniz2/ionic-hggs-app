@@ -1,6 +1,8 @@
 import {PantryItem} from '../../model/pantry-item';
-import {PantryItemTable, StoreTable} from './pantry-db-schema';
+import {LocationTable, PantryItemLocationTable, PantryItemTable, StoreTable} from './pantry-db-schema';
 import {GroceryStore} from '../../model/grocery-store';
+import {GroceryStoreLocation} from '../../model/grocery-store-location';
+import {PantryItemLocation} from '../../model/PantryItemLocation';
 
 export class DbRowConverters {
   public static rowToGroceryStore(row: any): GroceryStore {
@@ -22,6 +24,22 @@ export class DbRowConverters {
       description: row[PantryItemTable.COLS.DESCRIPTION],
       id: row[PantryItemTable.COLS.ID],
       //   locations: []
+    };
+  }
+
+  public static rowToGroceryStoreLocation(row: any): GroceryStoreLocation {
+    return {
+      storeId: row[LocationTable.COLS.STORE_ID],
+      section: row[LocationTable.COLS.SECTION_NAME],
+      aisle: row[LocationTable.COLS.AISLE],
+      id: row[LocationTable.COLS.ID],
+    };
+  }
+
+  public static rowToPantryItemLocation(row: any): PantryItemLocation {
+    return {
+      pantryItemId: row[PantryItemLocationTable.COLS.PANTRY_ITEM_ID],
+      groceryStoreLocationId: row[PantryItemLocationTable.COLS.LOCATION_ID],
     };
   }
 }

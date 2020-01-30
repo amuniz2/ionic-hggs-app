@@ -11,6 +11,9 @@ import {
 import {StoreSection} from '../modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component';
 import {PantryItem} from '../model/pantry-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
+import {GroceryStoreLocation} from '../model/grocery-store-location';
+import {allowNewBindingsForStylingContext} from '@angular/core/src/render3/styling/class_and_style_bindings';
+import {PantryItemLocation} from '../model/PantryItemLocation';
 
 @Injectable()
 export class PantryDataService implements IPantryDataService {
@@ -78,5 +81,14 @@ export class PantryDataService implements IPantryDataService {
 
   public updatePantryItem(savePantryItemRequest: PantryItem): Observable<boolean> {
     return this.dbHelper.updatePantryItem(savePantryItemRequest);
+  }
+
+  public addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<boolean > {
+    const storeLocation = this.dbHelper.queryGroceryStoreLocation(newLocation.storeId, newLocation.aisle, newLocation.section);
+    if (storeLocation === null) {
+      this.dbHelper.addGroceryStoreLocation(newLocation);
+    }
+
+    return this.dbHelper.addPantryItemLocation(itemId, newLocation.id);
   }
 }

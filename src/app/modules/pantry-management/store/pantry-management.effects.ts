@@ -161,8 +161,8 @@ export class PantryEffects {
       return this.storeManagementService.addPantryItemLocation(
         payload.addPantryItemLocation.itemId,
         payload.addPantryItemLocation.location).pipe(
-        map(itemLocationId => new PantryItemLocationAdded(
-          itemLocationId,
+        map(_ => new PantryItemLocationAdded(
+          payload.addPantryItemLocation.itemId,
           payload.addPantryItemLocation.itemId,
           payload.addPantryItemLocation.location)),
         catchError(error => [new AddPantryItemLocationFailed(error)])

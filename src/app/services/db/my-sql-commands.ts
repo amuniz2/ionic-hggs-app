@@ -2,13 +2,15 @@ import {PantryItem} from '../../model/pantry-item';
 import * as pantrySchema from './pantry-db-schema';
 import {DbRowConverters} from './db-row-converters';
 import {SQLite, SQLiteObject} from '@ionic-native/sqlite/ngx';
-import {PantryItemTable} from './pantry-db-schema';
+import {LocationTable, PantryItemLocationTable, PantryItemTable} from './pantry-db-schema';
 import {GroceryStore} from '../../model/grocery-store';
 import {StoreGroceryAisleTable} from './pantry-db-schema';
 import {StoreTable} from './pantry-db-schema';
 import {StoreGrocerySectionTable} from './pantry-db-schema';
 import {MySqlHelpers} from './my-sql-helpers';
 import {Injectable} from '@angular/core';
+import {GroceryStoreLocation} from '../../model/grocery-store-location';
+import {PantryItemLocation} from '../../model/PantryItemLocation';
 
 @Injectable()
 export class MySqlCommands {
@@ -216,6 +218,122 @@ export class MySqlCommands {
     }
   }
   // endregion
+
+  // region GroceryStoreLocation CRUD
+  public async insertGroceryStoreLocation(storeId: number, aisle: string, section: string): Promise<number> {
+    const insertSql = `INSERT INTO
+     ${pantrySchema.LocationTable.NAME}
+     (${pantrySchema.LocationTable.COLS.STORE_ID},
+     ${pantrySchema.LocationTable.COLS.AISLE},
+     ${pantrySchema.LocationTable.COLS.SECTION_NAME})
+      VALUES(${storeId}, \'${aisle}\', \'${section}\')`;
+    console.log('executing: ' + insertSql);
+    try {
+      const data = await this.db.executeSql(insertSql, []);
+      console.log(`returning ${data} from insertGroceryStoreLocation`);
+      return data.rowsAffected;
+    } catch (err) {
+      console.log(`Error inserting grocery store location  ${insertSql}`);
+      console.log(err);
+    }
+  }
+
+  public async queryGroceryStoreLocations(): Promise<Map<number, GroceryStoreLocation[]>> {
+    const locations: Map<number, GroceryStoreLocation[]> = new Map<number, GroceryStoreLocation[]>();
+    try {
+      const data = await this.db.executeSql(`SELECT * FROM ${LocationTable.NAME}`, []);
+      for (let i = 0; i < data.rows.length; i++) {
+        const groceryStoreLocation = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(i));
+        if (locations.has(groceryStoreLocation.id)) {
+          locations[groceryStoreLocation.id].push(groceryStoreLocation);
+        } else {
+          locations.set(groceryStoreLocation.id, [groceryStoreLocation]);
+        }
+      }
+    } catch (err) {
+      console.log('Error querying for grocery storeLocations');
+      console.log(err);
+    }
+    console.log('returning from query');
+    console.log(locations);
+    return locations;
+  }
+
+  public async updateGroceryStoreLocation(updatedGroceryStoreLocation: GroceryStoreLocation): Promise<boolean> {
+    try {
+      const sqlUpdate = `UPDATE ${pantrySchema.LocationTable.NAME} SET
+       ${pantrySchema.LocationTable.COLS.STORE_ID}=\'${updatedGroceryStoreLocation.storeId}\'
+       , ${pantrySchema.LocationTable.COLS.AISLE}=\'${updatedGroceryStoreLocation.aisle}\'
+       , ${pantrySchema.LocationTable.COLS.SECTION_NAME}=\'${updatedGroceryStoreLocation.section}\'
+        WHERE ${pantrySchema.LocationTable.COLS.ID} = ${updatedGroceryStoreLocation.id}`;
+      console.log(`running sql update: ${sqlUpdate}`);
+      const data = await this.db.executeSql(sqlUpdate, []);
+      if (data.rows.length > 0) {
+        console.log('grocery store location updated in db');
+        return true;
+      } else {
+        console.log('grocery store location update failed');
+        return false;
+      }
+    } catch (err) {
+      console.log('Error updating grocery store location');
+      console.log(err);
+      return false;
+    }
+  }
+  public async queryGroceryStoreLocation(storeId: number, aisle: string, section: string): Promise<GroceryStoreLocation> {
+    try {
+      const sqlQueryByName = `SELECT * from ${pantrySchema.LocationTable.NAME}
+       WHERE ${pantrySchema.LocationTable.COLS.STORE_ID} = \'${name}\'
+       AND ${pantrySchema.LocationTable.COLS.AISLE} = \'${aisle}\'
+       AND ${pantrySchema.LocationTable.COLS.STORE_ID} = \'${section}\'`;
+      console.log(`running query: ${sqlQueryByName}`);
+      const data = await this.db.executeSql(sqlQueryByName, []);
+      if (data.rows.length > 0) {
+        console.log('at least 1 row returned, converting first row to GroceryStoreLocation');
+        return DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
+      } else {
+        console.log('no grocery store location returned for query by storeId, aisle, section');
+        return null;
+      }
+    } catch (err) {
+      console.log('Error querying grocery store location');
+      console.log(err);
+      return null;
+    }
+  }
+  public async queryGroceryStoreLocationById(id: number): Promise<GroceryStoreLocation> {
+    try {
+      const sqlQueryById = `SELECT * from ${pantrySchema.LocationTable.NAME}
+       WHERE ${pantrySchema.LocationTable.COLS.STORE_ID} = ${id}`;
+      console.log(`running query: ${sqlQueryById}`);
+      const data = await this.db.executeSql(sqlQueryById, []);
+      if (data.rows.length > 0) {
+        console.log('at least 1 row returned, converting first row to GroceryStoreLocation');
+        return DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
+      } else {
+        console.log('no grocery store location returned for query by id');
+        return null;
+      }
+    } catch (err) {
+      console.log('Error querying grocery store location by id');
+      console.log(err);
+      return null;
+    }
+  }
+  public async deleteGroceryStoreLocation(id: number): Promise<number> {
+    const  deleteSql = `DELETE FROM ${pantrySchema.LocationTable.NAME} WHERE ${pantrySchema.LocationTable.COLS.ID} = ${id}`;
+    try {
+      const data = await this.db.executeSql(deleteSql, []);
+      console.log(`returning ${data} from deleteGroceryStoreLocation`);
+      return data.rowsAffected;
+    } catch (err) {
+      console.log(`Error deleting grocery store location ${id}`);
+      console.log(err);
+    }
+  }
+  // endregion
+  // endregion
   // region GroceryStoreSection CRUD
   /*
    todo: combine aisle and section tables into single table with column denoting if it section or aisle
@@ -398,7 +516,7 @@ export class MySqlCommands {
   }
 
   public async deleteGroceryStore(id: number): Promise<number> {
-    const  deleteSql = `DELETE FROM ${pantrySchema.StoreTable.NAME} WHERE ${pantrySchema.StoreTable.COLS.ID} = ${id}`;
+    const deleteSql = `DELETE FROM ${pantrySchema.StoreTable.NAME} WHERE ${pantrySchema.StoreTable.COLS.ID} = ${id}`;
     try {
       const data = await this.db.executeSql(deleteSql, []);
       return data.rowsAffected;
@@ -408,4 +526,72 @@ export class MySqlCommands {
     }
   }
   // endregion
+    // region PantryItemLocation CRUD
+  public async insertPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Promise<number> {
+      const insertSql = `INSERT INTO
+     ${pantrySchema.PantryItemLocationTable.NAME}
+     (${pantrySchema.PantryItemLocationTable.COLS.PANTRY_ITEM_ID},
+     ${pantrySchema.PantryItemLocationTable.COLS.LOCATION_ID})
+      VALUES(${pantryItemId}, ${groceryStoreLocationId})`;
+      console.log('executing: ' + insertSql);
+      try {
+      const data = await this.db.executeSql(insertSql, []);
+      console.log(`returning ${data} from insertPantryItemLocation`);
+      return data.rowsAffected;
+    } catch (err) {
+      console.log(`Error inserting pantry Item location  ${insertSql}`);
+      console.log(err);
+    }
+  }
+
+  public async queryPantryItemLocations(): Promise<Map<number, PantryItemLocation[]>> {
+    const locations: Map<number, PantryItemLocation[]> = new Map<number, PantryItemLocation[]>();
+    try {
+      const data = await this.db.executeSql(`SELECT  * FROM ${PantryItemLocationTable.NAME}`, []);
+      for (let i = 0; i < data.rows.length; i++) {
+        const pantryItemLocation = DbRowConverters.rowToPantryItemLocation(data.rows.item(i));
+        if (locations.has(pantryItemLocation.pantryItemId)) {
+          locations[pantryItemLocation.pantryItemId].push(pantryItemLocation);
+        } else {
+          locations.set(pantryItemLocation.pantryItemId, [pantryItemLocation]);
+        }
+      }
+    } catch (err) {
+      console.log('Error querying for pantry Item eLocations');
+      console.log(err);
+    }
+    console.log('returning from query');
+    console.log(locations);
+    return locations;
+  }
+
+  public async queryPantryItemLocation(pantryitemId: number, groceryStoreLocationId: number): Promise<PantryItemLocation> {
+    const sqlQueryByName = `SELECT * from ${pantrySchema.PantryItemLocationTable.NAME}
+       WHERE ${pantrySchema.PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${pantryitemId}
+       AND ${pantrySchema.PantryItemLocationTable.COLS.LOCATION_ID} = ${groceryStoreLocationId}`;
+    console.log(`running query: ${sqlQueryByName}`);
+    const data = await this.db.executeSql(sqlQueryByName, []);
+    if (data.rows.length > 0) {
+      console.log('at least 1 row returned, converting first row to pantryItemLocation');
+      return DbRowConverters.rowToPantryItemLocation(data.rows.item(0));
+    } else {
+      console.log('no pantryItem returned for query pantryItem by name');
+      return null;
+    }
+  }
+
+  public async deletePantryItemLocationLocation(pantryItemId: number, locationId: number): Promise<number> {
+      const  deleteSql = `DELETE FROM ${pantrySchema.PantryItemLocationTable.NAME}
+      WHERE ${pantrySchema.PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${pantryItemId}
+      AND ${pantrySchema.PantryItemLocationTable.COLS.LOCATION_ID} = ${locationId}`;
+      try {
+      const data = await this.db.executeSql(deleteSql, []);
+      console.log(`returning ${data} from deletePantryItemLocation`);
+      return data.rowsAffected;
+    } catch (err) {
+      console.log(`Error deleting pantry ite  location ${pantryItemId}, ${locationId}`);
+      console.log(err);
+    }
+  }
+    // endregion
 }

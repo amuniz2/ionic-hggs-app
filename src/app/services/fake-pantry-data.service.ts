@@ -1,4 +1,4 @@
-import {from, Observable, of} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {GroceryStore} from '../model/grocery-store';
 import {StoreAisle} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles.component';
@@ -10,6 +10,8 @@ import {
 import {StoreSection} from '../modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component';
 import {PantryItem} from '../model/pantry-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
+import {GroceryStoreLocation} from '../model/grocery-store-location';
+import {PantryItemLocation} from '../model/PantryItemLocation';
 
 @Injectable()
 export class FakePantryDataService implements IPantryDataService {
@@ -21,9 +23,12 @@ export class FakePantryDataService implements IPantryDataService {
     this.pantryItems = [
       { id: 1, name: 'Whole Wheat Bred', description: '1 loaf'},
     ];
+    this.pantryItemLocations = [];
   }
   private readonly groceryStores: GroceryStore[];
   private readonly pantryItems: PantryItem[];
+  private readonly pantryItemLocations: PantryItemLocation[];
+  private readonly groceryStoreLocations: GroceryStoreLocation[];
 
   deleteGroceryStoreAisle(deleteStoreAisleRequest: StoreAisle): Observable<boolean> {
       throw new Error('Method not implemented.');
@@ -136,5 +141,31 @@ export class FakePantryDataService implements IPantryDataService {
     return undefined;
   }
 
+  addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<boolean> {
+    let groceryStoreLocation = this.findGroceryStoreLocation(
+      newLocation.storeId,
+      newLocation.aisle,
+      newLocation.section
+    );
+    if (groceryStoreLocation === null) {
+      groceryStoreLocation = {
+        ...newLocation,
+        id: this.groceryStoreLocations.length
+      };
+      this.groceryStoreLocations.push(groceryStoreLocation);
+    }
+    this.pantryItemLocations.push({
+      pantryItemId: itemId,
+      groceryStoreLocationId: groceryStoreLocation.id
+    });
+    return of(true);
+  }
 
+  findPantryItem(id: number): PantryItem {
+    return  this.pantryItems.find(pantryItem => pantryItem.id === id);
+  }
+
+  findGroceryStoreLocation(storeId: number, aisle: string, section: string): GroceryStoreLocation {
+    return this.groceryStoreLocations.find(loc => (loc.storeId === storeId) && (loc.aisle === aisle) && (loc.section === section));
+  }
 }
