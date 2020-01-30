@@ -176,8 +176,8 @@ typings/
 android/build
 android/app/build
 
-platforms/browser/www/*.js
+platforms/browser/
 platforms/android/.gradle/*.*
-platforms/android/app/build/
+platforms/android/app/
 platforms/platforms/android/app/build/
 www/
