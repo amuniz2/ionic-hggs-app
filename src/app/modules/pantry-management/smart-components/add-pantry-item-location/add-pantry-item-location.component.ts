@@ -13,6 +13,13 @@ import {selectGroceryStoresLoading} from '../../../../store/store-management.sel
 // tslint:disable-next-line:max-line-length
 import {GroceryStoreAisleOrSectionSelected} from '../../../shared-module/dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {AddPantryItemLocation} from '../../store/pantry-management.actions';
+import {ActivatedRoute} from '@angular/router';
+
+export interface NewItemLocation {
+  itemId: number;
+  location: GroceryStoreLocation;
+}
 
 @Component({
   selector: 'app-add-pantry-item-location',
@@ -45,7 +52,10 @@ export class AddPantryItemLocationComponent implements OnInit {
   private groceryStoresLoading$: Observable<boolean>;
 
 //  selectedGroceryStoreId: number = null;
-  constructor(private store: Store<AppState>, @Inject('IPantryDataService') private pantryDataService: IPantryDataService, private fb: FormBuilder) {
+  constructor(private store: Store<AppState>,
+              @Inject('IPantryDataService') private pantryDataService: IPantryDataService,
+              private fb: FormBuilder,
+              private activeRoute: ActivatedRoute) {
     this.store.dispatch(new LoadGroceryStores());
     this.groceryStoreLocation = {
       id: null,
@@ -58,7 +68,7 @@ export class AddPantryItemLocationComponent implements OnInit {
       locationStore: [''],
       locationAisle: [''],
       locationSection: ['']
-    })
+    });
   }
 
   ngOnInit() {
@@ -97,8 +107,12 @@ export class AddPantryItemLocationComponent implements OnInit {
     console.log(this.groceryStoreLocation);
     console.log('LocationForm: ');
     console.log(this.locationForm);
-    // if (this.locationForm.valid)
-    //   this.store.dispatch(new AddItemLocation(this.groceryStoreLocation));
+    if (this.locationForm.valid) {
+      this.store.dispatch(new AddPantryItemLocation({
+        itemId: this.activeRoute.snapshot.params.id,
+        location: this.groceryStoreLocation
+      }));
+    }
     // return to previous form
   }
 }

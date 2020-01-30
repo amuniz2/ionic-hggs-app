@@ -1,8 +1,9 @@
 import {Inject, Injectable} from '@angular/core';
 import {
+  AddPantryItemLocation, AddPantryItemLocationFailed,
   AddPantryItemLocationRequest,
   CreateItemFailed, CreatePantryItem, DeletePantryItemFailed,
-  ItemCreated, NavigateToPantryItemPage, PantryItemDeleted,
+  ItemCreated, NavigateToPantryItemPage, PantryItemDeleted, PantryItemLocationAdded,
   PantryLoadedSuccessfully, PantryLoadFailed, SavePantryItemFailed, SavePantryItemSucceeded
 } from './pantry-management.actions';
 import {Store} from '@ngrx/store';
@@ -12,6 +13,7 @@ import {PantryState} from './pantry-management.reducers';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IPantryDataService} from '../../../services/IPantryDataService';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
+import {NewItemLocation} from '../smart-components/add-pantry-item-location/add-pantry-item-location.component';
 
 @Injectable()
 export class PantryEffects {
@@ -150,5 +152,20 @@ export class PantryEffects {
       this.router.navigateByUrl(route);
       // this.router.navigate(['/pantry-items/pantry-item-locations']);;
       // this.router.navigate(['../../manage']);
+    }));
+
+  @Effect({ dispatch: false })
+  public addItemLocation = this.actions$.pipe(
+    ofType(PantryActionTypes.AddPantryItemLocation),
+    switchMap((payload) => {
+      return this.storeManagementService.addPantryItemLocation(
+        payload.addPantryItemLocation.itemId,
+        payload.addPantryItemLocation.location).pipe(
+        map(itemLocationId => new PantryItemLocationAdded(
+          itemLocationId,
+          payload.addPantryItemLocation.itemId,
+          payload.addPantryItemLocation.location)),
+        catchError(error => [new AddPantryItemLocationFailed(error)])
+      );
     }));
 }
