@@ -4,12 +4,22 @@ import {HomePageComponent} from './home/home.page';
 
 const routes: Routes = [
   // { path: 'manage-stores', component: StoreListComponent  },
-  { path: 'stores',
-    loadChildren: './modules/store-management/store-management.module#StoreManagementModule'},
-  { path: 'pantry-items',
-    loadChildren: './modules/pantry-management/pantry-management.module#PantryManagementModule'},
-  { path: 'home', component: HomePageComponent},
-  { path: '', redirectTo: 'home', pathMatch: 'full'},
+  // { path: 'stores',
+  //   loadChildren: './modules/store-management/store-management.module#StoreManagementModule'},
+  // { path: 'pantry-items',
+  //   loadChildren: './modules/pantry-management/pantry-management.module#PantryManagementModule'},
+  { path: '',
+    component: HomePageComponent,
+    children: [
+      { path: 'grocery-stores',
+        loadChildren: './modules/store-management/store-management.module#StoreManagementModule',
+      },
+      { path: 'pantry-items',
+        outlet: 'pantry-items',
+        loadChildren: './modules/pantry-management/pantry-management.module#PantryManagementModule'},
+    ]
+  },
+  // { path: '', redirectTo: 'home', pathMatch: 'full'},
   // { path: '', redirectTo: 'manage-stores', pathMatch: 'full'},
   // { path: '**', component: PageNotFoundComponent}
 ];

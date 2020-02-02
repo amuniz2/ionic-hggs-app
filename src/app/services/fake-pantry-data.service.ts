@@ -21,9 +21,10 @@ export class FakePantryDataService implements IPantryDataService {
       { id: 2, name: 'Target', aisles: [], locations: [], sections: []},
     ];
     this.pantryItems = [
-      { id: 1, name: 'Whole Wheat Bred', description: '1 loaf'},
+      { id: 1, name: 'Whole Wheat Bread', description: '1 loaf'},
     ];
     this.pantryItemLocations = [];
+    this.groceryStoreLocations = [];
   }
   private readonly groceryStores: GroceryStore[];
   private readonly pantryItems: PantryItem[];
@@ -129,8 +130,9 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   addPantryItem(newPantryItemRequest: PantryItem): Observable<PantryItem> {
-    this.pantryItems.push(newPantryItemRequest);
-    return of(newPantryItemRequest);
+    const newPantryItem = { ...newPantryItemRequest, id: this.pantryItems.length + 1};
+    this.pantryItems.push(newPantryItem);
+    return of(newPantryItem);
   }
 
   deletePantryItem(deletePantryItemRequest: DeletePantryItemRequest): Observable<boolean> {

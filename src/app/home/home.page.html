@@ -1,27 +1,24 @@
 <ion-tabs>
-  <ion-tab tab="tab-grocery-stores">
-    <ion-nav></ion-nav>
+  <ion-tab tab="pantry-items">
+    <ion-router-outlet name="pantry-items"></ion-router-outlet>
   </ion-tab>
-  <ion-tab tab="tab-pantry-items">
-    <ion-nav></ion-nav>
-  </ion-tab>
-<ion-tab-bar slot="bottom">
-  <ion-tab-button tab="tab-grocery-stores">
-    <ion-label>Grocery Stores</ion-label>
-  </ion-tab-button>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="grocery-stores">
+      <ion-label>Grocery Stores</ion-label>
+    </ion-tab-button>
 
-  <ion-tab-button tab="tab-pantry-items">
-    <ion-label>Grocery Stores</ion-label>
-  </ion-tab-button>
-</ion-tab-bar>
+    <ion-tab-button tab="pantry-items">
+      <ion-label>Pantry Items</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-tabs>
 
-<ion-header>
-  <h2>Here are some links to help you start: </h2>
-</ion-header>
-<ion-content>
-      <a  [routerLink]="['/stores/manage']"> {{manageStoresLabel}} </a>
-<p></p>
-      <a  [routerLink]="['/pantry-items']"> {{managePantryItemsLabel}} </a>
-</ion-content>
-<!--<ion-router-outlet></ion-router-outlet>-->
+<!--<ion-header>-->
+<!--  <h2>Here are some links to help you start: </h2>-->
+<!--</ion-header>-->
+<!--<ion-content>-->
+<!--      <a  [routerLink]="['/stores/manage']"> {{manageStoresLabel}} </a>-->
+<!--<p></p>-->
+<!--      <a  [routerLink]="['/pantry-items']"> {{managePantryItemsLabel}} </a>-->
+<!--</ion-content>-->
+ƒ

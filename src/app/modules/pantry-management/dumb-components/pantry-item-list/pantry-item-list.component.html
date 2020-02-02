@@ -10,6 +10,7 @@
     </ion-item-sliding>
   </ion-card>
 </ion-list>
+<ion-text *ngIf="error">{{error}}</ion-text>
 <ng-template #showSpinner>
   <p>pantry items are loading...</p>
 </ng-template>

@@ -1,19 +1,16 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button>Back</ion-back-button>
-    </ion-buttons>
-  <h2>Pantry</h2>
+    <ion-text slot="start">Pantry</ion-text>
+    <ion-button slot="end" shape="round" fill="outline" (click)="onAddStoreClick()">Add
+      <!--<ion-icon slot="start" md="ios-add-circle-outline" ></ion-icon>-->
+      <!--<app-new-store></app-new-store>-->
+    </ion-button><!--  <app-add-pantry-item (notifyNewPantryItemRequested)="onNotifyNewPantryItemRequest($event)"></app-add-pantry-item>-->
+  </ion-toolbar>
 </ion-header>
 <ion-content>
   <app-pantry-item-list [pantryItems] = "(pantryItems$ | async)"
                         [pantryItemsLoading]="pantryItemsLoading$ | async"
-                        (notifyDeletePantryItemRequested)="onDeletePantryItemRequest($event)" >
+                        (notifyDeletePantryItemRequested)="onDeletePantryItemRequest($event)"
+                        [error] = "(error$ | async)">
   </app-pantry-item-list>
 </ion-content>
-<ion-footer>
-  <ion-button shape="round" fill="outline" (click)="onAddStoreClick()">Add
-    <!--<ion-icon slot="start" md="ios-add-circle-outline" ></ion-icon>-->
-    <!--<app-new-store></app-new-store>-->
-  </ion-button><!--  <app-add-pantry-item (notifyNewPantryItemRequested)="onNotifyNewPantryItemRequest($event)"></app-add-pantry-item>-->
-</ion-footer>

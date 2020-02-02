@@ -28,6 +28,9 @@ export class PantryItemListComponent implements OnInit {
   @Input()
   pantryItems: PantryItem[];
 
+  @Input()
+  error: Error;
+
   constructor(private router: Router, private store: Store<AppState>) { }
 
   ngOnInit() {
