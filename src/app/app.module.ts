@@ -19,6 +19,7 @@ import {SQLite} from '@ionic-native/sqlite/ngx';
 import {SharedModule} from './modules/shared-module/shared.module';
 import {MySqlCommands} from './services/db/my-sql-commands';
 import {FakePantryDataService} from './services/fake-pantry-data.service';
+import {PantryManagementRoutes} from './modules/pantry-management/pantry-management.routes';
 
 
 @NgModule({
