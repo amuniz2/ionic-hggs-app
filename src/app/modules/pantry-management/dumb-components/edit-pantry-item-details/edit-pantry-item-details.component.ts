@@ -3,6 +3,7 @@ import {PantryItem} from '../../../../model/pantry-item';
 import {of} from 'rxjs';
 import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
 import {NewItemLocationRequest} from '../pantry-item-locations/pantry-item-locations.component';
+import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 
 @Component({
   selector: 'app-edit-pantry-item-details',
@@ -16,6 +17,9 @@ export class EditPantryItemDetailsComponent implements OnInit {
 
   @Input()
   pantryItem: PantryItem;
+
+  @Input()
+  pantryItemLocations: GroceryStoreLocation[];
 
   @Input()
   error: Error;

@@ -7,6 +7,7 @@
 </ion-header>
 <ion-content>
   <app-edit-pantry-item-details [pantryItem]="pantryItem$ | async" [isNewItem] = "isNewItem" [error]="error$ | async"
+                                [pantryItemLocations]="pantryItemLocations$ | async"
     (notifySavePantryItemRequested)="savePantryItemChanges($event)"
     (notifyAddPantryItemRequested)="addPantryItem($event)"
   (notifyAddPantryItemLocationRequest)="addPantryItemLocation($event)">

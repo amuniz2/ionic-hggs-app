@@ -154,14 +154,14 @@ export class PantryEffects {
       // this.router.navigate(['../../manage']);
     }));
 
-  @Effect({ dispatch: false })
+  @Effect()
   public addItemLocation = this.actions$.pipe(
     ofType(PantryActionTypes.AddPantryItemLocation),
     switchMap((payload) => {
       return this.storeManagementService.addPantryItemLocation(
         payload.addPantryItemLocation.itemId,
         payload.addPantryItemLocation.location).pipe(
-          tap((locationId) => console.log(payload)),
+          tap((locationId) => console.log(locationId)),
           map((locationId) => {
             return new PantryItemLocationAdded({
               pantryItemId: payload.addPantryItemLocation.itemId,
@@ -173,5 +173,16 @@ export class PantryEffects {
           return [new AddPantryItemLocationFailed(error)];
         })
       );
+    }));
+
+  @Effect({dispatch: false})
+  public itemLocationAdded = this.actions$.pipe(
+    ofType(PantryActionTypes.PantryItemLocationAdded),
+    tap((navigateToItemPage: PantryItemLocationAdded) => {
+      // todo: make this single '/pantry-items/{pantry-item-id}/new-pantry-item-location
+      const route = `/home/pantry-items/pantry-item-details?id=${navigateToItemPage.pantryItemLocation.pantryItemId}&isNewItem=false`;
+      this.router.navigateByUrl(route);
+      // this.router.navigate(['/pantry-items/pantry-item-locations']);;
+      // this.router.navigate(['../../manage']);
     }));
 }

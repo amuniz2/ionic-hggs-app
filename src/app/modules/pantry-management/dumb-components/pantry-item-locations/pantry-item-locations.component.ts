@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
+import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 
 export interface NewItemLocationRequest {
   pantryItem: PantryItem;
@@ -14,6 +15,10 @@ export class PantryItemLocationsComponent implements OnInit {
 
   @Input()
   private pantryItem: PantryItem;
+
+  @Input()
+  private groceryLocations: GroceryStoreLocation[];
+
   constructor() { }
 
   @Output()

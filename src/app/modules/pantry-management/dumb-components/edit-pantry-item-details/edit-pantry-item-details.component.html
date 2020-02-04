@@ -16,6 +16,7 @@
   </app-hggs-accordion>
   <app-pantry-item-locations *ngIf="locationsSection.isOpen$ | async"
                             [pantryItem]="pantryItem"
+                             [groceryLocations]="pantryItemLocations"
                             (notifyNewPantryItemLocationRequested)="onNotifyNewLocationRequest($event)"
                             (notifyDeletePantryItemLocationRequested)="onNotifyDeleteLocationRequest($event)"></app-pantry-item-locations>
   <ion-textarea *ngIf="error">{{error.message}}</ion-textarea>

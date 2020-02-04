@@ -79,7 +79,9 @@ export class ItemCreated implements Action {
 
 export class PantryItemLocationAdded implements Action {
   readonly type = PantryActionTypes.PantryItemLocationAdded;
-  constructor(public pantryItemLocation: PantryItemLocation) {}
+  constructor(public pantryItemLocation: PantryItemLocation) {
+    console.log('created PantryItemLocationAdded action');
+  }
 }
 
 export class AddPantryItemLocationFailed implements Action {
