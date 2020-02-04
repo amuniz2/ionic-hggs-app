@@ -21,7 +21,7 @@ export class FakePantryDataService implements IPantryDataService {
       { id: 2, name: 'Target', aisles: [], locations: [], sections: []},
     ];
     this.pantryItems = [
-      { id: 1, name: 'Whole Wheat Bread', description: '1 loaf'},
+      { id: 1, name: 'Whole Wheat Bread', description: '1 loaf', locations: []},
     ];
     this.pantryItemLocations = [];
     this.groceryStoreLocations = [];
@@ -143,16 +143,16 @@ export class FakePantryDataService implements IPantryDataService {
     return undefined;
   }
 
-  addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<boolean> {
+  addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<number> {
     let groceryStoreLocation = this.findGroceryStoreLocation(
       newLocation.storeId,
       newLocation.aisle,
       newLocation.section
     );
-    if (groceryStoreLocation === null) {
+    if (groceryStoreLocation == null) {
       groceryStoreLocation = {
         ...newLocation,
-        id: this.groceryStoreLocations.length
+        id: this.groceryStoreLocations.length + 1
       };
       this.groceryStoreLocations.push(groceryStoreLocation);
     }
@@ -160,7 +160,8 @@ export class FakePantryDataService implements IPantryDataService {
       pantryItemId: itemId,
       groceryStoreLocationId: groceryStoreLocation.id
     });
-    return of(true);
+
+    return of(groceryStoreLocation.id);
   }
 
   findPantryItem(id: number): PantryItem {
@@ -169,5 +170,9 @@ export class FakePantryDataService implements IPantryDataService {
 
   findGroceryStoreLocation(storeId: number, aisle: string, section: string): GroceryStoreLocation {
     return this.groceryStoreLocations.find(loc => (loc.storeId === storeId) && (loc.aisle === aisle) && (loc.section === section));
+  }
+
+  findPantryItemLocation(pantryItemId: number, groceryLocationId: number): PantryItemLocation {
+    return this.pantryItemLocations.find(loc => (loc.pantryItemId === pantryItemId) && (loc.groceryStoreLocationId === groceryLocationId));
   }
 }

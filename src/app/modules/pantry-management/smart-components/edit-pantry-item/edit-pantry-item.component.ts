@@ -27,7 +27,8 @@ export class EditPantryItemComponent implements OnInit {
       this.pantryItem$ = of({
         id: 0,
         name: '',
-        description: ''
+        description: '',
+        locations: [],
       });
     } else {
       this.pantryItem$ = this.store.pipe(select(selectPantryItem(this.pantryItemId)));

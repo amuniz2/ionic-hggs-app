@@ -49,10 +49,15 @@ export class EditPantryItemDetailsComponent implements OnInit {
   onSaveClick() {
     if (!this.isNewItem) {
       // add new item
-      this.notifySavePantryItemRequested.emit({name: this.pantryItemName, description: this.pantryItemDescription, id: this.pantryItem.id});
+      this.notifySavePantryItemRequested.emit({
+        name: this.pantryItemName,
+        description: this.pantryItemDescription,
+        id: this.pantryItem.id,
+        locations: this.pantryItem.locations
+      });
     } else {
-      // add existing item
-      this.notifyAddPantryItemRequested.emit({name: this.pantryItemName, description: this.pantryItemDescription, id: 0});
+      // update existing item
+      this.notifyAddPantryItemRequested.emit({name: this.pantryItemName, description: this.pantryItemDescription, id: 0, locations: []});
     }
   }
 

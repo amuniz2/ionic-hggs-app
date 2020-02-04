@@ -161,11 +161,17 @@ export class PantryEffects {
       return this.storeManagementService.addPantryItemLocation(
         payload.addPantryItemLocation.itemId,
         payload.addPantryItemLocation.location).pipe(
-        map(_ => new PantryItemLocationAdded(
-          payload.addPantryItemLocation.itemId,
-          payload.addPantryItemLocation.itemId,
-          payload.addPantryItemLocation.location)),
-        catchError(error => [new AddPantryItemLocationFailed(error)])
+          tap((locationId) => console.log(payload)),
+          map((locationId) => {
+            return new PantryItemLocationAdded({
+              pantryItemId: payload.addPantryItemLocation.itemId,
+              groceryStoreLocationId: locationId
+            });
+        }),
+        catchError(error => {
+          console.log(error);
+          return [new AddPantryItemLocationFailed(error)];
+        })
       );
     }));
 }

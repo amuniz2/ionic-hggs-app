@@ -2,6 +2,8 @@ import * as fromAdapter from './pantry.adapter';
 import {EntityState} from '@ngrx/entity';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
 import {PantryItem} from '../../../model/pantry-item';
+import {from} from 'rxjs';
+import {getPantryItem} from './pantry-management.selectors';
 // export interface GroceryStoreAisle {
 //   aisle: string;
 //   storeId: number;
@@ -135,6 +137,36 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
           selectedPantryItemId: action.pantryItemId
         };
 
+      case PantryActionTypes.PantryItemLocationAdded:
+      {
+        const pantryItem = getPantryItem(state.pantryItems, action.pantryItemLocation.pantryItemId);
+        return {
+          ...state,
+          pantryItems: {
+            ...fromAdapter.pantryAdapter.updateOne({
+              id: action.pantryItemLocation.pantryItemId,
+              changes: {
+                locations: [
+                  ...pantryItem.locations,
+                  action.pantryItemLocation.groceryStoreLocationId]
+              }
+            }, state.pantryItems),
+            error: null
+          }
+        };
+      }
+
+
+      case PantryActionTypes.AddPantryItemLocationFailed:
+      {
+        return {
+          ...state,
+          pantryItems: {
+            ...state.pantryItems,
+            error: action.error
+          }
+        };
+      }
       default: return state;
     }
 

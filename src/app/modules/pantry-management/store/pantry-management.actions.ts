@@ -4,6 +4,7 @@ import {DeletePantryItemRequest, NavigateToEditPantryItemRequest} from '../dumb-
 import {NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 import {NewItemLocation} from '../smart-components/add-pantry-item-location/add-pantry-item-location.component';
+import {PantryItemLocation} from '../../../model/PantryItemLocation';
 
 export enum PantryActionTypes {
   PantryLoadedSuccessfully = '[Pantry] Loaded',
@@ -78,7 +79,7 @@ export class ItemCreated implements Action {
 
 export class PantryItemLocationAdded implements Action {
   readonly type = PantryActionTypes.PantryItemLocationAdded;
-  constructor(pantryItemLocationId: number, itemId: number, newLocation: GroceryStoreLocation) {}
+  constructor(public pantryItemLocation: PantryItemLocation) {}
 }
 
 export class AddPantryItemLocationFailed implements Action {

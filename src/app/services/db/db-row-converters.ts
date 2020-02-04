@@ -23,7 +23,7 @@ export class DbRowConverters {
       name: row[PantryItemTable.COLS.NAME],
       description: row[PantryItemTable.COLS.DESCRIPTION],
       id: row[PantryItemTable.COLS.ID],
-      //   locations: []
+      locations: [],
     };
   }
 
