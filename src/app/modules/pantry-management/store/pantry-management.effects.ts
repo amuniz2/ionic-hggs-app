@@ -148,7 +148,7 @@ export class PantryEffects {
     ofType(PantryActionTypes.AddPantryItemLocationRequest),
     tap((navigateToLocationPage: AddPantryItemLocationRequest) => {
       // todo: make this single '/pantry-items/{pantry-item-id}/new-pantry-item-location
-      const route = `/pantry-items/${navigateToLocationPage.request.pantryItem.id}/new-pantry-item-location`;
+      const route = `/home/pantry-items/${navigateToLocationPage.request.pantryItem.id}/new-pantry-item-location`;
       this.router.navigateByUrl(route);
       // this.router.navigate(['/pantry-items/pantry-item-locations']);;
       // this.router.navigate(['../../manage']);

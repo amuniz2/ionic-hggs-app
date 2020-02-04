@@ -36,4 +36,8 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit {
     this.selectedGroceryStoreAisleOrSection = $event.detail.value;
     this.aisleOrSectionChange.emit({ name: $event.detail.value});
   }
+
+  sectionsOrAislesExist(): boolean {
+    return this.groceryStoreAislesOrSections != null && this.groceryStoreAislesOrSections.length > 0;
+  }
 }

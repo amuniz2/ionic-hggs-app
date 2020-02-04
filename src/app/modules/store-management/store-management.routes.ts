@@ -4,11 +4,11 @@ import {EditSelectedGroceryStoreComponent} from './smart-components/edit-selecte
 
 export const StoreManagementRoutes: Routes = [
   {
-    path: 'manage',
+    path: '',
     component: StoreInventoryManagerPageComponent
   },
   {
-    path: 'manage/store-details',
+    path: 'store-details',
     component: EditSelectedGroceryStoreComponent
   },
   // {
