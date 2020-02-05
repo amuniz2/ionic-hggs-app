@@ -270,6 +270,25 @@ export class PantryDbHelper {
     );
   }
 
+  public async addPantryItemLocation(pantryItemId: number, groceryStoreLocation: GroceryStoreLocation): Observable<boolean> {
+    let groceryStoreLocationId = await this.mySqlCommands.queryGroceryStoreLocationId(
+      groceryStoreLocation.storeId,
+      groceryStoreLocation.aisle,
+      groceryStoreLocation.section);
+
+    if (groceryStoreLocationId === null) {
+      await this.mySqlCommands.insertGroceryStoreLocation(
+        groceryStoreLocation.storeId,
+        groceryStoreLocation.aisle,
+        groceryStoreLocation.section);
+      groceryStoreLocationId = await this.mySqlCommands.queryGroceryStoreLocationId(
+        groceryStoreLocation.storeId,
+        groceryStoreLocation.aisle,
+        groceryStoreLocation.section);
+    }
+    this.mySqlCommands.insertPantryItemLocation(pantryItemId, groceryStoreLocation.id);
+  }
+
   public addGroceryStoreLocation(newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
     return this.connect().pipe(
       mergeMap((success) => this.insertGroceryStoreLocation(newLocation.storeId, newLocation.aisle, newLocation.section)),
@@ -279,7 +298,7 @@ export class PantryDbHelper {
     );
   }
 
-  public insertPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Observable<number> {
+  private insertPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Observable<number> {
     return new Observable<number>((observer) => {
       this.mySqlCommands.insertPantryItemLocation(pantryItemId, groceryStoreLocationId).then((rowsAffected) => {
         observer.next(rowsAffected);
@@ -288,7 +307,7 @@ export class PantryDbHelper {
     });
   }
 
-  public insertGroceryStoreLocation(storeId: number, aisle: string, section: string): Observable<number> {
+  private insertGroceryStoreLocation(storeId: number, aisle: string, section: string): Observable<number> {
     return new Observable<number>((observer) => {
       this.mySqlCommands.insertGroceryStoreLocation(storeId, aisle, section).then((rowsAffected) => {
         observer.next(rowsAffected);
@@ -310,6 +329,14 @@ export class PantryDbHelper {
     return new Observable<GroceryStoreLocation>((observer) => {
       this.mySqlCommands.queryGroceryStoreLocation(storeId, aisle, section).then((groceryStoreLocation) => {
         observer.next(groceryStoreLocation);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+  public queryPantryItem(itemId: number): Observable<PantryItem> {
+    return new Observable<PantryItem>((observer) => {
+      this.mySqlCommands.queryPantryItem(itemId).then((pantryItem) => {
+        observer.next(pantryItem);
         observer.complete();
       }).catch((err) => observer.error(err));
     });

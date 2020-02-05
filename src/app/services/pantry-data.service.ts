@@ -83,14 +83,22 @@ export class PantryDataService implements IPantryDataService {
     return this.dbHelper.updatePantryItem(savePantryItemRequest);
   }
 
-  public addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<number > {
-    const storeLocation = this.dbHelper.queryGroceryStoreLocation(newLocation.storeId, newLocation.aisle, newLocation.section);
-    if (storeLocation === null) {
-      this.dbHelper.addGroceryStoreLocation(newLocation);
-    }
+  public addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<number> {
 
-    this.dbHelper.addPantryItemLocation(itemId, newLocation.id);
+    // const storeLocation = this.dbHelper.queryGroceryStoreLocation(newLocation.storeId, newLocation.aisle, newLocation.section);
+    // if (storeLocation === null) {
+    //   this.dbHelper.addGroceryStoreLocation(newLocation);
+    // }
+
+    this.dbHelper.addPantryItemLocation(itemId, newLocation);
 
     return of(newLocation.id);
+  }
+
+  getPantryItemDetails(id: number): Observable<PantryItem> {
+    const pantryItem = this.dbHelper.queryPantryItem(id);
+    if (pantryItem != null) {
+      pantryItem.locations = this.dbHelper.queryPantryItemLocations(id);
+    }
   }
 }

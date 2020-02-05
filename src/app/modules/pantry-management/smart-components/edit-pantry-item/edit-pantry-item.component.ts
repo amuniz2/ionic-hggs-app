@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import {ActivatedRoute, Router} from '@angular/router';
-import {selectPantryItem, selectPantryItemsError} from '../../store/pantry-management.selectors';
+import {selectPantryItem, selectPantryItemLocations, selectPantryItemsError} from '../../store/pantry-management.selectors';
 import {PantryItem} from '../../../../model/pantry-item';
 import {Observable, of} from 'rxjs';
 import * as fromActions from '../../../pantry-management/store/pantry-management.actions';
 import {NewItemLocationRequest} from '../../dumb-components/pantry-item-locations/pantry-item-locations.component';
+import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 
 
 @Component({
@@ -17,6 +18,7 @@ import {NewItemLocationRequest} from '../../dumb-components/pantry-item-location
 export class EditPantryItemComponent implements OnInit {
   pantryItemId: number;
   pantryItem$: Observable<PantryItem>;
+  pantryItemLocations$: Observable<GroceryStoreLocation[]>;
   isNewItem: boolean;
   error$: Observable<Error>;
 
@@ -32,6 +34,7 @@ export class EditPantryItemComponent implements OnInit {
       });
     } else {
       this.pantryItem$ = this.store.pipe(select(selectPantryItem(this.pantryItemId)));
+      this.pantryItemLocations$ = this.store.pipe(select(selectPantryItemLocations(this.pantryItemId)));
     }
     this.error$ = this.store.pipe(select(selectPantryItemsError));
   }

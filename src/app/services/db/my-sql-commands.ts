@@ -321,6 +321,25 @@ export class MySqlCommands {
       return null;
     }
   }
+  public async queryPantryItem(id: number): Promise<PantryItem> {
+      try {
+        const sqlQueryById = `SELECT * from ${pantrySchema.PantryItemTable.NAME}
+       WHERE ${pantrySchema.PantryItemTable.COLS.ID} = ${id}`;
+        console.log(`running query: ${sqlQueryById}`);
+        const data = await this.db.executeSql(sqlQueryById, []);
+        if (data.rows.length > 0) {
+          console.log('at least 1 row returned, converting first row to PantryItem');
+          return DbRowConverters.rowToPantryItem(data.rows.item(0));
+      } else {
+        console.log('no pantryItem returned for query by id');
+        return null;
+      }
+    } catch (err) {
+      console.log('Error querying pantry item by id');
+      console.log(err);
+      return null;
+    }
+  }
   public async deleteGroceryStoreLocation(id: number): Promise<number> {
     const  deleteSql = `DELETE FROM ${pantrySchema.LocationTable.NAME} WHERE ${pantrySchema.LocationTable.COLS.ID} = ${id}`;
     try {

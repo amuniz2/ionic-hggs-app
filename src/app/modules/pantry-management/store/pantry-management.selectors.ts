@@ -35,8 +35,8 @@ export const selectAllPantryItems = createSelector(
 export const selectPantryItem = (id: number) => createSelector(
   selectAllPantryItems, (state: PantryItem[]) => state.find((item) => item.id === id));
 
-// export const selectPantryItemLocations = (id: number) => createSelector(
-//   selectPantryItem(id), (state: PantryItem) => state.locations);
+export const selectPantryItemLocations = (id: number) => createSelector(
+  selectPantryItem(id), (state: PantryItem) => state.locations);
 
 export const selectPantryItemsLoading = createSelector(
   getPantryItemsState,

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
-import {NavigatedToPantryItemPage, NavigateToPantryItemPage} from '../../store/pantry-management.actions';
+import {NavigateToPantryItemPage} from '../../store/pantry-management.actions';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';

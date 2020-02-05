@@ -52,6 +52,22 @@ export class PantryEffects {
     })
   );
 
+  @Effect()
+  public getPantryItemDetails$ = this.actions$.pipe(
+    ofType(PantryActionTypes.NavigatedToPantryItemPage),
+    tap(() => console.log('calling stateManagementService.getPantryItemDetails()')),
+    switchMap((x) => {
+      return this.storeManagementService.getPantryItemDetails(x.pantryItemId).pipe(
+        tap((details) => {
+          console.log('dispatching PantryItemDetailsLoadedSuccessfully action');
+          console.log(details);
+        }),
+        map(data => new PantryItemDetailsLoadedSuccessfully(data)),
+        catchError(error => [new PantryItemDetailsLoadFailed(error)])
+      );
+    })
+  );
+
   // @Effect()
   // public addNewPantryItem$ = this.actions$.pipe(
   //   ofType(PantryActionTypes.CreateItem),
