@@ -13,6 +13,10 @@ export const PantryManagementRoutes: Routes = [
     component: AddPantryItemLocationComponent
   },
   {
+    path: ':id/pantry-item-location/:locationId',
+    component: EditPantryItemLocationComponent
+  },
+  {
     path: 'pantry-item-details',
     component: EditPantryItemComponent
   },

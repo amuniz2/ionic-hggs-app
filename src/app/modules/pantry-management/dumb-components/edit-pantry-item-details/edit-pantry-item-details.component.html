@@ -18,6 +18,7 @@
                             [pantryItem]="pantryItem"
                              [groceryLocations]="pantryItemLocations"
                             (notifyNewPantryItemLocationRequested)="onNotifyNewLocationRequest($event)"
+                             (notifyEditPantryItemLocationRequested)="onNotifyEditLocationRequest($event)"
                             (notifyDeletePantryItemLocationRequested)="onNotifyDeleteLocationRequest($event)"></app-pantry-item-locations>
   <ion-textarea *ngIf="error">{{error.message}}</ion-textarea>
   <ion-footer>

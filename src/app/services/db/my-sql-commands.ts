@@ -206,6 +206,7 @@ export class MySqlCommands {
       return null;
     }
   }
+
   public async deletePantryItem(id: number): Promise<number> {
     const  deleteSql = `DELETE FROM ${pantrySchema.PantryItemTable.NAME} WHERE ${pantrySchema.PantryItemTable.COLS.ID} = ${id}`;
     try {
@@ -241,7 +242,8 @@ export class MySqlCommands {
   public async queryGroceryStoreLocations(): Promise<Map<number, GroceryStoreLocation[]>> {
     const locations: Map<number, GroceryStoreLocation[]> = new Map<number, GroceryStoreLocation[]>();
     try {
-      const data = await this.db.executeSql(`SELECT * FROM ${LocationTable.NAME}`, []);
+      const data = await this.db.executeSql(`SELECT * FROM ${LocationTable.NAME}
+      JOIN ${pantrySchema.StoreTable.NAME} on ${pantrySchema.StoreTable.COLS.ID}=${pantrySchema.LocationTable.COLS.STORE_ID}`, []);
       for (let i = 0; i < data.rows.length; i++) {
         const groceryStoreLocation = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(i));
         if (locations.has(groceryStoreLocation.id)) {
@@ -284,6 +286,7 @@ export class MySqlCommands {
   public async queryGroceryStoreLocation(storeId: number, aisle: string, section: string): Promise<GroceryStoreLocation> {
     try {
       const sqlQueryByName = `SELECT * from ${pantrySchema.LocationTable.NAME}
+      JOIN ${pantrySchema.StoreTable.NAME} on ${pantrySchema.StoreTable.COLS.ID}=${pantrySchema.LocationTable.COLS.STORE_ID}
        WHERE ${pantrySchema.LocationTable.COLS.STORE_ID} = \'${name}\'
        AND ${pantrySchema.LocationTable.COLS.AISLE} = \'${aisle}\'
        AND ${pantrySchema.LocationTable.COLS.STORE_ID} = \'${section}\'`;
@@ -305,6 +308,7 @@ export class MySqlCommands {
   public async queryGroceryStoreLocationById(id: number): Promise<GroceryStoreLocation> {
     try {
       const sqlQueryById = `SELECT * from ${pantrySchema.LocationTable.NAME}
+      JOIN ${pantrySchema.StoreTable.NAME} ON ${pantrySchema.LocationTable.COLS.STORE_ID} = ${pantrySchema.StoreTable.COLS.ID}
        WHERE ${pantrySchema.LocationTable.COLS.STORE_ID} = ${id}`;
       console.log(`running query: ${sqlQueryById}`);
       const data = await this.db.executeSql(sqlQueryById, []);
@@ -546,24 +550,88 @@ export class MySqlCommands {
   }
   // endregion
     // region PantryItemLocation CRUD
-  public async insertPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Promise<number> {
-      const insertSql = `INSERT INTO
+  public async insertPantryItemLocation(pantryItemId: number, storeId: number, aisle: string, section: string): Promise<GroceryStoreLocation> {
+/*
+INSERT INTO grocery_item_locations (store_id, store_aisle, section_name)
+SELECT 1, '', ''
+WHERE NOT EXISTS(
+select location_id from grocery_Item_locations WHERE store_id=1 AND store_aisle = '' AND section_name = '' limit 1
+)
+
+INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
+	SELECT 1, location_id
+	from grocery_Item_locations
+	WHERE store_id=1 AND store_aisle = '' AND section_name = '' limit 1;
+ */
+    let result: GroceryStoreLocation = null;
+    const fromLocationTableClause = `FROM ${pantrySchema.LocationTable.NAME}`;
+
+    const fromLocationTableWithJoinClause = `FROM ${pantrySchema.LocationTable.NAME} JOIN ${pantrySchema.StoreTable.NAME}
+    ON ${pantrySchema.LocationTable.COLS.STORE_ID} = ${pantrySchema.StoreTable.COLS.ID}`;
+
+    const whereLocationClause = `WHERE ${pantrySchema.LocationTable.COLS.STORE_ID}=${storeId}
+     AND ${pantrySchema.LocationTable.COLS.AISLE} = '${aisle}'
+     AND ${pantrySchema.LocationTable.COLS.SECTION_NAME} = '${section}' limit 1`;
+
+    const insertGroceryStoreIfNecessarySql = `INSERT INTO ${pantrySchema.LocationTable.name} (
+    ${pantrySchema.LocationTable.COLS.STORE_ID},
+    ${pantrySchema.LocationTable.COLS.AISLE},
+    ${pantrySchema.LocationTable.COLS.SECTION_NAME})
+     SELECT ${storeId}, '${aisle}', '${section}'
+     WHERE NOT EXISTS(select ${pantrySchema.LocationTable.COLS.ID} ${fromLocationTableClause} ${whereLocationClause};`;
+
+    const insertPantryItemSql = `INSERT INTO
      ${pantrySchema.PantryItemLocationTable.NAME}
      (${pantrySchema.PantryItemLocationTable.COLS.PANTRY_ITEM_ID},
      ${pantrySchema.PantryItemLocationTable.COLS.LOCATION_ID})
-      VALUES(${pantryItemId}, ${groceryStoreLocationId})`;
-      console.log('executing: ' + insertSql);
-      try {
-      const data = await this.db.executeSql(insertSql, []);
+      SELECT ${pantryItemId}, ${pantrySchema.LocationTable.COLS.ID}
+      ${fromLocationTableClause} ${whereLocationClause};`;
+
+    const selectGroceryStoreLocation = `SELECT
+    ${pantrySchema.LocationTable.COLS.ID},
+    ${pantrySchema.LocationTable.COLS.STORE_ID},
+    ${pantrySchema.StoreTable.COLS.STORE_NAME},
+    ${pantrySchema.LocationTable.COLS.AISLE},
+    ${pantrySchema.LocationTable.COLS.SECTION_NAME}
+      ${fromLocationTableWithJoinClause} ${whereLocationClause}`;
+    console.log('executing: ');
+    console.log (insertGroceryStoreIfNecessarySql);
+    console.log(insertPantryItemSql);
+
+    try {
+      const data = await this.db.sqlBatch([insertGroceryStoreIfNecessarySql, insertPantryItemSql, selectGroceryStoreLocation]);
       console.log(`returning ${data} from insertPantryItemLocation`);
-      return data.rowsAffected;
+      result = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
     } catch (err) {
-      console.log(`Error inserting pantry Item location  ${insertSql}`);
+      console.log(`Error inserting pantry Item location `);
       console.log(err);
     }
+    return result;
   }
 
-  public async queryPantryItemLocations(): Promise<Map<number, PantryItemLocation[]>> {
+  public async queryPantryItemLocations(pantryItemId: number): Promise<GroceryStoreLocation[]> {
+    const selectSql = `SELECT * FROM ${pantrySchema.LocationTable}
+    JOIN ${pantrySchema.StoreTable.NAME} on ${pantrySchema.StoreTable.COLS.ID}=${pantrySchema.LocationTable.COLS.STORE_ID}
+      WHERE ${pantrySchema.LocationTable.COLS.ID} IN
+      SELECT ${pantrySchema.PantryItemLocationTable.COLS.LOCATION_ID} FROM ${pantrySchema.PantryItemLocationTable.NAME}
+      WHERE ${pantrySchema.PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${pantryItemId}`;
+    const result: GroceryStoreLocation[] = [];
+    try {
+      const data = await this.db.executeSql(selectSql, []);
+      for (let i = 0; i < data.rows.length; i++) {
+        const pantryItemLocation = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(i));
+        result.push(pantryItemLocation);
+      }
+    } catch (err) {
+      console.log('Error querying for pantry Item eLocations');
+      console.log(err);
+    }
+    console.log('returning from query');
+    console.log(result);
+    return result;
+  }
+
+  public async queryAllPantryItemLocations(): Promise<Map<number, PantryItemLocation[]>> {
     const locations: Map<number, PantryItemLocation[]> = new Map<number, PantryItemLocation[]>();
     try {
       const data = await this.db.executeSql(`SELECT  * FROM ${PantryItemLocationTable.NAME}`, []);

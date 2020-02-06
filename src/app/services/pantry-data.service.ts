@@ -12,8 +12,6 @@ import {StoreSection} from '../modules/store-management/dumb-components/grocery-
 import {PantryItem} from '../model/pantry-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
-import {allowNewBindingsForStylingContext} from '@angular/core/src/render3/styling/class_and_style_bindings';
-import {PantryItemLocation} from '../model/PantryItemLocation';
 
 @Injectable()
 export class PantryDataService implements IPantryDataService {
@@ -83,22 +81,27 @@ export class PantryDataService implements IPantryDataService {
     return this.dbHelper.updatePantryItem(savePantryItemRequest);
   }
 
-  public addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<number> {
+  public addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
 
     // const storeLocation = this.dbHelper.queryGroceryStoreLocation(newLocation.storeId, newLocation.aisle, newLocation.section);
     // if (storeLocation === null) {
     //   this.dbHelper.addGroceryStoreLocation(newLocation);
     // }
 
-    this.dbHelper.addPantryItemLocation(itemId, newLocation);
+    return this.dbHelper.addPantryItemLocation(itemId, newLocation.storeId, newLocation.aisle, newLocation.section);
+}
 
-    return of(newLocation.id);
+  public getPantryItem(id: number): Observable<PantryItem> {
+    return this.dbHelper.queryPantryItem(id);
+  }
+  public getPantryItemLocations(id: number): Observable<GroceryStoreLocation[]> {
+    return this.dbHelper.queryPantryItemLocations(id);
   }
 
-  getPantryItemDetails(id: number): Observable<PantryItem> {
-    const pantryItem = this.dbHelper.queryPantryItem(id);
-    if (pantryItem != null) {
-      pantryItem.locations = this.dbHelper.queryPantryItemLocations(id);
-    }
-  }
+  // getPantryItemDetails(id: number): Observable<PantryItem> {
+  //   const pantryItem = this.dbHelper.queryPantryItem(id);
+  //   if (pantryItem != null) {
+  //     pantryItem.locations = this.dbHelper.queryPantryItemLocations(id);
+  //   }
+  // }
 }

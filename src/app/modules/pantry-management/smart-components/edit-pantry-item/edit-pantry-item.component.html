@@ -10,7 +10,8 @@
                                 [pantryItemLocations]="pantryItemLocations$ | async"
     (notifySavePantryItemRequested)="savePantryItemChanges($event)"
     (notifyAddPantryItemRequested)="addPantryItem($event)"
-  (notifyAddPantryItemLocationRequest)="addPantryItemLocation($event)">
+  (notifyAddPantryItemLocationRequest)="addPantryItemLocation($event)"
+  (notifyEditPantryItemLocationRequest)="editPantryItemLocation($event)">
 <!--                          (notifyNewPantryItemLocationRequested)="onNotifyNewPantryItemLocationRequest($event)"-->
 <!--                          (notifyDeletePantryItemLocationRequested) ="onDeletePantryItemLocationRequest($event)"-->
 <!--                          (notifyExpandLocations)="onNotifyExpandLocations($event)"-->

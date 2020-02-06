@@ -261,56 +261,10 @@ export class PantryDbHelper {
     });
   }
 
-  public addPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Observable<boolean> {
-    return this.connect().pipe(
-      mergeMap((success) => this.insertPantryItemLocation(pantryItemId, groceryStoreLocationId)),
-      switchMap((rowsAffected) => {
-        return of(rowsAffected > 0);
-      })
-    );
-  }
-
-  public async addPantryItemLocation(pantryItemId: number, groceryStoreLocation: GroceryStoreLocation): Observable<boolean> {
-    let groceryStoreLocationId = await this.mySqlCommands.queryGroceryStoreLocationId(
-      groceryStoreLocation.storeId,
-      groceryStoreLocation.aisle,
-      groceryStoreLocation.section);
-
-    if (groceryStoreLocationId === null) {
-      await this.mySqlCommands.insertGroceryStoreLocation(
-        groceryStoreLocation.storeId,
-        groceryStoreLocation.aisle,
-        groceryStoreLocation.section);
-      groceryStoreLocationId = await this.mySqlCommands.queryGroceryStoreLocationId(
-        groceryStoreLocation.storeId,
-        groceryStoreLocation.aisle,
-        groceryStoreLocation.section);
-    }
-    this.mySqlCommands.insertPantryItemLocation(pantryItemId, groceryStoreLocation.id);
-  }
-
-  public addGroceryStoreLocation(newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
-    return this.connect().pipe(
-      mergeMap((success) => this.insertGroceryStoreLocation(newLocation.storeId, newLocation.aisle, newLocation.section)),
-      switchMap(( _ ) => {
-        return this.queryGroceryStoreLocation(newLocation.storeId, newLocation.aisle, newLocation.section);
-      })
-    );
-  }
-
-  private insertPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Observable<number> {
-    return new Observable<number>((observer) => {
-      this.mySqlCommands.insertPantryItemLocation(pantryItemId, groceryStoreLocationId).then((rowsAffected) => {
-        observer.next(rowsAffected);
-        observer.complete();
-      }).catch((err) => observer.error(err));
-    });
-  }
-
-  private insertGroceryStoreLocation(storeId: number, aisle: string, section: string): Observable<number> {
-    return new Observable<number>((observer) => {
-      this.mySqlCommands.insertGroceryStoreLocation(storeId, aisle, section).then((rowsAffected) => {
-        observer.next(rowsAffected);
+  public addPantryItemLocation(pantryItemId: number, storeId: number, aisle: string, section: string): Observable<GroceryStoreLocation> {
+    return new Observable<GroceryStoreLocation>((observer) => {
+      this.mySqlCommands.insertPantryItemLocation(pantryItemId, storeId, aisle, section).then((result) => {
+        observer.next(result);
         observer.complete();
       }).catch((err) => observer.error(err));
     });
@@ -350,4 +304,12 @@ export class PantryDbHelper {
     });
   }
 
+  public queryPantryItemLocations(pantryItemId: number): Observable<GroceryStoreLocation[]> {
+    return new Observable<GroceryStoreLocation[]>((observer) => {
+      this.mySqlCommands.queryPantryItemLocations(pantryItemId).then((pantryItemLocations) => {
+        observer.next(pantryItemLocations);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
 }

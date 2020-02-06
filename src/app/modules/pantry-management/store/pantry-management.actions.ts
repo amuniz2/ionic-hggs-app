@@ -1,12 +1,12 @@
 import {Action} from '@ngrx/store';
 import {PantryItem} from '../../../model/pantry-item';
 import {DeletePantryItemRequest, NavigateToEditPantryItemRequest} from '../dumb-components/pantry-item-list/pantry-item-list.component';
-import {NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
+import {EditItemLocationRequest, NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 import {NewItemLocation} from '../smart-components/add-pantry-item-location/add-pantry-item-location.component';
-import {PantryItemLocation} from '../../../model/PantryItemLocation';
 
 export enum PantryActionTypes {
+  PantryItemLoaded = '[Pantry Item] Loaded',
   PantryLoadedSuccessfully = '[Pantry] Loaded',
   PantryLoadFailed = '[Pantry] Load Failed',
   SelectGroceryItem = '[Grocery Item] Select',
@@ -17,13 +17,16 @@ export enum PantryActionTypes {
   DeletePantryItem = '[Pantry item] Delete',
   ItemCreated = '[Pantry Item] Created',
   PantryItemDeleted = '[Pantry Item] Deleted',
+  LoadPantryItemLocations = '[Pantry Item] Load Locations',
   NavigatedToPantryPage = '[Pantry] Navigated to',
   NavigateToPantryItemPage = '[Pantry Item] Navigate to',
   NavigatedToPantryItemPage = '[Pantry Item] Navigated to',
   AddPantryItemLocation = '[Pantry Item] add location',
   AddPantryItemLocationFailed = '[Pantry Item] add location failed',
   AddPantryItemLocationRequest = '[Pantry Item] add location requested',
+  EditPantryItemLocationRequest = '[Pantry Item] edit location requested',
   PantryItemLocationAdded = '[Pantry Item] add location succeeded',
+  PantryItemLocationsLoadedSuccessfully = '[Pantry Item] locations loaded successfully',
   SavePantryItem = '[Pantry Item] Save',
   SavePantryItemFailed = '[Pantry Item] Save Failed',
   SavePantryItemSucceeded = '[Pantry Item] Save Succeeded',
@@ -46,6 +49,12 @@ export class CreatePantryItem implements Action {
   readonly type = PantryActionTypes.CreateItem;
 
   constructor(public pantryItemRequest: NavigateToEditPantryItemRequest) {}
+}
+
+export class EditPantryItemLocationRequest implements Action {
+  readonly type = PantryActionTypes.EditPantryItemLocationRequest;
+
+  constructor(public request: EditItemLocationRequest) {}
 }
 
 export class NavigateToPantryItemPage implements Action {
@@ -79,7 +88,7 @@ export class ItemCreated implements Action {
 
 export class PantryItemLocationAdded implements Action {
   readonly type = PantryActionTypes.PantryItemLocationAdded;
-  constructor(public pantryItemLocation: PantryItemLocation) {
+  constructor(public itemId, public pantryItemLocation: GroceryStoreLocation) {
     console.log('created PantryItemLocationAdded action');
   }
 }
@@ -93,6 +102,17 @@ export class PantryItemDeleted implements Action {
   readonly type = PantryActionTypes.PantryItemDeleted;
   constructor(public id: number) {
   }
+}
+
+export class PantryItemLoaded implements Action {
+  readonly type = PantryActionTypes.PantryItemLoaded;
+  constructor(public pantryItem: PantryItem) {
+  }
+}
+
+export class LoadPantryItemLocations implements Action {
+  readonly type = PantryActionTypes.LoadPantryItemLocations;
+  constructor(public itemId: number) {}
 }
 
 export class NavigatedToPantryPage implements Action {
@@ -111,6 +131,11 @@ export class PantryLoadedSuccessfully implements Action {
   constructor(public pantryItems: PantryItem[]) {}
 }
 
+export class PantryItemLocationsLoadedSuccessfully implements Action {
+  readonly type = PantryActionTypes.PantryItemLocationsLoadedSuccessfully;
+
+  constructor(public itemId: number, public locations: GroceryStoreLocation[]) {}
+}
 export class PantryLoadFailed implements Action {
   readonly type = PantryActionTypes.PantryLoadFailed;
 
@@ -150,13 +175,17 @@ export type PantryActions =
   | DeletePantryItemFailed
   | DeletePantryItem
   | DeletePantryItemFailed
+  | EditPantryItemLocationRequest
   | ItemCreated
+  | LoadPantryItemLocations
   | PantryItemDeleted
   | NavigatedToPantryPage
   | NavigatedToPantryItemPage
   | NavigateToPantryItemPage
   | PantryItemLocationAdded
+  | PantryItemLoaded
   | PantryLoadedSuccessfully
+  | PantryItemLocationsLoadedSuccessfully
   | PantryLoadFailed
   | SaveNewPantryItem
   | SavePantryItem

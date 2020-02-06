@@ -6,8 +6,9 @@ import {selectPantryItem, selectPantryItemLocations, selectPantryItemsError} fro
 import {PantryItem} from '../../../../model/pantry-item';
 import {Observable, of} from 'rxjs';
 import * as fromActions from '../../../pantry-management/store/pantry-management.actions';
-import {NewItemLocationRequest} from '../../dumb-components/pantry-item-locations/pantry-item-locations.component';
+import {EditItemLocationRequest, NewItemLocationRequest} from '../../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
+import {NavigatedToPantryItemPage} from '../../../pantry-management/store/pantry-management.actions';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class EditPantryItemComponent implements OnInit {
         locations: [],
       });
     } else {
+      this.store.dispatch(new NavigatedToPantryItemPage(this.pantryItemId));
       this.pantryItem$ = this.store.pipe(select(selectPantryItem(this.pantryItemId)));
       this.pantryItemLocations$ = this.store.pipe(select(selectPantryItemLocations(this.pantryItemId)));
     }
@@ -63,5 +65,9 @@ export class EditPantryItemComponent implements OnInit {
 
   addPantryItemLocation($event: NewItemLocationRequest) {
     this.store.dispatch(new fromActions.AddPantryItemLocationRequest($event));
+  }
+
+  editPantryItemLocation($event: EditItemLocationRequest) {
+    this.store.dispatch((new fromActions.EditPantryItemLocationRequest($event)));
   }
 }

@@ -41,17 +41,10 @@ export class AddPantryItemLocationComponent implements OnInit {
   locationSection =  new FormControl('');
 
   locationForm: FormGroup;
-  // = new FormGroup({
-  //   locationStore: this.locationStore,
-  //   locationAisle: this.locationAisle,
-  //   locationSection:  this.locationSection,
-  //   selectGroceryStoreControl: new FormControl('')
-  // });
 
   groceryStoreLocation: GroceryStoreLocation;
   private groceryStoresLoading$: Observable<boolean>;
 
-//  selectedGroceryStoreId: number = null;
   constructor(private store: Store<AppState>,
               @Inject('IPantryDataService') private pantryDataService: IPantryDataService,
               private fb: FormBuilder,
@@ -61,7 +54,8 @@ export class AddPantryItemLocationComponent implements OnInit {
       id: null,
       aisle: '',
       section: '',
-      storeId: null
+      storeId: null,
+      storeName: null
     };
 
     this.locationForm = this.fb.group({
@@ -109,10 +103,9 @@ export class AddPantryItemLocationComponent implements OnInit {
     console.log(this.locationForm);
     if (this.locationForm.valid) {
       this.store.dispatch(new AddPantryItemLocation({
-        itemId: this.activeRoute.snapshot.params.id,
+        itemId: +this.activeRoute.snapshot.params.id,
         location: this.groceryStoreLocation
       }));
     }
-    // return to previous form
   }
 }

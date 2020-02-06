@@ -5,5 +5,5 @@ export interface PantryItem {
   id: number;
   name: string;
   description: string;
-  locations: number[];
+  locations: GroceryStoreLocation[];
 }

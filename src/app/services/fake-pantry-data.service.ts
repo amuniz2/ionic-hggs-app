@@ -143,7 +143,7 @@ export class FakePantryDataService implements IPantryDataService {
     return undefined;
   }
 
-  addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<number> {
+  addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
     let groceryStoreLocation = this.findGroceryStoreLocation(
       newLocation.storeId,
       newLocation.aisle,
@@ -152,6 +152,7 @@ export class FakePantryDataService implements IPantryDataService {
     if (groceryStoreLocation == null) {
       groceryStoreLocation = {
         ...newLocation,
+        storeName: this.findGroceryStore(newLocation.storeId).name,
         id: this.groceryStoreLocations.length + 1
       };
       this.groceryStoreLocations.push(groceryStoreLocation);
@@ -161,7 +162,19 @@ export class FakePantryDataService implements IPantryDataService {
       groceryStoreLocationId: groceryStoreLocation.id
     });
 
-    return of(groceryStoreLocation.id);
+    return of(groceryStoreLocation);
+  }
+
+  public getPantryItem(id: number): Observable<PantryItem> {
+    return of(this.findPantryItem(id));
+  }
+  public getPantryItemLocations(id: number): Observable<GroceryStoreLocation[]> {
+    const pantryItemLocations: PantryItemLocation[] =  this.pantryItemLocations.filter(location => location.pantryItemId === id);
+    const result = [];
+    pantryItemLocations.forEach( pantryItemLoc => {
+      result.push(this.groceryStoreLocations.find(x => x.id === pantryItemLoc.groceryStoreLocationId));
+    });
+    return of(result);
   }
 
   findPantryItem(id: number): PantryItem {
@@ -174,5 +187,9 @@ export class FakePantryDataService implements IPantryDataService {
 
   findPantryItemLocation(pantryItemId: number, groceryLocationId: number): PantryItemLocation {
     return this.pantryItemLocations.find(loc => (loc.pantryItemId === pantryItemId) && (loc.groceryStoreLocationId === groceryLocationId));
+  }
+
+  findGroceryStore(id: number): GroceryStore {
+    return this.groceryStores.find(store => store.id === id);
   }
 }

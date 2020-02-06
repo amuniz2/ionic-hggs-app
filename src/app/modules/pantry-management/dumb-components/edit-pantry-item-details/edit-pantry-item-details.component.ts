@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
 import {of} from 'rxjs';
 import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
-import {NewItemLocationRequest} from '../pantry-item-locations/pantry-item-locations.component';
+import {EditItemLocationRequest, NewItemLocationRequest} from '../pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 
 @Component({
@@ -32,6 +32,9 @@ export class EditPantryItemDetailsComponent implements OnInit {
 
   @Output()
   notifyAddPantryItemLocationRequest: EventEmitter<NewItemLocationRequest> = new EventEmitter();
+
+  @Output()
+  notifyEditPantryItemLocationRequest: EventEmitter<EditItemLocationRequest> = new EventEmitter();
 
   pantryItemName: string;
   pantryItemDescription: string;
@@ -74,6 +77,10 @@ export class EditPantryItemDetailsComponent implements OnInit {
 
   onNotifyNewLocationRequest($event) {
     this.notifyAddPantryItemLocationRequest.emit($event);
+  }
+
+  onNotifyEditLocationRequest($event) {
+    this.notifyEditPantryItemLocationRequest.emit($event);
   }
 
   onNotifyDeleteLocationRequest($event) {

@@ -3,6 +3,7 @@ import {LocationTable, PantryItemLocationTable, PantryItemTable, StoreTable} fro
 import {GroceryStore} from '../../model/grocery-store';
 import {GroceryStoreLocation} from '../../model/grocery-store-location';
 import {PantryItemLocation} from '../../model/PantryItemLocation';
+import {Store} from '@ngrx/store';
 
 export class DbRowConverters {
   public static rowToGroceryStore(row: any): GroceryStore {
@@ -30,6 +31,7 @@ export class DbRowConverters {
   public static rowToGroceryStoreLocation(row: any): GroceryStoreLocation {
     return {
       storeId: row[LocationTable.COLS.STORE_ID],
+      storeName: row[StoreTable.COLS.STORE_NAME],
       section: row[LocationTable.COLS.SECTION_NAME],
       aisle: row[LocationTable.COLS.AISLE],
       id: row[LocationTable.COLS.ID],

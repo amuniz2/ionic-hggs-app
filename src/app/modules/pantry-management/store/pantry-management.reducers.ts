@@ -44,6 +44,22 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
           }
         };
 
+      case PantryActionTypes.PantryItemLoaded:
+        return {
+          ...state,
+          pantryItems: {
+            ...fromAdapter.pantryAdapter.updateOne({
+              id: action.pantryItem.id,
+              changes: {
+                name: action.pantryItem.name,
+                description: action.pantryItem.description,
+              }
+            }, state.pantryItems),
+            loading: false,
+            error: null
+          }
+        };
+
       case PantryActionTypes.ItemCreated: {
         // const { id, name } = action.payload;
         return {
@@ -139,26 +155,41 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
 
       case PantryActionTypes.PantryItemLocationAdded:
       {
-        const pantryItem = getPantryItem(state.pantryItems, action.pantryItemLocation.pantryItemId);
+        const pantryItem = getPantryItem(state.pantryItems, action.itemId);
         console.log('in PantryItemLocationAdded reducer');
         return {
           ...state,
           pantryItems: {
             ...fromAdapter.pantryAdapter.updateOne({
-              id: action.pantryItemLocation.pantryItemId,
+              id: action.itemId,
               changes: {
                 locations: [
                   ...pantryItem.locations,
-                  action.pantryItemLocation.groceryStoreLocationId]
+                  action.pantryItemLocation]
               }
             }, state.pantryItems),
             error: null
           }
         };
       }
-
-
-      case PantryActionTypes.AddPantryItemLocationFailed:
+      case PantryActionTypes.PantryItemLocationsLoadedSuccessfully:
+      {
+        const pantryItem = getPantryItem(state.pantryItems, action.itemId);
+        return {
+          ...state,
+          pantryItems: {
+            ...fromAdapter.pantryAdapter.updateOne({
+              id: action.itemId,
+              changes: {
+                locations: [
+                  ...action.locations
+                ]
+              }
+            }, state.pantryItems),
+            error: null
+          }
+        };
+      }      case PantryActionTypes.AddPantryItemLocationFailed:
       {
         return {
           ...state,

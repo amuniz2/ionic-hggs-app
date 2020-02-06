@@ -21,7 +21,7 @@ export class LocationComponent implements OnInit {
 
   constructor() {
     this.selectedStoreLocation = {
-      storeId: null, aisle: '', section: '', id: null
+      storeId: null, storeName: null, aisle: '', section: '', id: null
     };
   }
 
