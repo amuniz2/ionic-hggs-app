@@ -270,6 +270,15 @@ export class PantryDbHelper {
     });
   }
 
+  public updatePantryItemLocation(pantryItemId: number, originalLocationId: number, storeId: number, aisle: string, section: string): Observable<GroceryStoreLocation> {
+    return new Observable<GroceryStoreLocation>((observer) => {
+      this.mySqlCommands.updatePantryItemLocation(pantryItemId, originalLocationId, storeId, aisle, section).then((result) => {
+        observer.next(result);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
   public queryGroceryStoreLocationById(id: number): Observable<GroceryStoreLocation> {
     return new Observable<GroceryStoreLocation>((observer) => {
       this.mySqlCommands.queryGroceryStoreLocationById(id).then((groceryStoreLocation) => {

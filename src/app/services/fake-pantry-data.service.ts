@@ -165,6 +165,30 @@ export class FakePantryDataService implements IPantryDataService {
     return of(groceryStoreLocation);
   }
 
+  updatePantryItemLocation(itemId: number, originalLocationId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
+    let groceryStoreLocation = this.findGroceryStoreLocation(
+      newLocation.storeId,
+      newLocation.aisle,
+      newLocation.section
+    );
+    if (groceryStoreLocation == null) {
+      groceryStoreLocation = {
+        ...newLocation,
+        storeName: this.findGroceryStore(newLocation.storeId).name,
+        id: this.groceryStoreLocations.length + 1
+      };
+      this.groceryStoreLocations.push(groceryStoreLocation);
+    }
+
+    const index = this.pantryItemLocations.findIndex(x => x.pantryItemId === itemId && x.groceryStoreLocationId === originalLocationId);
+
+    if (index !== -1) {
+      this.pantryItemLocations[index].groceryStoreLocationId = groceryStoreLocation.id;
+    }
+
+    return of(groceryStoreLocation);
+  }
+
   public getPantryItem(id: number): Observable<PantryItem> {
     return of(this.findPantryItem(id));
   }

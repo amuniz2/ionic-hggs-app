@@ -169,9 +169,30 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
               }
             }, state.pantryItems),
             error: null
+          },
+        };
+      }
+
+      case PantryActionTypes.PantryItemLocationUpdated:
+      {
+        const pantryItem = getPantryItem(state.pantryItems, action.itemId);
+        console.log('in PantryItemLocationAdded reducer');
+        return {
+          ...state,
+          pantryItems: {
+            ...fromAdapter.pantryAdapter.updateOne({
+              id: action.itemId,
+              changes: {
+                locations: [
+                  ...pantryItem.locations.filter(loc => loc.id !== action.originalLocationId),
+                  action.pantryItemLocation]
+              }
+            }, state.pantryItems),
+            error: null
           }
         };
       }
+
       case PantryActionTypes.PantryItemLocationsLoadedSuccessfully:
       {
         const pantryItem = getPantryItem(state.pantryItems, action.itemId);

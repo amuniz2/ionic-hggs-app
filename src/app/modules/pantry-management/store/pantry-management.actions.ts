@@ -3,7 +3,7 @@ import {PantryItem} from '../../../model/pantry-item';
 import {DeletePantryItemRequest, NavigateToEditPantryItemRequest} from '../dumb-components/pantry-item-list/pantry-item-list.component';
 import {EditItemLocationRequest, NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../model/grocery-store-location';
-import {NewItemLocation} from '../smart-components/add-pantry-item-location/add-pantry-item-location.component';
+import {NewItemLocation} from '../smart-components/add-pantry-item-location/edit-pantry-item-location.component';
 
 export enum PantryActionTypes {
   PantryItemLoaded = '[Pantry Item] Loaded',
@@ -26,11 +26,13 @@ export enum PantryActionTypes {
   AddPantryItemLocationRequest = '[Pantry Item] add location requested',
   EditPantryItemLocationRequest = '[Pantry Item] edit location requested',
   PantryItemLocationAdded = '[Pantry Item] add location succeeded',
+  PantryItemLocationUpdated = '[Pantry Item] location updated',
   PantryItemLocationsLoadedSuccessfully = '[Pantry Item] locations loaded successfully',
   SavePantryItem = '[Pantry Item] Save',
   SavePantryItemFailed = '[Pantry Item] Save Failed',
   SavePantryItemSucceeded = '[Pantry Item] Save Succeeded',
   SaveNewPantryItem = '[Pantry Item] Save New Requested',
+  UpdatePantryItemLocation = '[Pantry Item] Update Requested'
 }
 
 export class AddPantryItemLocationRequest implements Action {
@@ -88,11 +90,16 @@ export class ItemCreated implements Action {
 
 export class PantryItemLocationAdded implements Action {
   readonly type = PantryActionTypes.PantryItemLocationAdded;
-  constructor(public itemId, public pantryItemLocation: GroceryStoreLocation) {
-    console.log('created PantryItemLocationAdded action');
+  constructor(public itemId: number, public pantryItemLocation: GroceryStoreLocation) {
   }
 }
 
+export class PantryItemLocationUpdated implements Action {
+  readonly type = PantryActionTypes.PantryItemLocationUpdated
+
+  constructor(public itemId: number, public originalLocationId: number, public pantryItemLocation: GroceryStoreLocation) {
+  }
+}
 export class AddPantryItemLocationFailed implements Action {
   readonly type = PantryActionTypes.AddPantryItemLocationFailed;
   constructor(public error: Error) {}
@@ -166,6 +173,12 @@ export class SavePantryItemFailed implements Action {
   constructor(public error: Error, public item: PantryItem) {}
 }
 
+export class UpdatePantryItemLocation implements Action {
+  readonly type = PantryActionTypes.UpdatePantryItemLocation;
+
+  constructor(public originalLocationId: number, public updatePantryItemLocation: NewItemLocation) {}
+}
+
 export type PantryActions =
   CreatePantryItem
   | AddPantryItemLocation
@@ -183,6 +196,7 @@ export type PantryActions =
   | NavigatedToPantryItemPage
   | NavigateToPantryItemPage
   | PantryItemLocationAdded
+  | PantryItemLocationUpdated
   | PantryItemLoaded
   | PantryLoadedSuccessfully
   | PantryItemLocationsLoadedSuccessfully
@@ -190,4 +204,5 @@ export type PantryActions =
   | SaveNewPantryItem
   | SavePantryItem
   | SavePantryItemFailed
-  | SavePantryItemSucceeded;
+  | SavePantryItemSucceeded
+  | UpdatePantryItemLocation;

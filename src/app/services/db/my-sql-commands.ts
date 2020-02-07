@@ -550,7 +550,10 @@ export class MySqlCommands {
   }
   // endregion
     // region PantryItemLocation CRUD
-  public async insertPantryItemLocation(pantryItemId: number, storeId: number, aisle: string, section: string): Promise<GroceryStoreLocation> {
+  public async insertPantryItemLocation(pantryItemId: number,
+                                        storeId: number,
+                                        aisle: string,
+                                        section: string): Promise<GroceryStoreLocation> {
 /*
 INSERT INTO grocery_item_locations (store_id, store_aisle, section_name)
 SELECT 1, '', ''
@@ -601,6 +604,58 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
     try {
       const data = await this.db.sqlBatch([insertGroceryStoreIfNecessarySql, insertPantryItemSql, selectGroceryStoreLocation]);
       console.log(`returning ${data} from insertPantryItemLocation`);
+      result = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
+    } catch (err) {
+      console.log(`Error inserting pantry Item location `);
+      console.log(err);
+    }
+    return result;
+  }
+
+  public async updatePantryItemLocation(pantryItemId: number,
+                                        originalLocationId: number,
+                                        storeId: number,
+                                        aisle: string,
+                                        section: string): Promise<GroceryStoreLocation> {
+    let result: GroceryStoreLocation = null;
+    const fromLocationTableClause = `FROM ${pantrySchema.LocationTable.NAME}`;
+
+    const fromLocationTableWithJoinClause = `FROM ${pantrySchema.LocationTable.NAME} JOIN ${pantrySchema.StoreTable.NAME}
+    ON ${pantrySchema.LocationTable.COLS.STORE_ID} = ${pantrySchema.StoreTable.COLS.ID}`;
+
+    const whereLocationClause = `WHERE ${pantrySchema.LocationTable.COLS.STORE_ID}=${storeId}
+     AND ${pantrySchema.LocationTable.COLS.AISLE} = '${aisle}'
+     AND ${pantrySchema.LocationTable.COLS.SECTION_NAME} = '${section}' limit 1`;
+
+    const insertGroceryLocationIfNecessarySql = `INSERT INTO ${pantrySchema.LocationTable.name} (
+    ${pantrySchema.LocationTable.COLS.STORE_ID},
+    ${pantrySchema.LocationTable.COLS.AISLE},
+    ${pantrySchema.LocationTable.COLS.SECTION_NAME})
+     SELECT ${storeId}, '${aisle}', '${section}'
+     WHERE NOT EXISTS(select ${pantrySchema.LocationTable.COLS.ID} ${fromLocationTableClause} ${whereLocationClause};`;
+
+    const updatePantryItemSql = `UPDATE
+     ${pantrySchema.PantryItemLocationTable.NAME}
+     SET ${pantrySchema.PantryItemLocationTable.COLS.LOCATION_ID} =
+     (SELECT ${pantrySchema.LocationTable.COLS.ID} fromLocationTableClause
+     WHERE ${whereLocationClause})
+     WHERE ${pantrySchema.PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${pantryItemId}
+     AND ${pantrySchema.PantryItemLocationTable.COLS.LOCATION_ID} = ${originalLocationId};`;
+
+    const selectGroceryStoreLocation = `SELECT
+    ${pantrySchema.LocationTable.COLS.ID},
+    ${pantrySchema.LocationTable.COLS.STORE_ID},
+    ${pantrySchema.StoreTable.COLS.STORE_NAME},
+    ${pantrySchema.LocationTable.COLS.AISLE},
+    ${pantrySchema.LocationTable.COLS.SECTION_NAME}
+      ${fromLocationTableWithJoinClause} ${whereLocationClause}`;
+    console.log('executing: ');
+    console.log (insertGroceryLocationIfNecessarySql);
+    console.log(updatePantryItemSql);
+
+    try {
+      const data = await this.db.sqlBatch([insertGroceryLocationIfNecessarySql, updatePantryItemSql, selectGroceryStoreLocation]);
+      console.log(`returning ${data} from updatePantryItemLocation`);
       result = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
     } catch (err) {
       console.log(`Error inserting pantry Item location `);
@@ -667,7 +722,7 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
     }
   }
 
-  public async deletePantryItemLocationLocation(pantryItemId: number, locationId: number): Promise<number> {
+  public async deletePantryItemLocation(pantryItemId: number, locationId: number): Promise<number> {
       const  deleteSql = `DELETE FROM ${pantrySchema.PantryItemLocationTable.NAME}
       WHERE ${pantrySchema.PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${pantryItemId}
       AND ${pantrySchema.PantryItemLocationTable.COLS.LOCATION_ID} = ${locationId}`;

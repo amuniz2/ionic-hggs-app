@@ -8,7 +8,7 @@ import {AppActions, AppActionTypes} from './app.actions';
 import * as fromAppAdapter from './grocery-store.adapter';
 import {StoreManagerActionTypes} from '../modules/store-management/store/store-management.actions';
 import {sharedGroceryStoreAdapter} from './grocery-store.adapter';
-import {getGroceryStore} from './store-management.selectors';
+import {getGroceryStore, getGroceryStoreLocation} from './store-management.selectors';
 // import {appReducers} from '../app.reducers';
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -17,7 +17,8 @@ export const reducers: ActionReducerMap<AppState> = {
   version: (version) => version,
   deviceDetails: (deviceDetails) => deviceDetails,
   initializationError: (error) => error,
-  groceryStores: (groceryStores) => groceryStores
+  groceryStores: (groceryStores) => groceryStores,
+  groceryItemLocations: (groceryStoreLocations) => groceryStoreLocations,
   // appReducer: appReducers
 };
 
@@ -31,7 +32,13 @@ export const initialAppState: AppState = {
   ...fromAppAdapter.sharedGroceryStoreAdapter.getInitialState(),
   loading: false,
   error: null
-}};
+  },
+  groceryItemLocations: {
+    ...fromAppAdapter.sharedGroceryStoreLocationAdapter.getInitialState(),
+    loading: false,
+    error: null
+  }
+};
 
 export function appRootReducers(state: AppState = initialAppState, action: AppActions): AppState {
   switch (action.type) {
@@ -182,7 +189,6 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
       };
     }
 
-
     case AppActionTypes.GroceryStoreSectionDeleted: {
       const groceryStore = getGroceryStore(state.groceryStores, action.payload.groceryStoreId);
       return {
@@ -200,7 +206,21 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
         },
       };
     }
-    default: return state;
+
+    case AppActionTypes.GroceryStoreLocationPossiblyAdded: {
+      const existingLocation = getGroceryStoreLocation(state.groceryItemLocations, action.payload.id);
+      if (existingLocation == null) {
+        return {
+          ...state,
+          groceryItemLocations: {
+            ...fromAppAdapter.sharedGroceryStoreLocationAdapter.addOne(action.payload, state.groceryItemLocations),
+            error: null,
+          }
+        };
+      } else {
+        return state;
+      }
+    }
   }
 }
 

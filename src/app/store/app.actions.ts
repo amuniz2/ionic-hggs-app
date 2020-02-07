@@ -2,6 +2,7 @@ import {Action} from '@ngrx/store';
 import {GroceryStore} from '../model/grocery-store';
 import {StoreAisle} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles.component';
 import {StoreSection} from '../modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component';
+import {GroceryStoreLocation} from '../model/grocery-store-location';
 
 export const APP_READY = '[App] Ready';
 
@@ -34,6 +35,7 @@ export enum AppActionTypes {
   GroceryStoreSectionDeleted = '[Store Manager] Delete Grocery Section Succeeded',
   DeleteGroceryStoreSectionFailed = '[Store Manager] Delete Grocery Store Section Failed',
   GroceryStoreSectionAdded = '[Store Manager] Grocery Store Section Added',
+  GroceryStoreLocationPossiblyAdded = '[Store Manager] Grocery Store Possibly Added',
 }
 
 export class StartAppInitializer implements Action {
@@ -175,6 +177,12 @@ export class GroceryStoreSectionDeleted implements Action {
 
   constructor(public payload: { groceryStoreId: number, section: string }) {}
 }
+emit this
+export class GroceryStoreLocationPossiblyAdded implements Action {
+  readonly type = AppActionTypes.GroceryStoreLocationPossiblyAdded;
+
+  constructor(public payload: GroceryStoreLocation) {}
+}
 
 // endregion
 export type AppActions = AppReady
@@ -200,6 +208,7 @@ export type AppActions = AppReady
   | GroceryStoreAisleDeleted
   | GroceryStoreSectionAdded
   | GroceryStoreSectionDeleted
+  | GroceryStoreLocationPossiblyAdded
   | StoreAisleAdded;
 
 

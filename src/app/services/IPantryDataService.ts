@@ -45,4 +45,6 @@ export interface IPantryDataService {
   getPantryItemLocations(id: number): Observable<GroceryStoreLocation[]>;
 
   updatePantryItem(savePantryItemRequest: PantryItem): Observable<boolean>;
+
+  updatePantryItemLocation(itemId: number, originalLocationId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation>;
 }

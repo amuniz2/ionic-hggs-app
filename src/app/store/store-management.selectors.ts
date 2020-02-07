@@ -1,7 +1,9 @@
 import {createFeatureSelector, createSelector, select} from '@ngrx/store';
 import {GroceryStore} from '../model/grocery-store';
-import {AppState, GroceryStoresState} from './app.state';
+import {AppState, GroceryItemLocationsState, GroceryStoresState} from './app.state';
 import * as fromAdapter from './grocery-store.adapter';
+import {GroceryStoreLocationStoreComponent} from '../modules/shared-module/dumb-components/grocery-store-location-store/grocery-store-location-store.component';
+import {GroceryStoreLocation} from '../model/grocery-store-location';
 // import * as fromAdapter from '../../store-management/store/grocery-store.adapter';
 
 // export const getStoreManagementState = createFeatureSelector<SharedStoresState>('storeManagement');
@@ -46,3 +48,18 @@ export const selectGroceryStoresLoading = createSelector(
 );
 
 export const getGroceryStore = (state: GroceryStoresState, id: number) => state.entities[id];
+
+export const getGroceryItemsLocationsState = createSelector(
+  getAppState,
+  (state: AppState) => state.groceryItemLocations
+);
+
+export const selectAllGroceryStoreLocations = createSelector(
+  getGroceryItemsLocationsState,
+  fromAdapter.selectAllGroceryStoreLocations
+);
+
+export const selectGroceryStoreLocation = (id: number) => createSelector(
+  selectAllGroceryStoreLocations, (state: GroceryStoreLocation[]) => state.find((storeLocation) => storeLocation.id === id));
+
+export const getGroceryStoreLocation = (state: GroceryItemLocationsState, locationId: number) => state.entities[locationId];

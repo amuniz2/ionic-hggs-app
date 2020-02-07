@@ -5,14 +5,15 @@ import {
   AddPantryItemLocationRequest,
   CreateItemFailed,
   CreatePantryItem,
-  DeletePantryItemFailed, EditPantryItemLocationRequest,
+  DeletePantryItemFailed,
+  EditPantryItemLocationRequest,
   ItemCreated,
   LoadPantryItemLocations,
   NavigateToPantryItemPage,
   PantryItemDeleted,
   PantryItemLoaded,
   PantryItemLocationAdded,
-  PantryItemLocationsLoadedSuccessfully,
+  PantryItemLocationsLoadedSuccessfully, PantryItemLocationUpdated,
   PantryLoadedSuccessfully,
   PantryLoadFailed,
   SavePantryItemFailed,
@@ -25,9 +26,6 @@ import {PantryState} from './pantry-management.reducers';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IPantryDataService} from '../../../services/IPantryDataService';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
-import {NewItemLocation} from '../smart-components/add-pantry-item-location/add-pantry-item-location.component';
-import {AppActionTypes, LoadGroceryStoreAisles, LoadGroceryStoreSections} from '../../../store';
-import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 
 @Injectable()
 export class PantryEffects {
@@ -209,6 +207,24 @@ export class PantryEffects {
           tap((groceryStoreLocationAdded) => console.log(groceryStoreLocationAdded)),
           map((groceryStoreLocationAdded) => {
             return new PantryItemLocationAdded(payload.addPantryItemLocation.itemId, groceryStoreLocationAdded);
+        }),
+        catchError(error => {
+          console.log(error);
+          return [new AddPantryItemLocationFailed(error)];
+        })
+      );
+    }));
+
+  @Effect()
+  public updateItemLocation = this.actions$.pipe(
+    ofType(PantryActionTypes.UpdatePantryItemLocation),
+    switchMap((payload) => {
+      return this.storeManagementService.updatePantryItemLocation(
+        payload.updatePantryItemLocation.itemId,
+        payload.originalLocationId,
+        payload.updatePantryItemLocation.location).pipe(
+        map((newPantryItemLocation) => {
+          return new PantryItemLocationUpdated(payload.updatePantryItemLocation.itemId, payload.originalLocationId, newPantryItemLocation);
         }),
         catchError(error => {
           console.log(error);
