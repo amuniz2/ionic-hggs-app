@@ -7,19 +7,16 @@ import * as fromSelectors from '../../../../store/store-management.selectors';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 import {LoadGroceryStores, LocationGroceryStoreSelected} from '../../../../store';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
-// tslint:disable-next-line:max-line-length
-import {GroceryStoreSelected} from '../../../shared-module/dumb-components/grocery-store-location-store/grocery-store-location-store.component';
 import {
-  getGroceryItemsLocationsState,
-  getGroceryStoreLocation,
-  getGroceryStoresState, selectGroceryStoreLocation,
+  selectGroceryStore, selectGroceryStoreLocation,
   selectGroceryStoresLoading
 } from '../../../../store/store-management.selectors';
 // tslint:disable-next-line:max-line-length
 import {GroceryStoreAisleOrSectionSelected} from '../../../shared-module/dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {AddPantryItemLocation, UpdatePantryItemLocation} from '../../store/pantry-management.actions';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {withLatestFrom} from 'rxjs/operators';
 
 export interface NewItemLocation {
   itemId: number;
@@ -27,7 +24,7 @@ export interface NewItemLocation {
 }
 
 @Component({
-  selector: 'app-add-pantry-item-location',
+  selector: 'app-edit-pentry-item-location',
   templateUrl: './edit-pantry-item-location.component.html',
   styleUrls: ['./edit-pantry-item-location.component.scss']
 })
@@ -36,6 +33,7 @@ export class EditPantryItemLocationComponent implements OnInit {
   groceryStores$: Observable<GroceryStore[]>;
   groceryStoreAisles$: Observable<string[]>;
   groceryStoreSections$: Observable<string[]>;
+  selectedGroceryStore$: Observable<GroceryStore>;
 
   selectedGroceryStoreId$: Observable<number>;
 
@@ -55,49 +53,75 @@ export class EditPantryItemLocationComponent implements OnInit {
   constructor(private store: Store<AppState>,
               @Inject('IPantryDataService') private pantryDataService: IPantryDataService,
               private fb: FormBuilder,
-              private activeRoute: ActivatedRoute) {
+              private activeRoute: ActivatedRoute,
+              private router: Router) {
     this.store.dispatch(new LoadGroceryStores());
-    this.locationId = this.activeRoute.snapshot.params.locationId;
-  }
-
-  ngOnInit() {
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     this.groceryStores$ = this.store.select(fromSelectors.selectAllGroceryStores);
+    this.locationId = this.activeRoute.snapshot.params.locationId;
     if (this.locationId != null) {
       this.selectedGroceryStoreLocation$ = this.store.select(selectGroceryStoreLocation(this.locationId));
+      this.selectedGroceryStoreAisle = this.router.getCurrentNavigation().extras.queryParams.aisle;
+      this.selectedGroceryStoreSection = this.router.getCurrentNavigation().extras.queryParams.section;
+      this.selectedGroceryStoreId = this.router.getCurrentNavigation().extras.queryParams.storeId;
+      this.selectedGroceryStore$ = this.store.select(fromSelectors.selectGroceryStore(this.selectedGroceryStoreId));
+
+      this.selectGroceryStore(this.selectedGroceryStoreId);
+      // this.selectedGroceryStoreName = this.router.getCurrentNavigation().extras.queryParams.storeName;
     } else {
       this.selectedGroceryStoreLocation$ = of({
-          id: null,
-          aisle: '',
-          section: '',
-          storeId: null,
-          storeName: null
-        });
+        id: null,
+        aisle: '',
+        section: '',
+        storeId: null,
+        storeName: null
+      });
+    }
+    let groceryStoreValue: GroceryStore = null;
+    if (this.selectedGroceryStore$ != null) {
+      this.selectedGroceryStore$.subscribe((groceryStore: GroceryStore) => {
+        groceryStoreValue = groceryStore;
+      });
     }
     this.locationForm = this.fb.group({
-      locationStore: [this.selectedGroceryStoreId],
+      locationStore: [groceryStoreValue],
       locationAisle: [this.selectedGroceryStoreAisle],
       locationSection: [this.selectedGroceryStoreSection]
     });
   }
 
-  getSelectedGroceryStore(): Observable<GroceryStore> {
-    let storeId: number = null;
-
-    this.selectedGroceryStoreLocation$.subscribe(location => {
-      storeId = location.storeId;
-    });
-    return this.store.select(fromSelectors.selectGroceryStore(storeId));
+  ngOnInit() {
+    // if (this.locationId != null) {
+    //   this.selectedGroceryStoreLocation$ = this.store.select(selectGroceryStoreLocation(this.locationId));
+    //   this.selectedGroceryStoreAisle = this.router.getCurrentNavigation().extras.queryParams.aisle;
+    //   this.selectedGroceryStoreSection = this.router.getCurrentNavigation().extras.queryParams.section;
+    //   this.selectedGroceryStoreId = this.router.getCurrentNavigation().extras.queryParams.storeId;
+    //   // this.selectedGroceryStoreName = this.router.getCurrentNavigation().extras.queryParams.storeName;
+    // } else {
+    //   this.selectedGroceryStoreLocation$ = of({
+    //       id: null,
+    //       aisle: '',
+    //       section: '',
+    //       storeId: null,
+    //       storeName: null
+    //     });
+    // }
   }
 
-  onChangeLocationGroceryStore($event: GroceryStoreSelected) {
+  onChangeLocationGroceryStore($event: GroceryStore) {
     // this.groceryStoreLocation.storeId = $event.id;
-    this.store.dispatch(new LocationGroceryStoreSelected($event.id));
-    this.selectedGroceryStoreId = $event.id;
-    this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles($event.id));
-    this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections($event.id));
+    if ($event.id !== this.selectedGroceryStoreId) {
+      this.selectGroceryStore($event.id);
+      // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectGroceryStore(this.selectedGroceryStoreId));
+    }
   }
 
+  private selectGroceryStore(groceryStoreId: number) {
+    this.store.dispatch(new LocationGroceryStoreSelected(groceryStoreId));
+    this.selectedGroceryStoreId = groceryStoreId;
+    this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(groceryStoreId));
+    this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(groceryStoreId));
+  }
   onChangeAisle($event: GroceryStoreAisleOrSectionSelected) {
     this.selectedGroceryStoreAisle = $event.name;
   }

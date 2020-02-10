@@ -110,6 +110,9 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
 
     case AppActionTypes.StoreAisleAdded: {
       const groceryStore = getGroceryStore(state.groceryStores, action.payload.groceryStoreId);
+      if (groceryStore.aisles.find((aisle) => aisle === action.payload.newAisle) == null) {
+        return state;
+      }
       return {
         ...state,
         groceryStores: {
@@ -208,19 +211,29 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
     }
 
     case AppActionTypes.GroceryStoreLocationPossiblyAdded: {
-      const existingLocation = getGroceryStoreLocation(state.groceryItemLocations, action.payload.id);
-      if (existingLocation == null) {
-        return {
-          ...state,
-          groceryItemLocations: {
-            ...fromAppAdapter.sharedGroceryStoreLocationAdapter.addOne(action.payload, state.groceryItemLocations),
-            error: null,
-          }
-        };
-      } else {
-        return state;
-      }
+      return {
+        ...state,
+        groceryItemLocations: {
+          ...fromAppAdapter.sharedGroceryStoreLocationAdapter.upsertOne(action.payload, state.groceryItemLocations),
+          error: null,
+        }
+      };
     }
+    //   const existingLocation = getGroceryStoreLocation(state.groceryItemLocations, action.payload.id);
+    // //   if (existingLocation == null) {
+    //     return {
+    //       ...state,
+    //       groceryItemLocations: {
+    //         ...fromAppAdapter.sharedGroceryStoreLocationAdapter.upsertOne(action.payload, state.groceryItemLocations),
+    //         error: null,
+    //       }
+    //     };
+    //   } else {
+    //     return state;
+    //   }
+    // }
+
+    default: return state;
   }
 }
 

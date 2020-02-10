@@ -14,7 +14,7 @@ import { PantryItemListComponent } from './dumb-components/pantry-item-list/pant
 import {EditPantryItemComponent} from './smart-components/edit-pantry-item/edit-pantry-item.component';
 import { EditPantryItemDetailsComponent } from './dumb-components/edit-pantry-item-details/edit-pantry-item-details.component';
 import { PantryItemLocationsComponent } from './dumb-components/pantry-item-locations/pantry-item-locations.component';
-import { EditPantryItemLocationComponent } from './smart-components/add-pantry-item-location/edit-pantry-item-location.component';
+import { EditPantryItemLocationComponent } from './smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
 
 @NgModule({
   imports: [

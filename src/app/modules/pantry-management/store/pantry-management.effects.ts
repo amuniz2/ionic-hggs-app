@@ -21,11 +21,12 @@ import {
 } from './pantry-management.actions';
 import {Store} from '@ngrx/store';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {catchError, map, mapTo, switchMap, tap} from 'rxjs/operators';
+import {catchError, concatMap, map, mapTo, switchMap, tap} from 'rxjs/operators';
 import {PantryState} from './pantry-management.reducers';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IPantryDataService} from '../../../services/IPantryDataService';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
+import {GroceryStoreLocationPossiblyAdded} from '../../../store';
 
 @Injectable()
 export class PantryEffects {
@@ -192,9 +193,17 @@ export class PantryEffects {
   public navigateToEditLocationPage$ = this.actions$.pipe(
     ofType(PantryActionTypes.EditPantryItemLocationRequest),
     tap((navigateToLocationPage: EditPantryItemLocationRequest) => {
+      const navigationExtras = { queryParams:
+          {
+            storeId: navigateToLocationPage.request.storeLocation.storeId,
+            storeName: navigateToLocationPage.request.storeLocation.storeName,
+            aisle: navigateToLocationPage.request.storeLocation.aisle,
+            section: navigateToLocationPage.request.storeLocation.section,
+          }
+      };
       // tslint:disable-next-line:max-line-length
-      const route = `/home/pantry-items/${navigateToLocationPage.request.pantryItem.id}/pantry-item-location/${navigateToLocationPage.request.locationId}`;
-      this.router.navigateByUrl(route);
+      const route = `/home/pantry-items/${navigateToLocationPage.request.pantryItem.id}/pantry-item-location/${navigateToLocationPage.request.storeLocation.id}`;
+      this.router.navigateByUrl(route, navigationExtras);
     }));
 
   @Effect()
@@ -204,10 +213,11 @@ export class PantryEffects {
       return this.storeManagementService.addPantryItemLocation(
         payload.addPantryItemLocation.itemId,
         payload.addPantryItemLocation.location).pipe(
-          tap((groceryStoreLocationAdded) => console.log(groceryStoreLocationAdded)),
-          map((groceryStoreLocationAdded) => {
-            return new PantryItemLocationAdded(payload.addPantryItemLocation.itemId, groceryStoreLocationAdded);
-        }),
+          tap((pantryItemLocationAdded) => console.log(pantryItemLocationAdded)),
+          concatMap((pantryItemLocationAdded) => [
+            new PantryItemLocationAdded(payload.addPantryItemLocation.itemId, pantryItemLocationAdded),
+            new GroceryStoreLocationPossiblyAdded(pantryItemLocationAdded),
+        ]),
         catchError(error => {
           console.log(error);
           return [new AddPantryItemLocationFailed(error)];
@@ -242,5 +252,13 @@ export class PantryEffects {
       this.router.navigateByUrl(route);
       // this.router.navigate(['/pantry-items/pantry-item-locations']);;
       // this.router.navigate(['../../manage']);
+    }));
+
+  @Effect({dispatch: false})
+  public itemLocationUpdated = this.actions$.pipe(
+    ofType(PantryActionTypes.PantryItemLocationUpdated),
+    tap((navigateToItemPage: PantryItemLocationUpdated) => {
+      const route = `/home/pantry-items/pantry-item-details?id=${navigateToItemPage.itemId}&isNewItem=false`;
+      this.router.navigateByUrl(route);
     }));
 }

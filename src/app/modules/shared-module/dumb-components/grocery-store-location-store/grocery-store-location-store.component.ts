@@ -2,10 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {ControlContainer, FormControl} from '@angular/forms';
 
-export interface GroceryStoreSelected {
-  id: number;
-}
-
 @Component({
   selector: 'app-grocery-store-location-store',
   templateUrl: './grocery-store-location-store.component.html',
@@ -20,9 +16,7 @@ export class GroceryStoreLocationStoreComponent implements OnInit {
   selectedGroceryStore: GroceryStore;
 
   @Output()
-  selectedGroceryStoreChange: EventEmitter<GroceryStoreSelected> = new EventEmitter<GroceryStoreSelected>();
-  selectedGroceryStoreId: number | null;
-  selectGroceryStoreControl = new FormControl();
+  selectedGroceryStoreChange: EventEmitter<GroceryStore> = new EventEmitter<GroceryStore>();
 
   constructor(public controlContainer: ControlContainer) {
   }
@@ -31,7 +25,13 @@ export class GroceryStoreLocationStoreComponent implements OnInit {
   }
 
   onChangeGroceryStoreSelected($event: CustomEvent) {
-    this.selectedGroceryStoreChange.emit({ id: Number($event.detail.value) });
+    // if ((this.selectedGroceryStore == null ) || ($event.detail.value.id !== this.selectedGroceryStore.id)) {
+      this.selectedGroceryStoreChange.emit($event.detail.value);
+    // }
     // this.selectedGroceryStoreChange.emit({ id: $event.id });
+  }
+
+  compareById(store1: GroceryStore, store2: GroceryStore) {
+    return store1.id === store2.id;
   }
 }

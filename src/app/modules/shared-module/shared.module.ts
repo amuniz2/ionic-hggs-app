@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HggsAccordionComponent } from './widgets/hggs-accordion/hggs-accordion.component';
 import {IonicModule} from '@ionic/angular';
 import { SelectGroceryStoreComponent } from './dumb-components/select-grocery-store/select-grocery-store.component';
-import { LocationComponent } from './dumb-components/location/location.component';
 import { GroceryStoreLocationStoreComponent } from './dumb-components/grocery-store-location-store/grocery-store-location-store.component';
 // tslint:disable-next-line:max-line-length
 import { GroceryStoreLocationAisleOrSectionComponent } from './dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
@@ -13,7 +12,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
   declarations: [
     HggsAccordionComponent,
     SelectGroceryStoreComponent,
-    LocationComponent,
     GroceryStoreLocationStoreComponent,
     GroceryStoreLocationAisleOrSectionComponent
   ],
@@ -23,7 +21,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
   ],
-  exports: [HggsAccordionComponent, LocationComponent, GroceryStoreLocationStoreComponent, GroceryStoreLocationAisleOrSectionComponent],
+  exports: [HggsAccordionComponent, GroceryStoreLocationStoreComponent, GroceryStoreLocationAisleOrSectionComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule { }

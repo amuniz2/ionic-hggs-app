@@ -1,8 +1,5 @@
 import {StoreManagementActions, StoreManagerActionTypes} from './store-management.actions';
-import * as fromAppAdapter from '../../../store/grocery-store.adapter';
-import {getGroceryStore} from '../../../store/store-management.selectors';
-import {AppState} from '../../../store/app.state';
-import {initialAppState} from '../../../store/app.reducers';
+
 // export interface GroceryStoreAisle {
 //   aisle: string;
 //   storeId: number;

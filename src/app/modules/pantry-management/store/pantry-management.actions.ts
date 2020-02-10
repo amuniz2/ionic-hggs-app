@@ -3,7 +3,7 @@ import {PantryItem} from '../../../model/pantry-item';
 import {DeletePantryItemRequest, NavigateToEditPantryItemRequest} from '../dumb-components/pantry-item-list/pantry-item-list.component';
 import {EditItemLocationRequest, NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../model/grocery-store-location';
-import {NewItemLocation} from '../smart-components/add-pantry-item-location/edit-pantry-item-location.component';
+import {NewItemLocation} from '../smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
 
 export enum PantryActionTypes {
   PantryItemLoaded = '[Pantry Item] Loaded',

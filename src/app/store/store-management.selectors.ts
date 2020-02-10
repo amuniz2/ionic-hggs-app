@@ -2,7 +2,6 @@ import {createFeatureSelector, createSelector, select} from '@ngrx/store';
 import {GroceryStore} from '../model/grocery-store';
 import {AppState, GroceryItemLocationsState, GroceryStoresState} from './app.state';
 import * as fromAdapter from './grocery-store.adapter';
-import {GroceryStoreLocationStoreComponent} from '../modules/shared-module/dumb-components/grocery-store-location-store/grocery-store-location-store.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 // import * as fromAdapter from '../../store-management/store/grocery-store.adapter';
 

@@ -5,10 +5,10 @@
 <!--  <app-location [groceryStores]="groceryStores$ | async" (notifySelectedGroceryStoreChanged)="onChangeGroceryStore($event)"></app-location>-->
   <ion-list>
     <ion-list-header> Single Location </ion-list-header>
-    <form [formGroup]="locationForm" (ngSubmit)="onSubmit(locationForm.value)">"
+    <form [formGroup]="locationForm" (ngSubmit)="onSubmit(locationForm.value)">
       <ion-label>Store</ion-label>
       <app-grocery-store-location-store [formGroup]="locationForm" [groceryStores]="groceryStores$ | async"
-                                        [selectedGroceryStore]="getSelectedGroceryStore() | async"
+                                        [selectedGroceryStore]="selectedGroceryStore$ | async"
                                         (selectedGroceryStoreChange)="onChangeLocationGroceryStore($event)"></app-grocery-store-location-store>
       <ion-label>{{AisleLabel}}</ion-label>
       <app-grocery-store-location-aisle-or-section  [formGroup]="locationForm"

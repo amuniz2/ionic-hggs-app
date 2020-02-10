@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GroceryStoreSelected} from '../grocery-store-location-store/grocery-store-location-store.component';
 import {ControlContainer, FormControl} from '@angular/forms';
 export interface GroceryStoreAisleOrSectionSelected {
   name: string;

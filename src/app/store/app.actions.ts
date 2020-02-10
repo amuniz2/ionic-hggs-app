@@ -177,7 +177,7 @@ export class GroceryStoreSectionDeleted implements Action {
 
   constructor(public payload: { groceryStoreId: number, section: string }) {}
 }
-emit this
+
 export class GroceryStoreLocationPossiblyAdded implements Action {
   readonly type = AppActionTypes.GroceryStoreLocationPossiblyAdded;
 
