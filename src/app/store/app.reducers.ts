@@ -110,7 +110,7 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
 
     case AppActionTypes.StoreAisleAdded: {
       const groceryStore = getGroceryStore(state.groceryStores, action.payload.groceryStoreId);
-      if (groceryStore.aisles.find((aisle) => aisle === action.payload.newAisle) == null) {
+      if (groceryStore.aisles.find((aisle) => aisle === action.payload.newAisle) !== null) {
         return state;
       }
       return {
@@ -134,7 +134,9 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
 
     case AppActionTypes.GroceryStoreSectionAdded: {
       const groceryStore = getGroceryStore(state.groceryStores, action.payload.groceryStoreId);
-      console.log(`grocery store in reducer: ${JSON.stringify(groceryStore)}`);
+      if (groceryStore.sections.find((section) => section === action.payload.newSection) !== null) {
+        return state;
+      }
       return {
         ...state,
         groceryStores: {
