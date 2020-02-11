@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {select, Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import * as fromSelectors from '../../../../store/store-management.selectors';
 import {GroceryStore} from '../../../../model/grocery-store';
 import * as fromActions from '../../store/store-management.actions';
@@ -18,9 +18,12 @@ export class StoreInventoryManagerPageComponent implements OnInit {
   title: string;
   groceryStores$: Observable<GroceryStore[]>;
   groceryStoresLoading$: Observable<boolean>;
+  addingStore: boolean;
+  addingStore$: Observable<boolean>;
 
   constructor(private store: Store<AppState>) {
     this.title = 'Manage Stores from page component';
+    this.addingStore$ = of(this.addingStore);
   }
 
   ngOnInit() {
@@ -48,4 +51,8 @@ export class StoreInventoryManagerPageComponent implements OnInit {
   //   const groceryStore$ = select(this.groceryStores$);
   //   this.store.dispatch(new fromActions.NavigateToEditStore($event));
   // }
+
+  onAddStoreClick() {
+    this.addingStore = true;
+  }
 }

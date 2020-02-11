@@ -33,6 +33,9 @@ export class StoreListComponent implements OnInit {
   @Input()
   groceryStores: GroceryStore[];
 
+  @Input()
+  addingStore: boolean;
+
   constructor(private router: Router, private store: Store<AppState>) {
     // this.groceryStores = [];
   }
