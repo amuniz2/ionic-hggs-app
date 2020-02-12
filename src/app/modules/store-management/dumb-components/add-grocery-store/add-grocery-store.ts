@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NewGroceryStoreRequest} from '../store-list/store-list.component';
 
 @Component({
@@ -10,11 +10,15 @@ export class AddGroceryStoreComponent implements OnInit {
   @Output()
   notifyNewStoreRequested: EventEmitter<NewGroceryStoreRequest> = new EventEmitter();
 
+  @Input()
+  addingStore: boolean;
+
   enteringStoreName: boolean;
   newGroceryStoreName: string;
   constructor() { }
 
   ngOnInit() {
+    this.enteringStoreName = true;
   }
 
   onAddStoreClick() {

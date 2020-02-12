@@ -9,10 +9,8 @@
 </ion-header>
 <ion-content>
   <app-store-list [groceryStores] = "(groceryStores$ | async)"
- (notifyDeleteStoreRequested)="onDeleteStoreRequest($event)" [addingStore]="(addingStore$ | async)">
+ (notifyDeleteStoreRequested)="onDeleteStoreRequest($event)">
   </app-store-list>
+  <app-add-grocery-store [addingStore] = "(addingStore$ | async)" (notifyNewStoreRequested)="onNotifyNewStoreRequest($event)"></app-add-grocery-store>
 </ion-content>
-<ion-footer *ngIf="addingStore">
-  <app-add-grocery-store (notifyNewStoreRequested)="onNotifyNewStoreRequest($event)"></app-add-grocery-store>
-</ion-footer>
 
