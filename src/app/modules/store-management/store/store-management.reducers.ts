@@ -31,48 +31,6 @@ export function groceryStoresReducer(state = initialGroceryStoreManagementState,
       //     }
       //   };
 
-      case StoreManagerActionTypes.StoreCreated: {
-        // const { id, name } = action.payload;
-        return {
-          ...state,
-          // groceryStores: {
-          //   ...fromAppAdapter.sharedGroceryStoreAdapter.addOne(action.groceryStore, state.groceryStores),
-          //   error: null
-          // },
-        };
-      }
-
-      case StoreManagerActionTypes.StoreDeleted:
-        // const { id, name } = action.payload;
-        return {
-          ...state,
-          // groceryStores: {
-          //   ...fromAppAdapter.sharedGroceryStoreAdapter.removeOne(action.id, state.groceryStores),
-          //   error: null
-          // },
-          // selectedGroceryStoreId:
-        };
-
-      case StoreManagerActionTypes.DeleteStoreFailed:
-        // const { id, name } = action.payload;
-        return {
-          ...state,
-          // groceryStores: {
-          //   ...state.groceryStores,
-          //   error: action.error
-          // },
-          // selectedGroceryStoreId:
-        };
-
-      case StoreManagerActionTypes.CreateStoreFailed:
-        return {
-          ...state,
-          // groceryStores: {
-          //   ...state.groceryStores,
-          //   loading: false,
-          //   error: action.error
-          // },
-        };
 
       case StoreManagerActionTypes.NavigatedToStoreDetailsPage:
         return {

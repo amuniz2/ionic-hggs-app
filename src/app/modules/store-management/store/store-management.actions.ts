@@ -8,16 +8,11 @@ import {StoreSection} from '../dumb-components/grocery-store-sections/grocery-st
 
 export enum StoreManagerActionTypes {
   CreateStore = '[Store Manager] Create',
-  CreateStoreFailed = '[Store Manager] Create Store failed',
   NavigateToStoreDetailsPage = '[Store Manager] Navigate to Store Details Page',
   NavigatedToStoreDetailsPage = '[Store Manager] Navigated to Store Details Page',
-  StoreCreated = '[Store Manager] Created',
-  StoreDeleted = '[Store Manager] Deleted',
   SelectStore = '[Store Manager] Select',
   UpdateStore = '[Store Manager] Update',
   DeleteStore = '[Store Manager] Delete',
-  DeleteStoreFailed = '[Store Manager] Delete Store failed',
-  DeleteStoreSucceeded = '[Store Manager] Delete Store succeeded',
   GetGroceryStoreAislesFailed =  '[Store Manager] Store Aisles Failed To Load',
   GetGroceryStoreSectionsFailed =  '[Store Manager] Store Sections Failed To Load',
   UpdateStoreAisle = '[Store Manager] Update Aisle',
@@ -44,24 +39,6 @@ export class CreateStore implements Action {
   constructor(public createGroceryStorePayload: NewGroceryStoreRequest) {}
 }
 
-export class StoreCreated implements Action {
-  readonly type = StoreManagerActionTypes.StoreCreated;
-
-  constructor(public groceryStore: GroceryStore ) {}
-}
-
-export class DeleteStoreSucceeded implements Action {
-  constructor(public id: number) {
-  }
-  readonly type = StoreManagerActionTypes.DeleteStoreSucceeded;
-}
-
-export class CreateStoreFailed implements Action {
-  constructor(public error: Error) {
-  }
-  readonly type = StoreManagerActionTypes.CreateStoreFailed;
-}
-
 export class DeleteStore implements Action {
   readonly type = StoreManagerActionTypes.DeleteStore;
   constructor(public deleteGroceryStorePayload: DeleteGroceryStoreRequest) {
@@ -69,19 +46,6 @@ export class DeleteStore implements Action {
     console.log(deleteGroceryStorePayload);
   }
 }
-
-export class StoreDeleted implements Action {
-  readonly type = StoreManagerActionTypes.StoreDeleted;
-
-  constructor(public id: number ) {}
-}
-
-export class DeleteStoreFailed implements Action {
-  constructor(public error: Error) {
-  }
-  readonly type = StoreManagerActionTypes.DeleteStoreFailed;
-}
-
 
 export class GetStoreAislesFailed implements Action {
   constructor(public error: Error) {
@@ -114,10 +78,6 @@ export class UpdateStoreAisle implements Action {
 
 export type StoreManagementActions =
   | CreateStore
-  | CreateStoreFailed
   | DeleteStore
-  | DeleteStoreFailed
   | NavigateToStoreDetailsPage
-  | NavigatedToStoreDetailsPage
-  | StoreCreated
-  | StoreDeleted;
+  | NavigatedToStoreDetailsPage;

@@ -3,6 +3,7 @@ import {GroceryStore} from '../model/grocery-store';
 import {StoreAisle} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles.component';
 import {StoreSection} from '../modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
+import {StoreManagerActionTypes} from '../modules/store-management/store/store-management.actions';
 
 export const APP_READY = '[App] Ready';
 
@@ -35,7 +36,12 @@ export enum AppActionTypes {
   GroceryStoreSectionDeleted = '[Store Manager] Delete Grocery Section Succeeded',
   DeleteGroceryStoreSectionFailed = '[Store Manager] Delete Grocery Store Section Failed',
   GroceryStoreSectionAdded = '[Store Manager] Grocery Store Section Added',
-  GroceryStoreLocationPossiblyAdded = '[Store Manager] Grocery Store Possibly Added',
+  GroceryStoreLocationPossiblyAdded = '[Store Manager] Grocery Store Location Possibly Added',
+  StoreCreated = '[Store Manager] Grocery Store Created',
+  CreateStoreFailed = '[Store Manager] Create Store failed',
+  StoreDeleted = '[Store Manager] Deleted',
+  DeleteStoreFailed = '[Store Manager] Delete Store failed',
+  DeleteStoreSucceeded = '[Store Manager] Delete Store succeeded',
 }
 
 export class StartAppInitializer implements Action {
@@ -184,6 +190,36 @@ export class GroceryStoreLocationPossiblyAdded implements Action {
   constructor(public payload: GroceryStoreLocation) {}
 }
 
+export class StoreCreated implements Action {
+  readonly type = AppActionTypes.StoreCreated;
+
+  constructor(public groceryStore: GroceryStore ) {}
+}
+
+export class CreateStoreFailed implements Action {
+  constructor(public error: Error) {
+  }
+  readonly type = AppActionTypes.CreateStoreFailed;
+}
+
+export class StoreDeleted implements Action {
+  readonly type = AppActionTypes.StoreDeleted;
+
+  constructor(public id: number ) {}
+}
+
+export class DeleteStoreFailed implements Action {
+  constructor(public error: Error) {
+  }
+  readonly type = AppActionTypes.DeleteStoreFailed;
+}
+
+export class DeleteStoreSucceeded implements Action {
+  constructor(public id: number) {
+  }
+  readonly type = AppActionTypes.DeleteStoreSucceeded;
+}
+
 // endregion
 export type AppActions = AppReady
   | StartAppInitializer
@@ -209,6 +245,9 @@ export type AppActions = AppReady
   | GroceryStoreSectionAdded
   | GroceryStoreSectionDeleted
   | GroceryStoreLocationPossiblyAdded
-  | StoreAisleAdded;
-
-
+  | StoreAisleAdded
+  | StoreCreated
+  | CreateStoreFailed
+  | DeleteStoreFailed
+  | StoreDeleted
+  | DeleteStoreSucceeded;

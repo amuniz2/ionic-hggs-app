@@ -18,12 +18,11 @@ export class StoreInventoryManagerPageComponent implements OnInit {
   title: string;
   groceryStores$: Observable<GroceryStore[]>;
   groceryStoresLoading$: Observable<boolean>;
-  addingStore: boolean;
   addingStore$: Observable<boolean>;
 
   constructor(private store: Store<AppState>) {
     this.title = 'Manage Stores from page component';
-    this.addingStore$ = of(this.addingStore);
+    this.addingStore$ = of(false);
   }
 
   ngOnInit() {
@@ -37,7 +36,10 @@ export class StoreInventoryManagerPageComponent implements OnInit {
   onNotifyNewStoreRequest($event: NewGroceryStoreRequest) {
     console.log('dispatching createStore event');
     console.log($event);
-    this.store.dispatch(new fromActions.CreateStore($event));
+    this.addingStore$ = of(false);
+    if ($event.name) {
+      this.store.dispatch(new fromActions.CreateStore($event));
+    }
   }
 
   onDeleteStoreRequest($event: DeleteGroceryStoreRequest) {
@@ -53,6 +55,6 @@ export class StoreInventoryManagerPageComponent implements OnInit {
   // }
 
   onAddStoreClick() {
-    this.addingStore = true;
+    this.addingStore$ = of(true);
   }
 }

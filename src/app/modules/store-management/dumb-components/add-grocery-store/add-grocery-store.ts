@@ -13,27 +13,19 @@ export class AddGroceryStoreComponent implements OnInit {
   @Input()
   addingStore: boolean;
 
-  enteringStoreName: boolean;
   newGroceryStoreName: string;
   constructor() { }
 
   ngOnInit() {
-    this.enteringStoreName = true;
-  }
-
-  onAddStoreClick() {
-    this.enteringStoreName = true;
-    this.newGroceryStoreName = '';
   }
 
   onCancelAddStoreClick() {
-    this.enteringStoreName = false;
+    this.notifyNewStoreRequested.emit({ name: null});
     this.newGroceryStoreName = '';
   }
 
   onAddStoreDoneClick() {
     this.notifyNewStoreRequested.emit({ name: this.newGroceryStoreName});
-    this.enteringStoreName = false;
     this.newGroceryStoreName = '';
   }
 }

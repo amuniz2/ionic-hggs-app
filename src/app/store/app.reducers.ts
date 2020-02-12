@@ -235,6 +235,48 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
     //   }
     // }
 
+    case AppActionTypes.StoreCreated: {
+      // const { id, name } = action;
+      return {
+        ...state,
+        groceryStores: {
+          ...fromAppAdapter.sharedGroceryStoreAdapter.addOne(action.groceryStore, state.groceryStores),
+          error: null
+        },
+      };
+    }
+
+    case AppActionTypes.StoreDeleted:
+      // const { id, name } = action.payload;
+      return {
+        ...state,
+        // groceryStores: {
+        //   ...fromAppAdapter.sharedGroceryStoreAdapter.removeOne(action.id, state.groceryStores),
+        //   error: null
+        // },
+        // selectedGroceryStoreId:
+      };
+
+    case AppActionTypes.DeleteStoreFailed:
+      // const { id, name } = action.payload;
+      return {
+        ...state,
+        // groceryStores: {
+        //   ...state.groceryStores,
+        //   error: action.error
+        // },
+        // selectedGroceryStoreId:
+      };
+
+    case AppActionTypes.CreateStoreFailed:
+      return {
+        ...state,
+        // groceryStores: {
+        //   ...state.groceryStores,
+        //   loading: false,
+        //   error: action.error
+        // },
+      };
     default: return state;
   }
 }
