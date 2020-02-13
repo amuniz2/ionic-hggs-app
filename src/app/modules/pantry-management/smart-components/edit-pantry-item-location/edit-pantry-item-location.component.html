@@ -25,7 +25,10 @@
         [label] = "SectionLabel"
         (aisleOrSectionChange)="onChangeSection($event)">
       </app-grocery-store-location-aisle-or-section>
-      <button class="button" type="submit">Save</button>
+      <ion-toolbar>
+        <ion-button slot="start" color="primary" class="button" type="submit">Save</ion-button>
+        <ion-button class="button" color="secondary" (click)="onCancel()">Cancel</ion-button>
+      </ion-toolbar>
     </form>
 
 <!--    <ion-item>-->

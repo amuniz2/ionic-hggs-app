@@ -106,7 +106,14 @@ export class EditPantryItemLocationComponent implements OnInit {
     //       storeName: null
     //     });
     // }
+    const tabs = document.querySelectorAll('.show-tabbar');
+    if (tabs !== null) {
+      Object.keys(tabs).map((key) => {
+        tabs[key].style.display = 'flex';
+      });
+    }
   }
+
 
   onChangeLocationGroceryStore($event: GroceryStore) {
     // this.groceryStoreLocation.storeId = $event.id;
@@ -124,6 +131,11 @@ export class EditPantryItemLocationComponent implements OnInit {
   }
   onChangeAisle($event: GroceryStoreAisleOrSectionSelected) {
     this.selectedGroceryStoreAisle = $event.name;
+  }
+
+  onCancel() {
+    const route = `/home/pantry-items/pantry-item-details?id=${this.activeRoute.snapshot.params.id}&isNewItem=false`;
+    this.router.navigateByUrl(route);
   }
 
   onChangeSection($event: GroceryStoreAisleOrSectionSelected) {
