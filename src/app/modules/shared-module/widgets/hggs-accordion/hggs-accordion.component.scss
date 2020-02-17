@@ -10,8 +10,8 @@ h2 {
 
   /* Define the style rules for the 'arrow icons' */
   span {
-    position: absolute;
-    right: 1em;
+    position: relative;
+    right: 1.2em;
     top: 1.2em;
     font-size: 0.95em;
   }
@@ -48,7 +48,7 @@ div {
   ion-button {
     position: absolute;
     bottom: 20px;
-    right: 20px;
+    right: 5px;
   }
 
 }

@@ -35,7 +35,7 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
   }
   onNotifyNewStoreAisleRequest($event: StoreAisle) {
     this.store.dispatch(new fromAppActions.AddStoreAisle($event));
-  }
+}
 
   onDeleteStoreAisleRequest($event: StoreAisle) {
     console.log(`dispatching delete store aisle event: ${$event.aisle}`);

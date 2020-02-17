@@ -1,8 +1,13 @@
-<h2 (click)="toggleAccordion()">
-  {{ sectionName }}
-  <span *ngIf="isSectionOpen">&#9650;</span>
-  <span *ngIf="!isSectionOpen">&#9660;</span>
-</h2>
+<ion-row>
+  <ion-list-header>
+    <ion-label>{{ sectionName }}</ion-label>
+    <ion-button *ngIf="isSectionOpen" shape="round" fill="outline" size="small" (click)="onAddClick()">Add
+      <ion-icon name="md-add-circle-outline"></ion-icon>
+    </ion-button>
+    <span (click)="toggleAccordion()" *ngIf="isSectionOpen">&#9650;</span>
+    <span (click)="toggleAccordion()" *ngIf="!isSectionOpen">&#9660;</span>
+  </ion-list-header>
+</ion-row>
 
 <!--<div-->
 <!--  [ngClass]="this.isSectionOpen ? 'active' : 'inactive'">-->

@@ -6,6 +6,10 @@ export interface CollapsedStatusChangedEvent {
   isOpen: boolean;
 }
 
+export interface AddButtonClickedEvent {
+  placeholderText: string;
+}
+
 export interface PageSection {
   label: string;
   isOpen$: Observable<boolean>;
@@ -30,6 +34,9 @@ export class HggsAccordionComponent implements OnInit {
   @Output()
   change: EventEmitter<CollapsedStatusChangedEvent> = new EventEmitter<CollapsedStatusChangedEvent>();
 
+  @Output()
+  addToList: EventEmitter<AddButtonClickedEvent> = new EventEmitter<AddButtonClickedEvent>();
+
   public isSectionOpen = false;
 
   constructor() {
@@ -47,4 +54,7 @@ export class HggsAccordionComponent implements OnInit {
   // public broadcastName(name: string): void {
   //   this.change.emit(name);
   // }
+  onAddClick() {
+    this.addToList.emit({ placeholderText: `Please enter ${this.sectionName}`});
+  }
 }

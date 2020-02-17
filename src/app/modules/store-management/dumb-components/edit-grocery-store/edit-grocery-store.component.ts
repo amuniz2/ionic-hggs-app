@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
-import {StoreAisle} from '../grocery-store-aisles/grocery-store-aisles.component';
+import {Action, StoreAisle, StoreAisleActionRequest} from '../grocery-store-aisles/grocery-store-aisles.component';
 import {Observable, of} from 'rxjs';
 import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
 import {StoreSection} from '../grocery-store-sections/grocery-store-sections.component';
@@ -24,7 +24,7 @@ export class EditGroceryStoreComponent implements OnInit {
     isOpen$: of(false)
   };
 
-  inventorySection: PageSection;
+  addingAisle$: Observable<boolean>;
 
   @Input()
   groceryStore: GroceryStore;
@@ -52,8 +52,15 @@ export class EditGroceryStoreComponent implements OnInit {
   ngOnInit() {
   }
 
-  onNotifyNewStoreAisleRequest($event: StoreAisle) {
-    this.notifyNewStoreAisleRequested.emit($event);
+  onNotifyNewStoreAisleRequest($event: StoreAisleActionRequest) {
+    if ($event.action === Action.RequestCreate) {
+      this.addingAisle$ = of(true);
+    } else {
+      this.addingAisle$ = of(false);
+      if (($event.action === Action.Create) && $event.aisle) {
+        this.notifyNewStoreAisleRequested.emit($event);
+      }
+    }
   }
 
   onNotifyDeleteStoreAisleRequest($event: StoreAisle) {
@@ -79,5 +86,9 @@ export class EditGroceryStoreComponent implements OnInit {
         this.notifyExpandSections.emit(this.groceryStore.id);
       }
     }
+  }
+
+  onAddAisleClicked() {
+    this.addingAisle$ = of(true);
   }
 }

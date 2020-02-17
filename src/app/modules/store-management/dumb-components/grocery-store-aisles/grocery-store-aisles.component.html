@@ -1,5 +1,12 @@
 <ion-card>
   <ion-card-content>
+    <ion-card *ngIf="addingAisle">
+      <ion-row>
+        <ion-input placeholder="Enter aisle name" id="newStoreAisleInput2" [(ngModel)]="newStoreAisle"></ion-input>
+        <ion-button size="small" (click)="onAddStoreAisleDoneClick()">Done</ion-button>
+        <ion-button size="small" (click)="onCancelAddStoreAisleClick()">Cancel</ion-button>
+      </ion-row>
+    </ion-card>
     <ion-list *ngIf="groceryStore?.aisles">
       <ion-item *ngFor="let groceryAisle of groceryStore.aisles">
         <ion-item-sliding>
@@ -13,20 +20,13 @@
         </ion-item-sliding>
     </ion-item>
     </ion-list>
-    <ion-label *ngIf="groceryStore?.aisles?.length === 0 && !enteringStoreAisle">No Aisles Defined</ion-label>
-    <ion-card *ngIf="enteringStoreAisle">
-      <ion-row>
-        <ion-input placeholder="Enter aisle name" id="newStoreAisleInput" [(ngModel)]="newStoreAisle"></ion-input>
-        <ion-button size="small" (click)="onAddStoreAisleDoneClick()">Done</ion-button>
-        <ion-button size="small" (click)="onCancelAddStoreAisleClick()">Cancel</ion-button>
-      </ion-row>
-    </ion-card>
+    <ion-label *ngIf="groceryStore?.aisles?.length === 0 && !addingAisle">No Aisles Defined</ion-label>
+<!--    <ion-card *ngIf="enteringStoreAisle">-->
+<!--      <ion-row>-->
+<!--        <ion-input placeholder="Enter aisle name" id="newStoreAisleInput" [(ngModel)]="newStoreAisle"></ion-input>-->
+<!--        <ion-button size="small" (click)="onAddStoreAisleDoneClick()">Done</ion-button>-->
+<!--        <ion-button size="small" (click)="onCancelAddStoreAisleClick()">Cancel</ion-button>-->
+<!--      </ion-row>-->
+<!--    </ion-card>-->
   </ion-card-content>
-  <ion-row class="cardfooter">
-    <ion-col>
-      <ion-button *ngIf="!enteringStoreAisle" shape="round" fill="outline" size="small" (click)="onAddStoreAisleClick()">Add
-        <ion-icon name="md-add-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-col>
-  </ion-row>
 </ion-card>
