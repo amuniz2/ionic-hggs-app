@@ -120,7 +120,7 @@ export class AppEffects {
         }),
         map(aisleDeleted => new GroceryStoreAisleDeleted( {
           groceryStoreId: payload.deleteStoreAisleRequest.groceryStoreId,
-          aisle: payload.deleteStoreAisleRequest.aisle })),
+          aisle: payload.deleteStoreAisleRequest.name })),
         catchError(error => [new DeleteStoreAisleFailed(error)])
       );
     }));
@@ -144,13 +144,15 @@ export class AppEffects {
   public deleteGroceryStoreSection$ = this.actions$.pipe(
     ofType(AppActionTypes.DeleteGroceryStoreSection),
     switchMap((payload) => {
-      return this.storeManagementService.deleteGroceryStoreSection(payload.deleteGroceryStoreSectionRequest).pipe(
+      return this.storeManagementService.deleteGroceryStoreSection({
+        groceryStoreId: payload.deleteGroceryStoreSectionRequest.groceryStoreId,
+        name: payload.deleteGroceryStoreSectionRequest.name}).pipe(
         tap((sectionDeleted) => {
           console.log(`sectionDeleted: ${sectionDeleted}`);
         }),
         map(sectionDeleted => new GroceryStoreSectionDeleted( {
           groceryStoreId: payload.deleteGroceryStoreSectionRequest.groceryStoreId,
-          section: payload.deleteGroceryStoreSectionRequest.section })),
+          section: payload.deleteGroceryStoreSectionRequest.name })),
         catchError(error => [new DeleteGroceryStoreSectionFailed(error)])
       );
     }));

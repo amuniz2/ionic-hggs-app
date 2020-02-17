@@ -1,13 +1,13 @@
 import {Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {GroceryStore} from '../model/grocery-store';
-import {StoreAisle} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles.component';
+// tslint:disable-next-line:max-line-length
+import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles-or-sections.component';
 import {IPantryDataService} from './IPantryDataService';
 import {
   DeleteGroceryStoreRequest,
   NewGroceryStoreRequest
 } from '../modules/store-management/dumb-components/store-list/store-list.component';
-import {StoreSection} from '../modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component';
 import {PantryItem} from '../model/pantry-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
@@ -31,10 +31,10 @@ export class FakePantryDataService implements IPantryDataService {
   private readonly pantryItemLocations: PantryItemLocation[];
   private readonly groceryStoreLocations: GroceryStoreLocation[];
 
-  deleteGroceryStoreAisle(deleteStoreAisleRequest: StoreAisle): Observable<boolean> {
+  deleteGroceryStoreAisle(deleteStoreAisleRequest: StoreAisleOrSection): Observable<boolean> {
       throw new Error('Method not implemented.');
   }
-  deleteGroceryStoreSection = (deleteStoreSectionRequest: StoreSection): Observable<boolean> => {
+  deleteGroceryStoreSection = (deleteStoreSectionRequest: StoreAisleOrSection): Observable<boolean> => {
       throw new Error('Method not implemented.');
   }
 
@@ -76,23 +76,23 @@ export class FakePantryDataService implements IPantryDataService {
     return of(true);
   }
 
-  public addGroceryStoreAisle(newStoreAisleRequest: StoreAisle): Observable<string> {
+  public addGroceryStoreAisle(newStoreAisleRequest: StoreAisleOrSection): Observable<string> {
     const groceryStore: GroceryStore = this.groceryStores.find((grocerStore) => grocerStore.id === newStoreAisleRequest.groceryStoreId);
     let aisleAdded = '';
     if (groceryStore != null) {
-      groceryStore.aisles.push(newStoreAisleRequest.aisle);
-      aisleAdded = newStoreAisleRequest.aisle;
+      groceryStore.aisles.push(newStoreAisleRequest.name);
+      aisleAdded = newStoreAisleRequest.name;
     }
     return of(aisleAdded);
   }
 
-  addGroceryStoreSection(newGroceryStoreSectionRequest: StoreSection): Observable<string> {
+  addGroceryStoreSection(newGroceryStoreSectionRequest: StoreAisleOrSection): Observable<string> {
     const groceryStore: GroceryStore = this.groceryStores.find(
       (grocerStore) => grocerStore.id === newGroceryStoreSectionRequest.groceryStoreId);
     let sectionAdded = '';
     if (groceryStore != null) {
-      groceryStore.sections.push(newGroceryStoreSectionRequest.section);
-      sectionAdded = newGroceryStoreSectionRequest.section;
+      groceryStore.sections.push(newGroceryStoreSectionRequest.name);
+      sectionAdded = newGroceryStoreSectionRequest.name;
     }
     return of(sectionAdded);
   }
@@ -165,7 +165,9 @@ export class FakePantryDataService implements IPantryDataService {
     return of(groceryStoreLocation);
   }
 
-  updatePantryItemLocation(itemId: number, originalLocationId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
+  updatePantryItemLocation(itemId: number,
+                           originalLocationId: number,
+                           newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
     let groceryStoreLocation = this.findGroceryStoreLocation(
       newLocation.storeId,
       newLocation.aisle,

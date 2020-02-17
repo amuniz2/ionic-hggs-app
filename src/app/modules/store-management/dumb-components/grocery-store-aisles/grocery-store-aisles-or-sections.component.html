@@ -1,26 +1,26 @@
 <ion-card>
   <ion-card-content>
-    <ion-card *ngIf="addingAisle">
+    <ion-card *ngIf="addingAisleOrSection">
       <ion-row>
-        <ion-input placeholder="Enter aisle name" id="newStoreAisleInput2" [(ngModel)]="newStoreAisle"></ion-input>
+        <ion-input placeholder="Enter aisle name" id="newStoreAisleInput2" [(ngModel)]="newStoreAisleOrSection"></ion-input>
         <ion-button size="small" (click)="onAddStoreAisleDoneClick()">Done</ion-button>
-        <ion-button size="small" (click)="onCancelAddStoreAisleClick()">Cancel</ion-button>
+        <ion-button size="small" (click)="onCancelAddStoreAisleOrSectionClick()">Cancel</ion-button>
       </ion-row>
     </ion-card>
     <ion-list *ngIf="groceryStore?.aisles">
-      <ion-item *ngFor="let groceryAisle of groceryStore.aisles">
+      <ion-item *ngFor="let groceryAisleOrSection of groceryStore[collectionName]">
         <ion-item-sliding>
           <ion-item>
-            <ion-label (click)="editStoreAisle(groceryAisle)">{{groceryAisle}}</ion-label>
+            <ion-label (click)="editStoreAisle(groceryAisleOrSection)">{{groceryAisleOrSection}}</ion-label>
           </ion-item>
           <ion-item-options side="end">
             <!--<ion-item-option (click)="edit(groceryStore)">Edit</ion-item-option>-->
-            <ion-item-option color="danger" (click)="remove(groceryAisle)">Delete</ion-item-option>
+            <ion-item-option color="danger" (click)="remove(groceryAisleOrSection)">Delete</ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
     </ion-item>
     </ion-list>
-    <ion-label *ngIf="groceryStore?.aisles?.length === 0 && !addingAisle">No Aisles Defined</ion-label>
+    <ion-label *ngIf="groceryStore[collectionName]?.length === 0 && !addingAisleOrSection">No Aisles Defined</ion-label>
 <!--    <ion-card *ngIf="enteringStoreAisle">-->
 <!--      <ion-row>-->
 <!--        <ion-input placeholder="Enter aisle name" id="newStoreAisleInput" [(ngModel)]="newStoreAisle"></ion-input>-->

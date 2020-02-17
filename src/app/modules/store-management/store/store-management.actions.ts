@@ -1,10 +1,7 @@
 import {Action} from '@ngrx/store';
-import {GroceryStore} from '../../../model/grocery-store';
 import {DeleteGroceryStoreRequest,
   NavigateToEditStoreRequest,
   NewGroceryStoreRequest} from '../dumb-components/store-list/store-list.component';
-import {StoreAisle} from '../dumb-components/grocery-store-aisles/grocery-store-aisles.component';
-import {StoreSection} from '../dumb-components/grocery-store-sections/grocery-store-sections.component';
 
 export enum StoreManagerActionTypes {
   CreateStore = '[Store Manager] Create',

@@ -4,8 +4,8 @@ import {
   DeleteGroceryStoreRequest,
   NewGroceryStoreRequest
 } from '../modules/store-management/dumb-components/store-list/store-list.component';
-import {StoreAisle} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles.component';
-import {StoreSection} from '../modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component';
+// tslint:disable-next-line:max-line-length
+import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles-or-sections.component';
 import {PantryItem} from '../model/pantry-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
@@ -16,9 +16,9 @@ export interface IPantryDataService {
 
   addGroceryStore(newStoreRequest: NewGroceryStoreRequest): Observable<GroceryStore>;
 
-  addGroceryStoreAisle(newStoreAisleRequest: StoreAisle): Observable<string>;
+  addGroceryStoreAisle(newStoreAisleRequest: StoreAisleOrSection): Observable<string>;
 
-  addGroceryStoreSection(newGroceryStoreSectionRequest: StoreSection): Observable<string>;
+  addGroceryStoreSection(newGroceryStoreSectionRequest: StoreAisleOrSection): Observable<string>;
 
   addPantryItem(newPantryItemRequest: PantryItem): Observable<PantryItem>;
 
@@ -36,9 +36,9 @@ export interface IPantryDataService {
 
   getGroceryStoreSections(groceryStoreId: number): Observable<string[]>;
 
-  deleteGroceryStoreAisle(deleteStoreAisleRequest: StoreAisle): Observable<boolean>;
+  deleteGroceryStoreAisle(deleteStoreAisleRequest: StoreAisleOrSection): Observable<boolean>;
 
-  deleteGroceryStoreSection(deleteStoreSectionRequest: StoreSection): Observable<boolean>;
+  deleteGroceryStoreSection(deleteStoreSectionRequest: StoreAisleOrSection): Observable<boolean>;
 
   getPantryItem(id: number): Observable<PantryItem>;
 

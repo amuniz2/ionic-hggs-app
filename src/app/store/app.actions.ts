@@ -1,9 +1,8 @@
 import {Action} from '@ngrx/store';
 import {GroceryStore} from '../model/grocery-store';
-import {StoreAisle} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles.component';
-import {StoreSection} from '../modules/store-management/dumb-components/grocery-store-sections/grocery-store-sections.component';
+// tslint:disable-next-line:max-line-length
+import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles-or-sections.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
-import {StoreManagerActionTypes} from '../modules/store-management/store/store-management.actions';
 
 export const APP_READY = '[App] Ready';
 
@@ -139,31 +138,31 @@ export class AddGroceryStoreSectionFailed implements Action {
 }
 export class AddStoreAisle implements Action {
   readonly type = AppActionTypes.AddStoreAisle;
-  constructor(public newStoreAisleRequest: StoreAisle) {
+  constructor(public newStoreAisleRequest: StoreAisleOrSection) {
   }
 }
 
 export class DeleteStoreAisle implements Action {
   readonly type = AppActionTypes.DeleteStoreAisle;
-  constructor(public deleteStoreAisleRequest: StoreAisle) {
+  constructor(public deleteStoreAisleRequest: StoreAisleOrSection) {
   }
 }
 
 export class AddGroceryStoreSection implements Action {
   readonly type = AppActionTypes.AddGroceryStoreSection;
-  constructor(public newGroceryStoreSectionRequest: StoreSection) {
+  constructor(public newGroceryStoreSectionRequest: StoreAisleOrSection) {
   }
 }
 export class RemoveStoreAisle implements Action {
   readonly type = AppActionTypes.DeleteStoreAisle;
-  constructor(public deleteStoreAisleRequest: StoreAisle) {
+  constructor(public deleteStoreAisleRequest: StoreAisleOrSection) {
   }
 }
 
 export class DeleteGroceryStoreSection implements Action {
   readonly type = AppActionTypes.DeleteGroceryStoreSection;
 
-  constructor(public deleteGroceryStoreSectionRequest: StoreSection) {
+  constructor(public deleteGroceryStoreSectionRequest: StoreAisleOrSection) {
   }
 }
 export class DeleteStoreAisleFailed implements Action {

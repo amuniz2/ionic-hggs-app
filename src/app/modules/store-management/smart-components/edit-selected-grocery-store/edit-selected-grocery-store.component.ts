@@ -7,8 +7,10 @@ import {select, Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import * as fromActions from '../../store/store-management.actions';
 import * as fromAppActions from '../../../../store/app.actions';
-import {StoreAisle} from '../../dumb-components/grocery-store-aisles/grocery-store-aisles.component';
-import {StoreSection} from '../../dumb-components/grocery-store-sections/grocery-store-sections.component';
+import {
+  StoreAisleOrSection,
+  StoreAisleOrSectionActionRequest
+} from '../../dumb-components/grocery-store-aisles/grocery-store-aisles-or-sections.component';
 
 @Component({
   selector: 'app-edit-selected-grocery-store',
@@ -33,24 +35,28 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
     this.store.dispatch(new fromActions.NavigatedToStoreDetailsPage(this.groceryStoreId));
     // this.store.dispatch(new fromActions.NavigatedToStoreDetailsPage())
   }
-  onNotifyNewStoreAisleRequest($event: StoreAisle) {
-    this.store.dispatch(new fromAppActions.AddStoreAisle($event));
+  onNotifyNewStoreAisleRequest($event: StoreAisleOrSectionActionRequest) {
+    this.store.dispatch(new fromAppActions.AddStoreAisle({
+      name: $event.aisleOrSectionName,
+      groceryStoreId: $event.groceryStoreId}));
 }
 
-  onDeleteStoreAisleRequest($event: StoreAisle) {
-    console.log(`dispatching delete store aisle event: ${$event.aisle}`);
+  onDeleteStoreAisleRequest($event: StoreAisleOrSection) {
+    console.log(`dispatching delete store aisle event: ${$event.name}`);
     this.store.dispatch(new fromAppActions.DeleteStoreAisle($event));
   }
   onNotifyExpandAisles($event: number) {
     this.store.dispatch(new fromAppActions.LoadGroceryStoreAisles($event));
   }
 
-  onNotifyNewGrocerStoreSectionRequest($event: StoreSection) {
-    this.store.dispatch(new fromAppActions.AddGroceryStoreSection($event));
+  onNotifyNewGrocerStoreSectionRequest($event: StoreAisleOrSectionActionRequest) {
+    this.store.dispatch(new fromAppActions.AddGroceryStoreSection({
+      groceryStoreId: $event.groceryStoreId,
+      name: $event.aisleOrSectionName}));
   }
 
-  onDeleteGroceryStoreSectionRequest($event: StoreSection) {
-    console.log(`dispatching delete store aisle event: ${$event.section}`);
+  onDeleteGroceryStoreSectionRequest($event: StoreAisleOrSection) {
+    console.log(`dispatching delete store aisle event: ${$event.name}`);
     this.store.dispatch(new fromAppActions.DeleteGroceryStoreSection($event));
   }
   onNotifyExpandSections($event: number) {

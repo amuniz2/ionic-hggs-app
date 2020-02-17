@@ -11,8 +11,7 @@ import {CommonModule} from '@angular/common';
 import {StoreManagementRoutes} from './store-management.routes';
 import {FormsModule} from '@angular/forms';
 import { EditSelectedGroceryStoreComponent } from './smart-components/edit-selected-grocery-store/edit-selected-grocery-store.component';
-import { GroceryStoreAislesComponent } from './dumb-components/grocery-store-aisles/grocery-store-aisles.component';
-import { GroceryStoreSectionsComponent } from './dumb-components/grocery-store-sections/grocery-store-sections.component';
+import { GroceryStoreAislesOrSectionsComponent } from './dumb-components/grocery-store-aisles/grocery-store-aisles-or-sections.component';
 import { GroceryStoreItemsComponent } from './dumb-components/grocery-store-items/grocery-store-items.component';
 import { EditGroceryStoreComponent } from './dumb-components/edit-grocery-store/edit-grocery-store.component';
 import {AddGroceryStoreComponent} from './dumb-components/add-grocery-store/add-grocery-store';
@@ -33,8 +32,7 @@ import {AppEffects} from '../../store/app.effects';
     StoreInventoryManagerPageComponent,
     StoreListComponent,
     EditSelectedGroceryStoreComponent,
-    GroceryStoreAislesComponent,
-    GroceryStoreSectionsComponent,
+    GroceryStoreAislesOrSectionsComponent,
     GroceryStoreItemsComponent,
     EditGroceryStoreComponent,
     AddGroceryStoreComponent
