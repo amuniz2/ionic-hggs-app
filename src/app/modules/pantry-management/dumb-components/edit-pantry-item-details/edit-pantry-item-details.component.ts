@@ -1,9 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
-import {of} from 'rxjs';
-import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
+import {Observable, of} from 'rxjs';
+import {
+  AddButtonClickedEvent,
+  CollapsedStatusChangedEvent,
+  PageSection
+} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
 import {EditItemLocationRequest, NewItemLocationRequest} from '../pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
+import {UiCrudAction} from '../../../../ui-crud-actions';
 
 @Component({
   selector: 'app-edit-pantry-item-details',
@@ -75,14 +80,15 @@ export class EditPantryItemDetailsComponent implements OnInit {
     // }
   }
 
-  onNotifyNewLocationRequest($event) {
-    this.notifyAddPantryItemLocationRequest.emit($event);
-  }
-
   onNotifyEditLocationRequest($event) {
     this.notifyEditPantryItemLocationRequest.emit($event);
   }
 
   onNotifyDeleteLocationRequest($event) {
   }
+
+  onAddLocationClicked() {
+    this.notifyAddPantryItemLocationRequest.emit({ pantryItem: this.pantryItem, action: UiCrudAction.RequestCreate });
+  }
+
 }

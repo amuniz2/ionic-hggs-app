@@ -1,8 +1,5 @@
-  <ion-list *ngFor="let loc of groceryLocations">
+<ion-list *ngFor="let loc of groceryLocations">
     <ion-item>
       <ion-label (click)="editLocation(loc)">{{getLocationDescription(loc)}}</ion-label>
     </ion-item>
-  </ion-list>
-  <ion-button shape="round" fill="outline" size="small" (click)="onAddPantryItemLocation()">Add
-    <ion-icon name="md-add-circle-outline"></ion-icon>
-  </ion-button>
+</ion-list>

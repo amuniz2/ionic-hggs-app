@@ -2,15 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
+import {UiCrudAction} from '../../../../ui-crud-actions';
 
-export enum Action {
-  RequestCreate = 1,
-  Create,
-  Delete ,
-  RequestUpdate,
-  Update,
-  Cancel
-}
 export interface StoreAisleOrSection {
   groceryStoreId: number;
   name: string;
@@ -19,7 +12,7 @@ export interface StoreAisleOrSection {
 export interface StoreAisleOrSectionActionRequest {
   groceryStoreId: number;
   aisleOrSectionName: string;
-  action: Action;
+  action: UiCrudAction;
 }
 
 @Component({
@@ -53,7 +46,7 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
     this.notifyNewStoreAisleOrSectionRequested.emit({
       groceryStoreId: this.groceryStore.id,
       aisleOrSectionName: null,
-      action: Action.RequestCreate});
+      action: UiCrudAction.RequestCreate});
     this.newStoreAisleOrSection = '';
   }
 
@@ -61,7 +54,7 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
     this.notifyNewStoreAisleOrSectionRequested.emit({
       groceryStoreId: this.groceryStore.id,
       aisleOrSectionName: this.newStoreAisleOrSection,
-      action: Action.Cancel});
+      action: UiCrudAction.Cancel});
     this.newStoreAisleOrSection = '';
   }
 
@@ -69,7 +62,7 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
     this.notifyNewStoreAisleOrSectionRequested.emit({
       groceryStoreId: this.groceryStore.id,
       aisleOrSectionName: this.newStoreAisleOrSection,
-      action: Action.Create});
+      action: UiCrudAction.Create});
     this.newStoreAisleOrSection = '';
   }
 

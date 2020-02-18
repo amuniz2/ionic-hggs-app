@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
-import {Action,
-  StoreAisleOrSection,
+import {StoreAisleOrSection,
   StoreAisleOrSectionActionRequest} from '../grocery-store-aisles/grocery-store-aisles-or-sections.component';
 import {Observable, of} from 'rxjs';
 import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
+import {UiCrudAction} from '../../../../ui-crud-actions';
 
 @Component({
   selector: 'app-edit-grocery-store',
@@ -55,11 +55,11 @@ export class EditGroceryStoreComponent implements OnInit {
   }
 
   onNotifyNewStoreAisleRequest($event: StoreAisleOrSectionActionRequest) {
-    if ($event.action === Action.RequestCreate) {
+    if ($event.action === UiCrudAction.RequestCreate) {
       this.addingAisle$ = of(true);
     } else {
       this.addingAisle$ = of(false);
-      if (($event.action === Action.Create) && $event.aisleOrSectionName) {
+      if (($event.action === UiCrudAction.Create) && $event.aisleOrSectionName) {
         this.notifyNewStoreAisleRequested.emit($event);
       }
     }
@@ -70,11 +70,11 @@ export class EditGroceryStoreComponent implements OnInit {
   }
 
   onNotifyNewStoreGrocerySectionRequest($event: StoreAisleOrSectionActionRequest) {
-    if ($event.action === Action.RequestCreate) {
+    if ($event.action === UiCrudAction.RequestCreate) {
       this.addingSection$ = of(true);
     } else {
       this.addingSection$ = of(false);
-      if (($event.action === Action.Create) && $event.aisleOrSectionName) {
+      if (($event.action === UiCrudAction.Create) && $event.aisleOrSectionName) {
         this.notifyNewGroceryStoreSectionRequested.emit($event);
       }
     }

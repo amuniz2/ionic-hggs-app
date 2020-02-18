@@ -1,9 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
+import {UiCrudAction} from '../../../../ui-crud-actions';
 
 export interface NewItemLocationRequest {
   pantryItem: PantryItem;
+  action: UiCrudAction;
 }
 
 export interface EditItemLocationRequest {
@@ -33,10 +35,6 @@ export class PantryItemLocationsComponent implements OnInit {
   notifyEditPantryItemLocationRequested: EventEmitter<EditItemLocationRequest> = new EventEmitter<EditItemLocationRequest>();
 
   ngOnInit() {
-  }
-
-  onAddPantryItemLocation() {
-    this.notifyNewPantryItemLocationRequested.emit({ pantryItem: this.pantryItem });
   }
 
   getLocationDescription(loc: GroceryStoreLocation): string {
