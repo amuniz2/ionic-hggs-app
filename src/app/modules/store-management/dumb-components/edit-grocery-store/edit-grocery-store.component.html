@@ -2,7 +2,7 @@
   <ion-back-button slot="start"></ion-back-button>
   <ion-title>{{ groceryStore.name}}</ion-title>
 </ion-toolbar>
-<ion-content>
+<ion-card>
   <app-hggs-accordion [sectionName]="aislesSection.label" [description]="" (change)="captureName($event)" (addToList)="onAddAisleClicked()">
   </app-hggs-accordion>
   <app-grocery-store-aisles-or-sections *ngIf="aislesSection.isOpen$ | async"
@@ -25,4 +25,4 @@
 <!--                              [groceryStore]="groceryStore"-->
 <!--                            (notifyNewGroceryStoreSectionRequested)="onNotifyNewStoreGrocerySectionRequest($event)"-->
 <!--                            (notifyDeleteGroceryStoreSectionRequested)="onNotifyDeleteGroceryStoreSectionRequest($event)"></app-grocery-store-sections>-->
-</ion-content>
+</ion-card>
