@@ -1,6 +1,10 @@
 import {Action} from '@ngrx/store';
 import {PantryItem} from '../../../model/pantry-item';
-import {DeletePantryItemRequest, NavigateToEditPantryItemRequest} from '../dumb-components/pantry-item-list/pantry-item-list.component';
+import {
+  CreatePantryItemRequest,
+  DeletePantryItemRequest,
+  NavigateToEditPantryItemRequest
+} from '../dumb-components/pantry-item-list/pantry-item-list.component';
 import {EditItemLocationRequest, NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 import {NewItemLocation} from '../smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
@@ -11,7 +15,7 @@ export enum PantryActionTypes {
   PantryLoadFailed = '[Pantry] Load Failed',
   SelectGroceryItem = '[Grocery Item] Select',
   UpdateGroceryItem = '[Grocery Item] Update',
-  CreateItem = '[Pantry Item] Create',
+  CreatePantryItem = '[Pantry Item] Create',
   CreateItemFailed = '[Pantry Item] Create Failed',
   DeletePantryItemFailed = '[Pantry Item] Delete Failed',
   DeletePantryItem = '[Pantry item] Delete',
@@ -48,9 +52,9 @@ export class AddPantryItemLocation implements Action {
 }
 
 export class CreatePantryItem implements Action {
-  readonly type = PantryActionTypes.CreateItem;
+  readonly type = PantryActionTypes.CreatePantryItem;
 
-  constructor(public pantryItemRequest: NavigateToEditPantryItemRequest) {}
+  constructor(public pantryItemRequest: CreatePantryItemRequest) {}
 }
 
 export class EditPantryItemLocationRequest implements Action {
@@ -68,7 +72,7 @@ export class NavigateToPantryItemPage implements Action {
 export class CreateItemFailed implements Action {
   readonly type = PantryActionTypes.CreateItemFailed;
 
-  constructor(public item: PantryItem, public error: Error) {}
+  constructor(public name: string, public error: Error) {}
 }
 
 export class DeletePantryItemFailed implements Action {

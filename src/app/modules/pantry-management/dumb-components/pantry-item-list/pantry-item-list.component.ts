@@ -9,6 +9,10 @@ export interface DeletePantryItemRequest {
   id: number;
 }
 
+export interface CreatePantryItemRequest {
+  name: string;
+}
+
 export interface NavigateToEditPantryItemRequest {
   id: number;
   newItem: boolean;

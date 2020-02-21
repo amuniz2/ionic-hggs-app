@@ -140,7 +140,10 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   updatePantryItem(savePantryItemRequest: PantryItem): Observable<boolean> {
-    return undefined;
+    const pantryItemToUpdate = this.findPantryItem(savePantryItemRequest.id);
+    pantryItemToUpdate.description = savePantryItemRequest.description;
+    pantryItemToUpdate.name = savePantryItemRequest.name;
+    return of(true);
   }
 
   addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import * as fromActions from '../../../pantry-management/store/pantry-management.actions';
 import * as fromSelectors from '../../store/pantry-management.selectors';
 // tslint:disable-next-line:max-line-length
 import {
+  CreatePantryItemRequest,
   DeletePantryItemRequest,
   NavigateToEditPantryItemRequest
 } from '../../../pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
@@ -22,6 +23,7 @@ export class PantryInventoryManagerComponent implements OnInit {
   pantryItems$: Observable<PantryItem[]>;
   pantryItemsLoading$: Observable<boolean>;
   error$: Observable<Error>;
+  addingPantryItem$: Observable<boolean>;
 
   constructor(private store: Store<AppState>) {
     this.title = 'Manage pantry items from page component';
@@ -43,7 +45,15 @@ export class PantryInventoryManagerComponent implements OnInit {
   }
 
   onAddStoreClick() {
-    console.log('dispatching createPantryItem event');
-    this.store.dispatch(new fromActions.CreatePantryItem({newItem: true, id: 0}));
+    this.addingPantryItem$ = of(true);
+    // console.log('dispatching createPantryItem event');
+    // this.store.dispatch(new fromActions.CreatePantryItem({newItem: true, id: 0}));
+  }
+
+  onCreateItemRequest($event: CreatePantryItemRequest) {
+    this.addingPantryItem$ = of(false);
+    if ($event.name) {
+      this.store.dispatch(new fromActions.CreatePantryItem($event));
+    }
   }
 }

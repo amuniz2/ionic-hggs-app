@@ -15,6 +15,7 @@ import {EditPantryItemComponent} from './smart-components/edit-pantry-item/edit-
 import { EditPantryItemDetailsComponent } from './dumb-components/edit-pantry-item-details/edit-pantry-item-details.component';
 import { PantryItemLocationsComponent } from './dumb-components/pantry-item-locations/pantry-item-locations.component';
 import { EditPantryItemLocationComponent } from './smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
+import { AddPantryItemComponent } from './dumb-components/add-pantry-item/add-pantry-item.component';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { EditPantryItemLocationComponent } from './smart-components/edit-pantry-
     EditPantryItemComponent,
     EditPantryItemDetailsComponent,
     PantryItemLocationsComponent,
-    EditPantryItemLocationComponent
+    EditPantryItemLocationComponent,
+    AddPantryItemComponent
   ],
   providers: [
   ]

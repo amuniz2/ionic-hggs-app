@@ -13,4 +13,7 @@
                         (notifyDeletePantryItemRequested)="onDeletePantryItemRequest($event)"
                         [error] = "(error$ | async)">
   </app-pantry-item-list>
+  <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"
+                       (notifyNewPantryItemRequested)="onCreateItemRequest($event)">
+  </app-add-pantry-item>
 </ion-content>

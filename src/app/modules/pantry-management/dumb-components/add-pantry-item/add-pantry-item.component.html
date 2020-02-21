@@ -1,0 +1,7 @@
+<ion-card *ngIf="addingPantryItem">
+  <ion-row>
+    <ion-input placeholder="Enter pantry item name" id="newItemNameInput" [(ngModel)]="newPantryItemName"></ion-input>
+    <ion-button size="small" (click)="onAddPantryItemDoneClick()">Done</ion-button>
+    <ion-button size="small" (click)="onCancelAddPantryItemClick()">Cancel</ion-button>
+  </ion-row>
+</ion-card>

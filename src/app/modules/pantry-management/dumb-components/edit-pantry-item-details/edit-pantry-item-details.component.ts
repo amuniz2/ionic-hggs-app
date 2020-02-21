@@ -18,9 +18,6 @@ import {UiCrudAction} from '../../../../ui-crud-actions';
 export class EditPantryItemDetailsComponent implements OnInit {
 
   @Input()
-  isNewItem: boolean;
-
-  @Input()
   pantryItem: PantryItem;
 
   @Input()
@@ -58,19 +55,16 @@ export class EditPantryItemDetailsComponent implements OnInit {
     }
   }
 
-  onSaveClick() {
-    if (!this.isNewItem) {
-      // add new item
-      this.notifySavePantryItemRequested.emit({
-        name: this.pantryItemName,
-        description: this.pantryItemDescription,
-        id: this.pantryItem.id,
-        locations: this.pantryItem.locations
-      });
+  onNameEnteredOrChanged() {
+    if (this.pantryItem.id != null && this.pantryItem.id > 0) {
+      this.updateItem();
     } else {
-      // update existing item
       this.notifyAddPantryItemRequested.emit({name: this.pantryItemName, description: this.pantryItemDescription, id: 0, locations: []});
     }
+  }
+
+  onPropertyChange() {
+    this.updateItem();
   }
 
   toggleLocationsSection($event: CollapsedStatusChangedEvent) {
@@ -91,4 +85,12 @@ export class EditPantryItemDetailsComponent implements OnInit {
     this.notifyAddPantryItemLocationRequest.emit({ pantryItem: this.pantryItem, action: UiCrudAction.RequestCreate });
   }
 
+  private updateItem() {
+    this.notifySavePantryItemRequested.emit({
+      name: this.pantryItemName,
+      description: this.pantryItemDescription,
+      id: this.pantryItem.id,
+      locations: this.pantryItem.locations
+    });
+  }
 }

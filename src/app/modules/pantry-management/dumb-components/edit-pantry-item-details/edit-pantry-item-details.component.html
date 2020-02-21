@@ -1,33 +1,33 @@
-<ion-header *ngIf="isNewItem">
-  <ion-title>New Item</ion-title>
-<!--  <ng-template #existingItem>-->
-<!--    <ion-title>{{ pantryItem.name}}</ion-title>-->
-<!--  </ng-template>-->
-</ion-header>
+<!--<ion-header *ngIf="isNewItem">-->
+<!--  <ion-title>New Item</ion-title>-->
+<!--&lt;!&ndash;  <ng-template #existingItem>&ndash;&gt;-->
+<!--&lt;!&ndash;    <ion-title>{{ pantryItem.name}}</ion-title>&ndash;&gt;-->
+<!--&lt;!&ndash;  </ng-template>&ndash;&gt;-->
+<!--</ion-header>-->
 <ion-content>
-  <ion-input *ngIf="isNewItem; else existingItem" placeholder="Enter name" id="newPantryItemNameInput" [(ngModel)]="pantryItemName"></ion-input>
+  <ion-input *ngIf="!pantryItem?.id; else existingItem" placeholder="Enter name" id="newPantryItemNameInput" [(ngModel)]="pantryItemName"></ion-input>
   <ng-template #existingItem>
-    <ion-input id="pantryItemNameInput" [(ngModel)]="pantryItemName"></ion-input>
+    <ion-input id="pantryItemNameInput" [(ngModel)]="pantryItemName" (ionBlur)="onNameEnteredOrChanged()"></ion-input>
+    <ion-input placeholder="Enter description" id="newPantryItemDescriptionInput" (ionBlur)="onPropertyChange()" [(ngModel)]="pantryItemDescription"></ion-input>
+    <ion-card>
+      <app-hggs-accordion [sectionName]="locationsSection.label"
+                          [description]=""
+                          (change)="toggleLocationsSection($event)"
+                          (addToList)="onAddLocationClicked()">
+      </app-hggs-accordion>
+      <app-pantry-item-locations *ngIf="locationsSection.isOpen$ | async"
+                                 [pantryItem]="pantryItem"
+                                 [groceryLocations]="pantryItemLocations"
+                                 (notifyEditPantryItemLocationRequested)="onNotifyEditLocationRequest($event)"
+                                 (notifyDeletePantryItemLocationRequested)="onNotifyDeleteLocationRequest($event)"></app-pantry-item-locations>
+      <ion-textarea *ngIf="error">{{error.message}}</ion-textarea>
+    </ion-card>
   </ng-template>
 
-  <ion-input placeholder="Enter description" id="newPantryItemDescriptionInput" [(ngModel)]="pantryItemDescription"></ion-input>
-   <ion-card>
-  <app-hggs-accordion [sectionName]="locationsSection.label"
-                      [description]=""
-                      (change)="toggleLocationsSection($event)"
-                      (addToList)="onAddLocationClicked()">
-  </app-hggs-accordion>
-  <app-pantry-item-locations *ngIf="locationsSection.isOpen$ | async"
-                            [pantryItem]="pantryItem"
-                             [groceryLocations]="pantryItemLocations"
-                             (notifyEditPantryItemLocationRequested)="onNotifyEditLocationRequest($event)"
-                            (notifyDeletePantryItemLocationRequested)="onNotifyDeleteLocationRequest($event)"></app-pantry-item-locations>
-  <ion-textarea *ngIf="error">{{error.message}}</ion-textarea>
-   </ion-card>
-  <ion-footer>
-    <ion-button shape="round" fill="outline" (click)="onSaveClick()">Save
-      <!--<ion-icon slot="start" md="ios-add-circle-outline" ></ion-icon>-->
-      <!--<app-new-store></app-new-store>-->
-    </ion-button>
-  </ion-footer>
+<!--  <ion-footer>-->
+<!--    <ion-button shape="round" fill="outline" (click)="onNameEnteredOrChanged()">Save-->
+<!--      &lt;!&ndash;<ion-icon slot="start" md="ios-add-circle-outline" ></ion-icon>&ndash;&gt;-->
+<!--      &lt;!&ndash;<app-new-store></app-new-store>&ndash;&gt;-->
+<!--    </ion-button>-->
+<!--  </ion-footer>-->
 </ion-content>
