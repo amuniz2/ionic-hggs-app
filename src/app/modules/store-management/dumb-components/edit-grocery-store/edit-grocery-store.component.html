@@ -3,7 +3,7 @@
   <ion-title>{{ groceryStore.name}}</ion-title>
 </ion-toolbar>
 <ion-card>
-  <app-hggs-accordion [sectionName]="aislesSection.label" [description]="" (change)="captureName($event)" (addToList)="onAddAisleClicked()">
+  <app-hggs-accordion [sectionName]="aislesSection.label" [description]="" (change)="toggleAislesExpandState($event)" (addToList)="onAddAisleClicked()">
   </app-hggs-accordion>
   <app-grocery-store-aisles-or-sections *ngIf="aislesSection.isOpen$ | async"
                                         [addingAisleOrSection]="(addingAisle$ | async)"
@@ -12,7 +12,7 @@
                                         (notifyDeleteStoreAisleOrSectionRequested)="onNotifyDeleteStoreAisleRequest($event)"
                                         [collectionName]="'aisles'">
   </app-grocery-store-aisles-or-sections>
-  <app-hggs-accordion [sectionName]="grocerySectionsSection.label" [description]="" (change)="captureName($event)" (addToList)="onAddSectionClicked()">
+  <app-hggs-accordion [sectionName]="grocerySectionsSection.label" [description]="" (change)="toggleGroceryStoreSectionsExpandState($event)" (addToList)="onAddSectionClicked()">
   </app-hggs-accordion>
   <app-grocery-store-aisles-or-sections *ngIf="grocerySectionsSection.isOpen$ | async"
                                         [addingAisleOrSection]="(addingSection$ | async)"
@@ -21,8 +21,4 @@
                                         (notifyDeleteStoreAisleOrSectionRequested)="onNotifyDeleteGroceryStoreSectionRequest($event)"
                                         [collectionName]="'sections'">
   </app-grocery-store-aisles-or-sections>
-<!--  <app-grocery-store-sections *ngIf="grocerySectionsSection.isOpen$ | async"-->
-<!--                              [groceryStore]="groceryStore"-->
-<!--                            (notifyNewGroceryStoreSectionRequested)="onNotifyNewStoreGrocerySectionRequest($event)"-->
-<!--                            (notifyDeleteGroceryStoreSectionRequested)="onNotifyDeleteGroceryStoreSectionRequest($event)"></app-grocery-store-sections>-->
 </ion-card>

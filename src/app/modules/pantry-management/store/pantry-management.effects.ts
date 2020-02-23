@@ -105,8 +105,8 @@ export class PantryEffects {
   //   }),
   // );
 
-  @Effect({ dispatch: false })
-  public navigateToNewPantryItemDetailsPage$ = this.actions$.pipe(
+  @Effect()
+  public createPantryItem$ = this.actions$.pipe(
     ofType(PantryActionTypes.CreatePantryItem),
     switchMap((payload) => {
       return this.storeManagementService.addPantryItem({

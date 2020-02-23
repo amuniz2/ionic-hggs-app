@@ -50,7 +50,7 @@ export class PantryInventoryManagerComponent implements OnInit {
     // this.store.dispatch(new fromActions.CreatePantryItem({newItem: true, id: 0}));
   }
 
-  onCreateItemRequest($event: CreatePantryItemRequest) {
+  onCreateItem($event: CreatePantryItemRequest) {
     this.addingPantryItem$ = of(false);
     if ($event.name) {
       this.store.dispatch(new fromActions.CreatePantryItem($event));

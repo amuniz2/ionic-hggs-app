@@ -5,6 +5,9 @@ import {StoreAisleOrSection,
 import {Observable, of} from 'rxjs';
 import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
 import {UiCrudAction} from '../../../../ui-crud-actions';
+export interface AccordionSections {
+  [sectioName: string]: PageSection;
+}
 
 @Component({
   selector: 'app-edit-grocery-store',
@@ -15,6 +18,8 @@ export class EditGroceryStoreComponent implements OnInit {
 
   @Input()
   groceryAislesSectionIsOpen: boolean;
+
+  private sections: AccordionSections;
 
   aislesSection: PageSection = {
     label: 'Aisles',
@@ -49,7 +54,8 @@ export class EditGroceryStoreComponent implements OnInit {
   @Output()
   notifyExpandSections: EventEmitter<number> = new EventEmitter();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
@@ -83,17 +89,17 @@ export class EditGroceryStoreComponent implements OnInit {
   onNotifyDeleteGroceryStoreSectionRequest($event: StoreAisleOrSection) {
     this.notifyDeleteGroceryStoreSectionRequested.emit($event);
   }
-  public captureName($event: CollapsedStatusChangedEvent) {
-    if ($event.sectionName === this.aislesSection.label) {
+  public toggleAislesExpandState($event: CollapsedStatusChangedEvent) {
       this.aislesSection.isOpen$ = of($event.isOpen);
       if ($event.isOpen && this.groceryStore.aisles.length === 0) {
         this.notifyExpandAisles.emit(this.groceryStore.id);
       }
-    } else if ($event.sectionName === this.grocerySectionsSection.label) {
-      this.grocerySectionsSection.isOpen$ = of($event.isOpen);
-      if ($event.isOpen && this.groceryStore.sections.length === 0) {
-        this.notifyExpandSections.emit(this.groceryStore.id);
-      }
+  }
+
+  public toggleGroceryStoreSectionsExpandState($event: CollapsedStatusChangedEvent) {
+    this.grocerySectionsSection.isOpen$ = of($event.isOpen);
+    if ($event.isOpen && this.groceryStore.sections.length === 0) {
+      this.notifyExpandSections.emit(this.groceryStore.id);
     }
   }
 

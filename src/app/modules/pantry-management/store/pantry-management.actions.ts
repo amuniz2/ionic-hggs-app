@@ -54,7 +54,10 @@ export class AddPantryItemLocation implements Action {
 export class CreatePantryItem implements Action {
   readonly type = PantryActionTypes.CreatePantryItem;
 
-  constructor(public pantryItemRequest: CreatePantryItemRequest) {}
+  constructor(public pantryItemRequest: CreatePantryItemRequest) {
+    console.log('Creating CreatePantryItem action.');
+    console.log(pantryItemRequest);
+  }
 }
 
 export class EditPantryItemLocationRequest implements Action {
