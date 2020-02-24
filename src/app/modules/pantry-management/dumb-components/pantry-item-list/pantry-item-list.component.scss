@@ -1,0 +1,20 @@
+ion-item {
+  ion-row {
+    ion-col {
+      margin: 0;
+      ion-label {
+        text-align: left;
+      }
+      ion-checkbox {
+        margin: 0;
+        text-align: right;
+      }
+    }
+  }
+  //ion-checkbox {
+  //  position: relative;
+  //  top: .2em;
+  //  right: .2em;
+  //}
+
+}

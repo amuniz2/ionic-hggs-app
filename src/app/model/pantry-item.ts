@@ -6,4 +6,5 @@ export interface PantryItem {
   name: string;
   description: string;
   locations: GroceryStoreLocation[];
+  need: boolean;
 }

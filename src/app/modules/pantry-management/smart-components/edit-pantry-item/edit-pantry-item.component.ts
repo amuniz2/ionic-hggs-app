@@ -32,6 +32,7 @@ export class EditPantryItemComponent implements OnInit {
         name: '',
         description: '',
         locations: [],
+        need: true,
       });
     } else {
       this.store.dispatch(new NavigatedToPantryItemPage(this.pantryItemId));

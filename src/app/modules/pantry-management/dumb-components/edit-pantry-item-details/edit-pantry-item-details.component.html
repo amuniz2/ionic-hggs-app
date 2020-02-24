@@ -9,6 +9,8 @@
   <ng-template #existingItem>
     <ion-input id="pantryItemNameInput" [(ngModel)]="pantryItemName" (ionBlur)="onNameEnteredOrChanged()"></ion-input>
     <ion-input placeholder="Enter description" id="newPantryItemDescriptionInput" (ionBlur)="onPropertyChange()" [(ngModel)]="pantryItemDescription"></ion-input>
+<!--    <ion-checkbox checked="{{pantryItem.need}}"></ion-checkbox>-->
+<!--    <ion-label>Need</ion-label>-->
     <ion-card>
       <app-hggs-accordion [sectionName]="locationsSection.label"
                           [description]=""

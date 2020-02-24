@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
-import {Observable, of} from 'rxjs';
+import {of} from 'rxjs';
 import {
-  AddButtonClickedEvent,
   CollapsedStatusChangedEvent,
   PageSection
 } from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
@@ -59,7 +58,12 @@ export class EditPantryItemDetailsComponent implements OnInit {
     if (this.pantryItem.id != null && this.pantryItem.id > 0) {
       this.updateItem();
     } else {
-      this.notifyAddPantryItemRequested.emit({name: this.pantryItemName, description: this.pantryItemDescription, id: 0, locations: []});
+      this.notifyAddPantryItemRequested.emit({
+        name: this.pantryItemName,
+        description: this.pantryItemDescription,
+        id: 0,
+        locations: [],
+        need: this.pantryItem.need});
     }
   }
 
@@ -90,7 +94,8 @@ export class EditPantryItemDetailsComponent implements OnInit {
       name: this.pantryItemName,
       description: this.pantryItemDescription,
       id: this.pantryItem.id,
-      locations: this.pantryItem.locations
+      locations: this.pantryItem.locations,
+      need: this.pantryItem.need,
     });
   }
 }

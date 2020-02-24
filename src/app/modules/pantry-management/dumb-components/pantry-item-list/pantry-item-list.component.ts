@@ -26,6 +26,9 @@ export class PantryItemListComponent implements OnInit {
   @Output()
   notifyDeletePantryItemRequested: EventEmitter<DeletePantryItemRequest> = new EventEmitter();
 
+  @Output()
+  notifySavePantryItemRequested: EventEmitter<PantryItem> = new EventEmitter();
+
   @Input()
   pantryItemsLoading: boolean;
 
@@ -47,4 +50,13 @@ export class PantryItemListComponent implements OnInit {
   remove(item: PantryItem) {
     console.log(`emitting notification that pantry item delete is requested ${item.id}`);
     this.notifyDeletePantryItemRequested.emit({ id: item.id});
-  }}
+  }
+
+  itemClicked($event, pantryItem: PantryItem) {
+    console.log($event);
+    console.log(pantryItem);
+    // if ($event.target.checked !== pantryItem.need) {
+    this.notifySavePantryItemRequested.emit({...pantryItem, need: $event.detail.checked });
+    // }
+  }
+}

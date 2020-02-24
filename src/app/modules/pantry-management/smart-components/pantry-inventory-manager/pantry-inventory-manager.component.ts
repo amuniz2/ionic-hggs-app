@@ -56,4 +56,8 @@ export class PantryInventoryManagerComponent implements OnInit {
       this.store.dispatch(new fromActions.CreatePantryItem($event));
     }
   }
+
+  onPantryItemModified($event: PantryItem) {
+    this.store.dispatch(new fromActions.SavePantryItem($event));
+  }
 }

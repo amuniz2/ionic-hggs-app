@@ -79,7 +79,8 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
               id: action.pantryItem.id,
               changes: {
                 name: action.pantryItem.name,
-                description: action.pantryItem.description
+                description: action.pantryItem.description,
+                need: action.pantryItem.need
               }
               }, state.pantryItems),
             error: null

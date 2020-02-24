@@ -25,6 +25,7 @@ export class DbRowConverters {
       description: row[PantryItemTable.COLS.DESCRIPTION],
       id: row[PantryItemTable.COLS.ID],
       locations: [],
+      need: row[PantryItemTable.COLS.NEED],
     };
   }
 

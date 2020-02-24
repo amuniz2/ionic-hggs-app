@@ -1,10 +1,8 @@
 import {Inject, Injectable} from '@angular/core';
 import {
-  AddPantryItemLocation,
   AddPantryItemLocationFailed,
   AddPantryItemLocationRequest,
   CreateItemFailed,
-  CreatePantryItem,
   DeletePantryItemFailed,
   EditPantryItemLocationRequest,
   ItemCreated,
@@ -113,7 +111,8 @@ export class PantryEffects {
         name: payload.pantryItemRequest.name,
         description: '',
         locations: [],
-        id: 0
+        id: 0,
+        need: true,
       }).pipe(
         tap((itemAdded) => {
           console.log(`item Added: ${itemAdded}`);
