@@ -21,7 +21,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
   ],
-  exports: [HggsAccordionComponent, GroceryStoreLocationStoreComponent, GroceryStoreLocationAisleOrSectionComponent],
+  exports: [HggsAccordionComponent, GroceryStoreLocationStoreComponent, GroceryStoreLocationAisleOrSectionComponent, SelectGroceryStoreComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule { }

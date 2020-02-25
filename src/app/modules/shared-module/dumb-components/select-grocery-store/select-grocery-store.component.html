@@ -1,1 +1,6 @@
+<ion-select id="groceryStoreSelectionControl" placeholder="Shop for items" [compareWith]="compareById"
+            [(ngModel)]="selectedGroceryStore"
+            (ionChange)="onChangeGroceryStoreSelected($event)">
+  <ion-select-option *ngFor="let groceryStore of groceryStores" [value]="groceryStore">{{groceryStore.name}}</ion-select-option>
+</ion-select>
 

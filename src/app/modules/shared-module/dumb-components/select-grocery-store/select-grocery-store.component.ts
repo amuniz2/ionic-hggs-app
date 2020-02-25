@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
 
 @Component({
@@ -10,10 +10,22 @@ export class SelectGroceryStoreComponent implements OnInit {
 
   @Input()
   groceryStores: GroceryStore[];
+  selectedGroceryStore: any;
 
-  constructor() { }
+  @Output()
+  selectedGroceryStoreChange: EventEmitter<GroceryStore> = new EventEmitter<GroceryStore>();
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
+  onChangeGroceryStoreSelected($event: CustomEvent) {
+    this.selectedGroceryStoreChange.emit($event.detail.value);
+  }
+
+  compareById(store1: GroceryStore, store2: GroceryStore) {
+    return store1.id === store2.id;
+  }
 }

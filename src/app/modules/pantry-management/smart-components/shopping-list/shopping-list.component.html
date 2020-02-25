@@ -1,0 +1,9 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-text slot="start">Shopping List</ion-text>
+    <app-select-grocery-store slot="end" [groceryStores]="groceryStores$ | async" (selectedGroceryStoreChange)="onGroceryStoreSelected($event)"></app-select-grocery-store>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+<app-shopping-item-list [shoppingItems]="getShoppingItemsForSelectedGroceryStore() | async"
+</ion-content>

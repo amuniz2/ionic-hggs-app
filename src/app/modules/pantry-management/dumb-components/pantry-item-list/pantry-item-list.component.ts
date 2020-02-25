@@ -52,6 +52,10 @@ export class PantryItemListComponent implements OnInit {
     this.notifyDeletePantryItemRequested.emit({ id: item.id});
   }
 
+  onCreateShoppingList() {
+
+  }
+
   itemClicked($event, pantryItem: PantryItem) {
     console.log($event);
     console.log(pantryItem);

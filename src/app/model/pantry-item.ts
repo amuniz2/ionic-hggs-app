@@ -8,3 +8,12 @@ export interface PantryItem {
   locations: GroceryStoreLocation[];
   need: boolean;
 }
+
+export interface ShoppingItem {
+  pantryItem: PantryItem;
+  quantity: {
+    amount: number;
+    units: string;
+  };
+  inCart: boolean;
+}

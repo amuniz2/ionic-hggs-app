@@ -12,6 +12,9 @@ import {
 } from '../../../pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {PantryItem} from '../../../../model/pantry-item';
 import {selectPantryItemsLoading} from '../../store/pantry-management.selectors';
+import {LoadGroceryStores} from '../../../../store';
+import {selectAllGroceryStores, selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
+import {GroceryStore} from '../../../../model/grocery-store';
 
 @Component({
   selector: 'app-pantry-inventory-manager',
@@ -24,9 +27,14 @@ export class PantryInventoryManagerComponent implements OnInit {
   pantryItemsLoading$: Observable<boolean>;
   error$: Observable<Error>;
   addingPantryItem$: Observable<boolean>;
+  groceryStoresLoading$: Observable<boolean>;
+  groceryStores$: Observable<GroceryStore[]>;
 
   constructor(private store: Store<AppState>) {
     this.title = 'Manage pantry items from page component';
+    this.store.dispatch(new LoadGroceryStores());
+    this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
+    this.groceryStores$ = this.store.select(selectAllGroceryStores);
   }
 
   ngOnInit() {
@@ -59,5 +67,13 @@ export class PantryInventoryManagerComponent implements OnInit {
 
   onPantryItemModified($event: PantryItem) {
     this.store.dispatch(new fromActions.SavePantryItem($event));
+  }
+
+  onShopClick() {
+
+  }
+
+  groceryStoresExist() {
+
   }
 }

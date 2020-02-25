@@ -60,7 +60,7 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
           }
         };
 
-      case PantryActionTypes.ItemCreated: {
+      case PantryActionTypes.PantryItemCreated: {
         // const { id, name } = action.payload;
         return {
           ...state,

@@ -19,7 +19,7 @@ export enum PantryActionTypes {
   CreateItemFailed = '[Pantry Item] Create Failed',
   DeletePantryItemFailed = '[Pantry Item] Delete Failed',
   DeletePantryItem = '[Pantry item] Delete',
-  ItemCreated = '[Pantry Item] Created',
+  PantryItemCreated = '[Pantry Item] Created',
   PantryItemDeleted = '[Pantry Item] Deleted',
   LoadPantryItemLocations = '[Pantry Item] Load Locations',
   NavigatedToPantryPage = '[Pantry] Navigated to',
@@ -89,8 +89,8 @@ export class DeletePantryItem implements Action {
   constructor(public deletePantryItemRequest: DeletePantryItemRequest) {}
 }
 
-export class ItemCreated implements Action {
-  readonly type = PantryActionTypes.ItemCreated;
+export class PantryItemCreated implements Action {
+  readonly type = PantryActionTypes.PantryItemCreated;
   constructor(public pantryItem: PantryItem) {
   }
 }
@@ -196,7 +196,7 @@ export type PantryActions =
   | DeletePantryItem
   | DeletePantryItemFailed
   | EditPantryItemLocationRequest
-  | ItemCreated
+  | PantryItemCreated
   | LoadPantryItemLocations
   | PantryItemDeleted
   | NavigatedToPantryPage
