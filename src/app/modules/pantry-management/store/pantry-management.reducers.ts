@@ -2,17 +2,8 @@ import * as fromAdapter from './pantry.adapter';
 import {EntityState} from '@ngrx/entity';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
 import {PantryItem} from '../../../model/pantry-item';
-import {from} from 'rxjs';
 import {getPantryItem} from './pantry-management.selectors';
-// export interface GroceryStoreAisle {
-//   aisle: string;
-//   storeId: number;
-// }
-//
-// export interface GroceryStoreSection {
-//   section: string;
-//   storeId: number;
-// }
+
 export interface PantryState extends EntityState<PantryItem> {
   loading: boolean;
   error: Error;

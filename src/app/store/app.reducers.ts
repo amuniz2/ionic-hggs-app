@@ -6,10 +6,7 @@ import { environment } from '../../environments/environment';
 import {AppState} from './app.state';
 import {AppActions, AppActionTypes} from './app.actions';
 import * as fromAppAdapter from './grocery-store.adapter';
-import {StoreManagerActionTypes} from '../modules/store-management/store/store-management.actions';
-import {sharedGroceryStoreAdapter} from './grocery-store.adapter';
-import {getGroceryStore, getGroceryStoreLocation} from './store-management.selectors';
-// import {appReducers} from '../app.reducers';
+import {getGroceryStore} from './store-management.selectors';
 
 export const reducers: ActionReducerMap<AppState> = {
   isReady: (isReady) => isReady,

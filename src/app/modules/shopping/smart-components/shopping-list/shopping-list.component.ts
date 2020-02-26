@@ -5,8 +5,9 @@ import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import {Observable} from 'rxjs';
 import {GroceryStore} from '../../../../model/grocery-store';
-import {selectPantryItemsNeededFromStore} from '../../store/pantry-management.selectors';
-import {ShoppingItem} from '../../../../model/pantry-item';
+import {PantryItem, ShoppingItem} from '../../../../model/pantry-item';
+import {LoadShoppingList} from '../../store/shopping.actions';
+import {selectPantryItemsNeededFromStore} from '../../../pantry-management/store/pantry-management.selectors';
 
 @Component({
   selector: 'app-shopping-list',
@@ -17,6 +18,7 @@ export class ShoppingListComponent implements OnInit {
   groceryStoresLoading$: Observable<boolean>;
   groceryStores$: Observable<GroceryStore[]>;
   shoppingItems$: Observable<ShoppingItem[]>;
+  pantryItemsNeeded$: Observable<PantryItem[]>;
 
   selectedStoreId: number;
 
@@ -31,6 +33,7 @@ export class ShoppingListComponent implements OnInit {
 
   onGroceryStoreSelected($event: GroceryStore) {
     this.selectedStoreId = $event.id;
-    this.shoppingItems$ = this.store.select(selectPantryItemsNeededFromStore(this.selectedStoreId));
+    this.store.dispatch(new LoadShoppingList(this.selectedStoreId, this.pantryItemsNeeded$));
+    this.pantryItemsNeeded$ = this.store.select(selectPantryItemsNeededFromStore(this.selectedStoreId));
   }
 }

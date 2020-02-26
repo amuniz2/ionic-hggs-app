@@ -21,17 +21,6 @@ export const initialGroceryStoreManagementState: StoreManagementState = {
 
 export function groceryStoresReducer(state = initialGroceryStoreManagementState, action: StoreManagementActions): StoreManagementState  {
     switch (action.type) {
-      // case StoreManagerActionTypes.LoadGroceryStores:
-      //   return {
-      //     ...state,
-      //     groceryStores: {
-      //       ...state.groceryStores,
-      //       loading: true,
-      //       error: null
-      //     }
-      //   };
-
-
       case StoreManagerActionTypes.NavigatedToStoreDetailsPage:
         return {
           ...state,
