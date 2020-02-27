@@ -5,7 +5,7 @@ import {
   CreateItemFailed,
   DeletePantryItemFailed,
   EditPantryItemLocationRequest,
-  ItemCreated,
+  PantryItemCreated,
   LoadPantryItemLocations,
   NavigateToPantryItemPage,
   PantryItemDeleted,
@@ -117,7 +117,7 @@ export class PantryEffects {
         tap((itemAdded) => {
           console.log(`item Added: ${itemAdded}`);
         }),
-        map(itemAdded => new ItemCreated( itemAdded )),
+        map(itemAdded => new PantryItemCreated( itemAdded )),
         catchError(error => [new CreateItemFailed(payload.pantryItemRequest.name, error)])
       );
     }));
@@ -143,7 +143,7 @@ export class PantryEffects {
         tap((itemAdded) => {
           console.log(`item Added: ${itemAdded}`);
         }),
-        map(itemAdded => new ItemCreated( itemAdded )),
+        map(itemAdded => new PantryItemCreated( itemAdded )),
         catchError(error => [new CreateItemFailed(payload.pantryItem.name, error)])
       );
     }));

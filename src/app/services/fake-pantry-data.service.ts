@@ -8,7 +8,7 @@ import {
   DeleteGroceryStoreRequest,
   NewGroceryStoreRequest
 } from '../modules/store-management/dumb-components/store-list/store-list.component';
-import {PantryItem} from '../model/pantry-item';
+import {PantryItem, ShoppingItem} from '../model/pantry-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {PantryItemLocation} from '../model/PantryItemLocation';
@@ -220,5 +220,27 @@ export class FakePantryDataService implements IPantryDataService {
 
   findGroceryStore(id: number): GroceryStore {
     return this.groceryStores.find(store => store.id === id);
+  }
+
+  getPantryItemsNeeded(storeId: number): Observable<PantryItem[]> {
+    return of(this.getPantryItemsNeededInternal(storeId));
+  }
+
+  private getPantryItemsNeededInternal(storeId: number): PantryItem[] {
+    return this.pantryItems.filter((item) => item.need && item.locations.find((loc) => loc.storeId === storeId));
+  }
+
+  getShoppingList(storeId: number): Observable<ShoppingItem[]> {
+    const result: ShoppingItem[] =  this.getPantryItemsNeededInternal(storeId).map((pantryItem: PantryItem) => {
+      const storeLocation = pantryItem.locations.find(loc => loc.storeId === storeId);
+      return {
+        pantryItem,
+        inCart: false,
+        quantity: pantryItem.defaultQuantity,
+        aisle: storeLocation.aisle,
+        section: storeLocation.section
+      };
+    });
+    return of(result);
   }
 }

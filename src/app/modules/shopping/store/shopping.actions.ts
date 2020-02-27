@@ -11,7 +11,7 @@ export enum ShoppingActionTypes {
 export class LoadShoppingList implements Action {
   readonly type = ShoppingActionTypes.LoadShoppingList;
 
-  constructor(public storeId: number, public pantryItemsNeeded: PantryItem[] ){}
+  constructor(public storeId: number) {}
 }
 
 export class LoadShoppingListFailed implements Action {

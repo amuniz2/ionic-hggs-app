@@ -52,6 +52,9 @@ export class PantryDataService implements IPantryDataService {
     return this.dbHelper.getAllPantryItems();
   }
 
+  public getPantryItemsNeeded(storeId: number): Observable<PantryItem[]> {
+
+  }
   public getGroceryStoreAisles(groceryStoreId: number): Observable<string[]> {
     console.log('Calling dbHelper.getGroceryStoreAisles()');
     return this.dbHelper.getGroceryStoreAisles(groceryStoreId);

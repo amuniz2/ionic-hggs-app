@@ -33,7 +33,7 @@ export class ShoppingListComponent implements OnInit {
 
   onGroceryStoreSelected($event: GroceryStore) {
     this.selectedStoreId = $event.id;
-    this.store.dispatch(new LoadShoppingList(this.selectedStoreId, this.pantryItemsNeeded$));
-    this.pantryItemsNeeded$ = this.store.select(selectPantryItemsNeededFromStore(this.selectedStoreId));
+    this.store.dispatch(new LoadShoppingList(this.selectedStoreId));
+    this.shoppingItems$ = this.store.select(selectShoppingItems(this.selectedStoreId));
   }
 }

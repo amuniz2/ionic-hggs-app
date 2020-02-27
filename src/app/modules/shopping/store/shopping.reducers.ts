@@ -5,8 +5,9 @@ import * as fromAdapter from './shopping.adapter';
 import {from} from 'rxjs';
 
 
-export interface ShoppingListState  extends EntityState<ShoppingItem> {
+export interface ShoppingListState  {
   groceryStoreId: number;
+  shoppingItems: ShoppingItem[];
   loading: boolean;
   error: Error;
 }
@@ -23,14 +24,16 @@ export function shoppingListManagementReducer(state = initialShoppingListManagem
                                               action: ShoppingActions): ShoppingListManagementState  {
   switch (action.type) {
     case ShoppingActionTypes.LoadShoppingListSucceeded: {
-      state.shoppingLists
       return {
         ...state,
-        shoppingLists: fromAdapter.shoppingListAdapter.upsertOne(action.shoppingList,
-          state.shoppingLists),
+        shoppingLists: fromAdapter.shoppingListAdapter.upsertOne( {
+          groceryStoreId: action.storeId,
+          loading: false,
+          error: null,
+          shoppingItems: action.shoppingList
+        }, state.shoppingLists),
       };
     }
     default: return state;
   }
-
 }

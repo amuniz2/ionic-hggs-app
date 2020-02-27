@@ -20,12 +20,6 @@ export class StoreManagementEffects {
               private router: Router) {
   }
 
-  // @Effect()
-  // public firstAction$: Observable<Action> = this.actions$.pipe(
-  //   ofType( 'FIRST_ACTION' ),
-  //   mapTo( new SecondAction() )
-  // );
-
   @Effect()
   public addNewGroceryStore$ = this.actions$.pipe(
     ofType(StoreManagerActionTypes.CreateStore),
@@ -63,9 +57,4 @@ export class StoreManagementEffects {
       const navigationExtras: NavigationExtras = { queryParams: { id: navigateToEditStorePage.navigateToEditStorePayload.id} };
       this.router.navigate([this.router.url, 'store-details'], navigationExtras);
     }));
-
-  // @Effect()
-  // public storeAisleAdded$ = this.action$.pipe(
-  //   ofType(StoreManagerActionTypes.StoreAisleAdded),
-  //   map((payload) => new LoadGroceryStoreAisles())); // (app action)
 }
