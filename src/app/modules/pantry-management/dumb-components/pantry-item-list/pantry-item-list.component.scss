@@ -18,3 +18,11 @@ ion-item {
   //}
 
 }
+
+.itemDivContents {
+  display: flex;
+  align-items: center;
+}
+.checkboxLabel {
+  margin-right: .5em;
+}

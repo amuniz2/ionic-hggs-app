@@ -2,18 +2,20 @@
   <ion-card *ngFor="let pantryItem of pantryItems">
     <ion-item-sliding>
       <ion-item>
+        <div class="itemDivContents">
+          <ion-label (click)="editPantryItem(pantryItem)">{{pantryItem.name}}</ion-label>
+          <ion-label class="checkboxLabel">Need?</ion-label>
+          <ion-checkbox (ionChange)="itemClicked($event, pantryItem)" [checked]="pantryItem.need"></ion-checkbox>
+        </div>
         <ion-grid>
           <ion-row align-items-start nowrap="true">
             <ion-col size="8">
-              <ion-label (click)="editPantryItem(pantryItem)">{{pantryItem.name}}</ion-label>
             </ion-col>
             <ion-col>
               <ion-row align-items-end nowrap="true">
                 <ion-col align-self-end>
-                  <ion-label>Need</ion-label>
                 </ion-col>
                 <ion-col align-self-start>
-                  <ion-checkbox (ionChange)="itemClicked($event, pantryItem)" [checked]="pantryItem.need"></ion-checkbox>
                 </ion-col>
               </ion-row>
             </ion-col>
