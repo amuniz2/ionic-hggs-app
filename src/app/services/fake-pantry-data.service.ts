@@ -149,6 +149,9 @@ export class FakePantryDataService implements IPantryDataService {
     const pantryItemToUpdate = this.findPantryItem(savePantryItemRequest.id);
     pantryItemToUpdate.description = savePantryItemRequest.description;
     pantryItemToUpdate.name = savePantryItemRequest.name;
+    pantryItemToUpdate.need = savePantryItemRequest.need;
+    pantryItemToUpdate.defaultQuantity = savePantryItemRequest.defaultQuantity;
+    pantryItemToUpdate.units = savePantryItemRequest.units;
     return of(true);
   }
 
@@ -229,11 +232,19 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   private getPantryItemsNeededInternal(storeId: number, shoppingItems: ShoppingItem[]): PantryItem[] {
-    return this.pantryItems.filter((item) =>
-      item.need &&
-      item.locations.find((loc) => loc.storeId === storeId) &&
-      shoppingItems.find((shoppingItem => shoppingItem.pantryItemId === item.id))
-    );
+    return this.pantryItems.filter((item) => {
+      if (!item.need) {
+        return false;
+      }
+      const itemFoundInStore =
+      !!this.pantryItemLocations.find((ploc) => ploc.pantryItemId === item.id &&
+        !!this.groceryStoreLocations.find((gloc) => gloc.id === ploc.groceryStoreLocationId && gloc.storeId === storeId));
+
+      if (!itemFoundInStore) {
+        return false;
+      }
+      return !shoppingItems.find((shoppingItem => shoppingItem.pantryItemId === item.id));
+    });
   }
 
   getShoppingList(storeId: number): Observable<ShoppingItem[]> {
@@ -241,16 +252,15 @@ export class FakePantryDataService implements IPantryDataService {
     const shoppingItemsStillNeeded = this.shoppingItems.filter(shoppingItem => !shoppingItem.inCart);
     const additionalShoppingItemsNeeded: ShoppingItem[] =
       this.getPantryItemsNeededInternal(storeId, shoppingItemsStillNeeded).map((pantryItem: PantryItem) => {
-      const storeLocation = pantryItem.locations.find(loc => loc.storeId === storeId);
+      const pantryItemLocation = this.pantryItemLocations.find(ploc => ploc.pantryItemId === pantryItem.id);
+      const groceryStoreLocation = this.groceryStoreLocations.find(gloc => gloc.id === pantryItemLocation.groceryStoreLocationId);
       return {
         pantryItem,
         pantryItemId: pantryItem.id,
-        locationId: storeLocation.id,
-        location: storeLocation,
+        locationId: groceryStoreLocation.id,
+        location: groceryStoreLocation,
         inCart: false,
         quantity: pantryItem.defaultQuantity,
-        aisle: storeLocation.aisle,
-        section: storeLocation.section
       };
     });
     shoppingItemsStillNeeded.push(...additionalShoppingItemsNeeded);

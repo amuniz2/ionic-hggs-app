@@ -15,7 +15,13 @@ export class ShoppingItemListComponent implements OnInit {
   @Input()
   shoppingItems: ShoppingItem[];
 
-  constructor() { }
+  shoppingItemsLoading: boolean;
+  error: Error;
+
+  constructor() {
+    this.shoppingItemsLoading = false;
+    this.error = null;
+  }
 
   ngOnInit() {
   }
