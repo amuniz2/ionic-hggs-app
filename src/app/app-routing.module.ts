@@ -15,7 +15,11 @@ const routes: Routes = [
         loadChildren: './modules/store-management/store-management.module#StoreManagementModule',
       },
       { path: 'pantry-items',
-        loadChildren: './modules/pantry-management/pantry-management.module#PantryManagementModule'},
+        loadChildren: './modules/pantry-management/pantry-management.module#PantryManagementModule'
+      },
+      { path: 'shopping-list',
+        loadChildren: './modules/shopping/shopping.module#ShoppingModule'
+      },
     ]
   },
   { path: '', redirectTo: 'home', pathMatch: 'full'},

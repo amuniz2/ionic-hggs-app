@@ -57,10 +57,6 @@ export class PantryItemListComponent implements OnInit {
   }
 
   itemClicked($event, pantryItem: PantryItem) {
-    console.log($event);
-    console.log(pantryItem);
-    // if ($event.target.checked !== pantryItem.need) {
     this.notifySavePantryItemRequested.emit({...pantryItem, need: $event.detail.checked });
-    // }
   }
 }

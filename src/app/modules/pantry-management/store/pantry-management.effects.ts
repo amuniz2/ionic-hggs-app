@@ -113,6 +113,8 @@ export class PantryEffects {
         locations: [],
         id: 0,
         need: true,
+        units: '',
+        defaultQuantity: 1,
       }).pipe(
         tap((itemAdded) => {
           console.log(`item Added: ${itemAdded}`);

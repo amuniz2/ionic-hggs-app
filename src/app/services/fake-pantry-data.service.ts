@@ -8,7 +8,8 @@ import {
   DeleteGroceryStoreRequest,
   NewGroceryStoreRequest
 } from '../modules/store-management/dumb-components/store-list/store-list.component';
-import {PantryItem, ShoppingItem} from '../model/pantry-item';
+import {ShoppingItem} from '../model/shopping-item';
+import {PantryItem} from '../model/pantry-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {PantryItemLocation} from '../model/PantryItemLocation';
@@ -21,8 +22,9 @@ export class FakePantryDataService implements IPantryDataService {
       { id: 2, name: 'Target', aisles: [], locations: [], sections: []},
     ];
     this.pantryItems = [
-      { id: 1, name: 'Whole Wheat Bread', description: '1 loaf', locations: [], need: false},
+      { id: 1, name: 'Whole Wheat Bread', defaultQuantity: 1, units: 'loaf', description: 'Holsum', locations: [], need: false},
     ];
+    this.shoppingItems = [];
     this.pantryItemLocations = [];
     this.groceryStoreLocations = [];
   }
@@ -30,6 +32,10 @@ export class FakePantryDataService implements IPantryDataService {
   private readonly pantryItems: PantryItem[];
   private readonly pantryItemLocations: PantryItemLocation[];
   private readonly groceryStoreLocations: GroceryStoreLocation[];
+  private readonly shoppingItems: ShoppingItem[];
+    getPantryItemsNeeded(storeId: number): Observable<PantryItem[]> {
+        throw new Error('Method not implemented.');
+    }
 
   deleteGroceryStoreAisle(deleteStoreAisleRequest: StoreAisleOrSection): Observable<boolean> {
       throw new Error('Method not implemented.');
@@ -222,25 +228,32 @@ export class FakePantryDataService implements IPantryDataService {
     return this.groceryStores.find(store => store.id === id);
   }
 
-  getPantryItemsNeeded(storeId: number): Observable<PantryItem[]> {
-    return of(this.getPantryItemsNeededInternal(storeId));
-  }
-
-  private getPantryItemsNeededInternal(storeId: number): PantryItem[] {
-    return this.pantryItems.filter((item) => item.need && item.locations.find((loc) => loc.storeId === storeId));
+  private getPantryItemsNeededInternal(storeId: number, shoppingItems: ShoppingItem[]): PantryItem[] {
+    return this.pantryItems.filter((item) =>
+      item.need &&
+      item.locations.find((loc) => loc.storeId === storeId) &&
+      shoppingItems.find((shoppingItem => shoppingItem.pantryItemId === item.id))
+    );
   }
 
   getShoppingList(storeId: number): Observable<ShoppingItem[]> {
-    const result: ShoppingItem[] =  this.getPantryItemsNeededInternal(storeId).map((pantryItem: PantryItem) => {
+    // remove items in shoppingList already purchased / loaded into cart
+    const shoppingItemsStillNeeded = this.shoppingItems.filter(shoppingItem => !shoppingItem.inCart);
+    const additionalShoppingItemsNeeded: ShoppingItem[] =
+      this.getPantryItemsNeededInternal(storeId, shoppingItemsStillNeeded).map((pantryItem: PantryItem) => {
       const storeLocation = pantryItem.locations.find(loc => loc.storeId === storeId);
       return {
         pantryItem,
+        pantryItemId: pantryItem.id,
+        locationId: storeLocation.id,
+        location: storeLocation,
         inCart: false,
         quantity: pantryItem.defaultQuantity,
         aisle: storeLocation.aisle,
         section: storeLocation.section
       };
     });
-    return of(result);
+    shoppingItemsStillNeeded.push(...additionalShoppingItemsNeeded);
+    return of(shoppingItemsStillNeeded);
   }
 }

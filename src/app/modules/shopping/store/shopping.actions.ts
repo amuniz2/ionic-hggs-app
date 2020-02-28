@@ -1,6 +1,5 @@
 import {Action} from '@ngrx/store';
-import {PantryItem} from '../../../model/pantry-item';
-import {ShoppingItem} from '../../../model/pantry-item';
+import {ShoppingItem} from '../../../model/shopping-item';
 
 export enum ShoppingActionTypes {
   LoadShoppingList = '[Shopping] Load Shopping List',

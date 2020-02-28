@@ -1,5 +1,5 @@
 import {createEntityAdapter, EntityAdapter} from '@ngrx/entity';
-import {PantryItem, ShoppingItem} from '../../../model/pantry-item';
+import {ShoppingItem} from '../../../model/shopping-item';
 import {ShoppingListState} from './shopping.reducers';
 
 function sortByLocation( item1: ShoppingItem, item2: ShoppingItem): number {

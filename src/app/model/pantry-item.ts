@@ -1,19 +1,22 @@
 import {GroceryStoreLocation} from './grocery-store-location';
-import {PantryItemLocation} from './PantryItemLocation';
 
-export interface PantryItem {
+
+export class PantryItem {
   id: number;
   name: string;
   description: string;
   locations: GroceryStoreLocation[];
   need: boolean;
-}
+  units: string;
+  defaultQuantity: number;
 
-export interface ShoppingItem {
-  pantryItem: PantryItem;
-  quantity: {
-    amount: number;
-    units: string;
-  };
-  inCart: boolean;
+  constructor() {
+    this.id = 0;
+    this.locations = [];
+    this.description = '';
+    this.name = '';
+    this.need = false;
+    this.defaultQuantity = 1;
+    this.units = '';
+  }
 }

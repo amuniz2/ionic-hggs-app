@@ -28,10 +28,7 @@ export class EditPantryItemComponent implements OnInit {
     this.pantryItemId = this.router.getCurrentNavigation().extras.queryParams.id;
     if (this.isNewItem) {
       this.pantryItem$ = of({
-        id: 0,
-        name: '',
-        description: '',
-        locations: [],
+        ...new PantryItem(),
         need: true,
       });
     } else {

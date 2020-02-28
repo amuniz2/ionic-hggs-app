@@ -14,12 +14,10 @@ import {RouteReuseStrategy, RouterModule} from '@angular/router';
 import {HomePageComponent} from './home/home.page';
 import {StoreManagementModule} from './modules/store-management/store-management.module';
 import {PantryDbHelper} from './services/db/db-helper';
-import {PantryDataService} from './services/pantry-data.service';
 import {SQLite} from '@ionic-native/sqlite/ngx';
 import {SharedModule} from './modules/shared-module/shared.module';
 import {MySqlCommands} from './services/db/my-sql-commands';
 import {FakePantryDataService} from './services/fake-pantry-data.service';
-import {PantryManagementRoutes} from './modules/pantry-management/pantry-management.routes';
 
 
 @NgModule({

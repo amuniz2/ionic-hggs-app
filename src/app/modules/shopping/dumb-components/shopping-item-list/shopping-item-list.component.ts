@@ -1,5 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ShoppingItem} from '../../../../model/pantry-item';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ShoppingItem} from '../../../../model/shopping-item';
+import {PantryItem} from '../../../../model/pantry-item';
 
 @Component({
   selector: 'app-shopping-item-list',
@@ -7,6 +8,9 @@ import {ShoppingItem} from '../../../../model/pantry-item';
   styleUrls: ['./shopping-item-list.component.scss']
 })
 export class ShoppingItemListComponent implements OnInit {
+
+  @Output()
+  notifySaveShoppingItemRequested: EventEmitter<ShoppingItem> = new EventEmitter();
 
   @Input()
   shoppingItems: ShoppingItem[];
@@ -16,4 +20,7 @@ export class ShoppingItemListComponent implements OnInit {
   ngOnInit() {
   }
 
+  itemClicked($event, shoppingItem: ShoppingItem) {
+    this.notifySaveShoppingItemRequested.emit({...shoppingItem, inCart: $event.detail.inCart });
+  }
 }

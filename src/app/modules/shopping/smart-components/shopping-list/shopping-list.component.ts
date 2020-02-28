@@ -5,9 +5,10 @@ import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import {Observable} from 'rxjs';
 import {GroceryStore} from '../../../../model/grocery-store';
-import {PantryItem, ShoppingItem} from '../../../../model/pantry-item';
+import {PantryItem} from '../../../../model/pantry-item';
 import {LoadShoppingList} from '../../store/shopping.actions';
-import {selectPantryItemsNeededFromStore} from '../../../pantry-management/store/pantry-management.selectors';
+import {ShoppingItem} from '../../../../model/shopping-item';
+import {selectShoppingListItems} from '../../store/shopping.selectors';
 
 @Component({
   selector: 'app-shopping-list',
@@ -34,6 +35,6 @@ export class ShoppingListComponent implements OnInit {
   onGroceryStoreSelected($event: GroceryStore) {
     this.selectedStoreId = $event.id;
     this.store.dispatch(new LoadShoppingList(this.selectedStoreId));
-    this.shoppingItems$ = this.store.select(selectShoppingItems(this.selectedStoreId));
+    this.shoppingItems$ = this.store.select(selectShoppingListItems(this.selectedStoreId));
   }
 }

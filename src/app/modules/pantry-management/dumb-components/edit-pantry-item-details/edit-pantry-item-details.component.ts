@@ -59,11 +59,10 @@ export class EditPantryItemDetailsComponent implements OnInit {
       this.updateItem();
     } else {
       this.notifyAddPantryItemRequested.emit({
+        ...new PantryItem(),
         name: this.pantryItemName,
         description: this.pantryItemDescription,
-        id: 0,
-        locations: [],
-        need: this.pantryItem.need});
+      });
     }
   }
 
@@ -91,6 +90,7 @@ export class EditPantryItemDetailsComponent implements OnInit {
 
   private updateItem() {
     this.notifySavePantryItemRequested.emit({
+      ...new PantryItem(),
       name: this.pantryItemName,
       description: this.pantryItemDescription,
       id: this.pantryItem.id,

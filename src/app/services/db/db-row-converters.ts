@@ -26,6 +26,8 @@ export class DbRowConverters {
       id: row[PantryItemTable.COLS.ID],
       locations: [],
       need: row[PantryItemTable.COLS.NEED],
+      units: row[PantryItemTable.COLS.UNITS],
+      defaultQuantity: row[PantryItemTable.COLS.DEFAULT_QUANTITY]
     };
   }
 

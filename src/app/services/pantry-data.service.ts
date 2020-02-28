@@ -12,6 +12,7 @@ import {
 import {PantryItem} from '../model/pantry-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
+import {ShoppingItem} from '../model/shopping-item';
 
 @Injectable()
 export class PantryDataService implements IPantryDataService {
@@ -52,9 +53,6 @@ export class PantryDataService implements IPantryDataService {
     return this.dbHelper.getAllPantryItems();
   }
 
-  public getPantryItemsNeeded(storeId: number): Observable<PantryItem[]> {
-
-  }
   public getGroceryStoreAisles(groceryStoreId: number): Observable<string[]> {
     console.log('Calling dbHelper.getGroceryStoreAisles()');
     return this.dbHelper.getGroceryStoreAisles(groceryStoreId);
@@ -104,6 +102,14 @@ export class PantryDataService implements IPantryDataService {
   }
   public getPantryItemLocations(id: number): Observable<GroceryStoreLocation[]> {
     return this.dbHelper.queryPantryItemLocations(id);
+  }
+
+  getPantryItemsNeeded(storeId: number): Observable<PantryItem[]> {
+    return undefined;
+  }
+
+  getShoppingList(storeId: number): Observable<ShoppingItem[]> {
+    return undefined;
   }
 
   // getPantryItemDetails(id: number): Observable<PantryItem> {
