@@ -23,6 +23,9 @@ export interface PageSection {
 })
 export class HggsAccordionComponent implements OnInit {
   @Input()
+  isOpenInitially: boolean;
+
+  @Input()
   sectionName: string;
 
   @Input()
@@ -44,6 +47,7 @@ export class HggsAccordionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isSectionOpen = this.isOpenInitially;
   }
 
   public toggleAccordion(): void {

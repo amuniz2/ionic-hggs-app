@@ -2,21 +2,33 @@
 ion-card {
   ion-item-sliding {
     ion-item {
+      inner-padding-end: 0px;
+      padding-start: 0px;
       div {
         display: flex;
         align-items: center;
-        ion-label {
+        .nameLabel {
           float: left;
+          font-weight: bold;
         }
         div {
           display: flex;
           align-items: center;
           float: right;
           label {
-            margin: .5em;
+            margin-right: .5em;
           }
         }
       }
     }
   }
+}
+.in-item {
+  margin-left: 0.5em;
+  padding: 0;
+}
+
+.descLabel {
+  font-style: italic;
+  float: left;
 }

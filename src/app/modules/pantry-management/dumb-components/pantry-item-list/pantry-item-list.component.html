@@ -10,14 +10,23 @@
 <!--          </div>-->
 <!--        </div>-->
         <ion-grid>
-          <ion-row align-items-start nowrap="true">
+          <ion-row  nowrap="true">
             <ion-col size="8">
-              <ion-label float-left (click)="editPantryItem(pantryItem)">{{pantryItem.name}}</ion-label>
+              <div float-left>
+                <ion-label class="nameLabel" (click)="editPantryItem(pantryItem)">{{pantryItem.name}}</ion-label>
+              </div>
             </ion-col>
             <ion-col>
               <div float-right class="itemDivContents">
                 <ion-label class="checkboxLabel">Need?</ion-label>
-                <ion-checkbox (ionChange)="itemClicked($event, pantryItem)" [checked]="pantryItem.need"></ion-checkbox>
+                <ion-checkbox class="checkbox" (ionChange)="itemClicked($event, pantryItem)" [checked]="pantryItem.need"></ion-checkbox>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <div float-left>
+              <ion-label class="descLabel" >{{pantryItem.description}}</ion-label>
               </div>
             </ion-col>
           </ion-row>
