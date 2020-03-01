@@ -25,6 +25,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {IPantryDataService} from '../../../services/IPantryDataService';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
 import {GroceryStoreLocationPossiblyAdded} from '../../../store';
+import {PantryItem} from '../../../model/pantry-item';
 
 @Injectable()
 export class PantryEffects {
@@ -107,14 +108,9 @@ export class PantryEffects {
   public createPantryItem$ = this.actions$.pipe(
     ofType(PantryActionTypes.CreatePantryItem),
     switchMap((payload) => {
-      return this.storeManagementService.addPantryItem({
+      return this.storeManagementService.addPantryItem( {
+        ...new PantryItem(),
         name: payload.pantryItemRequest.name,
-        description: '',
-        locations: [],
-        id: 0,
-        need: true,
-        units: '',
-        defaultQuantity: 1,
       }).pipe(
         tap((itemAdded) => {
           console.log(`item Added: ${itemAdded}`);

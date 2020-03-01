@@ -102,6 +102,7 @@ export class MySqlCommands {
       pantrySchema.PantryItemTable.COLS.SELECT_BY_DEFAULT + ' TINYINT, ' +
       pantrySchema.PantryItemTable.COLS.NEED + ' TINYINT, ' +
       pantrySchema.PantryItemTable.COLS.DEFAULT_QUANTITY + ' REAL, ' +
+      pantrySchema.PantryItemTable.COLS.QUANTITY_NEEDED + ' REAL, ' +
       pantrySchema.PantryItemTable.COLS.UNITS + ' TEXT, ' +
       pantrySchema.PantryItemTable.COLS.NAME + ' TEXT NOT NULL, ' +
       pantrySchema.PantryItemTable.COLS.ID + ' INTEGER PRIMARY KEY ASC, ' +

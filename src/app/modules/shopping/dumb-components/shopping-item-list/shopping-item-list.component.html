@@ -1,8 +1,11 @@
 <ion-list *ngIf="!shoppingItemsLoading else showSpinner;">
   <ion-item *ngFor="let shoppingItem of shoppingItems">
-    <div class="itemContents">
+    <div float-left class="itemContents" align-items-center>
       <ion-checkbox (ionChange)="itemClicked($event, shoppingItem)" [checked]="shoppingItem.inCart"></ion-checkbox>
-      <ion-label class="checkboxLabel">{{shoppingItem.pantryItem?.name}}</ion-label>
+      <ion-label class="checkboxLabel">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
+    </div>
+    <div float-left class="itemContents" align-items-center>
+      <ion-label>{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
     </div>
   </ion-item>
 </ion-list>

@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingItem} from '../../../../model/shopping-item';
-import {PantryItem} from '../../../../model/pantry-item';
 
 @Component({
   selector: 'app-shopping-item-list',
@@ -28,5 +27,13 @@ export class ShoppingItemListComponent implements OnInit {
 
   itemClicked($event, shoppingItem: ShoppingItem) {
     this.notifySaveShoppingItemRequested.emit({...shoppingItem, inCart: $event.detail.inCart });
+  }
+
+  getShoppingItemDescriptionLine1(shoppingItem: ShoppingItem) {
+    return shoppingItem.pantryItem.name + ', ' + shoppingItem.pantryItem.quantityNeeded + ' ' + shoppingItem.pantryItem.units;
+  }
+
+  getShoppingItemDescriptionLine2(shoppingItem: ShoppingItem) {
+    return shoppingItem.pantryItem.description;
   }
 }

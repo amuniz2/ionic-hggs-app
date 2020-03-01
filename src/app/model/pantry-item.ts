@@ -7,6 +7,7 @@ export class PantryItem {
   description: string;
   locations: GroceryStoreLocation[];
   need: boolean;
+  quantityNeeded: number;
   units: string;
   defaultQuantity: number;
 
@@ -18,5 +19,6 @@ export class PantryItem {
     this.need = false;
     this.defaultQuantity = 1;
     this.units = '';
+    this.quantityNeeded = this.defaultQuantity;
   }
 }

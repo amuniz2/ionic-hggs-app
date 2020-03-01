@@ -22,7 +22,14 @@ export class FakePantryDataService implements IPantryDataService {
       { id: 2, name: 'Target', aisles: [], locations: [], sections: []},
     ];
     this.pantryItems = [
-      { id: 1, name: 'Whole Wheat Bread', defaultQuantity: 1, units: 'loaf', description: 'Holsum', locations: [], need: false},
+      { id: 1,
+        name: 'Whole Wheat Bread',
+        defaultQuantity: 1,
+        units: 'loaf',
+        description: 'Holsum',
+        locations: [],
+        need: false,
+        quantityNeeded: 1},
     ];
     this.shoppingItems = [];
     this.pantryItemLocations = [];

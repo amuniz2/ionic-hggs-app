@@ -41,6 +41,7 @@ export class PantryItemTable {
     public static DESCRIPTION = 'description';
     public static SELECT_BY_DEFAULT = 'select_by_default';
     public static DEFAULT_QUANTITY = 'default_quantity';
+    public static QUANTITY_NEEDED = 'quantity_needed';
     public static UNITS = 'units';
     public static NEED = 'need';
   };

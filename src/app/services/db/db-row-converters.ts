@@ -3,7 +3,6 @@ import {LocationTable, PantryItemLocationTable, PantryItemTable, StoreTable} fro
 import {GroceryStore} from '../../model/grocery-store';
 import {GroceryStoreLocation} from '../../model/grocery-store-location';
 import {PantryItemLocation} from '../../model/PantryItemLocation';
-import {Store} from '@ngrx/store';
 
 export class DbRowConverters {
   public static rowToGroceryStore(row: any): GroceryStore {
@@ -27,7 +26,8 @@ export class DbRowConverters {
       locations: [],
       need: row[PantryItemTable.COLS.NEED],
       units: row[PantryItemTable.COLS.UNITS],
-      defaultQuantity: row[PantryItemTable.COLS.DEFAULT_QUANTITY]
+      defaultQuantity: row[PantryItemTable.COLS.DEFAULT_QUANTITY],
+      quantityNeeded: row[PantryItemTable.COLS.QUANTITY_NEEDED]
     };
   }
 
