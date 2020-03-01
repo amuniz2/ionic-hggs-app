@@ -1,12 +1,28 @@
 .itemContents {
-  display: flex;
   align-items: center;
+  flex-direction: row;
+  display: flex;
+  float: left;
 }
 .checkboxLabel {
-  margin-left: 1em;
+  flex: auto;
+  font-weight: bold;
+  margin-left: .5em;
+  margin-bottom: .5em;
 }
 .quantity {
   float: right;
   align-items: center;
   margin-left: 1em;
+}
+#parent {
+  display: flex;
+  flex-direction: column;
+}
+.descLabel {
+  font-style: italic;
+}
+.in-item {
+  margin: 0em 0.5em 0.5em 0em;
+  padding: 0em;
 }

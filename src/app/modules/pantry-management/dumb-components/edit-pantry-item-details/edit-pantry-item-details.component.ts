@@ -42,7 +42,7 @@ export class EditPantryItemDetailsComponent implements OnInit {
 
   locationsSection: PageSection = {
     label: 'Locations',
-    isOpen$: of(false)
+    isOpen$: of(true)
   };
 
   constructor() { }
