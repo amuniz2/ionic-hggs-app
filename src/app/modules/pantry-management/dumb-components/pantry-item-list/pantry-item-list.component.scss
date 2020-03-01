@@ -1,28 +1,22 @@
-ion-item {
-  ion-row {
-    ion-col {
-      margin: 0;
-      ion-label {
-        text-align: left;
-      }
-      ion-checkbox {
-        margin: 0;
-        text-align: right;
+
+ion-card {
+  ion-item-sliding {
+    ion-item {
+      div {
+        display: flex;
+        align-items: center;
+        ion-label {
+          float: left;
+        }
+        div {
+          display: flex;
+          align-items: center;
+          float: right;
+          label {
+            margin: .5em;
+          }
+        }
       }
     }
   }
-  //ion-checkbox {
-  //  position: relative;
-  //  top: .2em;
-  //  right: .2em;
-  //}
-
-}
-
-.itemDivContents {
-  display: flex;
-  align-items: center;
-}
-.checkboxLabel {
-  margin-right: .5em;
 }
