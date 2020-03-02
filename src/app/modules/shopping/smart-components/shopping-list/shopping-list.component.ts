@@ -5,7 +5,6 @@ import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import {Observable} from 'rxjs';
 import {GroceryStore} from '../../../../model/grocery-store';
-import {PantryItem} from '../../../../model/pantry-item';
 import {LoadShoppingList} from '../../store/shopping.actions';
 import {ShoppingItem} from '../../../../model/shopping-item';
 import {selectShoppingListItems} from '../../store/shopping.selectors';
@@ -19,7 +18,6 @@ export class ShoppingListComponent implements OnInit {
   groceryStoresLoading$: Observable<boolean>;
   groceryStores$: Observable<GroceryStore[]>;
   shoppingItems$: Observable<ShoppingItem[]>;
-  pantryItemsNeeded$: Observable<PantryItem[]>;
 
   selectedStoreId: number;
 

@@ -3,7 +3,6 @@ import {ShoppingItem} from '../../../model/shopping-item';
 import {ShoppingListState} from './shopping.reducers';
 
 function sortByLocation( item1: ShoppingItem, item2: ShoppingItem): number {
-  // sort by location in store
   return 0;
 }
 

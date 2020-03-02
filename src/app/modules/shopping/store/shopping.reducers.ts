@@ -2,7 +2,6 @@ import {ShoppingActions, ShoppingActionTypes} from './shopping.actions';
 import {EntityState} from '@ngrx/entity';
 import {ShoppingItem} from '../../../model/shopping-item';
 import * as fromAdapter from './shopping.adapter';
-import {from} from 'rxjs';
 
 
 export interface ShoppingListState  {

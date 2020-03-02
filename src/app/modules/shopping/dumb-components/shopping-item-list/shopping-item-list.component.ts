@@ -20,9 +20,11 @@ export class ShoppingItemListComponent implements OnInit {
   constructor() {
     this.shoppingItemsLoading = false;
     this.error = null;
+    this.shoppingItems = [];
   }
 
   ngOnInit() {
+  //   this.getSortedShoppingItems();
   }
 
   itemClicked($event, shoppingItem: ShoppingItem) {
