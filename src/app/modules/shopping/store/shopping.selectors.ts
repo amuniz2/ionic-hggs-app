@@ -37,6 +37,12 @@ export const selectShoppingList = (id: number) => createSelector(
 export const selectShoppingListItems = (id: number) => createSelector(
   selectShoppingList(id), (state: ShoppingListState) => state.shoppingItems.sort(compareByStoreLocation));
 
+export const selectShoppingListItemsGroupedByAisle = (id: number) => createSelector(
+  selectShoppingList(id), (state: ShoppingListState) => state.aisles.sort(compareByStoreAisle));
+
+export const selectShoppingListItemsGroupedBySection = (id: number) => createSelector(
+  selectShoppingList(id), (state: ShoppingListState) => state.sections.sort(compareByStoreSection));
+
 export const getShoppingList = (state: ShoppingListManagementState, id: number) => state.shoppingLists.entities[id];
 
 export const getShoppingListItems = (state: ShoppingListManagementState, id: number) => getShoppingList(state, id).shoppingItems;
