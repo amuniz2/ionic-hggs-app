@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingItem} from '../../../../model/shopping-item';
 
+
 @Component({
   selector: 'app-shopping-item-list',
   templateUrl: './shopping-item-list.component.html',

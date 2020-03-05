@@ -1,7 +1,7 @@
 import {ShoppingActions, ShoppingActionTypes} from './shopping.actions';
 import {EntityState} from '@ngrx/entity';
 import {ShoppingItem} from '../../../model/shopping-item';
-import * as fromAdapter from './shopping.adapter';
+import {shoppingListAdapter} from './shopping.adapter';
 
 export class SectionItems {
   section: string;
@@ -23,7 +23,7 @@ export class AisleItems {
 }
 
 export interface IStoreShoppingList {
-  groceryStoreId: number;
+  id: number;
   shoppingItems: ShoppingItem[];
   aisles: AisleItems[];
   sections: SectionItems[];
@@ -32,18 +32,22 @@ export interface IStoreShoppingList {
 export class StoreShoppingList implements IStoreShoppingList {
 
   constructor(storeId: number, shoppingItems: ShoppingItem[]) {
-    this.groceryStoreId = storeId;
+    this.id = storeId;
+    this.aisles = [];
+    this.sections = [];
 
-    const distinctAisles = Array.from(new Set(shoppingItems.map(x => x.location.aisle)));
+    const distinctAisles = Array.from(new Set(shoppingItems.filter(item => item.location.aisle).map(x => x.location.aisle)));
     distinctAisles.forEach( aisle => this.aisles.push(new AisleItems(aisle, shoppingItems)));
     const shoppingItemsWithNoAisles = shoppingItems.filter(item => !item.location.aisle);
-    const distinctSectionsWithNoAisles = Array.from(new Set(shoppingItemsWithNoAisles.map(x => x.location.section)));
+    const distinctSectionsWithNoAisles = Array.from(new Set(shoppingItemsWithNoAisles
+      .filter(item=> !item.location.aisle && item.location.section).
+      map(x => x.location.section)));
     distinctSectionsWithNoAisles.forEach( section => this.sections.push(new SectionItems(section, shoppingItems)));
     this.shoppingItems = shoppingItems.filter(item => !item.location.aisle && !item.location.section);
   }
 
   aisles: AisleItems[];
-  groceryStoreId: number;
+  id: number;
   sections: SectionItems[];
   shoppingItems: ShoppingItem[];
 }
@@ -65,7 +69,7 @@ export interface ShoppingListManagementState {
 }
 
 export const initialShoppingListManagementState: ShoppingListManagementState = {
-  shoppingLists: fromAdapter.shoppingListAdapter.getInitialState(),
+  shoppingLists: shoppingListAdapter.getInitialState(),
   loading: false,
   error: null
 };
@@ -76,7 +80,7 @@ export function shoppingListManagementReducer(state = initialShoppingListManagem
     case ShoppingActionTypes.LoadShoppingListSucceeded: {
       return {
         ...state,
-        shoppingLists: fromAdapter.shoppingListAdapter.upsertOne( new ShoppingListState(action.storeId, action.shoppingList),
+        shoppingLists: shoppingListAdapter.upsertOne( new ShoppingListState(action.storeId, action.shoppingList),
           state.shoppingLists),
       };
     }

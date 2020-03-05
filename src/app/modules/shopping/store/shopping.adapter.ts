@@ -17,7 +17,7 @@ export const {
 
 function sortByGroceryStore( item1: ShoppingListState, item2: ShoppingListState): number {
   // sort by location in store
-  return item2.groceryStoreId - item2.groceryStoreId;
+  return item2.id - item2.id;
 }
 
 export const shoppingListAdapter: EntityAdapter<ShoppingListState> =

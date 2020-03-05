@@ -7,7 +7,11 @@ import {Observable} from 'rxjs';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {LoadShoppingList} from '../../store/shopping.actions';
 import {ShoppingItem} from '../../../../model/shopping-item';
-import {selectShoppingListItems} from '../../store/shopping.selectors';
+import {
+  selectShoppingListItems,
+  selectShoppingListItemsGroupedByAisle,
+  selectShoppingListItemsGroupedBySection
+} from '../../store/shopping.selectors';
 import {AisleItems, SectionItems} from '../../store/shopping.reducers';
 
 @Component({
@@ -36,8 +40,8 @@ export class ShoppingListComponent implements OnInit {
   onGroceryStoreSelected($event: GroceryStore) {
     this.selectedStoreId = $event.id;
     this.store.dispatch(new LoadShoppingList(this.selectedStoreId));
-    this.shoppingItemsGroupedByAisle$ = this.store.select(slectShoppingListItemsGroupedByAisle(this.selectedStoreId));
-    this.shoppingItemsGroupedBySection$ = this.store.select(slectShoppingListItemsGroupedBySection(this.selectedStoreId));
+    this.shoppingItemsGroupedByAisle$ = this.store.select(selectShoppingListItemsGroupedByAisle(this.selectedStoreId));
+    this.shoppingItemsGroupedBySection$ = this.store.select(selectShoppingListItemsGroupedBySection(this.selectedStoreId));
     this.shoppingItems$ = this.store.select(selectShoppingListItems(this.selectedStoreId));
   }
 }

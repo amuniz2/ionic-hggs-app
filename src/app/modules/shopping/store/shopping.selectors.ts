@@ -32,16 +32,16 @@ export const selectAllShoppingLists = createSelector(
 );
 
 export const selectShoppingList = (id: number) => createSelector(
-  selectAllShoppingLists, (state: ShoppingListState[]) => state.find((item) => item.groceryStoreId === id));
+  selectAllShoppingLists, (state: ShoppingListState[]) => state.find((item) => item.id === id));
 
 export const selectShoppingListItems = (id: number) => createSelector(
   selectShoppingList(id), (state: ShoppingListState) => state.shoppingItems.sort(compareByStoreLocation));
 
 export const selectShoppingListItemsGroupedByAisle = (id: number) => createSelector(
-  selectShoppingList(id), (state: ShoppingListState) => state.aisles.sort(compareByStoreAisle));
+  selectShoppingList(id), (state: ShoppingListState) => state.aisles);
 
 export const selectShoppingListItemsGroupedBySection = (id: number) => createSelector(
-  selectShoppingList(id), (state: ShoppingListState) => state.sections.sort(compareByStoreSection));
+  selectShoppingList(id), (state: ShoppingListState) => state.sections);
 
 export const getShoppingList = (state: ShoppingListManagementState, id: number) => state.shoppingLists.entities[id];
 
