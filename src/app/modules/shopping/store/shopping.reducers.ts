@@ -4,11 +4,11 @@ import {ShoppingItem} from '../../../model/shopping-item';
 import {shoppingListAdapter} from './shopping.adapter';
 
 export class SectionItems {
-  section: string;
+  name: string;
   items: ShoppingItem[];
   constructor(section: string, items: ShoppingItem[]) {
-    this.section = section;
-    this.items = items.filter((item) => item.location.section === this.section);
+    this.name = section;
+    this.items = items.filter((item) => item.location.section === this.name);
   }
 }
 

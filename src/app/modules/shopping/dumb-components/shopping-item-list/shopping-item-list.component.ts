@@ -29,15 +29,7 @@ export class ShoppingItemListComponent implements OnInit {
   //   this.getSortedShoppingItems();
   }
 
-  itemClicked($event, shoppingItem: ShoppingItem) {
-    this.notifySaveShoppingItemRequested.emit({...shoppingItem, inCart: $event.detail.inCart });
-  }
-
-  getShoppingItemDescriptionLine1(shoppingItem: ShoppingItem) {
-    return shoppingItem.pantryItem.name + ', ' + shoppingItem.pantryItem.quantityNeeded + ' ' + shoppingItem.pantryItem.units;
-  }
-
-  getShoppingItemDescriptionLine2(shoppingItem: ShoppingItem) {
-    return shoppingItem.pantryItem.description;
+  onSaveShoppingItem(shoppingItem: ShoppingItem) {
+    this.notifySaveShoppingItemRequested.emit(shoppingItem);
   }
 }

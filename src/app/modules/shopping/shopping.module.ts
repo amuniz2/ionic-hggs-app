@@ -10,6 +10,7 @@ import * as fromReducers from './store/shopping.reducers';
 import {IonicModule} from '@ionic/angular';
 import {SharedModule} from '../shared-module/shared.module';
 import {ShoppingItemListComponent} from './dumb-components/shopping-item-list/shopping-item-list.component';
+import { ShoppingItemComponent } from './dumb-components/shopping-item/shopping-item.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import {ShoppingItemListComponent} from './dumb-components/shopping-item-list/sh
   declarations: [
     ShoppingListComponent,
     ShoppingItemListComponent,
+    ShoppingItemComponent,
   ],
   providers: [],
 })
