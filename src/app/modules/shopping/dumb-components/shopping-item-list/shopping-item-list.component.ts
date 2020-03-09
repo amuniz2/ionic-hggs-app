@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingItem} from '../../../../model/shopping-item';
+import {ShoppingListState} from '../../store/shopping.reducers';
 
 
 @Component({
@@ -13,7 +14,7 @@ export class ShoppingItemListComponent implements OnInit {
   notifySaveShoppingItemRequested: EventEmitter<ShoppingItem> = new EventEmitter();
 
   @Input()
-  shoppingItems: ShoppingItem[];
+  shoppingList: ShoppingListState;
 
   shoppingItemsLoading: boolean;
   error: Error;
@@ -21,7 +22,7 @@ export class ShoppingItemListComponent implements OnInit {
   constructor() {
     this.shoppingItemsLoading = false;
     this.error = null;
-    this.shoppingItems = [];
+    // this.shoppingList = null;
   }
 
   ngOnInit() {

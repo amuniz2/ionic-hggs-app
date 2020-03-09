@@ -1,14 +1,17 @@
 <ion-list *ngIf="!shoppingItemsLoading else showSpinner;">
-  <ion-item *ngFor="let shoppingItem of shoppingItems">
-    <div id="parent">
-      <div class="itemContents">
-        <ion-checkbox (ionChange)="itemClicked($event, shoppingItem)" [checked]="shoppingItem.inCart"></ion-checkbox>
-        <ion-label class="checkboxLabel">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
+  <ion-item *ngFor="let aisle of shoppingList?.aisles">
+    <ion-label>{{aisle.name}}</ion-label>
+    <ion-item *ngFor="let shoppingItem of aisle.items">
+      <div id="parent">
+        <div class="itemContents">
+          <ion-checkbox (ionChange)="itemClicked($event, shoppingItem)" [checked]="shoppingItem.inCart"></ion-checkbox>
+          <ion-label class="checkboxLabel">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
+        </div>
+        <div class="itemContents">
+          <ion-label class="descLabel">{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
+        </div>
       </div>
-      <div class="itemContents">
-        <ion-label class="descLabel">{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
-      </div>
-    </div>
+    </ion-item>
   </ion-item>
 </ion-list>
 <ion-text *ngIf="error">{{error}}</ion-text>

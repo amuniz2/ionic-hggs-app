@@ -13,12 +13,12 @@ export class SectionItems {
 }
 
 export class AisleItems {
-  aisle: string;
+  name: string;
   items: ShoppingItem[];
 
   constructor(aisle: string, items: ShoppingItem[]) {
-    this.aisle = aisle;
-    this.items = items.filter((item) => item.location.aisle === this.aisle);
+    this.name = aisle;
+    this.items = items.filter((item) => item.location.aisle === this.name);
   }
 }
 
@@ -37,12 +37,14 @@ export class StoreShoppingList implements IStoreShoppingList {
     this.sections = [];
 
     const distinctAisles = Array.from(new Set(shoppingItems.filter(item => item.location.aisle).map(x => x.location.aisle)));
-    distinctAisles.forEach( aisle => this.aisles.push(new AisleItems(aisle, shoppingItems)));
+    distinctAisles.forEach( aisle => this.aisles.push(new AisleItems(aisle,
+      shoppingItems.filter(shoppingItem => shoppingItem.location.aisle === aisle))));
     const shoppingItemsWithNoAisles = shoppingItems.filter(item => !item.location.aisle);
     const distinctSectionsWithNoAisles = Array.from(new Set(shoppingItemsWithNoAisles
       .filter(item => !item.location.aisle && item.location.section).
       map(x => x.location.section)));
-    distinctSectionsWithNoAisles.forEach( section => this.sections.push(new SectionItems(section, shoppingItems)));
+    distinctSectionsWithNoAisles.forEach( section => this.sections.push(new SectionItems(section,
+      shoppingItems.filter(shoppingItem => shoppingItem.location.section === section))));
     this.shoppingItems = shoppingItems.filter(item => !item.location.aisle && !item.location.section);
   }
 

@@ -8,11 +8,11 @@ import {GroceryStore} from '../../../../model/grocery-store';
 import {LoadShoppingList} from '../../store/shopping.actions';
 import {ShoppingItem} from '../../../../model/shopping-item';
 import {
-  selectShoppingListItems,
+  selectShoppingList,
   selectShoppingListItemsGroupedByAisle,
   selectShoppingListItemsGroupedBySection
 } from '../../store/shopping.selectors';
-import {AisleItems, SectionItems} from '../../store/shopping.reducers';
+import {AisleItems, IStoreShoppingList, SectionItems, ShoppingListState} from '../../store/shopping.reducers';
 
 @Component({
   selector: 'app-shopping-list',
@@ -22,9 +22,10 @@ import {AisleItems, SectionItems} from '../../store/shopping.reducers';
 export class ShoppingListComponent implements OnInit {
   groceryStoresLoading$: Observable<boolean>;
   groceryStores$: Observable<GroceryStore[]>;
-  shoppingItemsGroupedByAisle$: Observable<AisleItems[]>;
-  shoppingItems$: Observable<ShoppingItem[]>;
-  shoppingItemsGroupedBySection$: Observable<SectionItems[]>;
+  shoppingList$: Observable<IStoreShoppingList>;
+  // shoppingItemsGroupedByAisle$: Observable<AisleItems[]>;
+  // shoppingItems$: Observable<ShoppingItem[]>;
+  // shoppingItemsGroupedBySection$: Observable<SectionItems[]>;
 
   selectedStoreId: number;
 
@@ -40,8 +41,9 @@ export class ShoppingListComponent implements OnInit {
   onGroceryStoreSelected($event: GroceryStore) {
     this.selectedStoreId = $event.id;
     this.store.dispatch(new LoadShoppingList(this.selectedStoreId));
-    this.shoppingItemsGroupedByAisle$ = this.store.select(selectShoppingListItemsGroupedByAisle(this.selectedStoreId));
-    this.shoppingItemsGroupedBySection$ = this.store.select(selectShoppingListItemsGroupedBySection(this.selectedStoreId));
-    this.shoppingItems$ = this.store.select(selectShoppingListItems(this.selectedStoreId));
+    this.shoppingList$ = this.store.select(selectShoppingList(this.selectedStoreId));
+    // this.shoppingItemsGroupedByAisle$ = this.store.select(selectShoppingListItemsGroupedByAisle(this.selectedStoreId));
+    // this.shoppingItemsGroupedBySection$ = this.store.select(selectShoppingListItemsGroupedBySection(this.selectedStoreId));
+    // this.shoppingItems$ = this.store.select(selectShoppingListItems(this.selectedStoreId));
   }
 }

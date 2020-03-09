@@ -2,6 +2,9 @@ import * as fromAdapter from './shopping.adapter';
 import {createFeatureSelector, createSelector} from '@ngrx/store';
 import {ShoppingListManagementState, ShoppingListState} from './shopping.reducers';
 import {ShoppingItem} from '../../../model/shopping-item';
+import {LoadShoppingListSucceeded} from './shopping.actions';
+import {PantryManagementState} from '../../pantry-management/store/pantry-management.reducers';
+import {getPantryManagementState} from '../../pantry-management/store/pantry-management.selectors';
 
 export const getShoppingListManagementState = createFeatureSelector<ShoppingListManagementState>('shoppingListManagement');
 
@@ -9,7 +12,6 @@ export const getShoppingListsState = createSelector(
   getShoppingListManagementState,
   (state: ShoppingListManagementState) => state.shoppingLists
 );
-
 
 export const selectShoppingListEntities = createSelector(
   getShoppingListsState,
@@ -32,10 +34,10 @@ export const selectAllShoppingLists = createSelector(
 );
 
 export const selectShoppingList = (id: number) => createSelector(
-  selectAllShoppingLists, (state: ShoppingListState[]) => state.find((item) => item.id === id));
+  selectAllShoppingLists, (state: ShoppingListState[]) => state.find((list) => list.id === id));
 
-export const selectShoppingListItems = (id: number) => createSelector(
-  selectShoppingList(id), (state: ShoppingListState) => state.shoppingItems.sort(compareByStoreLocation));
+// export const selectShoppingListItems = (id: number) => createSelector(
+//   selectAllShoppingLists, (state: ShoppingListState) => state.shoppingItems.sort(compareByStoreLocation));
 
 export const selectShoppingListItemsGroupedByAisle = (id: number) => createSelector(
   selectShoppingList(id), (state: ShoppingListState) => state.aisles);
