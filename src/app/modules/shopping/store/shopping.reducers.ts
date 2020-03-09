@@ -40,7 +40,7 @@ export class StoreShoppingList implements IStoreShoppingList {
     distinctAisles.forEach( aisle => this.aisles.push(new AisleItems(aisle, shoppingItems)));
     const shoppingItemsWithNoAisles = shoppingItems.filter(item => !item.location.aisle);
     const distinctSectionsWithNoAisles = Array.from(new Set(shoppingItemsWithNoAisles
-      .filter(item=> !item.location.aisle && item.location.section).
+      .filter(item => !item.location.aisle && item.location.section).
       map(x => x.location.section)));
     distinctSectionsWithNoAisles.forEach( section => this.sections.push(new SectionItems(section, shoppingItems)));
     this.shoppingItems = shoppingItems.filter(item => !item.location.aisle && !item.location.section);
