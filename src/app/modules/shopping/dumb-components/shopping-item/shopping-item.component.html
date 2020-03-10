@@ -1,10 +1,11 @@
-<div id="parent">
-  <div class="itemContents">
-    <ion-checkbox (ionChange)="itemClicked($event, shoppingItem)" [checked]="shoppingItem.inCart"></ion-checkbox>
-    <ion-label class="checkboxLabel">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
+<ion-item>
+  <div id="parent">
+    <div class="itemContents">
+      <ion-checkbox (ionChange)="itemClicked($event, shoppingItem)" [checked]="shoppingItem.inCart"></ion-checkbox>
+      <ion-label class="checkboxLabel">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
+    </div>
+    <div class="itemContents">
+      <ion-label class="descLabel">{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
+    </div>
   </div>
-  <div class="itemContents">
-    <ion-label class="descLabel">{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
-  </div>
-</div>
-
+</ion-item>
