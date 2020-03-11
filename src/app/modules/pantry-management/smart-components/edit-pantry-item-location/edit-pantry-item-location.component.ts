@@ -127,7 +127,8 @@ export class EditPantryItemLocationComponent implements OnInit {
     this.store.dispatch(new LocationGroceryStoreSelected(groceryStoreId));
     this.selectedGroceryStoreId = groceryStoreId;
     this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(groceryStoreId));
-    this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(groceryStoreId));
+    this.groceryStoreSections$ = this.store.select(
+      fromSelectors.selectPossibleGroceryStoreSectionsInAisle(this.selectedGroceryStoreId, this.selectedGroceryStoreAisle));
   }
   onChangeAisle($event: GroceryStoreAisleOrSectionSelected) {
     this.selectedGroceryStoreAisle = $event.name;

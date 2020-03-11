@@ -24,6 +24,7 @@
       <ion-row *ngFor="let shoppingItem of section.items">
         <ion-col>
           <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem(shoppingItem)"></app-shopping-item>
+          <hr width="100%">
         </ion-col>
       </ion-row>
     </ion-grid>

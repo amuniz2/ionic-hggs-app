@@ -87,7 +87,7 @@ export const selectPossibleGroceryStoreSectionsInAisle = (storeId: number, aisle
   selectGroceryStore(storeId), (groceryStore: GroceryStore) => {
       const sectionsInAisle = groceryStore.locations.filter((location) => location.aisle === aisle).map(location => location.section);
       return sectionsInAisle.concat(groceryStore.sections.filter((section) =>
-        !groceryStore.locations.find(loc => loc.section === section) ||
+        !groceryStore.locations.some(loc => loc.section === section) ||
         groceryStore.locations.some(loc => !loc.aisle && loc.section === section)));
     });
 

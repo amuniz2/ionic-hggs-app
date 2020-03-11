@@ -24,8 +24,7 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit {
   groceryStoreAislesOrSections: string[];
 
   @Output()
-  aisleOrSectionChange: EventEmitter<GroceryStoreAisleOrSectionSelected> =
-    new EventEmitter<GroceryStoreAisleOrSectionSelected>();
+  aisleOrSectionChange: EventEmitter<GroceryStoreAisleOrSectionSelected> = new EventEmitter<GroceryStoreAisleOrSectionSelected>();
 
   @Input()
   selectedGroceryStoreAisleOrSection: string;
