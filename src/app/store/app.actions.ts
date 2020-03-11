@@ -1,7 +1,7 @@
 import {Action} from '@ngrx/store';
 import {GroceryStore} from '../model/grocery-store';
 // tslint:disable-next-line:max-line-length
-import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles-or-sections.component';
+import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 
 export const APP_READY = '[App] Ready';
@@ -41,6 +41,7 @@ export enum AppActionTypes {
   StoreDeleted = '[Store Manager] Deleted',
   DeleteStoreFailed = '[Store Manager] Delete Store failed',
   DeleteStoreSucceeded = '[Store Manager] Delete Store succeeded',
+  DisplayError = '[Store Manager] Something failed',
 }
 
 export class StartAppInitializer implements Action {
@@ -219,6 +220,12 @@ export class DeleteStoreSucceeded implements Action {
   readonly type = AppActionTypes.DeleteStoreSucceeded;
 }
 
+export class DisplayError implements Action {
+  constructor(public error: Error) {
+  }
+  readonly type = AppActionTypes.DisplayError;
+
+}
 // endregion
 export type AppActions = AppReady
   | StartAppInitializer
@@ -239,6 +246,7 @@ export type AppActions = AppReady
   | DeleteGroceryStoreSectionFailed
   | DeleteStoreAisle
   | DeleteStoreAisleFailed
+  | DisplayError
   | GroceryStoreSectionAdded
   | GroceryStoreAisleDeleted
   | GroceryStoreSectionAdded

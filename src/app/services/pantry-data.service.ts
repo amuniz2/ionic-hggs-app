@@ -2,7 +2,7 @@ import {from, Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {GroceryStore} from '../model/grocery-store';
 // tslint:disable-next-line:max-line-length
-import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles-or-sections.component';
+import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {PantryDbHelper} from './db/db-helper';
 import {IPantryDataService} from './IPantryDataService';
 import {

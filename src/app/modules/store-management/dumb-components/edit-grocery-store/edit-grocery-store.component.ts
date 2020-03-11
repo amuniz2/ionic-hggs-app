@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {StoreAisleOrSection,
-  StoreAisleOrSectionActionRequest} from '../grocery-store-aisles/grocery-store-aisles-or-sections.component';
+  StoreAisleOrSectionActionRequest} from '../grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {Observable, of} from 'rxjs';
 import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
 import {UiCrudAction} from '../../../../ui-crud-actions';

@@ -156,4 +156,12 @@ export class AppEffects {
         catchError(error => [new DeleteGroceryStoreSectionFailed(error)])
       );
     }));
+
+  // @Effect()
+  // public displayError$ = this.actions$.pipe(
+  //   ofType(AppActionTypes.DisplayError),
+  //   switchMap((payload) =>{
+  //     return
+  //   })
+  // )
 }

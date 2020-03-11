@@ -5,7 +5,7 @@ import {
   NewGroceryStoreRequest
 } from '../modules/store-management/dumb-components/store-list/store-list.component';
 // tslint:disable-next-line:max-line-length
-import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles-or-sections.component';
+import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {PantryItem} from '../model/pantry-item';
 import {ShoppingItem} from '../model/shopping-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';

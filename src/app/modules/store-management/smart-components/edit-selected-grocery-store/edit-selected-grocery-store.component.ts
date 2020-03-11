@@ -10,7 +10,7 @@ import * as fromAppActions from '../../../../store/app.actions';
 import {
   StoreAisleOrSection,
   StoreAisleOrSectionActionRequest
-} from '../../dumb-components/grocery-store-aisles/grocery-store-aisles-or-sections.component';
+} from '../../dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 
 @Component({
   selector: 'app-edit-selected-grocery-store',

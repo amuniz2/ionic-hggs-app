@@ -1,8 +1,6 @@
 import {Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {GroceryStore} from '../model/grocery-store';
-// tslint:disable-next-line:max-line-length
-import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles/grocery-store-aisles-or-sections.component';
 import {IPantryDataService} from './IPantryDataService';
 import {
   DeleteGroceryStoreRequest,
@@ -13,6 +11,8 @@ import {PantryItem} from '../model/pantry-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {PantryItemLocation} from '../model/PantryItemLocation';
+// tslint:disable-next-line:max-line-length
+import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 
 @Injectable()
 export class FakePantryDataService implements IPantryDataService {
@@ -45,10 +45,39 @@ export class FakePantryDataService implements IPantryDataService {
     }
 
   deleteGroceryStoreAisle(deleteStoreAisleRequest: StoreAisleOrSection): Observable<boolean> {
-      throw new Error('Method not implemented.');
+    const groceryStore = this.findGroceryStore(deleteStoreAisleRequest.groceryStoreId);
+    const groceryStoreLocationsWithAisle = this.groceryStoreLocations.filter(
+      loc => loc.storeId === deleteStoreAisleRequest.groceryStoreId && loc.aisle === deleteStoreAisleRequest.name);
+    groceryStoreLocationsWithAisle.forEach((groceryStoreLocation => {
+      if (this.pantryItemLocations.some(itemLocation => groceryStoreLocation.id === itemLocation.groceryStoreLocationId)) {
+        throw new Error(`Cannot delete ${groceryStore.name} aisle ${deleteStoreAisleRequest.name} \
+        as there are pantry items located in the aisle.`);
+      } else {
+        const indexOfLoc = this.groceryStoreLocations.indexOf(groceryStoreLocation);
+        this.groceryStoreLocations.splice(indexOfLoc, 1);
+      }
+    }));
+
+    groceryStore.aisles.splice(groceryStore.aisles.indexOf(deleteStoreAisleRequest.name),1);
+    return of(true);
   }
+
   deleteGroceryStoreSection = (deleteStoreSectionRequest: StoreAisleOrSection): Observable<boolean> => {
-      throw new Error('Method not implemented.');
+    const groceryStore = this.findGroceryStore(deleteStoreSectionRequest.groceryStoreId);
+    const groceryStoreLocationsWithSection = this.groceryStoreLocations.filter(
+      loc => loc.storeId === deleteStoreSectionRequest.groceryStoreId && loc.section === deleteStoreSectionRequest.name);
+    groceryStoreLocationsWithSection.forEach((groceryStoreLocation => {
+      if (this.pantryItemLocations.some(itemLocation => groceryStoreLocation.id === itemLocation.groceryStoreLocationId)) {
+        throw new Error(`Cannot delete ${groceryStore.name} section ${deleteStoreSectionRequest.name} \
+        as there are pantry items located in the section.`);
+      } else {
+        const indexOfLoc = this.groceryStoreLocations.indexOf(groceryStoreLocation);
+        this.groceryStoreLocations.splice(indexOfLoc, 1);
+      }
+    }));
+
+    groceryStore.sections.splice(groceryStore.aisles.indexOf(deleteStoreSectionRequest.name),1);
+    return of(true);
   }
 
   public initialize(): Observable<boolean> {

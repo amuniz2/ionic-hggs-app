@@ -1,13 +1,9 @@
-import {
-  ActionReducerMap,
-  MetaReducer
-} from '@ngrx/store';
-import { environment } from '../../environments/environment';
+import {ActionReducerMap, MetaReducer} from '@ngrx/store';
+import {environment} from '../../environments/environment';
 import {AppState} from './app.state';
-import {AppActions, AppActionTypes} from './app.actions';
+import {AddStoreAisleFailed, AppActions, AppActionTypes} from './app.actions';
 import * as fromAppAdapter from './grocery-store.adapter';
 import {getGroceryStore} from './store-management.selectors';
-import {from} from 'rxjs';
 
 export const reducers: ActionReducerMap<AppState> = {
   isReady: (isReady) => isReady,
@@ -108,7 +104,7 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
 
     case AppActionTypes.StoreAisleAdded: {
       const groceryStore = getGroceryStore(state.groceryStores, action.payload.groceryStoreId);
-      if (groceryStore.aisles.find((aisle) => aisle === action.payload.newAisle) !== null) {
+      if (groceryStore.aisles.some((aisle) => aisle === action.payload.newAisle)) {
         return state;
       }
       return {
@@ -132,7 +128,7 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
 
     case AppActionTypes.GroceryStoreSectionAdded: {
       const groceryStore = getGroceryStore(state.groceryStores, action.payload.groceryStoreId);
-      if (groceryStore.sections.find((section) => section === action.payload.newSection) !== null) {
+      if (groceryStore.sections.some((section) => section === action.payload.newSection)) {
         return state;
       }
       return {
