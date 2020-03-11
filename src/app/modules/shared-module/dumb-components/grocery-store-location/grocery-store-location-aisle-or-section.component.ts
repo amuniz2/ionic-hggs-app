@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ControlContainer, FormControl} from '@angular/forms';
+import {GroceryStore} from '../../../../model/grocery-store';
 export interface GroceryStoreAisleOrSectionSelected {
   name: string;
 }
@@ -15,6 +16,9 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit {
 
   @Input()
   label: string;
+
+  @Input()
+  groceryStores: GroceryStore[];
 
   @Input()
   groceryStoreAislesOrSections: string[];

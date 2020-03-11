@@ -7,6 +7,7 @@ import {AppState} from './app.state';
 import {AppActions, AppActionTypes} from './app.actions';
 import * as fromAppAdapter from './grocery-store.adapter';
 import {getGroceryStore} from './store-management.selectors';
+import {from} from 'rxjs';
 
 export const reducers: ActionReducerMap<AppState> = {
   isReady: (isReady) => isReady,
@@ -210,8 +211,18 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
     }
 
     case AppActionTypes.GroceryStoreLocationPossiblyAdded: {
+      const existingStoreLocations = state.groceryStores.entities[action.payload.storeId].locations;
+      const existingStoreLocation = existingStoreLocations.find((loc) => loc.id === action.payload.id);
       return {
         ...state,
+        groceryStores: {
+          ...fromAppAdapter.sharedGroceryStoreAdapter.updateOne({
+            id: action.payload.storeId,
+            changes: {
+              locations: [...existingStoreLocations, action.payload]
+            }
+          }, state.groceryStores)
+        },
         groceryItemLocations: {
           ...fromAppAdapter.sharedGroceryStoreLocationAdapter.upsertOne(action.payload, state.groceryItemLocations),
           error: null,

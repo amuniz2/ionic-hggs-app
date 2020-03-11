@@ -58,7 +58,7 @@ export class FakePantryDataService implements IPantryDataService {
     console.log('Calling dbHelper.getAllGroceryStores()');
     const ret: GroceryStore[] = [];
     this.groceryStores.forEach((groceryStore) => {
-      ret.push({ ...groceryStore, aisles: [], sections: [] });
+      ret.push({ ...groceryStore, locations: this.groceryStoreLocations.filter(loc => loc.storeId === groceryStore.id) });
     });
     return of(ret);
   }

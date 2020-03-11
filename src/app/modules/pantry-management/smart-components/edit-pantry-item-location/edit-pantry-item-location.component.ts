@@ -131,6 +131,8 @@ export class EditPantryItemLocationComponent implements OnInit {
   }
   onChangeAisle($event: GroceryStoreAisleOrSectionSelected) {
     this.selectedGroceryStoreAisle = $event.name;
+    this.groceryStoreSections$ = this.store.select(fromSelectors.selectPossibleGroceryStoreSectionsInAisle(
+      this.selectedGroceryStoreId, this.selectedGroceryStoreAisle));
   }
 
   onCancel() {
@@ -140,6 +142,8 @@ export class EditPantryItemLocationComponent implements OnInit {
 
   onChangeSection($event: GroceryStoreAisleOrSectionSelected) {
     this.selectedGroceryStoreSection = $event.name;
+    this.groceryStoreAisles$ = this.store.select(fromSelectors.selectPossibleGroceryStoreAislesForSection(
+      this.selectedGroceryStoreId, this.selectedGroceryStoreSection));
   }
 
   onSubmit(value: any) {
