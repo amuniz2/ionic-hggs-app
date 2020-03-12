@@ -17,6 +17,7 @@ import { EditGroceryStoreComponent } from './dumb-components/edit-grocery-store/
 import {AddGroceryStoreComponent} from './dumb-components/add-grocery-store/add-grocery-store';
 import {SharedModule} from '../shared-module/shared.module';
 import {AppEffects} from '../../store/app.effects';
+import {SnackbarModule} from 'ngx-snackbar';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import {AppEffects} from '../../store/app.effects';
     EffectsModule.forFeature([AppEffects, StoreManagementEffects]),
     IonicModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    SnackbarModule
   ],
   declarations: [
     StoreInventoryManagerPageComponent,

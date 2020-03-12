@@ -18,7 +18,7 @@ import {
   GroceryStoreSectionAdded,
   AddGroceryStoreSectionFailed,
   GroceryStoreSectionDeleted,
-  DeleteGroceryStoreSectionFailed, GroceryStoreSectionsLoaded
+  DeleteGroceryStoreSectionFailed, GroceryStoreSectionsLoaded, DisplayError
 } from '../store/app.actions';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {AppState} from './app.state';
@@ -26,11 +26,14 @@ import {IPantryDataService} from '../services/IPantryDataService';
 import {
   GetStoreAislesFailed, GetStoreSectionsFailed
 } from '../modules/store-management/store/store-management.actions';
+import {SnackbarService} from 'ngx-snackbar';
+import {of} from 'rxjs';
 
 @Injectable()
 export class AppEffects {
   constructor(private store: Store<AppState>,
               private actions$: Actions<AppActions>,
+              private snackbar: SnackbarService,
               @Inject('IPantryDataService') private storeManagementService: IPantryDataService) {
   }
 
@@ -120,9 +123,10 @@ export class AppEffects {
         }),
         map(aisleDeleted => new GroceryStoreAisleDeleted( {
           groceryStoreId: payload.deleteStoreAisleRequest.groceryStoreId,
-          aisle: payload.deleteStoreAisleRequest.name })),
-        catchError(error => [new DeleteStoreAisleFailed(error)])
-      );
+          aisle: payload.deleteStoreAisleRequest.name })));
+    }),
+    catchError(error => {
+      return of(new DisplayError(error));
     }));
 
   @Effect()
@@ -157,11 +161,15 @@ export class AppEffects {
       );
     }));
 
-  // @Effect()
-  // public displayError$ = this.actions$.pipe(
-  //   ofType(AppActionTypes.DisplayError),
-  //   switchMap((payload) =>{
-  //     return
-  //   })
-  // )
+  @Effect()
+  public displayError$ = this.actions$.pipe(
+    ofType(AppActionTypes.DisplayError),
+    switchMap((payload) => {
+      this.snackbar.add( { msg: payload.error.message});
+      // remap to noop Action if no state needs to be updated.
+      // or for example on 401 Errors dispach a re-login action etc.
+
+      return of({ type: 'noop' });
+    })
+  );
 }

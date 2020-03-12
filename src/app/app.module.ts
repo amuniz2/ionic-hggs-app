@@ -18,6 +18,7 @@ import {SQLite} from '@ionic-native/sqlite/ngx';
 import {SharedModule} from './modules/shared-module/shared.module';
 import {MySqlCommands} from './services/db/my-sql-commands';
 import {FakePantryDataService} from './services/fake-pantry-data.service';
+import {SnackbarModule} from 'ngx-snackbar';
 
 
 @NgModule({
@@ -35,12 +36,13 @@ import {FakePantryDataService} from './services/fake-pantry-data.service';
     // StoreModule.forRoot(reducers, { metaReducers, initialState: initialAppState }),
     EffectsModule.forRoot([]),
     IonicModule.forRoot(),
+    SnackbarModule.forRoot(),
     SharedModule,
     StoreManagementModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
-    })
+    }),
   ],
   providers: [
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
