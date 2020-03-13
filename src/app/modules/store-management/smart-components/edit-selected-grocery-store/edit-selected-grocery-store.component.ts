@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {GroceryStore} from '../../../../model/grocery-store';
@@ -11,6 +11,7 @@ import {
   StoreAisleOrSection,
   StoreAisleOrSectionActionRequest
 } from '../../dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
+import {IPantryDataService} from '../../../../services/IPantryDataService';
 
 @Component({
   selector: 'app-edit-selected-grocery-store',
@@ -25,10 +26,17 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
   groceryStore$: Observable<GroceryStore>;
   groceryStoreAisles$: Observable<string[]>;
 
-  constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router) {
+  aislesInUse$: Observable<string[]>;
+  sectionsInUse$: Observable<string[]>;
+
+  constructor(private store: Store<AppState>, private route: ActivatedRoute,
+              private router: Router,
+              @Inject('IPantryDataService') private groceryStoreManagementService: IPantryDataService) {
     this.groceryStoreId = this.router.getCurrentNavigation().extras.queryParams.id;
     this.groceryStore$ = this.store.pipe(select(selectGroceryStore(this.groceryStoreId)));
     this.groceryStoreAisles$ = this.store.pipe(select(selectGroceryStoreAisles(this.groceryStoreId)));
+    this.aislesInUse$ = this.groceryStoreManagementService.getAislesInUse(this.groceryStoreId);
+    this.sectionsInUse$ = this.groceryStoreManagementService.getSectionsInUse(this.groceryStoreId);
   }
 
   ngOnInit() {

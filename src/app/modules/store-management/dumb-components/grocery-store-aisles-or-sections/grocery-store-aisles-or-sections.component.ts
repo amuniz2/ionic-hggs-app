@@ -77,4 +77,8 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
       name: item
     });
   }
+
+  itemCanBeDeleted(groceryAisleOrSection: string) {
+
+  }
 }

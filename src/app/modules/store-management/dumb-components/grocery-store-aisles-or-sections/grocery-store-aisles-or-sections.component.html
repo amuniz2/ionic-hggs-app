@@ -11,7 +11,7 @@
           <ion-item>
             <ion-label (click)="editStoreAisle(groceryAisleOrSection)">{{groceryAisleOrSection}}</ion-label>
           </ion-item>
-          <ion-item-options side="end">
+          <ion-item-options *ngIf="itemCanBeDeleted(groceryAisleOrSection)" iside="end">
             <!--<ion-item-option (click)="edit(groceryStore)">Edit</ion-item-option>-->
             <ion-item-option color="danger" (click)="remove(groceryAisleOrSection)">Delete</ion-item-option>
           </ion-item-options>
@@ -19,7 +19,6 @@
     </ion-item>
     </ion-list>
     <ion-label *ngIf="groceryStore[collectionName]?.length === 0 && !addingAisleOrSection">No Aisles Defined</ion-label>
-    <ngx-snackbar></ngx-snackbar>
 <!--    <ion-card *ngIf="enteringStoreAisle">-->
 <!--      <ion-row>-->
 <!--        <ion-input placeholder="Enter aisle name" id="newStoreAisleInput" [(ngModel)]="newStoreAisle"></ion-input>-->

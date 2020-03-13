@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {StoreAisleOrSection,
   StoreAisleOrSectionActionRequest} from '../grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
@@ -32,6 +32,8 @@ export class EditGroceryStoreComponent implements OnInit {
 
   addingAisle$: Observable<boolean>;
   addingSection$: Observable<boolean>;
+  aislesInUse$: Observable<string[]>;
+  sectionsInUse$: Observable<string[]>;
 
   @Input()
   groceryStore: GroceryStore;

@@ -28,6 +28,7 @@ import {
 } from '../modules/store-management/store/store-management.actions';
 import {SnackbarService} from 'ngx-snackbar';
 import {of} from 'rxjs';
+import {colors} from '@angular-devkit/core/src/terminal';
 
 @Injectable()
 export class AppEffects {
@@ -161,15 +162,16 @@ export class AppEffects {
       );
     }));
 
-  @Effect()
+  @Effect({ dispatch: false})
   public displayError$ = this.actions$.pipe(
     ofType(AppActionTypes.DisplayError),
-    switchMap((payload) => {
-      this.snackbar.add( { msg: payload.error.message});
+    tap((payload) => {
+      window.alert(payload.error);
+      // this.snackbar.add( { msg: payload.error.message });
       // remap to noop Action if no state needs to be updated.
       // or for example on 401 Errors dispach a re-login action etc.
 
-      return of({ type: 'noop' });
+      // return of({ type: 'noop' });
     })
   );
 }
