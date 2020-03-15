@@ -7,6 +7,7 @@
   </app-hggs-accordion>
   <app-grocery-store-aisles-or-sections *ngIf="aislesSection.isOpen$ | async"
                                         [addingAisleOrSection]="(addingAisle$ | async)"
+                                        [aislesOrSectionsInUse] = "aislesInUse"
                                         [groceryStore]="groceryStore"
                                         (notifyNewStoreAisleOrSectionRequested)="onNotifyNewStoreAisleRequest($event)"
                                         (notifyDeleteStoreAisleOrSectionRequested)="onNotifyDeleteStoreAisleRequest($event)"
@@ -19,6 +20,8 @@
                                         [groceryStore]="groceryStore"
                                         (notifyNewStoreAisleOrSectionRequested)="onNotifyNewStoreGrocerySectionRequest($event)"
                                         (notifyDeleteStoreAisleOrSectionRequested)="onNotifyDeleteGroceryStoreSectionRequest($event)"
-                                        [collectionName]="'sections'">
+                                        [collectionName]="'sections'"
+                                        [aislesOrSectionsInUse] = "sectionsInUse"
+  >
   </app-grocery-store-aisles-or-sections>
 </ion-card>

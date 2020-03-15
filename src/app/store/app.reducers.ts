@@ -225,6 +225,26 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
         }
       };
     }
+
+    case AppActionTypes.GroceryStoreLocationsLoaded: {
+      const existingStoreLocations = state.groceryStores.entities[action.payload.storeId].locations;
+      const existingStoreLocation = existingStoreLocations.find((loc) => loc.id === action.payload.id);
+      return {
+        ...state,
+        groceryStores: {
+          ...fromAppAdapter.sharedGroceryStoreAdapter.updateOne({
+            id: action.payload.storeId,
+            changes: {
+              locations: [...existingStoreLocations, action.payload]
+            }
+          }, state.groceryStores)
+        },
+        groceryItemLocations: {
+          ...fromAppAdapter.sharedGroceryStoreLocationAdapter.upsertMany(action.payload, state.groceryItemLocations),
+          error: null,
+        }
+      };
+    }
     //   const existingLocation = getGroceryStoreLocation(state.groceryItemLocations, action.payload.id);
     // //   if (existingLocation == null) {
     //     return {

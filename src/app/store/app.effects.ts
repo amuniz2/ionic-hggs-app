@@ -26,7 +26,6 @@ import {IPantryDataService} from '../services/IPantryDataService';
 import {
   GetStoreAislesFailed, GetStoreSectionsFailed
 } from '../modules/store-management/store/store-management.actions';
-import {SnackbarService} from 'ngx-snackbar';
 import {of} from 'rxjs';
 import {colors} from '@angular-devkit/core/src/terminal';
 
@@ -34,7 +33,6 @@ import {colors} from '@angular-devkit/core/src/terminal';
 export class AppEffects {
   constructor(private store: Store<AppState>,
               private actions$: Actions<AppActions>,
-              private snackbar: SnackbarService,
               @Inject('IPantryDataService') private storeManagementService: IPantryDataService) {
   }
 

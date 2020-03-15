@@ -7,6 +7,8 @@
 </ion-header>
 <ion-content>
   <app-edit-grocery-store [groceryStore]="groceryStore$ | async"
+                          [aislesInUse]="aislesInUse$ | async"
+                          [sectionsInUse]="sectionsInUse$ | async"
                           (notifyNewStoreAisleRequested)="onNotifyNewStoreAisleRequest($event)"
                           (notifyDeleteStoreAisleRequested) ="onDeleteStoreAisleRequest($event)"
                           (notifyExpandAisles)="onNotifyExpandAisles($event)"

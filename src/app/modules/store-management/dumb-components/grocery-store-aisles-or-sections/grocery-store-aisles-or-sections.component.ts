@@ -26,6 +26,9 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
   @Input()
   addingAisleOrSection: boolean;
 
+  @Input()
+  aislesOrSectionsInUse: string[];
+
   @Output()
   notifyNewStoreAisleOrSectionRequested: EventEmitter<StoreAisleOrSectionActionRequest> = new EventEmitter();
 
@@ -78,7 +81,7 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
     });
   }
 
-  itemCanBeDeleted(groceryAisleOrSection: string) {
-
+  itemCanBeDeleted(groceryAisleOrSection: string): boolean {
+    return !this.aislesOrSectionsInUse.some(name => name === groceryAisleOrSection);
   }
 }

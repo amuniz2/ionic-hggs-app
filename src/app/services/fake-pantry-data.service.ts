@@ -58,7 +58,7 @@ export class FakePantryDataService implements IPantryDataService {
       }
     }));
 
-    groceryStore.aisles.splice(groceryStore.aisles.indexOf(deleteStoreAisleRequest.name),1);
+    groceryStore.aisles.splice(groceryStore.aisles.indexOf(deleteStoreAisleRequest.name), 1);
     return of(true);
   }
 
@@ -76,7 +76,7 @@ export class FakePantryDataService implements IPantryDataService {
       }
     }));
 
-    groceryStore.sections.splice(groceryStore.aisles.indexOf(deleteStoreSectionRequest.name),1);
+    groceryStore.sections.splice(groceryStore.aisles.indexOf(deleteStoreSectionRequest.name), 1);
     return of(true);
   }
 
@@ -301,5 +301,48 @@ export class FakePantryDataService implements IPantryDataService {
     });
     shoppingItemsStillNeeded.push(...additionalShoppingItemsNeeded);
     return of(shoppingItemsStillNeeded);
+  }
+
+  getAislesInUse(groceryStoreId: number): Observable<string[]> {
+      const groceryStoreLocationsWithAisleDefined =  this.groceryStoreLocations.filter(loc =>
+      loc.storeId === groceryStoreId && loc.aisle);
+      const aislesInUse: string[] = [];
+
+      groceryStoreLocationsWithAisleDefined.forEach((groceryStoreLocation) => {
+        if (!aislesInUse.some(aisle => aisle === groceryStoreLocation.aisle) &&
+          this.pantryItemLocations.some(ploc => ploc.groceryStoreLocationId === groceryStoreLocation.id)) {
+          aislesInUse.push(groceryStoreLocation.aisle);
+        }
+      });
+      return of(aislesInUse);
+  }
+
+  getSectionsInUse(groceryStoreId: number): Observable<string[]> {
+    // const groceryStoreLocationsWithSectionDefined =  this.groceryStoreLocations.filter(loc =>
+    //   loc.storeId === groceryStoreId && loc.section);
+    // const sectionsInUse: string[] = [];
+    //
+    // groceryStoreLocationsWithSectionDefined.forEach((groceryStoreLocation) => {
+    //   if (!sectionsInUse.some(aisle => aisle === groceryStoreLocation.aisle) &&
+    //     this.pantryItemLocations.some(ploc => ploc.groceryStoreLocationId === groceryStoreLocation.id)) {
+    //     sectionsInUse.push(groceryStoreLocation.aisle);
+    //   }
+    // };
+    // return of(sectionsInUse);
+    return this.getItemsInUse(groceryStoreId, 'aisle');
+  }
+
+  private getItemsInUse(groceryStoreId: number, propName: string): Observable<string[]> {
+    const groceryStoreLocationsItemDefined =  this.groceryStoreLocations.filter(loc =>
+      loc.storeId === groceryStoreId && loc[propName]);
+    const itemsInUse: string[] = [];
+
+    groceryStoreLocationsItemDefined.forEach((groceryStoreLocation) => {
+      if (!itemsInUse.some(item => item === groceryStoreLocation[propName]) &&
+        this.pantryItemLocations.some(ploc => ploc.groceryStoreLocationId === groceryStoreLocation.id)) {
+        itemsInUse.push(groceryStoreLocation.aisle);
+      }
+    });
+    return of(itemsInUse);
   }
 }

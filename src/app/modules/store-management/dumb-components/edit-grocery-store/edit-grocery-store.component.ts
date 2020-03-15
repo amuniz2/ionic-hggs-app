@@ -19,6 +19,12 @@ export class EditGroceryStoreComponent implements OnInit {
   @Input()
   groceryAislesSectionIsOpen: boolean;
 
+  @Input()
+  aislesInUse: string[];
+
+  @Input()
+  sectionsInUse: string[];
+
   private sections: AccordionSections;
 
   aislesSection: PageSection = {
@@ -32,8 +38,6 @@ export class EditGroceryStoreComponent implements OnInit {
 
   addingAisle$: Observable<boolean>;
   addingSection$: Observable<boolean>;
-  aislesInUse$: Observable<string[]>;
-  sectionsInUse$: Observable<string[]>;
 
   @Input()
   groceryStore: GroceryStore;

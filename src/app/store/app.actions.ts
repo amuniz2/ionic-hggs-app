@@ -42,6 +42,8 @@ export enum AppActionTypes {
   DeleteStoreFailed = '[Store Manager] Delete Store failed',
   DeleteStoreSucceeded = '[Store Manager] Delete Store succeeded',
   DisplayError = '[Store Manager] Something failed',
+  LoadGroceryStoreLocations = '[Store Manager] Load GroceryStore Locations',
+  GroceryStoreLocationsLoaded = '[Store Manager] Grocery Store Locations Loaded'
 }
 
 export class StartAppInitializer implements Action {
@@ -224,15 +226,27 @@ export class DisplayError implements Action {
   constructor(public error: Error) {
   }
   readonly type = AppActionTypes.DisplayError;
-
 }
+
+export class LoadGroceryStoreLocations implements Action {
+  constructor(groceryStoreId: number) {}
+  readonly type = AppActionTypes.LoadGroceryStoreLocations;
+}
+
+export class GroceryStoreLocationsLoaded implements Action {
+  constructor(groceryStoreId: number, storeLocations: GroceryStoreLocation[]) {}
+  readonly type = AppActionTypes.GroceryStoreLocationsLoaded;
+}
+
 // endregion
 export type AppActions = AppReady
   | StartAppInitializer
   | FinishAppInitializer
   | DatabaseOpenFailed
+  | GroceryStoreLocationsLoaded
   | LoadGroceryStoreAisles
   | LoadGroceryStoreSections
+  | LoadGroceryStoreLocations
   | LoadGroceryStores
   | LoadGroceryStoresFailed
   | StoresLoadedSuccessfully

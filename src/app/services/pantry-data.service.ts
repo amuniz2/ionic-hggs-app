@@ -16,6 +16,12 @@ import {ShoppingItem} from '../model/shopping-item';
 
 @Injectable()
 export class PantryDataService implements IPantryDataService {
+    getAislesInUse(groceryStoreId: number): Observable<string[]> {
+        throw new Error("Method not implemented.");
+    }
+    getSectionsInUse(groceryStoreId: number): Observable<string[]> {
+        throw new Error("Method not implemented.");
+    }
   private readonly groceryStores: GroceryStore[];
   constructor(private dbHelper: PantryDbHelper) {
     this.groceryStores = [
