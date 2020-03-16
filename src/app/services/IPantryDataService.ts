@@ -56,4 +56,6 @@ export interface IPantryDataService {
   getAislesInUse(groceryStoreId: number): Observable<string[]>;
 
   getSectionsInUse(groceryStoreId: number): Observable<string[]>;
+
+  getGroceryStoreLocations(groceryStoreId: number): Observable<GroceryStoreLocation[]>;
 }

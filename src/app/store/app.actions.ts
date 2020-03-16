@@ -229,12 +229,12 @@ export class DisplayError implements Action {
 }
 
 export class LoadGroceryStoreLocations implements Action {
-  constructor(groceryStoreId: number) {}
+  constructor(public groceryStoreId: number) {}
   readonly type = AppActionTypes.LoadGroceryStoreLocations;
 }
 
 export class GroceryStoreLocationsLoaded implements Action {
-  constructor(groceryStoreId: number, storeLocations: GroceryStoreLocation[]) {}
+  constructor(public groceryStoreId: number, public storeLocations: GroceryStoreLocation[]) {}
   readonly type = AppActionTypes.GroceryStoreLocationsLoaded;
 }
 

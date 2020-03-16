@@ -1,5 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
 import {
+  NavigatedToStoreDetailsPage,
   NavigateToStoreDetailsPage,
   StoreManagementActions,
   StoreManagerActionTypes,
@@ -10,7 +11,14 @@ import {catchError, map, mapTo, switchMap, tap} from 'rxjs/operators';
 import {StoreManagementState} from './store-management.reducers';
 import {NavigationExtras, Router} from '@angular/router';
 import {IPantryDataService} from '../../../services/IPantryDataService';
-import {CreateStoreFailed, DeleteStoreFailed, StoreCreated, StoreDeleted} from '../../../store';
+import {
+  CreateStoreFailed,
+  DeleteStoreFailed, DisplayError,
+  GroceryStoreLocationsLoaded,
+  LoadGroceryStoreLocations,
+  StoreCreated,
+  StoreDeleted
+} from '../../../store';
 
 @Injectable()
 export class StoreManagementEffects {
@@ -56,5 +64,22 @@ export class StoreManagementEffects {
     tap((navigateToEditStorePage: NavigateToStoreDetailsPage) => {
       const navigationExtras: NavigationExtras = { queryParams: { id: navigateToEditStorePage.navigateToEditStorePayload.id} };
       this.router.navigate([this.router.url, 'store-details'], navigationExtras);
+    }));
+
+  @Effect()
+  public navigatedToStoreDetailsPage$ = this.actions$.pipe(
+    ofType(StoreManagerActionTypes.NavigatedToStoreDetailsPage),
+    map((navigatedToEditStorePage: NavigatedToStoreDetailsPage) => {
+      return new LoadGroceryStoreLocations(navigatedToEditStorePage.groceryStoreId);
+    }));
+
+  @Effect()
+  public loadGroceryStoreLocations$ = this.actions$.pipe(
+    ofType(StoreManagerActionTypes.NavigatedToStoreDetailsPage),
+    switchMap((payload) => {
+      return this.storeManagementService.getGroceryStoreLocations(payload.groceryStoreId).pipe(
+        map(success => new GroceryStoreLocationsLoaded(payload.groceryStoreId, success)),
+        catchError(error => [new DisplayError(error)])
+      );
     }));
 }

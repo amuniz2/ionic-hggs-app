@@ -21,7 +21,6 @@ import {IPantryDataService} from '../../../../services/IPantryDataService';
 export class EditSelectedGroceryStoreComponent implements OnInit {
 
   groceryStoreId: number;
-  aislesSectionIsOpen: boolean;
 
   groceryStore$: Observable<GroceryStore>;
   groceryStoreAisles$: Observable<string[]>;
