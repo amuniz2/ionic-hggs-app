@@ -345,4 +345,8 @@ export class FakePantryDataService implements IPantryDataService {
     });
     return of(itemsInUse);
   }
+
+  getGroceryStoreLocations(groceryStoreId: number): Observable<GroceryStoreLocation[]> {
+    return of(this.groceryStoreLocations.filter(loc => loc.storeId === groceryStoreId));
+  }
 }

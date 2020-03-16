@@ -2,7 +2,12 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {GroceryStore} from '../../../../model/grocery-store';
-import {selectGroceryStore, selectGroceryStoreAisles} from '../../../../store/store-management.selectors';
+import {
+  selectAislesInUse,
+  selectGroceryStore,
+  selectGroceryStoreAisles,
+  selectSectionsInUse
+} from '../../../../store/store-management.selectors';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import * as fromActions from '../../store/store-management.actions';
@@ -34,8 +39,10 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
     this.groceryStoreId = this.router.getCurrentNavigation().extras.queryParams.id;
     this.groceryStore$ = this.store.pipe(select(selectGroceryStore(this.groceryStoreId)));
     this.groceryStoreAisles$ = this.store.pipe(select(selectGroceryStoreAisles(this.groceryStoreId)));
-    this.aislesInUse$ = this.groceryStoreManagementService.getAislesInUse(this.groceryStoreId);
-    this.sectionsInUse$ = this.groceryStoreManagementService.getSectionsInUse(this.groceryStoreId);
+    // this.aislesInUse$ = this.groceryStoreManagementService.getAislesInUse(this.groceryStoreId);
+    this.aislesInUse$ = this.store.pipe(select(selectAislesInUse(this.groceryStoreId)));
+    this.sectionsInUse$ = this.store.pipe(select(selectSectionsInUse(this.groceryStoreId)));
+    // this.sectionsInUse$ = this.groceryStoreManagementService.getSectionsInUse(this.groceryStoreId);
   }
 
   ngOnInit() {

@@ -3,10 +3,7 @@ import {GroceryStore} from '../model/grocery-store';
 import {AppState, GroceryItemLocationsState, GroceryStoresState} from './app.state';
 import * as fromAdapter from './grocery-store.adapter';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
-import {of} from 'rxjs';
-// import * as fromAdapter from '../../store-management/store/grocery-store.adapter';
 
-// export const getStoreManagementState = createFeatureSelector<SharedStoresState>('storeManagement');
 const getAppState = createFeatureSelector<AppState>('app');
 export const getGroceryStoresState = createSelector(
   getAppState,
@@ -68,15 +65,22 @@ export const selectGroceryStoreSectionsInAisle = (id: number, aisle: string) => 
     .locations.filter((location) => location.aisle === aisle)
     .map(location => location.section));
 
-/*
-export const selectGroceryStore = (id: number) => createSelector(
-  selectAllGroceryStores, (state: GroceryStore[]) => state.find((store) => store.id === id));
+export const selectAislesInUse = (groceryStoreId: number) => selectStoreLocationComponentsInuse(groceryStoreId, 'aisle');
 
- */
-// export const selectGroceryStoreLocations = (storeId: number) => createSelector(
-//   selectAllGroceryStoreLocations, (state: GroceryItemLocationsState) => groceryStore
-//     .locations.filter((location) => location.aisle === aisle)
-//     .map(location => location.section));
+export const selectSectionsInUse = (groceryStoreId: number) => selectStoreLocationComponentsInuse(groceryStoreId, 'section');
+
+const selectStoreLocationComponentsInuse = (groceryStoreId: number, component: string) => createSelector(
+  selectAllGroceryStoreLocations,
+  (state: GroceryStoreLocation[]) => {
+    const componentsInUse: Set<string> = new Set<string>();
+    state.filter(loc => loc.storeId === groceryStoreId && loc[component]).forEach(
+      (loc) => {
+        if (!componentsInUse.has(loc[component])) {
+          componentsInUse.add(loc[component]);
+        }
+      });
+    return Array.from(componentsInUse);
+  });
 
 export const selectGroceryStoreSectionsInNoAisle = (id: number) => createSelector(
   selectGroceryStore(id), (groceryStore: GroceryStore) => groceryStore
