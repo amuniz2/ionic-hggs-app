@@ -15,6 +15,10 @@ export interface StoreAisleOrSectionActionRequest {
   action: UiCrudAction;
 }
 
+export interface UpdateStoreAisleOrSectionActionRequest extends StoreAisleOrSectionActionRequest {
+  originalName: string;
+}
+
 @Component({
   selector: 'app-grocery-store-aisles-or-sections',
   templateUrl: './grocery-store-aisles-or-sections.component.html',
@@ -33,6 +37,12 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
   notifyNewStoreAisleOrSectionRequested: EventEmitter<StoreAisleOrSectionActionRequest> = new EventEmitter();
 
   @Output()
+  notifyStartEditStoreAisleOrSectionRequested: EventEmitter<StoreAisleOrSectionActionRequest> = new EventEmitter();
+
+  @Output()
+  notifyEditStoreAisleOrSectionRequested: EventEmitter<UpdateStoreAisleOrSectionActionRequest> = new EventEmitter();
+
+  @Output()
   notifyDeleteStoreAisleOrSectionRequested: EventEmitter<StoreAisleOrSection> = new EventEmitter();
 
   @Input()
@@ -41,16 +51,16 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
   @Input()
   collectionName: string;
 
-  constructor(private store: Store<AppState>) { }
+  @Input()
+  itemBeingEdited: string;
+
+  nameBeforeEdit: string;
+  newName: any;
+
+  constructor(private store: Store<AppState>) {
+  }
 
   ngOnInit() {
-  }
-  onAddStoreAisleClick() {
-    this.notifyNewStoreAisleOrSectionRequested.emit({
-      groceryStoreId: this.groceryStore.id,
-      aisleOrSectionName: null,
-      action: UiCrudAction.RequestCreate});
-    this.newStoreAisleOrSection = '';
   }
 
   onCancelAddStoreAisleOrSectionClick() {
@@ -61,6 +71,14 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
     this.newStoreAisleOrSection = '';
   }
 
+  onCancelEditStoreAisleOrSectionClick() {
+    this.notifyEditStoreAisleOrSectionRequested.emit({
+      originalName: "",
+      groceryStoreId: this.groceryStore.id,
+      aisleOrSectionName: this.itemBeingEdited,
+      action: UiCrudAction.Cancel});
+    this.newName = '';
+  }
   onAddStoreAisleDoneClick() {
     this.notifyNewStoreAisleOrSectionRequested.emit({
       groceryStoreId: this.groceryStore.id,
@@ -69,8 +87,15 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
     this.newStoreAisleOrSection = '';
   }
 
-  editStoreAisle(name: string) {
-    // this.store.dispatch( new NavigateToStoreDetailsPage({ id: item.id } ));
+  editStoreAisle(slidingItem, asileName: string) {
+    slidingItem.el.close();
+    this.newName = asileName;
+    this.nameBeforeEdit = asileName;
+    this.notifyStartEditStoreAisleOrSectionRequested.emit( {
+      groceryStoreId: this.groceryStore.id,
+      aisleOrSectionName: asileName,
+      action: UiCrudAction.RequestUpdate
+    });
     // item.close();
   }
   remove(item: string) {
@@ -83,5 +108,22 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
 
   itemCanBeDeleted(groceryAisleOrSection: string): boolean {
     return !this.aislesOrSectionsInUse.some(name => name === groceryAisleOrSection);
+  }
+
+  doneEditingItem() {
+    if (this.itemBeingEdited === this.newName) {
+      return;
+    }
+    this.notifyEditStoreAisleOrSectionRequested.emit( {
+      groceryStoreId: this.groceryStore.id,
+      originalName: this.itemBeingEdited,
+      aisleOrSectionName: this.newName,
+      action: UiCrudAction.Update
+    });
+    // this.itemBeingEdited = '';
+  }
+
+  isItemBeingEdited(): boolean {
+    return this.itemBeingEdited && this.itemBeingEdited === this.nameBeforeEdit;
   }
 }

@@ -16,22 +16,22 @@ import {ShoppingItem} from '../model/shopping-item';
 
 @Injectable()
 export class PantryDataService implements IPantryDataService {
-    getGroceryStoreLocations(groceryStoreId: number): Observable<GroceryStoreLocation[]> {
-        throw new Error("Method not implemented.");
-    }
-    getAislesInUse(groceryStoreId: number): Observable<string[]> {
-        throw new Error("Method not implemented.");
-    }
-    getSectionsInUse(groceryStoreId: number): Observable<string[]> {
-        throw new Error("Method not implemented.");
-    }
-  private readonly groceryStores: GroceryStore[];
   constructor(private dbHelper: PantryDbHelper) {
     this.groceryStores = [
       { id: 1, name: 'Publix', aisles: [], locations: [], sections: []},
       { id: 2, name: 'Target', aisles: [], locations: [], sections: []},
     ];
   }
+  private readonly groceryStores: GroceryStore[];
+    getGroceryStoreLocations(groceryStoreId: number): Observable<GroceryStoreLocation[]> {
+        throw new Error('Method not implemented.');
+    }
+    getAislesInUse(groceryStoreId: number): Observable<string[]> {
+        throw new Error('Method not implemented.');
+    }
+    getSectionsInUse(groceryStoreId: number): Observable<string[]> {
+        throw new Error('Method not implemented.');
+    }
 
   public initialize(): Observable<boolean> {
     return this.dbHelper.connect();
@@ -118,6 +118,10 @@ export class PantryDataService implements IPantryDataService {
   }
 
   getShoppingList(storeId: number): Observable<ShoppingItem[]> {
+    return undefined;
+  }
+
+  updateGroceryStoreAisle(groceryStoreId: number, oldName: string, newName: string): Observable<boolean> {
     return undefined;
   }
 

@@ -1,7 +1,10 @@
 import {Action} from '@ngrx/store';
 import {GroceryStore} from '../model/grocery-store';
 // tslint:disable-next-line:max-line-length
-import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
+import {
+  StoreAisleOrSection,
+  UpdateStoreAisleOrSectionActionRequest
+} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 
 export const APP_READY = '[App] Ready';
@@ -43,7 +46,9 @@ export enum AppActionTypes {
   DeleteStoreSucceeded = '[Store Manager] Delete Store succeeded',
   DisplayError = '[Store Manager] Something failed',
   LoadGroceryStoreLocations = '[Store Manager] Load GroceryStore Locations',
-  GroceryStoreLocationsLoaded = '[Store Manager] Grocery Store Locations Loaded'
+  GroceryStoreLocationsLoaded = '[Store Manager] Grocery Store Locations Loaded',
+  UpdateAisle = '[Store Manager] Update Store Aisle',
+  UpdateSection = '[Store Manager] Update Grocery Store Section',
 }
 
 export class StartAppInitializer implements Action {
@@ -238,6 +243,15 @@ export class GroceryStoreLocationsLoaded implements Action {
   readonly type = AppActionTypes.GroceryStoreLocationsLoaded;
 }
 
+export class UpdateAisle implements Action {
+  constructor(public updateRequest: UpdateStoreAisleOrSectionActionRequest) {}
+  readonly type = AppActionTypes.UpdateAisle;
+}
+
+export class UpdateSection implements Action {
+  constructor(public updateRequest: UpdateStoreAisleOrSectionActionRequest) {}
+  readonly type = AppActionTypes.UpdateSection;
+}
 // endregion
 export type AppActions = AppReady
   | StartAppInitializer
@@ -271,4 +285,6 @@ export type AppActions = AppReady
   | CreateStoreFailed
   | DeleteStoreFailed
   | StoreDeleted
-  | DeleteStoreSucceeded;
+  | DeleteStoreSucceeded
+  | UpdateAisle
+  | UpdateSection;

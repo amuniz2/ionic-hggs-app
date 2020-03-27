@@ -1,10 +1,14 @@
-import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
-import {StoreAisleOrSection,
-  StoreAisleOrSectionActionRequest} from '../grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
+import {
+  StoreAisleOrSection,
+  StoreAisleOrSectionActionRequest,
+  UpdateStoreAisleOrSectionActionRequest
+} from '../grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {Observable, of} from 'rxjs';
 import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
 import {UiCrudAction} from '../../../../ui-crud-actions';
+
 export interface AccordionSections {
   [sectioName: string]: PageSection;
 }
@@ -38,6 +42,8 @@ export class EditGroceryStoreComponent implements OnInit {
 
   addingAisle$: Observable<boolean>;
   addingSection$: Observable<boolean>;
+  aisleBeingEdited$: Observable<string>;
+  sectionBeingEdited$: Observable<string>;
 
   @Input()
   groceryStore: GroceryStore;
@@ -59,6 +65,12 @@ export class EditGroceryStoreComponent implements OnInit {
 
   @Output()
   notifyExpandSections: EventEmitter<number> = new EventEmitter();
+
+  @Output()
+  notifyUpdateAisle: EventEmitter<UpdateStoreAisleOrSectionActionRequest> = new EventEmitter();
+
+  @Output()
+  notifyUpdateSection: EventEmitter<UpdateStoreAisleOrSectionActionRequest> = new EventEmitter();
 
   constructor() {
   }
@@ -115,5 +127,29 @@ export class EditGroceryStoreComponent implements OnInit {
 
   onAddSectionClicked() {
     this.addingSection$ = of(true);
+  }
+
+  onStartEditAisle($event: StoreAisleOrSectionActionRequest) {
+    this.aisleBeingEdited$ = of($event.aisleOrSectionName);
+  }
+
+  onStartEditSection($event: StoreAisleOrSectionActionRequest) {
+    this.sectionBeingEdited$ = of($event.aisleOrSectionName);
+  }
+
+  onUpdateAisle($event: UpdateStoreAisleOrSectionActionRequest) {
+    this.aisleBeingEdited$ = of('');
+    if ($event.action === UiCrudAction.Cancel) {
+      return;
+    }
+    this.notifyUpdateAisle.emit($event);
+  }
+
+  onUpdateSection($event: UpdateStoreAisleOrSectionActionRequest) {
+    this.sectionBeingEdited$ = of('');
+    if ($event.action === UiCrudAction.Cancel) {
+      return;
+    }
+    this.notifyUpdateSection.emit($event);
   }
 }

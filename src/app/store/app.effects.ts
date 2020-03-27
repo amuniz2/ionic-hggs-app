@@ -18,7 +18,7 @@ import {
   GroceryStoreSectionAdded,
   AddGroceryStoreSectionFailed,
   GroceryStoreSectionDeleted,
-  DeleteGroceryStoreSectionFailed, GroceryStoreSectionsLoaded, DisplayError
+  DeleteGroceryStoreSectionFailed, GroceryStoreSectionsLoaded, DisplayError, LoadGroceryStoreLocations
 } from '../store/app.actions';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {AppState} from './app.state';
@@ -160,16 +160,28 @@ export class AppEffects {
       );
     }));
 
+  @Effect()
+  public updateStoreAisle$ = this.actions$.pipe(
+    ofType(AppActionTypes.UpdateAisle),
+    switchMap((payload) => {
+      return this.storeManagementService.updateGroceryStoreAisle(
+        payload.updateRequest.groceryStoreId,
+        payload.updateRequest.originalName,
+        payload.updateRequest.aisleOrSectionName).pipe(
+            switchMap(aisleUpdated => [
+              new LoadGroceryStoreAisles(payload.updateRequest.groceryStoreId),
+              new LoadGroceryStoreLocations(payload.updateRequest.groceryStoreId)
+            ]));
+        }),
+    catchError(error => {
+      return of(new DisplayError(error));
+    }));
+
   @Effect({ dispatch: false})
   public displayError$ = this.actions$.pipe(
     ofType(AppActionTypes.DisplayError),
     tap((payload) => {
       window.alert(payload.error);
-      // this.snackbar.add( { msg: payload.error.message });
-      // remap to noop Action if no state needs to be updated.
-      // or for example on 401 Errors dispach a re-login action etc.
-
-      // return of({ type: 'noop' });
     })
   );
 }

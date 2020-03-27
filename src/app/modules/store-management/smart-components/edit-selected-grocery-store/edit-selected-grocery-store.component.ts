@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {
   selectAislesInUse,
@@ -14,9 +14,11 @@ import * as fromActions from '../../store/store-management.actions';
 import * as fromAppActions from '../../../../store/app.actions';
 import {
   StoreAisleOrSection,
-  StoreAisleOrSectionActionRequest
+  StoreAisleOrSectionActionRequest,
+  UpdateStoreAisleOrSectionActionRequest
 } from '../../dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
+import {UiCrudAction} from '../../../../ui-crud-actions';
 
 @Component({
   selector: 'app-edit-selected-grocery-store',
@@ -39,10 +41,8 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
     this.groceryStoreId = this.router.getCurrentNavigation().extras.queryParams.id;
     this.groceryStore$ = this.store.pipe(select(selectGroceryStore(this.groceryStoreId)));
     this.groceryStoreAisles$ = this.store.pipe(select(selectGroceryStoreAisles(this.groceryStoreId)));
-    // this.aislesInUse$ = this.groceryStoreManagementService.getAislesInUse(this.groceryStoreId);
     this.aislesInUse$ = this.store.pipe(select(selectAislesInUse(this.groceryStoreId)));
     this.sectionsInUse$ = this.store.pipe(select(selectSectionsInUse(this.groceryStoreId)));
-    // this.sectionsInUse$ = this.groceryStoreManagementService.getSectionsInUse(this.groceryStoreId);
   }
 
   ngOnInit() {
@@ -75,5 +75,11 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
   }
   onNotifyExpandSections($event: number) {
     this.store.dispatch(new fromAppActions.LoadGroceryStoreSections($event));
+  }
+
+  onUpdateAisle($event: UpdateStoreAisleOrSectionActionRequest) {
+    if ($event.action === UiCrudAction.Update) {
+      this.store.dispatch(new fromAppActions.UpdateAisle($event));
+    }
   }
 }

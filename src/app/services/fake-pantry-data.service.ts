@@ -122,8 +122,12 @@ export class FakePantryDataService implements IPantryDataService {
     const groceryStore: GroceryStore = this.groceryStores.find((grocerStore) => grocerStore.id === newStoreAisleRequest.groceryStoreId);
     let aisleAdded = '';
     if (groceryStore != null) {
-      groceryStore.aisles.push(newStoreAisleRequest.name);
-      aisleAdded = newStoreAisleRequest.name;
+      if (!groceryStore.aisles.some(aisle => aisle === newStoreAisleRequest.name)) {
+        groceryStore.aisles.push(newStoreAisleRequest.name);
+        aisleAdded = newStoreAisleRequest.name;
+      } else {
+        throw new Error(`${newStoreAisleRequest.name} already exists.`);
+      }
     }
     return of(aisleAdded);
   }
@@ -133,8 +137,12 @@ export class FakePantryDataService implements IPantryDataService {
       (grocerStore) => grocerStore.id === newGroceryStoreSectionRequest.groceryStoreId);
     let sectionAdded = '';
     if (groceryStore != null) {
-      groceryStore.sections.push(newGroceryStoreSectionRequest.name);
-      sectionAdded = newGroceryStoreSectionRequest.name;
+      if (!groceryStore.sections.some(section => section === newGroceryStoreSectionRequest.name)) {
+        groceryStore.sections.push(newGroceryStoreSectionRequest.name);
+        sectionAdded = newGroceryStoreSectionRequest.name;
+      } else {
+        throw new Error(`${newGroceryStoreSectionRequest.name} already exists.`);
+      }
     }
     return of(sectionAdded);
   }
@@ -318,17 +326,6 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   getSectionsInUse(groceryStoreId: number): Observable<string[]> {
-    // const groceryStoreLocationsWithSectionDefined =  this.groceryStoreLocations.filter(loc =>
-    //   loc.storeId === groceryStoreId && loc.section);
-    // const sectionsInUse: string[] = [];
-    //
-    // groceryStoreLocationsWithSectionDefined.forEach((groceryStoreLocation) => {
-    //   if (!sectionsInUse.some(aisle => aisle === groceryStoreLocation.aisle) &&
-    //     this.pantryItemLocations.some(ploc => ploc.groceryStoreLocationId === groceryStoreLocation.id)) {
-    //     sectionsInUse.push(groceryStoreLocation.aisle);
-    //   }
-    // };
-    // return of(sectionsInUse);
     return this.getItemsInUse(groceryStoreId, 'aisle');
   }
 
@@ -348,5 +345,25 @@ export class FakePantryDataService implements IPantryDataService {
 
   getGroceryStoreLocations(groceryStoreId: number): Observable<GroceryStoreLocation[]> {
     return of(this.groceryStoreLocations.filter(loc => loc.storeId === groceryStoreId));
+  }
+
+  updateGroceryStoreAisle(groceryStoreId: number, oldName: string, newName: string): Observable<boolean> {
+    // (1) update aisle name
+    const groceryStore = this.getGroceryStore(groceryStoreId);
+    if (groceryStore === null) {
+      return of(false);
+    }
+    // (1) update aisle name
+    const aisleNdx = groceryStore.aisles.indexOf(oldName);
+    if (aisleNdx < 0) {
+      return of(false);
+    }
+    groceryStore.aisles[aisleNdx]  = newName;
+
+    // (2) update grocery store locations that used old aisle name with new aisle name
+    this.groceryStoreLocations.filter(loc => loc.storeId === groceryStoreId && loc.aisle === oldName)
+      .forEach(loc => loc.aisle = newName);
+
+    return of(true);
   }
 }

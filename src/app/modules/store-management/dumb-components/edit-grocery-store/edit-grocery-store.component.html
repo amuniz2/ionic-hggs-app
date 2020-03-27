@@ -11,6 +11,9 @@
                                         [groceryStore]="groceryStore"
                                         (notifyNewStoreAisleOrSectionRequested)="onNotifyNewStoreAisleRequest($event)"
                                         (notifyDeleteStoreAisleOrSectionRequested)="onNotifyDeleteStoreAisleRequest($event)"
+                                        (notifyStartEditStoreAisleOrSectionRequested)="onStartEditAisle($event)"
+                                        (notifyEditStoreAisleOrSectionRequested)="onUpdateAisle($event)"
+                                        [itemBeingEdited]="(aisleBeingEdited$ | async)"
                                         [collectionName]="'aisles'">
   </app-grocery-store-aisles-or-sections>
   <app-hggs-accordion [sectionName]="grocerySectionsSection.label" [description]="" (change)="toggleGroceryStoreSectionsExpandState($event)" (addToList)="onAddSectionClicked()">
@@ -22,6 +25,9 @@
                                         (notifyDeleteStoreAisleOrSectionRequested)="onNotifyDeleteGroceryStoreSectionRequest($event)"
                                         [collectionName]="'sections'"
                                         [aislesOrSectionsInUse] = "sectionsInUse"
+                                        (notifyStartEditStoreAisleOrSectionRequested)="onStartEditSection($event)"
+                                        (notifyEditStoreAisleOrSectionRequested)="onUpdateSection($event)"
+                                        [itemBeingEdited]="(sectionBeingEdited$ | async)"
   >
   </app-grocery-store-aisles-or-sections>
 </ion-card>

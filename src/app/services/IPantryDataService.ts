@@ -58,4 +58,6 @@ export interface IPantryDataService {
   getSectionsInUse(groceryStoreId: number): Observable<string[]>;
 
   getGroceryStoreLocations(groceryStoreId: number): Observable<GroceryStoreLocation[]>;
+
+  updateGroceryStoreAisle(groceryStoreId: number, oldName: string, newName: string): Observable<boolean>;
 }
