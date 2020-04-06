@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {select, Store} from '@ngrx/store';
 import {Observable, of} from 'rxjs';
 import * as fromSelectors from '../../../../store/store-management.selectors';
-import {GroceryStore} from '../../../../model/grocery-store';
+import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 import * as fromActions from '../../store/store-management.actions';
 import {AppState} from '../../../../store/app.state';
 import {DeleteGroceryStoreRequest, NewGroceryStoreRequest} from '../../dumb-components/store-list/store-list.component';
@@ -16,7 +16,7 @@ import {LoadGroceryStores} from '../../../../store';
 })
 export class StoreInventoryManagerPageComponent implements OnInit {
   title: string;
-  groceryStores$: Observable<GroceryStore[]>;
+  groceryStores$: Observable<GroceryStoreState[]>;
   groceryStoresLoading$: Observable<boolean>;
   addingStore$: Observable<boolean>;
 

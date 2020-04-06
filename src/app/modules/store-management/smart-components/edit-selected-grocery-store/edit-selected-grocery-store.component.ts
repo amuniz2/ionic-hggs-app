@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {GroceryStore} from '../../../../model/grocery-store';
+import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 import {
   selectAislesInUse,
   selectGroceryStore,
@@ -29,7 +29,7 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
 
   groceryStoreId: number;
 
-  groceryStore$: Observable<GroceryStore>;
+  groceryStore$: Observable<GroceryStoreState>;
   groceryStoreAisles$: Observable<string[]>;
 
   aislesInUse$: Observable<string[]>;

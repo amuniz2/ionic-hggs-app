@@ -104,7 +104,7 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
 
     case AppActionTypes.StoreAisleAdded: {
       const groceryStore = getGroceryStore(state.groceryStores, action.payload.groceryStoreId);
-      if (groceryStore.aisles.some((aisle) => aisle === action.payload.newAisle)) {
+      if (groceryStore.aisles.some(aisle => aisle === action.payload.newAisle)) {
         return state;
       }
       return {

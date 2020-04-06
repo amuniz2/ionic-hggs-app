@@ -428,9 +428,9 @@ export class MySqlCommands {
       console.log(err);
     }
   }
-  public async queryGroceryStoreAisles(id: number): Promise<string[]> {
+  public async queryGroceryStoreAisles(id: number): Promise<Set<string>> {
     try {
-      const ret = [];
+      const ret = new Set<string>();
       console.log(`In queryGroceryStoreAislesPromise ${id}`);
       // tslint:disable-next-line:max-line-length
       const sqlQueryAisles = `SELECT * from ${pantrySchema.StoreGroceryAisleTable.NAME} WHERE ${pantrySchema.StoreGroceryAisleTable.COLS.STORE_ID} = \'${id}\'`;
@@ -439,12 +439,12 @@ export class MySqlCommands {
       if (data.rows.length > 0) {
         console.log('at least 1 row returned, converting first row to grocery aisle');
         for (let i = 0; i < data.rows.length; i++) {
-          ret.push(data.rows.item(i)[StoreGroceryAisleTable.COLS.GROCERY_AISLE]);
+          ret.add(data.rows.item(i)[StoreGroceryAisleTable.COLS.GROCERY_AISLE]);
         }
         return ret;
       } else {
         console.log('no aisles returned for query store by id');
-        return [];
+        return ret;
       }
     } catch (err) {
       console.log('Error querying store aisles by id');

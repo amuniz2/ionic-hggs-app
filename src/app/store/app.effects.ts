@@ -26,8 +26,9 @@ import {IPantryDataService} from '../services/IPantryDataService';
 import {
   GetStoreAislesFailed, GetStoreSectionsFailed
 } from '../modules/store-management/store/store-management.actions';
-import {of} from 'rxjs';
+import {of, throwError} from 'rxjs';
 import {colors} from '@angular-devkit/core/src/terminal';
+import {GroceryStoreState} from '../model/grocery-store';
 
 @Injectable()
 export class AppEffects {
@@ -56,7 +57,15 @@ export class AppEffects {
           console.log('grocery stores returned: ');
           console.log(data);
         }),
-        map(data => new StoresLoadedSuccessfully(data)),
+        map(data => {
+          const stateData: GroceryStoreState[] = data.map(x => {
+                return {
+                  ...x,
+                  aisles: Array.from(x.aisles)
+                };
+          });
+          return new StoresLoadedSuccessfully(stateData);
+        }),
         catchError(error => [new LoadGroceryStoresFailed(error)])
       );
     })
@@ -78,10 +87,10 @@ export class AppEffects {
     ofType(AppActionTypes.LoadStoreAisles),
     switchMap((payload) => {
       return this.storeManagementService.getGroceryStoreAisles(payload.groceryStoreId).pipe(
-        tap((aisles) => {
-          console.log(`aisles: ${aisles}`);
-        }),
-        map(aisles => new GroceryStoreAislesLoaded( { groceryStoreId: payload.groceryStoreId, aisles })),
+        map(aisles => new GroceryStoreAislesLoaded( {
+          groceryStoreId: payload.groceryStoreId,
+          aisles: Array.from(aisles)
+        })),
         catchError(error => [new GetStoreAislesFailed(error)])
       );
     }));
@@ -103,29 +112,27 @@ export class AppEffects {
   public addNewStoreAisle$ = this.actions$.pipe(
     ofType(AppActionTypes.AddStoreAisle),
     switchMap((payload) => {
-      return this.storeManagementService.addGroceryStoreAisle(payload.newStoreAisleRequest).pipe(
-        tap((aisleAdded) => {
-          console.log(`aisleAdded: ${aisleAdded}`);
-        }),
-        map(aisleAdded => new StoreAisleAdded( { groceryStoreId: payload.newStoreAisleRequest.groceryStoreId, newAisle: aisleAdded })),
-        catchError(error => [new AddStoreAisleFailed(error)])
-      );
-    }));
+        return this.storeManagementService.addGroceryStoreAisle(payload.newStoreAisleRequest).pipe(
+          map(aisleAdded => new StoreAisleAdded(
+              {groceryStoreId: payload.newStoreAisleRequest.groceryStoreId, newAisle: aisleAdded})),
+          catchError(error => {
+            return [new DisplayError(error)];
+          })
+        );
+      })
+    );
 
   @Effect()
   public deleteStoreAisle$ = this.actions$.pipe(
     ofType(AppActionTypes.DeleteStoreAisle),
     switchMap((payload) => {
       return this.storeManagementService.deleteGroceryStoreAisle(payload.deleteStoreAisleRequest).pipe(
-        tap((aisleDeleted) => {
-          console.log(`aisleDeleted: ${aisleDeleted}`);
-        }),
         map(aisleDeleted => new GroceryStoreAisleDeleted( {
           groceryStoreId: payload.deleteStoreAisleRequest.groceryStoreId,
-          aisle: payload.deleteStoreAisleRequest.name })));
-    }),
-    catchError(error => {
-      return of(new DisplayError(error));
+          aisle: payload.deleteStoreAisleRequest.name })),
+        catchError(error => {
+          return of(new DisplayError(error));
+        }));
     }));
 
   @Effect()
@@ -139,7 +146,7 @@ export class AppEffects {
         map(sectionAdded => new GroceryStoreSectionAdded( {
           groceryStoreId: payload.newGroceryStoreSectionRequest.groceryStoreId,
           newSection: sectionAdded })),
-        catchError(error => [new AddGroceryStoreSectionFailed(error)])
+        catchError(error => of(new DisplayError(error)))
       );
     }));
 
@@ -171,11 +178,12 @@ export class AppEffects {
             switchMap(aisleUpdated => [
               new LoadGroceryStoreAisles(payload.updateRequest.groceryStoreId),
               new LoadGroceryStoreLocations(payload.updateRequest.groceryStoreId)
-            ]));
-        }),
-    catchError(error => {
-      return of(new DisplayError(error));
-    }));
+            ]),
+            catchError(error => {
+              return of(new DisplayError(error));
+            }));
+    }),
+);
 
   @Effect({ dispatch: false})
   public displayError$ = this.actions$.pipe(

@@ -9,14 +9,14 @@
       <ion-card *ngFor="let groceryAisleOrSection of groceryStore[collectionName]">
         <ion-item-sliding #itemSliding>
           <ion-item>
-            <ion-label *ngIf="!isItemBeingEdited() else showEditBox;" >{{groceryAisleOrSection}}</ion-label>
+            <ion-label *ngIf="!(itemBeingEdited && groceryAisleOrSection === itemBeingEdited) else showEditBox;" >{{groceryAisleOrSection}}</ion-label>
             <ng-template #showEditBox>
               <ion-input [(ngModel)]="newName"></ion-input>
               <ion-button size="small" (click)="doneEditingItem()">Done</ion-button>
               <ion-button size="small" (click)="onCancelEditStoreAisleOrSectionClick()">Cancel</ion-button>
             </ng-template>
           </ion-item>
-          <ion-item-options *ngIf="!isItemBeingEdited()" side="end">
+          <ion-item-options *ngIf="!(itemBeingEdited && groceryAisleOrSection === itemBeingEdited)" side="end">
               <ion-item-option (click)="editStoreAisle(itemSliding, groceryAisleOrSection)">Edit</ion-item-option>
               <ion-item-option *ngIf="itemCanBeDeleted(groceryAisleOrSection)" color="danger" (click)="remove(groceryAisleOrSection)">Delete</ion-item-option>
           </ion-item-options>

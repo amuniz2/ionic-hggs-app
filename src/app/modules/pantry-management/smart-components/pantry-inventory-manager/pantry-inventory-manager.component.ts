@@ -14,7 +14,7 @@ import {PantryItem} from '../../../../model/pantry-item';
 import {selectPantryItemsLoading} from '../../store/pantry-management.selectors';
 import {LoadGroceryStores} from '../../../../store';
 import {selectAllGroceryStores, selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
-import {GroceryStore} from '../../../../model/grocery-store';
+import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 
 @Component({
   selector: 'app-pantry-inventory-manager',
@@ -28,7 +28,7 @@ export class PantryInventoryManagerComponent implements OnInit {
   error$: Observable<Error>;
   addingPantryItem$: Observable<boolean>;
   groceryStoresLoading$: Observable<boolean>;
-  groceryStores$: Observable<GroceryStore[]>;
+  groceryStores$: Observable<GroceryStoreState[]>;
 
   constructor(private store: Store<AppState>) {
     this.title = 'Manage pantry items from page component';

@@ -123,7 +123,7 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
     // this.itemBeingEdited = '';
   }
 
-  isItemBeingEdited(): boolean {
-    return this.itemBeingEdited && this.itemBeingEdited === this.nameBeforeEdit;
+  isItemBeingEdited(current: string): boolean {
+    return this.itemBeingEdited && current === this.nameBeforeEdit && this.itemBeingEdited === this.nameBeforeEdit;
   }
 }

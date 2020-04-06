@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {GroceryStore} from '../../../../model/grocery-store';
+import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 import {Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
@@ -30,10 +30,10 @@ export interface NewItemLocation {
 })
 export class EditPantryItemLocationComponent implements OnInit {
 
-  groceryStores$: Observable<GroceryStore[]>;
+  groceryStores$: Observable<GroceryStoreState[]>;
   groceryStoreAisles$: Observable<string[]>;
   groceryStoreSections$: Observable<string[]>;
-  selectedGroceryStore$: Observable<GroceryStore>;
+  selectedGroceryStore$: Observable<GroceryStoreState>;
 
   selectedGroceryStoreId$: Observable<number>;
 
@@ -77,9 +77,9 @@ export class EditPantryItemLocationComponent implements OnInit {
         storeName: null
       });
     }
-    let groceryStoreValue: GroceryStore = null;
+    let groceryStoreValue: GroceryStoreState = null;
     if (this.selectedGroceryStore$ != null) {
-      this.selectedGroceryStore$.subscribe((groceryStore: GroceryStore) => {
+      this.selectedGroceryStore$.subscribe((groceryStore: GroceryStoreState) => {
         groceryStoreValue = groceryStore;
       });
     }

@@ -62,7 +62,7 @@ export class PantryDbHelper {
     );
   }
 
-  public getGroceryStoreAisles(groceryStoreId: number): Observable<string[]> {
+  public getGroceryStoreAisles(groceryStoreId: number): Observable<Set<string>> {
     return this.queryGroceryStoreAisles(groceryStoreId);
   }
 
@@ -123,8 +123,8 @@ export class PantryDbHelper {
     );
   }
 
-  private queryGroceryStoreAisles(id: number): Observable<string[]> {
-    return new Observable<string[]>((observer) => {
+  private queryGroceryStoreAisles(id: number): Observable<Set<string>> {
+    return new Observable<Set<string>>((observer) => {
       this.mySqlCommands.queryGroceryStoreAisles(id).then((aisles) => {
         observer.next(aisles);
         observer.complete();

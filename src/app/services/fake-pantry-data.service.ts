@@ -1,4 +1,4 @@
-import {Observable, of} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {GroceryStore} from '../model/grocery-store';
 import {IPantryDataService} from './IPantryDataService';
@@ -13,13 +13,14 @@ import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {PantryItemLocation} from '../model/PantryItemLocation';
 // tslint:disable-next-line:max-line-length
 import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
+import {allowNewBindingsForStylingContext} from '@angular/core/src/render3/styling/class_and_style_bindings';
 
 @Injectable()
 export class FakePantryDataService implements IPantryDataService {
   constructor() {
     this.groceryStores = [
-      { id: 1, name: 'Publix', aisles: [], locations: [], sections: []},
-      { id: 2, name: 'Target', aisles: [], locations: [], sections: []},
+      { id: 1, name: 'Publix', aisles: new Set<string>(), locations: [], sections: []},
+      { id: 2, name: 'Target', aisles: new Set<string>(), locations: [], sections: []},
     ];
     this.pantryItems = [
       { id: 1,
@@ -58,7 +59,7 @@ export class FakePantryDataService implements IPantryDataService {
       }
     }));
 
-    groceryStore.aisles.splice(groceryStore.aisles.indexOf(deleteStoreAisleRequest.name), 1);
+    groceryStore.aisles.delete(deleteStoreAisleRequest.name);
     return of(true);
   }
 
@@ -76,7 +77,7 @@ export class FakePantryDataService implements IPantryDataService {
       }
     }));
 
-    groceryStore.sections.splice(groceryStore.aisles.indexOf(deleteStoreSectionRequest.name), 1);
+    groceryStore.sections.splice(groceryStore.sections.indexOf(deleteStoreSectionRequest.name), 1);
     return of(true);
   }
 
@@ -95,7 +96,7 @@ export class FakePantryDataService implements IPantryDataService {
   public addGroceryStore(newStoreRequest: NewGroceryStoreRequest): Observable<GroceryStore> {
     console.log(`adding: ${JSON.stringify(newStoreRequest)}`);
     const newStore: GroceryStore = {
-      aisles: [],
+      aisles: new Set<string>(),
       id: this.groceryStores.length + 1,
       sections: [],
       locations: [],
@@ -122,11 +123,11 @@ export class FakePantryDataService implements IPantryDataService {
     const groceryStore: GroceryStore = this.groceryStores.find((grocerStore) => grocerStore.id === newStoreAisleRequest.groceryStoreId);
     let aisleAdded = '';
     if (groceryStore != null) {
-      if (!groceryStore.aisles.some(aisle => aisle === newStoreAisleRequest.name)) {
-        groceryStore.aisles.push(newStoreAisleRequest.name);
+      if (!groceryStore.aisles.has(newStoreAisleRequest.name)) {
+        groceryStore.aisles.add(newStoreAisleRequest.name);
         aisleAdded = newStoreAisleRequest.name;
       } else {
-        throw new Error(`${newStoreAisleRequest.name} already exists.`);
+        return throwError(new Error(`Aisle ${newStoreAisleRequest.name} already exists.`));
       }
     }
     return of(aisleAdded);
@@ -147,11 +148,11 @@ export class FakePantryDataService implements IPantryDataService {
     return of(sectionAdded);
   }
 
-  getGroceryStoreAisles(groceryStoreId: number): Observable<string[]> {
+  getGroceryStoreAisles(groceryStoreId: number): Observable<Set<string>> {
     console.log('Inside getGroceryStoreAisles()');
     const groceryStore = this.getGroceryStore(groceryStoreId);
     if (groceryStore === null) {
-      return of([]);
+      return of(new Set<string>());
     }
     return of(groceryStore.aisles);
   }
@@ -354,11 +355,10 @@ export class FakePantryDataService implements IPantryDataService {
       return of(false);
     }
     // (1) update aisle name
-    const aisleNdx = groceryStore.aisles.indexOf(oldName);
-    if (aisleNdx < 0) {
-      return of(false);
+    if (groceryStore.aisles.has(oldName)) {
+      groceryStore.aisles.delete(oldName);
     }
-    groceryStore.aisles[aisleNdx]  = newName;
+    groceryStore.aisles.add(newName);
 
     // (2) update grocery store locations that used old aisle name with new aisle name
     this.groceryStoreLocations.filter(loc => loc.storeId === groceryStoreId && loc.aisle === oldName)

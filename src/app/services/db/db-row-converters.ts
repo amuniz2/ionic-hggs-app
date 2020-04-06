@@ -8,7 +8,7 @@ export class DbRowConverters {
   public static rowToGroceryStore(row: any): GroceryStore {
     return {
       name: row[StoreTable.COLS.STORE_NAME],
-      aisles: [],
+      aisles: new Set<string>(),
       sections: [],
       id: row[StoreTable.COLS.ID],
       locations: []

@@ -1,5 +1,5 @@
 import {createFeatureSelector, createSelector, select} from '@ngrx/store';
-import {GroceryStore} from '../model/grocery-store';
+import {GroceryStore, GroceryStoreState} from '../model/grocery-store';
 import {AppState, GroceryItemLocationsState, GroceryStoresState} from './app.state';
 import * as fromAdapter from './grocery-store.adapter';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
@@ -31,13 +31,13 @@ export const selectAllGroceryStores = createSelector(
 );
 
 export const selectGroceryStore = (id: number) => createSelector(
-  selectAllGroceryStores, (state: GroceryStore[]) => state.find((store) => store.id === id));
+  selectAllGroceryStores, (state: GroceryStoreState[]) => state.find((store) => store.id === id));
 
 export const selectGroceryStoreAisles = (id: number) => createSelector(
-  selectGroceryStore(id), (state: GroceryStore) => state.aisles);
+  selectGroceryStore(id), (state: GroceryStoreState) => state.aisles);
 
 export const selectGroceryStoreSections = (id: number) => createSelector(
-  selectGroceryStore(id), (state: GroceryStore) => state.sections);
+  selectGroceryStore(id), (state: GroceryStoreState) => state.sections);
 
 export const selectGroceryStoresLoading = createSelector(
   getGroceryStoresState,
@@ -61,7 +61,7 @@ export const selectGroceryStoreLocation = (id: number) => createSelector(
   selectAllGroceryStoreLocations, (state: GroceryStoreLocation[]) => state.find((storeLocation) => storeLocation.id === id));
 
 export const selectGroceryStoreSectionsInAisle = (id: number, aisle: string) => createSelector(
-  selectGroceryStore(id), (groceryStore: GroceryStore) => groceryStore
+  selectGroceryStore(id), (groceryStore: GroceryStoreState) => groceryStore
     .locations.filter((location) => location.aisle === aisle)
     .map(location => location.section));
 
@@ -83,12 +83,12 @@ const selectStoreLocationComponentsInuse = (groceryStoreId: number, component: s
   });
 
 export const selectGroceryStoreSectionsInNoAisle = (id: number) => createSelector(
-  selectGroceryStore(id), (groceryStore: GroceryStore) => groceryStore
+  selectGroceryStore(id), (groceryStore: GroceryStoreState) => groceryStore
     .locations.filter((location) => location.section && !location.aisle)
     .map(location => location.section));
 
 export const selectPossibleGroceryStoreSectionsInAisle = (storeId: number, aisle) => createSelector(
-  selectGroceryStore(storeId), (groceryStore: GroceryStore) => {
+  selectGroceryStore(storeId), (groceryStore: GroceryStoreState) => {
       const sectionsInAisle = groceryStore.locations.filter((location) => location.aisle === aisle).map(location => location.section);
       return sectionsInAisle.concat(groceryStore.sections.filter((section) =>
         !groceryStore.locations.some(loc => loc.section === section) ||
@@ -96,10 +96,10 @@ export const selectPossibleGroceryStoreSectionsInAisle = (storeId: number, aisle
     });
 
 export const  selectPossibleGroceryStoreAislesForSection = (storeId: number, section: string) => createSelector(
-  selectGroceryStore(storeId), (groceryStore: GroceryStore) => {
+  selectGroceryStore(storeId), (groceryStore: GroceryStoreState) => {
     const locationWithSectionAndAisle = groceryStore.locations.find((location) => location.aisle && location.section === section);
     if (locationWithSectionAndAisle) {
-      return [locationWithSectionAndAisle.aisle];
+      return ([locationWithSectionAndAisle.aisle]);
     }
     return groceryStore.aisles;
   });

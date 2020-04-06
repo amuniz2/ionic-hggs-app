@@ -33,11 +33,8 @@ export class StoreManagementEffects {
     ofType(StoreManagerActionTypes.CreateStore),
     tap((payload) => console.log('Payload to addNewStore$ ' + JSON.stringify(payload))),
     switchMap((payload) => {
-      console.log('calling stateManagementService.addGroceryStore()');
       return this.storeManagementService.addGroceryStore(payload.createGroceryStorePayload).pipe(
-        tap((something) => console.log(
-          'return from addGroceryStore, dispatching StoreCreated' + JSON.stringify(something))),
-        map(newGroceryStore => new StoreCreated(newGroceryStore)),
+        map(newGroceryStore => new StoreCreated({...newGroceryStore, aisles: Array.from(newGroceryStore.aisles)})),
         catchError(error => {
           console.log('CreateStore failed');
           return [new CreateStoreFailed(error)];

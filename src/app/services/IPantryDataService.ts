@@ -37,7 +37,7 @@ export interface IPantryDataService {
 
   deletePantryItem(deletePantryItemRequest: DeletePantryItemRequest): Observable<boolean>;
 
-  getGroceryStoreAisles(groceryStoreId: number): Observable<string[]>;
+  getGroceryStoreAisles(groceryStoreId: number): Observable<Set<string>>;
 
   getGroceryStoreSections(groceryStoreId: number): Observable<string[]>;
 

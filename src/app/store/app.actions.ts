@@ -1,5 +1,5 @@
 import {Action} from '@ngrx/store';
-import {GroceryStore} from '../model/grocery-store';
+import {GroceryStore, GroceryStoreState} from '../model/grocery-store';
 // tslint:disable-next-line:max-line-length
 import {
   StoreAisleOrSection,
@@ -71,7 +71,7 @@ export class DatabaseReady implements Action {
 
 // region GroceryStores
 export class StoresLoadedSuccessfully implements  Action {
-  constructor(public groceryStores: GroceryStore[]) {
+  constructor(public groceryStores: GroceryStoreState[]) {
   }
   readonly type = AppActionTypes.StoresLoadedSuccessfully;
 }
@@ -200,7 +200,7 @@ export class GroceryStoreLocationPossiblyAdded implements Action {
 export class StoreCreated implements Action {
   readonly type = AppActionTypes.StoreCreated;
 
-  constructor(public groceryStore: GroceryStore ) {}
+  constructor(public groceryStore: GroceryStoreState ) {}
 }
 
 export class CreateStoreFailed implements Action {

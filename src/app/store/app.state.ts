@@ -1,8 +1,8 @@
 import {EntityState} from '@ngrx/entity';
-import {GroceryStore} from '../model/grocery-store';
+import {GroceryStore, GroceryStoreState} from '../model/grocery-store';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 
-export interface GroceryStoresState extends EntityState<GroceryStore> {
+export interface GroceryStoresState extends EntityState<GroceryStoreState> {
   loading: boolean;
   error: Error;
 }
