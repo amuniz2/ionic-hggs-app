@@ -57,7 +57,7 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
   nameBeforeEdit: string;
   newName: any;
 
-  constructor(private store: Store<AppState>) {
+  constructor() {
   }
 
   ngOnInit() {

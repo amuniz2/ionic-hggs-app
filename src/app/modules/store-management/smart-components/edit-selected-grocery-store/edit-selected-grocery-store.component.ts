@@ -35,9 +35,8 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
   aislesInUse$: Observable<string[]>;
   sectionsInUse$: Observable<string[]>;
 
-  constructor(private store: Store<AppState>, private route: ActivatedRoute,
-              private router: Router,
-              @Inject('IPantryDataService') private groceryStoreManagementService: IPantryDataService) {
+  constructor(private store: Store<AppState>,
+              private router: Router) {
     this.groceryStoreId = this.router.getCurrentNavigation().extras.queryParams.id;
     this.groceryStore$ = this.store.pipe(select(selectGroceryStore(this.groceryStoreId)));
     this.groceryStoreAisles$ = this.store.pipe(select(selectGroceryStoreAisles(this.groceryStoreId)));

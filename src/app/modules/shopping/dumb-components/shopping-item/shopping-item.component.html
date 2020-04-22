@@ -1,7 +1,7 @@
 <ion-item>
   <div id="parent">
     <div class="itemContents">
-      <ion-checkbox (ionChange)="itemClicked($event, shoppingItem)" [checked]="shoppingItem.inCart"></ion-checkbox>
+      <ion-checkbox (ionChange)="itemClicked($event)" [checked]="shoppingItem?.inCart"></ion-checkbox>
       <ion-label class="checkboxLabel">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
     </div>
     <div class="itemContents">

@@ -1,6 +1,6 @@
 <ion-toolbar>
   <ion-back-button slot="start"></ion-back-button>
-  <ion-title>{{ groceryStore.name}}</ion-title>
+  <ion-title>{{ groceryStore?.name}}</ion-title>
 </ion-toolbar>
 <ion-card>
   <app-hggs-accordion [sectionName]="aislesSection.label" [description]="" (change)="toggleAislesExpandState($event)" (addToList)="onAddAisleClicked()">

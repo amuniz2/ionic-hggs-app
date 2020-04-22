@@ -23,7 +23,7 @@ export class EditPantryItemComponent implements OnInit {
   isNewItem: boolean;
   error$: Observable<Error>;
 
-  constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router) {
+  constructor(private store: Store<AppState>, private router: Router) {
     this.isNewItem = this.router.getCurrentNavigation().extras.queryParams.newItem;
     this.pantryItemId = this.router.getCurrentNavigation().extras.queryParams.id;
     if (this.isNewItem) {

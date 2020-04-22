@@ -4,7 +4,7 @@ import {StoreInventoryManagerPageComponent} from './smart-components/store-inven
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreListComponent} from './dumb-components/store-list/store-list.component';
-import {StoreManagementEffects} from './store/store-management.effects';
+import {StoreManagementEffects} from './store/effects/store-management.effects';
 import * as fromReducers from './store/store-management.reducers';
 import {IonicModule} from '@ionic/angular';
 import {CommonModule} from '@angular/common';

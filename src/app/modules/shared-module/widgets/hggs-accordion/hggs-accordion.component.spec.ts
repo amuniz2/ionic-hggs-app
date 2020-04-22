@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HggsAccordionComponent } from './hggs-accordion.component';
+import {IonicModule} from '@ionic/angular';
+import {FormsModule} from '@angular/forms';
 
 describe('HggsAccordionComponent', () => {
   let component: HggsAccordionComponent;
@@ -8,8 +10,11 @@ describe('HggsAccordionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HggsAccordionComponent ]
-    })
+      declarations: [ HggsAccordionComponent ],
+      imports: [
+        IonicModule,
+        FormsModule
+      ]    })
     .compileComponents();
   }));
 

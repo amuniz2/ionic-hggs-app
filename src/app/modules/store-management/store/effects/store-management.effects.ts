@@ -4,13 +4,13 @@ import {
   NavigateToStoreDetailsPage,
   StoreManagementActions,
   StoreManagerActionTypes,
-} from './store-management.actions';
+} from '../store-management.actions';
 import {Store} from '@ngrx/store';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {catchError, map, mapTo, switchMap, tap} from 'rxjs/operators';
-import {StoreManagementState} from './store-management.reducers';
+import {StoreManagementState} from '../store-management.reducers';
 import {NavigationExtras, Router} from '@angular/router';
-import {IPantryDataService} from '../../../services/IPantryDataService';
+import {IPantryDataService} from '../../../../services/IPantryDataService';
 import {
   CreateStoreFailed,
   DeleteStoreFailed, DisplayError,
@@ -18,7 +18,7 @@ import {
   LoadGroceryStoreLocations,
   StoreCreated,
   StoreDeleted
-} from '../../../store';
+} from '../../../../store';
 
 @Injectable()
 export class StoreManagementEffects {

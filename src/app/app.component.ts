@@ -15,8 +15,8 @@ export class AppComponent {
   manageStoresLabel = 'Manage stores';
   constructor(
     private platform: Platform,
-    private store: Store<AppState>,
-    private statusBar: StatusBar
+    private store: Store<AppState>
+    // private statusBar: StatusBar
   ) {
     this.initializeApp();
   }
@@ -24,7 +24,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
 
       this.store.dispatch( new StartAppInitializer());
-      this.statusBar.styleDefault();
+      // this.statusBar.styleDefault();
 
 //      this.splashScreen.hide();
     });

@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddPantryItemComponent } from './add-pantry-item.component';
+import {HggsAccordionComponent} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {IonicModule} from '@ionic/angular';
+import {FormsModule} from '@angular/forms';
 
 describe('AddPantryItemComponent', () => {
   let component: AddPantryItemComponent;
@@ -8,7 +12,17 @@ describe('AddPantryItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddPantryItemComponent ]
+      declarations: [
+        HggsAccordionComponent,
+        AddPantryItemComponent,
+      ],
+      imports: [
+        IonicModule,
+        FormsModule,
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+      ]
     })
     .compileComponents();
   }));

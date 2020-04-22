@@ -34,7 +34,9 @@ import {FakePantryDataService} from './services/fake-pantry-data.service';
     // StoreModule.forFeature('app', appRootReducers),
     // StoreModule.forRoot(reducers, { metaReducers, initialState: initialAppState }),
     EffectsModule.forRoot([]),
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      mode: 'md'
+    }),
     SharedModule,
     StoreManagementModule,
     StoreDevtoolsModule.instrument({

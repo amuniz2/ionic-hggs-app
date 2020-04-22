@@ -1,4 +1,4 @@
-<ng-container [formGroup]="controlContainer.control">
+<form [formGroup]="controlContainer.control">
 <ion-item>
     <ion-select id="aisleSelectionControl" *ngIf="sectionsOrAislesExist() else noItems;" placeholder="Select Grocery Store {{label}}"
                 [formControlName]="inputControlName" (ionChange)="onChangeAisleOrSection($event)">
@@ -8,5 +8,5 @@
     <ion-text>No {{label}} added.</ion-text>
   </ng-template>
 </ion-item>
-</ng-container>
+</form>
 

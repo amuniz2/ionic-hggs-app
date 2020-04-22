@@ -24,10 +24,16 @@ export class ShoppingItemComponent implements OnInit {
   }
 
   getShoppingItemDescriptionLine1(shoppingItem: ShoppingItem) {
+    if (!shoppingItem) {
+      return '';
+    }
     return this.shoppingItem.pantryItem.name + ', ' + this.shoppingItem.pantryItem.quantityNeeded + ' ' + shoppingItem.pantryItem.units;
   }
 
   getShoppingItemDescriptionLine2(shoppingItem: ShoppingItem) {
+    if (!shoppingItem) {
+      return '';
+    }
     return this.shoppingItem.pantryItem.description;
   }
 }
