@@ -56,11 +56,13 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
 
   nameBeforeEdit: string;
   newName: any;
+  singleCollectionItemName: string;
 
   constructor() {
   }
 
   ngOnInit() {
+    this.singleCollectionItemName = this.collectionName.substr(0, this.collectionName.length - 1);
   }
 
   onCancelAddStoreAisleOrSectionClick() {
@@ -79,7 +81,7 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
       action: UiCrudAction.Cancel});
     this.newName = '';
   }
-  onAddStoreAisleDoneClick() {
+  onAddStoreAisleOrSectionDoneClick() {
     this.notifyNewStoreAisleOrSectionRequested.emit({
       groceryStoreId: this.groceryStore.id,
       aisleOrSectionName: this.newStoreAisleOrSection,
@@ -121,9 +123,5 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
       action: UiCrudAction.Update
     });
     // this.itemBeingEdited = '';
-  }
-
-  isItemBeingEdited(current: string): boolean {
-    return this.itemBeingEdited && current === this.nameBeforeEdit && this.itemBeingEdited === this.nameBeforeEdit;
   }
 }

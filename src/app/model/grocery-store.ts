@@ -4,7 +4,7 @@ export interface GroceryStore {
   id: number;
   name: string;
   aisles: Set<string>;
-  sections: string[];
+  sections: Set<string>;
   locations: GroceryStoreLocation[];
 }
 

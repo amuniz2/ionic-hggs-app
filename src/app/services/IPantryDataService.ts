@@ -39,7 +39,7 @@ export interface IPantryDataService {
 
   getGroceryStoreAisles(groceryStoreId: number): Observable<Set<string>>;
 
-  getGroceryStoreSections(groceryStoreId: number): Observable<string[]>;
+  getGroceryStoreSections(groceryStoreId: number): Observable<Set<string>>;
 
   deleteGroceryStoreAisle(deleteStoreAisleRequest: StoreAisleOrSection): Observable<boolean>;
 

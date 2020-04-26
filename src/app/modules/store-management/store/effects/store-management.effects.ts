@@ -12,7 +12,6 @@ import {StoreManagementState} from '../store-management.reducers';
 import {NavigationExtras, Router} from '@angular/router';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
 import {
-  CreateStoreFailed,
   DeleteStoreFailed, DisplayError,
   GroceryStoreLocationsLoaded,
   LoadGroceryStoreLocations,
@@ -34,10 +33,15 @@ export class StoreManagementEffects {
     tap((payload) => console.log('Payload to addNewStore$ ' + JSON.stringify(payload))),
     switchMap((payload) => {
       return this.storeManagementService.addGroceryStore(payload.createGroceryStorePayload).pipe(
-        map(newGroceryStore => new StoreCreated({...newGroceryStore, aisles: Array.from(newGroceryStore.aisles)})),
+        map(newGroceryStore => new StoreCreated({
+          ...newGroceryStore,
+          sections: Array.from(newGroceryStore.sections),
+          aisles: Array.from(newGroceryStore.aisles)})),
         catchError(error => {
           console.log('CreateStore failed');
-          return [new CreateStoreFailed(error)];
+          return [new DisplayError(error)];
+          //
+          // return [new CreateStoreFailed(error)];
         })
       );
     }),
@@ -49,7 +53,7 @@ export class StoreManagementEffects {
     tap((payload) => console.log('Payload to deleteGroceryStore ' + JSON.stringify(payload))),
     switchMap((payload) => {
       return this.storeManagementService.deleteGroceryStore(payload.deleteGroceryStorePayload).pipe(
-        map(success => new StoreDeleted(payload.deleteGroceryStorePayload.id)),
+        map(success => success ? new StoreDeleted(payload.deleteGroceryStorePayload.id) : null),
         catchError(error => [new DeleteStoreFailed(error)])
       );
     })

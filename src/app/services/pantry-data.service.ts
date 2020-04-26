@@ -1,4 +1,4 @@
-import {from, Observable, of} from 'rxjs';
+import {from, Observable, of, throwError} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {GroceryStore} from '../model/grocery-store';
 // tslint:disable-next-line:max-line-length
@@ -24,19 +24,20 @@ export class PantryDataService implements IPantryDataService {
   }
 
   getGroceryStoreLocations(groceryStoreId: number): Observable<GroceryStoreLocation[]> {
-      throw new Error('Method not implemented.');
+      return throwError(new Error('Method not implemented.'));
   }
   getAislesInUse(groceryStoreId: number): Observable<string[]> {
-      throw new Error('Method not implemented.');
+    return throwError(new Error('Method not implemented.'));
   }
   getSectionsInUse(groceryStoreId: number): Observable<string[]> {
-      throw new Error('Method not implemented.');
+    return throwError(new Error('Method not implemented.'));
   }
 
   public addGroceryStore(newStoreRequest: NewGroceryStoreRequest): Observable<GroceryStore> {
     const newStore$ = this.dbHelper.addGroceryStore(newStoreRequest.name);
     return newStore$;
   }
+
   public addGroceryStoreAisle(newStoreAisleRequest: StoreAisleOrSection): Observable<string> {
     return this.dbHelper.addGroceryStoreAisle(newStoreAisleRequest.groceryStoreId, newStoreAisleRequest.name);
   }
@@ -63,7 +64,7 @@ export class PantryDataService implements IPantryDataService {
     return this.dbHelper.getGroceryStoreAisles(groceryStoreId);
   }
 
-  public getGroceryStoreSections(groceryStoreId: number): Observable<string[]> {
+  public getGroceryStoreSections(groceryStoreId: number): Observable<Set<string>> {
     console.log('Calling dbHelper.getGroceryStoreSections()');
     return this.dbHelper.getGroceryStoreSections(groceryStoreId);
   }

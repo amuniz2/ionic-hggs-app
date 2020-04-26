@@ -66,7 +66,7 @@ export class PantryDbHelper {
     return this.queryGroceryStoreAisles(groceryStoreId);
   }
 
-  public getGroceryStoreSections(groceryStoreId: number): Observable<string[]> {
+  public getGroceryStoreSections(groceryStoreId: number): Observable<Set<string>> {
     return this.queryGroceryStoreSections(groceryStoreId);
   }
 
@@ -132,8 +132,8 @@ export class PantryDbHelper {
     });
   }
 
-  private queryGroceryStoreSections(id: number): Observable<string[]> {
-    return new Observable<string[]>((observer) => {
+  private queryGroceryStoreSections(id: number): Observable<Set<string>> {
+    return new Observable<Set<string>>((observer) => {
       this.mySqlCommands.queryGroceryStoreSections(id).then((sections) => {
         observer.next(sections);
         observer.complete();

@@ -61,7 +61,8 @@ export class AppEffects {
           const stateData: GroceryStoreState[] = data.map(x => {
                 return {
                   ...x,
-                  aisles: Array.from(x.aisles)
+                  aisles: Array.from(x.aisles),
+                  sections: Array.from(x.sections),
                 };
           });
           return new StoresLoadedSuccessfully(stateData);
@@ -103,7 +104,10 @@ export class AppEffects {
         tap((sections) => {
           console.log(`sections: ${sections}`);
         }),
-        map(sections => new GroceryStoreSectionsLoaded( { groceryStoreId: payload.groceryStoreId, sections })),
+        map(sections => new GroceryStoreSectionsLoaded( {
+          groceryStoreId: payload.groceryStoreId,
+          sections: Array.from(sections)
+        })),
         catchError(error => [new GetStoreSectionsFailed(error)])
       );
     }));

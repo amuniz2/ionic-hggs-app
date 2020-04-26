@@ -13,14 +13,13 @@ import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {PantryItemLocation} from '../model/PantryItemLocation';
 // tslint:disable-next-line:max-line-length
 import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
-import {allowNewBindingsForStylingContext} from '@angular/core/src/render3/styling/class_and_style_bindings';
 
 @Injectable()
 export class FakePantryDataService implements IPantryDataService {
   constructor() {
     this.groceryStores = [
-      { id: 1, name: 'Publix', aisles: new Set<string>(), locations: [], sections: []},
-      { id: 2, name: 'Target', aisles: new Set<string>(), locations: [], sections: []},
+      { id: 1, name: 'Publix', aisles: new Set<string>(), locations: [], sections: new Set<string>()},
+      { id: 2, name: 'Target', aisles: new Set<string>(), locations: [], sections: new Set<string>()},
     ];
     this.pantryItems = [
       { id: 1,
@@ -51,8 +50,8 @@ export class FakePantryDataService implements IPantryDataService {
       loc => loc.storeId === deleteStoreAisleRequest.groceryStoreId && loc.aisle === deleteStoreAisleRequest.name);
     groceryStoreLocationsWithAisle.forEach((groceryStoreLocation => {
       if (this.pantryItemLocations.some(itemLocation => groceryStoreLocation.id === itemLocation.groceryStoreLocationId)) {
-        throw new Error(`Cannot delete ${groceryStore.name} aisle ${deleteStoreAisleRequest.name} \
-        as there are pantry items located in the aisle.`);
+        return throwError(new Error(`Cannot delete ${groceryStore.name} aisle ${deleteStoreAisleRequest.name} \
+        as there are pantry items located in the aisle.`));
       } else {
         const indexOfLoc = this.groceryStoreLocations.indexOf(groceryStoreLocation);
         this.groceryStoreLocations.splice(indexOfLoc, 1);
@@ -63,21 +62,21 @@ export class FakePantryDataService implements IPantryDataService {
     return of(true);
   }
 
-  deleteGroceryStoreSection = (deleteStoreSectionRequest: StoreAisleOrSection): Observable<boolean> => {
+  public deleteGroceryStoreSection(deleteStoreSectionRequest: StoreAisleOrSection): Observable<boolean> {
     const groceryStore = this.findGroceryStore(deleteStoreSectionRequest.groceryStoreId);
     const groceryStoreLocationsWithSection = this.groceryStoreLocations.filter(
       loc => loc.storeId === deleteStoreSectionRequest.groceryStoreId && loc.section === deleteStoreSectionRequest.name);
     groceryStoreLocationsWithSection.forEach((groceryStoreLocation => {
       if (this.pantryItemLocations.some(itemLocation => groceryStoreLocation.id === itemLocation.groceryStoreLocationId)) {
-        throw new Error(`Cannot delete ${groceryStore.name} section ${deleteStoreSectionRequest.name} \
-        as there are pantry items located in the section.`);
+        return throwError(new Error(`Cannot delete ${groceryStore.name} section ${deleteStoreSectionRequest.name} \
+        as there are pantry items located in the section.`));
       } else {
         const indexOfLoc = this.groceryStoreLocations.indexOf(groceryStoreLocation);
         this.groceryStoreLocations.splice(indexOfLoc, 1);
       }
     }));
 
-    groceryStore.sections.splice(groceryStore.sections.indexOf(deleteStoreSectionRequest.name), 1);
+    groceryStore.sections.delete(deleteStoreSectionRequest.name);
     return of(true);
   }
 
@@ -95,10 +94,14 @@ export class FakePantryDataService implements IPantryDataService {
 
   public addGroceryStore(newStoreRequest: NewGroceryStoreRequest): Observable<GroceryStore> {
     console.log(`adding: ${JSON.stringify(newStoreRequest)}`);
+
+    if (this.groceryStores.some(groceryStore => groceryStore.name.toUpperCase() === newStoreRequest.name.toUpperCase())) {
+      return throwError(new Error(`Grocery store <${newStoreRequest.name}> already exists.`));
+    }
     const newStore: GroceryStore = {
       aisles: new Set<string>(),
       id: this.groceryStores.length + 1,
-      sections: [],
+      sections: new Set<string>(),
       locations: [],
       name: newStoreRequest.name
     };
@@ -108,12 +111,18 @@ export class FakePantryDataService implements IPantryDataService {
 
   public deleteGroceryStore(deleteStoreRequest: DeleteGroceryStoreRequest): Observable<boolean> {
     let i: number;
-    let groceryStoreDeleted: GroceryStore;
+    let groceryStoreDeleted: GroceryStore = null;
+    if (this.groceryStoreLocations.some(gStore => gStore.id === deleteStoreRequest.id)) {
+      this.deleteGroceryStoreLocations(deleteStoreRequest.id);
+    }
     for (i = 0; i < this.groceryStores.length; i++) {
       if (this.groceryStores[i].id === deleteStoreRequest.id) {
         groceryStoreDeleted = this.groceryStores[i];
         break;
       }
+    }
+    if (groceryStoreDeleted === null) {
+      return of(false);
     }
     this.groceryStores.splice(i, 1);
     return of(true);
@@ -138,11 +147,11 @@ export class FakePantryDataService implements IPantryDataService {
       (grocerStore) => grocerStore.id === newGroceryStoreSectionRequest.groceryStoreId);
     let sectionAdded = '';
     if (groceryStore != null) {
-      if (!groceryStore.sections.some(section => section === newGroceryStoreSectionRequest.name)) {
-        groceryStore.sections.push(newGroceryStoreSectionRequest.name);
+      if (!groceryStore.sections.has(newGroceryStoreSectionRequest.name)) {
+        groceryStore.sections.add(newGroceryStoreSectionRequest.name);
         sectionAdded = newGroceryStoreSectionRequest.name;
       } else {
-        throw new Error(`${newGroceryStoreSectionRequest.name} already exists.`);
+        return throwError(new Error(`${newGroceryStoreSectionRequest.name} already exists.`));
       }
     }
     return of(sectionAdded);
@@ -157,11 +166,11 @@ export class FakePantryDataService implements IPantryDataService {
     return of(groceryStore.aisles);
   }
 
-  getGroceryStoreSections(groceryStoreId: number): Observable<string[]> {
+  getGroceryStoreSections(groceryStoreId: number): Observable<Set<string>> {
     console.log('Inside getGroceryStoreSections()');
     const groceryStore = this.getGroceryStore(groceryStoreId);
     if (groceryStore === null) {
-      return of([]);
+      return of(new Set<string>());
     }
     return of(groceryStore.sections);
   }
@@ -181,9 +190,12 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   addPantryItem(newPantryItemRequest: PantryItem): Observable<PantryItem> {
-    const newPantryItem = { ...newPantryItemRequest, id: this.pantryItems.length + 1};
-    this.pantryItems.push(newPantryItem);
-    return of(newPantryItem);
+      if (this.pantryItems.some(item => item.name.toUpperCase() === newPantryItemRequest.name.toUpperCase())) {
+        return throwError(new Error(`${newPantryItemRequest.name} already exists`));
+      }
+      const newPantryItem = { ...newPantryItemRequest, id: this.pantryItems.length + 1};
+      this.pantryItems.push(newPantryItem);
+      return of(newPantryItem);
   }
 
   deletePantryItem(deletePantryItemRequest: DeletePantryItemRequest): Observable<boolean> {
@@ -266,10 +278,6 @@ export class FakePantryDataService implements IPantryDataService {
 
   findGroceryStoreLocation(storeId: number, aisle: string, section: string): GroceryStoreLocation {
     return this.groceryStoreLocations.find(loc => (loc.storeId === storeId) && (loc.aisle === aisle) && (loc.section === section));
-  }
-
-  findPantryItemLocation(pantryItemId: number, groceryLocationId: number): PantryItemLocation {
-    return this.pantryItemLocations.find(loc => (loc.pantryItemId === pantryItemId) && (loc.groceryStoreLocationId === groceryLocationId));
   }
 
   findGroceryStore(id: number): GroceryStore {
@@ -365,5 +373,35 @@ export class FakePantryDataService implements IPantryDataService {
       .forEach(loc => loc.aisle = newName);
 
     return of(true);
+  }
+
+  private deleteGroceryStoreLocations(groceryStoreId: number) {
+      const indecesToDelete = [];
+      for (let i = 0; i < this.groceryStoreLocations.length; i++) {
+        if (this.groceryStoreLocations[i].storeId === groceryStoreId) {
+            const gloc = this.groceryStoreLocations[i];
+            indecesToDelete.push(i);
+            if (this.pantryItemLocations.some(ploc => ploc.groceryStoreLocationId === gloc.id)) {
+              this.deletePantryItemLocations(gloc.id);
+            }
+        }
+      }
+
+      while (indecesToDelete.length > 0) {
+        this.groceryStoreLocations.splice(indecesToDelete.pop(), 1);
+      }
+  }
+
+  private deletePantryItemLocations(locId: number) {
+      const indecesToDelete =  [];
+      for (let i = 0; i < this.pantryItemLocations.length; i++) {
+        if (this.pantryItemLocations[i].groceryStoreLocationId === locId) {
+          indecesToDelete.push(i);
+        }
+      }
+
+      while (indecesToDelete.length > 0) {
+        this.pantryItemLocations.splice(indecesToDelete.pop(), 1);
+      }
   }
 }

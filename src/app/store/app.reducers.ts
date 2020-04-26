@@ -272,11 +272,10 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
       // const { id, name } = action.payload;
       return {
         ...state,
-        // groceryStores: {
-        //   ...fromAppAdapter.sharedGroceryStoreAdapter.removeOne(action.id, state.groceryStores),
-        //   error: null
-        // },
-        // selectedGroceryStoreId:
+        groceryStores: {
+          ...fromAppAdapter.sharedGroceryStoreAdapter.removeOne(action.id, state.groceryStores),
+          error: null
+        },
       };
 
     case AppActionTypes.DeleteStoreFailed:

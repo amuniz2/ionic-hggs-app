@@ -9,7 +9,7 @@ export class DbRowConverters {
     return {
       name: row[StoreTable.COLS.STORE_NAME],
       aisles: new Set<string>(),
-      sections: [],
+      sections: new Set<string>(),
       id: row[StoreTable.COLS.ID],
       locations: []
     };
