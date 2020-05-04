@@ -19,6 +19,8 @@ export class DbRowConverters {
     // todo: read aisles, sections, and locations
     console.log('converting row to PantryItem:');
     console.log(row);
+    const defaultQuantity =  row[PantryItemTable.COLS.DEFAULT_QUANTITY];
+    const quantityNeeded =  row[PantryItemTable.COLS.QUANTITY_NEEDED];
     return {
       name: row[PantryItemTable.COLS.NAME],
       description: row[PantryItemTable.COLS.DESCRIPTION],
@@ -26,8 +28,8 @@ export class DbRowConverters {
       locations: [],
       need: row[PantryItemTable.COLS.NEED],
       units: row[PantryItemTable.COLS.UNITS],
-      defaultQuantity: row[PantryItemTable.COLS.DEFAULT_QUANTITY],
-      quantityNeeded: row[PantryItemTable.COLS.QUANTITY_NEEDED]
+      defaultQuantity,
+      quantityNeeded: quantityNeeded === null ? defaultQuantity : quantityNeeded
     };
   }
 
@@ -46,5 +48,9 @@ export class DbRowConverters {
       pantryItemId: row[PantryItemLocationTable.COLS.PANTRY_ITEM_ID],
       groceryStoreLocationId: row[PantryItemLocationTable.COLS.LOCATION_ID],
     };
+  }
+
+  public static rowToString(row: any, columnName: string): string {
+    return row[columnName];
   }
 }

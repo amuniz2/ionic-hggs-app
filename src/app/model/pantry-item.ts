@@ -16,9 +16,9 @@ export class PantryItem {
     this.locations = [];
     this.description = '';
     this.name = '';
-    this.need = false;
+    this.need = true;
     this.defaultQuantity = 1;
-    this.units = '';
-    this.quantityNeeded = this.defaultQuantity;
+    this.units = 'item';
+    this.quantityNeeded = 1;
   }
 }

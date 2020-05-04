@@ -59,13 +59,12 @@ export class ShoppingItemTable {
   };
 }
 
-export class PantryItemLocationTable
-{
+export class PantryItemLocationTable {
   public static NAME = 'pantryitemlocationtable';
 
   public static COLS = class {
     //        public static UUID = 'uuid';
     public static LOCATION_ID = 'locationid';
     public static PANTRY_ITEM_ID = 'pantryitemid';
-  }
+  };
 }

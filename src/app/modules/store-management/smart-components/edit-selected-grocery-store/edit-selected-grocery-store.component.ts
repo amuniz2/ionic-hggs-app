@@ -59,6 +59,7 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
     this.store.dispatch(new fromAppActions.DeleteStoreAisle($event));
   }
   onNotifyExpandAisles($event: number) {
+    console.log(`dispatching loadGroceryStoreAisles event: ${$event}`);
     this.store.dispatch(new fromAppActions.LoadGroceryStoreAisles($event));
   }
 

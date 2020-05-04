@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GroceryStore} from '../../../../model/grocery-store';
+import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 import {
   StoreAisleOrSection,
   StoreAisleOrSectionActionRequest,
@@ -46,7 +46,7 @@ export class EditGroceryStoreComponent implements OnInit {
   sectionBeingEdited$: Observable<string>;
 
   @Input()
-  groceryStore: GroceryStore;
+  groceryStore: GroceryStoreState;
 
   @Output()
   notifyNewStoreAisleRequested: EventEmitter<StoreAisleOrSectionActionRequest> = new EventEmitter();
@@ -109,14 +109,16 @@ export class EditGroceryStoreComponent implements OnInit {
   }
   public toggleAislesExpandState($event: CollapsedStatusChangedEvent) {
       this.aislesSection.isOpen$ = of($event.isOpen);
-      if ($event.isOpen && this.groceryStore.aisles.size === 0) {
+      console.log(`toggling aisles, isOpen: ${$event.isOpen}; aisles: ${this.groceryStore.aisles}; size: ${this.groceryStore.aisles.length}`);
+      if ($event.isOpen && this.groceryStore.aisles.length === 0) {
+        console.log('sending notification to expand aisles');
         this.notifyExpandAisles.emit(this.groceryStore.id);
       }
   }
 
   public toggleGroceryStoreSectionsExpandState($event: CollapsedStatusChangedEvent) {
     this.grocerySectionsSection.isOpen$ = of($event.isOpen);
-    if ($event.isOpen && this.groceryStore.sections.size === 0) {
+    if ($event.isOpen && this.groceryStore.sections.length === 0) {
       this.notifyExpandSections.emit(this.groceryStore.id);
     }
   }

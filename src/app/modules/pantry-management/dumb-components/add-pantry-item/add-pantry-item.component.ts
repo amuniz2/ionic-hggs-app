@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NewGroceryStoreRequest} from '../../../store-management/dumb-components/store-list/store-list.component';
 import {CreatePantryItemRequest} from '../pantry-item-list/pantry-item-list.component';
 
 @Component({

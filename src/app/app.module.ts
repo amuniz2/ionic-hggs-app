@@ -18,6 +18,7 @@ import {SQLite} from '@ionic-native/sqlite/ngx';
 import {SharedModule} from './modules/shared-module/shared.module';
 import {MySqlCommands} from './services/db/my-sql-commands';
 import {FakePantryDataService} from './services/fake-pantry-data.service';
+import {PantryDataService} from './services/pantry-data.service';
 
 
 @NgModule({
@@ -47,8 +48,8 @@ import {FakePantryDataService} from './services/fake-pantry-data.service';
   providers: [
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     StatusBar,
-    // [{provide: 'IPantryDataService', useClass: PantryDataService}],
-    [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
+    [{provide: 'IPantryDataService', useClass: PantryDataService}],
+    // [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
     PantryDbHelper,
     MySqlCommands,
     SQLite

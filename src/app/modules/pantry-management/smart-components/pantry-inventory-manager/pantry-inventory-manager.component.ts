@@ -34,15 +34,15 @@ export class PantryInventoryManagerComponent implements OnInit {
     this.title = 'Manage pantry items from page component';
     this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
+    console.log('dispatching NavigatedToPantryPage');
+    this.store.dispatch(new fromActions.NavigatedToPantryPage());
+    this.pantryItemsLoading$ = this.store.select(fromSelectors.selectPantryItemsLoading);
     this.groceryStores$ = this.store.select(selectAllGroceryStores);
   }
 
   ngOnInit() {
     // dispatch action that list has been navigated to
-    console.log('dispatching NavigatedToPantryPage');
-    this.store.dispatch(new fromActions.NavigatedToPantryPage());
     this.pantryItems$ = this.store.select(fromSelectors.selectAllPantryItems);
-    this.pantryItemsLoading$ = this.store.select(fromSelectors.selectPantryItemsLoading);
     this.error$ = this.store.select(fromSelectors.selectPantryItemsError);
   }
 

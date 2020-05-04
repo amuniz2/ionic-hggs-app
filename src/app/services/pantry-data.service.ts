@@ -24,13 +24,15 @@ export class PantryDataService implements IPantryDataService {
   }
 
   getGroceryStoreLocations(groceryStoreId: number): Observable<GroceryStoreLocation[]> {
-      return throwError(new Error('Method not implemented.'));
+      return this.dbHelper.getGroceryStoreLocations(groceryStoreId);
   }
+
   getAislesInUse(groceryStoreId: number): Observable<string[]> {
-    return throwError(new Error('Method not implemented.'));
+      return this.dbHelper.getGroceryStoreAislesInUse(groceryStoreId);
   }
+
   getSectionsInUse(groceryStoreId: number): Observable<string[]> {
-    return throwError(new Error('Method not implemented.'));
+    return this.dbHelper.getGroceryStoreSectionsInUse(groceryStoreId);
   }
 
   public addGroceryStore(newStoreRequest: NewGroceryStoreRequest): Observable<GroceryStore> {
@@ -39,11 +41,19 @@ export class PantryDataService implements IPantryDataService {
   }
 
   public addGroceryStoreAisle(newStoreAisleRequest: StoreAisleOrSection): Observable<string> {
-    return this.dbHelper.addGroceryStoreAisle(newStoreAisleRequest.groceryStoreId, newStoreAisleRequest.name);
+    try {
+      return this.dbHelper.addGroceryStoreAisle(newStoreAisleRequest.groceryStoreId, newStoreAisleRequest.name);
+    } catch(error) {
+      return throwError(error);
+    }
   }
 
   public addGroceryStoreSection(newGroceryStoreSectionRequest: StoreAisleOrSection): Observable<string> {
-    return this.dbHelper.addGroceryStoreSection(newGroceryStoreSectionRequest.groceryStoreId, newGroceryStoreSectionRequest.name);
+    try {
+      return this.dbHelper.addGroceryStoreSection(newGroceryStoreSectionRequest.groceryStoreId, newGroceryStoreSectionRequest.name);
+    } catch(error) {
+      return throwError(error);
+    }
   }
 
   public addPantryItem(newPantryItemRequest: PantryItem): Observable<PantryItem> {

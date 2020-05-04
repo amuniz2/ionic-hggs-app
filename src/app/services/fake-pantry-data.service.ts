@@ -208,6 +208,7 @@ export class FakePantryDataService implements IPantryDataService {
     pantryItemToUpdate.name = savePantryItemRequest.name;
     pantryItemToUpdate.need = savePantryItemRequest.need;
     pantryItemToUpdate.defaultQuantity = savePantryItemRequest.defaultQuantity;
+    pantryItemToUpdate.quantityNeeded = savePantryItemRequest.quantityNeeded;
     pantryItemToUpdate.units = savePantryItemRequest.units;
     return of(true);
   }

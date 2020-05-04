@@ -11,13 +11,13 @@
       <!--<app-new-store></app-new-store>-->
     </ion-button><!--  <app-add-pantry-item (notifyNewPantryItemRequested)="onNotifyNewPantryItemRequest($event)"></app-add-pantry-item>-->
   </ion-list-header>
+  <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"
+                       (notifyNewPantryItemRequested)="onCreateItem($event)">
+  </app-add-pantry-item>
   <app-pantry-item-list [pantryItems] = "(pantryItems$ | async)"
                         [pantryItemsLoading]="pantryItemsLoading$ | async"
                         (notifyDeletePantryItemRequested)="onDeletePantryItemRequest($event)"
                         (notifySavePantryItemRequested)="onPantryItemModified($event)"
                         [error] = "(error$ | async)">
   </app-pantry-item-list>
-  <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"
-                       (notifyNewPantryItemRequested)="onCreateItem($event)">
-  </app-add-pantry-item>
 </ion-content>

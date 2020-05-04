@@ -39,6 +39,8 @@ export class EditPantryItemDetailsComponent implements OnInit {
 
   pantryItemName: string;
   pantryItemDescription: string;
+  pantryItemQuantity: number;
+  pantryItemQuantityUnit: string;
 
   locationsSection: PageSection = {
     label: 'Locations',
@@ -51,6 +53,8 @@ export class EditPantryItemDetailsComponent implements OnInit {
     if (this.pantryItem != null) {
       this.pantryItemName = this.pantryItem.name;
       this.pantryItemDescription = this.pantryItem.description;
+      this.pantryItemQuantity = this.pantryItem.defaultQuantity;
+      this.pantryItemQuantityUnit = this.pantryItem.units;
     }
   }
 
@@ -89,12 +93,20 @@ export class EditPantryItemDetailsComponent implements OnInit {
   }
 
   private updateItem() {
+    let pantryItem = this.pantryItem;
+    if (pantryItem === null) {
+      pantryItem = new PantryItem();
+    }
     this.notifySavePantryItemRequested.emit({
-      ...new PantryItem(),
+      ...pantryItem,
       name: this.pantryItemName,
       description: this.pantryItemDescription,
       id: this.pantryItem.id,
       locations: this.pantryItem.locations,
+      // quantityNeeded: this.pantryItem.quantityNeeded,
+      defaultQuantity: this.pantryItemQuantity,
+      quantityNeeded: (pantryItem.quantityNeeded === 0) ? this.pantryItemQuantity : pantryItem.quantityNeeded,
+      units: this.pantryItemQuantityUnit,
       need: this.pantryItem.need,
     });
   }

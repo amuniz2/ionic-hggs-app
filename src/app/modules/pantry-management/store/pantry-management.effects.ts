@@ -151,9 +151,6 @@ export class PantryEffects {
     ofType(PantryActionTypes.SavePantryItem),
     switchMap((payload) => {
       return this.storeManagementService.updatePantryItem(payload.pantryItem).pipe(
-        tap((itemUpdated) => {
-          console.log(`item Added: ${itemUpdated}`);
-        }),
         map(itemUpdated => new SavePantryItemSucceeded( payload.pantryItem )),
         catchError(error => [new SavePantryItemFailed(error, payload.pantryItem)])
       );

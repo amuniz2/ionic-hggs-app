@@ -22,6 +22,9 @@
               </div>
             </ion-col>
             <ion-col size="4">
+              <div float-right>
+
+              </div>
               <ion-item float-right *ngIf="pantryItem.need" class="itemDivContents">
                 <ion-input class="leftSideElement" type="number" (ionBlur)="quantityChanged($event, pantryItem)" [(ngModel)]="pantryItem.quantityNeeded"></ion-input>
                 <ion-label class="rightSideLabel">{{pantryItem.units}}</ion-label>
