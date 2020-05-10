@@ -9,13 +9,11 @@
   <ng-template #existingItem>
     <ion-input placeholder="Name" id="pantryItemNameInput" [(ngModel)]="pantryItemName" (ionBlur)="onNameEnteredOrChanged()"></ion-input>
     <ion-input placeholder="Enter description" id="newPantryItemDescriptionInput" (ionBlur)="onPropertyChange()" [(ngModel)]="pantryItemDescription"></ion-input>
-    <div>
+<!--    <div>-->
       <ion-input placeholder="Quantity" id="pantryItemQuantityInput" (ionBlur)="onPropertyChange()" [(ngModel)]="pantryItemQuantity"></ion-input>
       <ion-input placeholder="Units" id="pantryItemQuantityUnitInput" (ionBlur)="onPropertyChange()" [(ngModel)]="pantryItemQuantityUnit"></ion-input>
-    </div>
-<!--    <ion-checkbox checked="{{pantryItem.need}}"></ion-checkbox>-->
-<!--    <ion-label>Need</ion-label>-->
-    <ion-card>
+<!--    </div>-->
+<!--    <ion-card>-->
       <app-hggs-accordion [sectionName]="locationsSection.label"
                           [description]=""
                           [isOpenInitially]="true"
@@ -28,7 +26,7 @@
                                  (notifyEditPantryItemLocationRequested)="onNotifyEditLocationRequest($event)"
                                  (notifyDeletePantryItemLocationRequested)="onNotifyDeleteLocationRequest($event)"></app-pantry-item-locations>
       <ion-textarea *ngIf="error">{{error.message}}</ion-textarea>
-    </ion-card>
+<!--    </ion-card>-->
   </ng-template>
 
 <!--  <ion-footer>-->

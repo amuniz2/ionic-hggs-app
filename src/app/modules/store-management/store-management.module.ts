@@ -38,7 +38,6 @@ import {AppEffects} from '../../store/app.effects';
     AddGroceryStoreComponent
   ],
   providers: [
-    // FakePantryDataService
   ]
 })
 

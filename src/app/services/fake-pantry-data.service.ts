@@ -18,7 +18,7 @@ import {StoreAisleOrSection} from '../modules/store-management/dumb-components/g
 export class FakePantryDataService implements IPantryDataService {
   constructor() {
     this.groceryStores = [
-      { id: 1, name: 'Publix', aisles: new Set<string>(), locations: [], sections: new Set<string>()},
+      { id: 1, name: 'XPublix', aisles: new Set<string>(), locations: [], sections: new Set<string>()},
       { id: 2, name: 'Target', aisles: new Set<string>(), locations: [], sections: new Set<string>()},
     ];
     this.pantryItems = [
