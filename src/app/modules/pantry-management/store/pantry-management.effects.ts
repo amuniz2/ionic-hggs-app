@@ -110,7 +110,7 @@ export class PantryEffects {
     switchMap((payload) => {
       return this.storeManagementService.addPantryItem( {
         ...new PantryItem(),
-        name: payload.pantryItemRequest.name,
+        name: payload.pantryItemRequest.name
       }).pipe(
         tap((itemAdded) => {
           console.log(`item Added: ${itemAdded}`);

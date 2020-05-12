@@ -57,7 +57,8 @@ export class PantryDataService implements IPantryDataService {
   }
 
   public addPantryItem(newPantryItemRequest: PantryItem): Observable<PantryItem> {
-    const newPantryItem$ = this.dbHelper.addPantryItem(newPantryItemRequest.name, newPantryItemRequest.description);
+   const { name, description, units, quantityNeeded, defaultQuantity, need } = newPantryItemRequest;
+    const newPantryItem$ = this.dbHelper.addPantryItem(name, description, units, quantityNeeded, defaultQuantity, need);
     return newPantryItem$;
   }
 

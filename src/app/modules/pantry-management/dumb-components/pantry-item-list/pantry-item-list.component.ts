@@ -60,7 +60,9 @@ export class PantryItemListComponent implements OnInit {
     this.notifySavePantryItemRequested.emit({...pantryItem, need: $event.detail.checked });
   }
 
-  quantityChanged($event: CustomEvent, pantryItem: PantryItem) {
+  quantityChanged($event: any, pantryItem: PantryItem) {
+    console.log('ionBlur event:');
+    console.log($event);
     this.notifySavePantryItemRequested.emit({...pantryItem, quantityNeeded: $event.detail.value });
   }
 }

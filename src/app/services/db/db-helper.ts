@@ -106,9 +106,15 @@ export class PantryDbHelper {
       mergeMap((success) => success ? this.deleteStoreAisle(id, aisle) :  of(false)));
   }
 
-  public addPantryItem(name: string, description: string): Observable<PantryItem> {
+  public addPantryItem(
+  name: string,
+  description: string,
+  units: string,
+  quantityNeeded: number,
+  defaultQuantity: number,
+  need: boolean): Observable<PantryItem> {
     return this.connect().pipe(
-      mergeMap((success) => this.insertPantryItem(name, description)),
+      mergeMap((success) => this.insertPantryItem(name, description, units, quantityNeeded, defaultQuantity, need)),
       switchMap((rowsAffected) => {
         return this.queryPantryItemByName(name);
       })
@@ -236,9 +242,14 @@ export class PantryDbHelper {
     });
   }
 
-  private insertPantryItem(pantryItemName: string, description: string): Observable<number> {
+  private insertPantryItem(pantryItemName: string,
+                           description: string,
+                           units: string,
+                           quantityNeeded: number,
+                           defaultQuantity: number,
+                           need: boolean): Observable<number> {
     return new Observable<number>((observer) => {
-      this.mySqlCommands.insertPantryItem(pantryItemName, description).then((rowsAffected) => {
+      this.mySqlCommands.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need).then((rowsAffected) => {
         observer.next(rowsAffected);
         observer.complete();
       }).catch((err) => observer.error(err));

@@ -136,11 +136,20 @@ export class MySqlCommands {
   }
   // endregion
   // region PantryItem CRUD
-  public async insertPantryItem(pantryItemName: string, description: string): Promise<number> {
+  public async insertPantryItem(pantryItemName: string, description: string,
+                                units: string,
+                                quantityNeeded: number,
+                                defaultQuantity: number,
+                                need: boolean): Promise<number> {
     const insertSql = `INSERT INTO
      ${pantrySchema.PantryItemTable.NAME}
-     (${pantrySchema.PantryItemTable.COLS.NAME}, ${pantrySchema.PantryItemTable.COLS.DESCRIPTION})
-      VALUES(\'${pantryItemName}\', \'${description}\')`;
+     (${pantrySchema.PantryItemTable.COLS.NAME},
+     ${pantrySchema.PantryItemTable.COLS.DESCRIPTION},
+     ${pantrySchema.PantryItemTable.COLS.UNITS},
+     ${pantrySchema.PantryItemTable.COLS.QUANTITY_NEEDED},
+     ${pantrySchema.PantryItemTable.COLS.DEFAULT_QUANTITY},
+     ${pantrySchema.PantryItemTable.COLS.NEED})
+      VALUES(\'${pantryItemName}\', \'${description}\', '${units}', ${quantityNeeded}, ${defaultQuantity}, ${need})`;
     console.log('executing: ' + insertSql);
     try {
       const data = await this.db.executeSql(insertSql, []);
