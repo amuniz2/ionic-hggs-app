@@ -7,8 +7,7 @@
 <ion-content>]
   <ion-list-header>
     <ion-button shape="round" fill="outline" (click)="onAddStoreClick()">Add
-      <!--<ion-icon slot="start" md="ios-add-circle-outline" ></ion-icon>-->
-      <!--<app-new-store></app-new-store>-->
+      <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
     </ion-button><!--  <app-add-pantry-item (notifyNewPantryItemRequested)="onNotifyNewPantryItemRequest($event)"></app-add-pantry-item>-->
   </ion-list-header>
   <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"

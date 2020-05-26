@@ -71,7 +71,10 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
               changes: {
                 name: action.pantryItem.name,
                 description: action.pantryItem.description,
-                need: action.pantryItem.need
+                need: action.pantryItem.need,
+                defaultQuantity: action.pantryItem.defaultQuantity,
+                units: action.pantryItem.units,
+                quantityNeeded: action.pantryItem.quantityNeeded
               }
               }, state.pantryItems),
             error: null

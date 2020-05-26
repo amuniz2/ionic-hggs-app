@@ -97,6 +97,7 @@ export class EditPantryItemDetailsComponent implements OnInit {
     if (pantryItem === null) {
       pantryItem = new PantryItem();
     }
+    console.log('emitting notfiySavePantryItemRequested');
     this.notifySavePantryItemRequested.emit({
       ...pantryItem,
       name: this.pantryItemName,

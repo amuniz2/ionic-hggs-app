@@ -10,8 +10,8 @@
     <ion-input placeholder="Name" id="pantryItemNameInput" [(ngModel)]="pantryItemName" (ionBlur)="onNameEnteredOrChanged()"></ion-input>
     <ion-input placeholder="Enter description" id="newPantryItemDescriptionInput" (ionBlur)="onPropertyChange()" [(ngModel)]="pantryItemDescription"></ion-input>
 <!--    <div>-->
-      <ion-input placeholder="Quantity" id="pantryItemQuantityInput" (ionBlur)="onPropertyChange()" [(ngModel)]="pantryItemQuantity"></ion-input>
-      <ion-input placeholder="Units" id="pantryItemQuantityUnitInput" (ionBlur)="onPropertyChange()" [(ngModel)]="pantryItemQuantityUnit"></ion-input>
+      <ion-input type="number" placeholder="Quantity" id="pantryItemQuantityInput" (ionChange)="onPropertyChange()" [(ngModel)]="pantryItemQuantity"></ion-input>
+      <ion-input placeholder="Units" id="pantryItemQuantityUnitInput" (ionChange)="onPropertyChange()" [(ngModel)]="pantryItemQuantityUnit"></ion-input>
 <!--    </div>-->
 <!--    <ion-card>-->
       <app-hggs-accordion [sectionName]="locationsSection.label"
@@ -28,11 +28,4 @@
       <ion-textarea *ngIf="error">{{error.message}}</ion-textarea>
 <!--    </ion-card>-->
   </ng-template>
-
-<!--  <ion-footer>-->
-<!--    <ion-button shape="round" fill="outline" (click)="onNameEnteredOrChanged()">Save-->
-<!--      &lt;!&ndash;<ion-icon slot="start" md="ios-add-circle-outline" ></ion-icon>&ndash;&gt;-->
-<!--      &lt;!&ndash;<app-new-store></app-new-store>&ndash;&gt;-->
-<!--    </ion-button>-->
-<!--  </ion-footer>-->
 </ion-content>

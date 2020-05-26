@@ -96,6 +96,8 @@ export class PantryDataService implements IPantryDataService {
   }
 
   public updatePantryItem(savePantryItemRequest: PantryItem): Observable<boolean> {
+    console.log('updatePantryItem:');
+    console.log(savePantryItemRequest);
     return this.dbHelper.updatePantryItem(savePantryItemRequest);
   }
 

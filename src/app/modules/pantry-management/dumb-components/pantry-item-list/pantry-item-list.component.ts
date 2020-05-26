@@ -57,12 +57,16 @@ export class PantryItemListComponent implements OnInit {
   }
 
   itemClicked($event, pantryItem: PantryItem) {
-    this.notifySavePantryItemRequested.emit({...pantryItem, need: $event.detail.checked });
+    console.log('item clicked');
+    console.log($event);
+    this.notifySavePantryItemRequested.emit({...pantryItem, need: $event?.detail?.checked });
   }
 
-  quantityChanged($event: any, pantryItem: PantryItem) {
-    console.log('ionBlur event:');
-    console.log($event);
-    this.notifySavePantryItemRequested.emit({...pantryItem, quantityNeeded: $event.detail.value });
+  quantityChanged($event, pantryItem: PantryItem) {
+    if (!isNaN($event.detail?.value)) {
+      console.log('ionChange event, pantryItem:');
+      console.log(pantryItem);
+      // this.notifySavePantryItemRequested.emit({...pantryItem, quantityNeeded: $event.detail.value });
+    }
   }
 }
