@@ -294,7 +294,9 @@ export class PantryDbHelper {
 
   public addPantryItemLocation(pantryItemId: number, storeId: number, aisle: string, section: string): Observable<GroceryStoreLocation> {
     return new Observable<GroceryStoreLocation>((observer) => {
-      this.mySqlCommands.insertPantryItemLocation(pantryItemId, storeId, aisle, section).then((result) => {
+      this.mySqlCommands.insertPantryItemLocation(pantryItemId, storeId,
+        (typeof aisle === 'undefined') ? '': aisle,
+        (typeof section === 'undefined') ? '' : section).then((result) => {
         observer.next(result);
         observer.complete();
       }).catch((err) => observer.error(err));
@@ -307,7 +309,9 @@ export class PantryDbHelper {
                                   aisle: string,
                                   section: string): Observable<GroceryStoreLocation> {
     return new Observable<GroceryStoreLocation>((observer) => {
-      this.mySqlCommands.updatePantryItemLocation(pantryItemId, originalLocationId, storeId, aisle, section).then((result) => {
+      this.mySqlCommands.updatePantryItemLocation(pantryItemId, originalLocationId, storeId,
+        (typeof aisle === 'undefined') ? '': aisle,
+        (typeof section === 'undefined') ? '' : section).then((result) => {
         observer.next(result);
         observer.complete();
       }).catch((err) => observer.error(err));
