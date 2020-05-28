@@ -44,8 +44,8 @@ export class EditPantryItemLocationComponent implements OnInit {
 
   selectedGroceryStoreLocation$: Observable<GroceryStoreLocation>;
   selectedGroceryStoreId: number;
-  selectedGroceryStoreAisle: string;
-  selectedGroceryStoreSection: string;
+  selectedGroceryStoreAisle?: string;
+  selectedGroceryStoreSection?: string;
 
   private groceryStoresLoading$: Observable<boolean>;
   private locationId: any;

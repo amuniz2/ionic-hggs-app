@@ -584,18 +584,18 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
     const fromLocationTableClause = `FROM ${pantrySchema.LocationTable.NAME}`;
 
     const fromLocationTableWithJoinClause = `FROM ${pantrySchema.LocationTable.NAME} JOIN ${pantrySchema.StoreTable.NAME}
-    ON ${pantrySchema.LocationTable.COLS.STORE_ID} = ${pantrySchema.StoreTable.COLS.ID}`;
+    ON ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.STORE_ID} = ${pantrySchema.StoreTable.NAME}.${pantrySchema.StoreTable.COLS.ID}`;
 
-    const whereLocationClause = `WHERE ${pantrySchema.LocationTable.COLS.STORE_ID}=${storeId}
-     AND ${pantrySchema.LocationTable.COLS.AISLE} = '${aisle}'
-     AND ${pantrySchema.LocationTable.COLS.SECTION_NAME} = '${section}' limit 1`;
+    const whereLocationClause = `WHERE  ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.STORE_ID}=${storeId}
+     AND ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.AISLE} = '${aisle}'
+     AND ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.SECTION_NAME} = '${section}' limit 1`;
 
-    const insertGroceryStoreIfNecessarySql = `INSERT INTO ${pantrySchema.LocationTable.name} (
+    const insertGroceryStoreIfNecessarySql = `INSERT INTO ${pantrySchema.LocationTable.NAME} (
     ${pantrySchema.LocationTable.COLS.STORE_ID},
     ${pantrySchema.LocationTable.COLS.AISLE},
     ${pantrySchema.LocationTable.COLS.SECTION_NAME})
      SELECT ${storeId}, '${aisle}', '${section}'
-     WHERE NOT EXISTS(select ${pantrySchema.LocationTable.COLS.ID} ${fromLocationTableClause} ${whereLocationClause};`;
+     WHERE NOT EXISTS(select ${pantrySchema.LocationTable.COLS.ID} ${fromLocationTableClause} ${whereLocationClause});`;
 
     const insertPantryItemSql = `INSERT INTO
      ${pantrySchema.PantryItemLocationTable.NAME}
@@ -605,18 +605,21 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
       ${fromLocationTableClause} ${whereLocationClause};`;
 
     const selectGroceryStoreLocation = `SELECT
-    ${pantrySchema.LocationTable.COLS.ID},
-    ${pantrySchema.LocationTable.COLS.STORE_ID},
-    ${pantrySchema.StoreTable.COLS.STORE_NAME},
-    ${pantrySchema.LocationTable.COLS.AISLE},
-    ${pantrySchema.LocationTable.COLS.SECTION_NAME}
+    ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.ID},
+    ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.STORE_ID},
+    ${pantrySchema.StoreTable.NAME}.${pantrySchema.StoreTable.COLS.STORE_NAME},
+    ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.AISLE},
+    ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.SECTION_NAME}
       ${fromLocationTableWithJoinClause} ${whereLocationClause}`;
     console.log('executing: ');
     console.log (insertGroceryStoreIfNecessarySql);
     console.log(insertPantryItemSql);
+    console.log(selectGroceryStoreLocation);
 
     try {
-      const data = await this.db.sqlBatch([insertGroceryStoreIfNecessarySql, insertPantryItemSql, selectGroceryStoreLocation]);
+      // const data = await this.db.sqlBatch([insertGroceryStoreIfNecessarySql, insertPantryItemSql, selectGroceryStoreLocation]);
+      await this.db.sqlBatch([insertGroceryStoreIfNecessarySql, insertPantryItemSql]);
+      const data = await(this.db.executeSql(selectGroceryStoreLocation, []));
       console.log(`returning ${data} from insertPantryItemLocation`);
       result = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
     } catch (err) {
@@ -635,18 +638,18 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
     const fromLocationTableClause = `FROM ${pantrySchema.LocationTable.NAME}`;
 
     const fromLocationTableWithJoinClause = `FROM ${pantrySchema.LocationTable.NAME} JOIN ${pantrySchema.StoreTable.NAME}
-    ON ${pantrySchema.LocationTable.COLS.STORE_ID} = ${pantrySchema.StoreTable.COLS.ID}`;
+    ON ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.STORE_ID} = ${pantrySchema.StoreTable.NAME}.${pantrySchema.StoreTable.COLS.ID}`;
 
-    const whereLocationClause = `WHERE ${pantrySchema.LocationTable.COLS.STORE_ID}=${storeId}
-     AND ${pantrySchema.LocationTable.COLS.AISLE} = '${aisle}'
-     AND ${pantrySchema.LocationTable.COLS.SECTION_NAME} = '${section}' limit 1`;
+    const whereLocationClause = `WHERE ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.STORE_ID}=${storeId}
+     AND ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.AISLE} = '${aisle}'
+     AND ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.SECTION_NAME} = '${section}' limit 1`;
 
-    const insertGroceryLocationIfNecessarySql = `INSERT INTO ${pantrySchema.LocationTable.name} (
+    const insertGroceryLocationIfNecessarySql = `INSERT INTO ${pantrySchema.LocationTable.NAME} (
     ${pantrySchema.LocationTable.COLS.STORE_ID},
     ${pantrySchema.LocationTable.COLS.AISLE},
     ${pantrySchema.LocationTable.COLS.SECTION_NAME})
      SELECT ${storeId}, '${aisle}', '${section}'
-     WHERE NOT EXISTS(select ${pantrySchema.LocationTable.COLS.ID} ${fromLocationTableClause} ${whereLocationClause};`;
+     WHERE NOT EXISTS(select ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.ID} ${fromLocationTableClause} ${whereLocationClause});`;
 
     const updatePantryItemLocationSql = `UPDATE
      ${pantrySchema.PantryItemLocationTable.NAME}
