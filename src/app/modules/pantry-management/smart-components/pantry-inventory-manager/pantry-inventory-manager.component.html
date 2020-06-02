@@ -1,15 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-text slot="start">Pantry</ion-text>
+    <ion-button  fill="clear" outline="none" (click)="onAddStoreClick()">Add
+      <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
+    </ion-button>
+    <!--  <app-add-pantry-item (notifyNewPantryItemRequested)="onNotifyNewPantryItemRequest($event)"></app-add-pantry-item>-->
     <app-select-grocery-store slot="end" [groceryStores]="groceryStores$ | async"></app-select-grocery-store>
   </ion-toolbar>
 </ion-header>
 <ion-content>]
-  <ion-list-header>
-    <ion-button shape="round" fill="outline" (click)="onAddStoreClick()">Add
-      <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
-    </ion-button><!--  <app-add-pantry-item (notifyNewPantryItemRequested)="onNotifyNewPantryItemRequest($event)"></app-add-pantry-item>-->
-  </ion-list-header>
   <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"
                        (notifyNewPantryItemRequested)="onCreateItem($event)">
   </app-add-pantry-item>

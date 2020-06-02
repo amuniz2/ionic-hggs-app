@@ -99,8 +99,10 @@ export const  selectPossibleGroceryStoreAislesForSection = (storeId: number, sec
   selectGroceryStore(storeId), (groceryStore: GroceryStoreState) => {
     const locationWithSectionAndAisle = groceryStore.locations.find((location) => location.aisle && location.section === section);
     if (locationWithSectionAndAisle) {
+      console.log(`returning [locationWithSectionAndAisle.aisle] ${[locationWithSectionAndAisle.aisle]}`);
       return ([locationWithSectionAndAisle.aisle]);
     }
+    console.log(`returning groceryStore.aisles ${groceryStore.aisles}`);
     return groceryStore.aisles;
   });
 

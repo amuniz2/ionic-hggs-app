@@ -8,7 +8,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <app-store-list [groceryStores] = "(groceryStores$ | async)"
+  <app-store-list [groceryStoresLoading]="(groceryStoresLoading$ | async)" [groceryStores] = "(groceryStores$ | async)"
  (notifyDeleteStoreRequested)="onDeleteStoreRequest($event)">
   </app-store-list>
   <app-add-grocery-store [addingStore] = "(addingStore$ | async)" (notifyNewStoreRequested)="onNotifyNewStoreRequest($event)"></app-add-grocery-store>

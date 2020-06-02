@@ -30,7 +30,7 @@ export class ShoppingListComponent implements OnInit {
   selectedStoreId: number;
 
   constructor(private store: Store<AppState>) {
-    this.store.dispatch(new LoadGroceryStores());
+    // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     this.groceryStores$ = this.store.select(selectAllGroceryStores);
   }

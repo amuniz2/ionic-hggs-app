@@ -4,6 +4,8 @@ import {AppState} from './app.state';
 import {AddStoreAisleFailed, AppActions, AppActionTypes} from './app.actions';
 import * as fromAppAdapter from './grocery-store.adapter';
 import {getGroceryStore} from './store-management.selectors';
+import {UpdateNum, UpdateStr} from '@ngrx/entity/src/models';
+import {GroceryStoreState} from '../model/grocery-store';
 
 export const reducers: ActionReducerMap<AppState> = {
   isReady: (isReady) => isReady,
@@ -51,14 +53,22 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
         }
       };
     case AppActionTypes.StoresLoadedSuccessfully:
+    {
+      // const updateManyPayload: UpdateNum<GroceryStoreState>[] = action.groceryStores.map((groceryStore) => {
+      //   return {
+      //     id: groceryStore.id,
+      //     changes: { name: groceryStore.name }
+      //   };
+      // });
       return {
         ...state,
         groceryStores: {
-          ...fromAppAdapter.sharedGroceryStoreAdapter.addAll(action.groceryStores, state.groceryStores),
+          ...fromAppAdapter.sharedGroceryStoreAdapter.addMany(action.groceryStores, state.groceryStores),
           loading: false,
           error: null
         },
       };
+    }
 
     case AppActionTypes.LoadGroceryStoresFailed:
       return {

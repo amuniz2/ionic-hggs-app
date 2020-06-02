@@ -18,7 +18,7 @@ import {
   GroceryStoreSectionAdded,
   AddGroceryStoreSectionFailed,
   GroceryStoreSectionDeleted,
-  DeleteGroceryStoreSectionFailed, GroceryStoreSectionsLoaded, DisplayError, LoadGroceryStoreLocations
+  DeleteGroceryStoreSectionFailed, GroceryStoreSectionsLoaded, DisplayError, LoadGroceryStoreLocations, LoadGroceryStores
 } from '../store/app.actions';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {AppState} from './app.state';
@@ -41,6 +41,7 @@ export class AppEffects {
   public openDatabase$ = this.actions$.pipe(
     ofType(AppActionTypes.StartAppInitializer),
     switchMap(() => {
+      this.store.dispatch(new LoadGroceryStores());
       return this.storeManagementService.initialize().pipe(
         map((success) => new FinishAppInitializer()),
         // map(data => new DatabaseOpenedSuccessfully({groceryStores: data})),

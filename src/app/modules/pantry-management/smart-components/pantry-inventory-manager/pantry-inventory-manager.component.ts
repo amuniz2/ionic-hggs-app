@@ -32,7 +32,7 @@ export class PantryInventoryManagerComponent implements OnInit {
 
   constructor(private store: Store<AppState>) {
     this.title = 'Manage pantry items from page component';
-    this.store.dispatch(new LoadGroceryStores());
+    // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     console.log('dispatching NavigatedToPantryPage');
     this.store.dispatch(new fromActions.NavigatedToPantryPage());

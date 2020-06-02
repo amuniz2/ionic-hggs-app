@@ -78,6 +78,7 @@ export class StoresLoadedSuccessfully implements  Action {
 
 export class LoadGroceryStores implements Action {
   readonly type = AppActionTypes.LoadGroceryStores;
+  constructor() {}
 }
 
 export class LoadGroceryStoresFailed implements Action {

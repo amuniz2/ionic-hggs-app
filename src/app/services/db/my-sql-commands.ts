@@ -654,14 +654,14 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
     const updatePantryItemLocationSql = `UPDATE
      ${pantrySchema.PantryItemLocationTable.NAME}
      SET ${pantrySchema.PantryItemLocationTable.COLS.LOCATION_ID} =
-     (SELECT ${pantrySchema.LocationTable.COLS.ID} fromLocationTableClause
-     WHERE ${whereLocationClause})
+     (SELECT ${pantrySchema.LocationTable.COLS.ID} ${fromLocationTableClause}
+     ${whereLocationClause})
      WHERE ${pantrySchema.PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${pantryItemId}
      AND ${pantrySchema.PantryItemLocationTable.COLS.LOCATION_ID} = ${originalLocationId};`;
 
     const selectGroceryStoreLocation = `SELECT
     ${pantrySchema.LocationTable.COLS.ID},
-    ${pantrySchema.LocationTable.COLS.STORE_ID},
+    ${pantrySchema.LocationTable.NAME}.${pantrySchema.LocationTable.COLS.STORE_ID},
     ${pantrySchema.StoreTable.COLS.STORE_NAME},
     ${pantrySchema.LocationTable.COLS.AISLE},
     ${pantrySchema.LocationTable.COLS.SECTION_NAME}
@@ -669,13 +669,15 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
     console.log('executing: ');
     console.log (insertGroceryLocationIfNecessarySql);
     console.log(updatePantryItemLocationSql);
+    console.log(selectGroceryStoreLocation);
 
     try {
-      const data = await this.db.sqlBatch([insertGroceryLocationIfNecessarySql, updatePantryItemLocationSql, selectGroceryStoreLocation]);
+      await this.db.sqlBatch([insertGroceryLocationIfNecessarySql, updatePantryItemLocationSql]);
+      const data = await this.db.executeSql(selectGroceryStoreLocation, []);
       console.log(`returning ${data} from updatePantryItemLocation`);
       result = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
     } catch (err) {
-      console.log(`Error inserting pantry Item location `);
+      console.log(`Error updating pantry Item location `);
       console.log(err);
     }
     return result;

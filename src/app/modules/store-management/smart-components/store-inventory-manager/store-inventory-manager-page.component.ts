@@ -27,8 +27,7 @@ export class StoreInventoryManagerPageComponent implements OnInit {
 
   ngOnInit() {
     // dispatch action that list has been navigated to
-    console.log('dispatching LoadGroceryStores');
-    this.store.dispatch(new LoadGroceryStores());
+    // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     this.groceryStores$ = this.store.select(fromSelectors.selectAllGroceryStores);
   }

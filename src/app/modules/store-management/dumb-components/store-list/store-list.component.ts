@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GroceryStore} from '../../../../model/grocery-store';
+import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 import {Router} from '@angular/router';
 import {NavigateToStoreDetailsPage} from '../../store/store-management.actions';
 import {Store} from '@ngrx/store';
@@ -31,7 +31,7 @@ export class StoreListComponent implements OnInit {
   groceryStoresLoading: boolean;
 
   @Input()
-  groceryStores: GroceryStore[];
+  groceryStores: GroceryStoreState[];
 
   constructor(private router: Router, private store: Store<AppState>) {
     // this.groceryStores = [];
@@ -41,14 +41,15 @@ export class StoreListComponent implements OnInit {
       // .subscribe( groceryStores  => this.groceryStores$ = groceryStores);
     // to do get list of stores from the ngrx store
     // this.groceryStores = [...this.groceryStores, { id: 2, name: 'Test'}];
-    console.log(this.groceryStores);
+
+    console.log(`Stores onInit ${this.groceryStores}, ${this.groceryStoresLoading}`);
   }
 
-  editGroceryStore(item: GroceryStore) {
+  editGroceryStore(item: GroceryStoreState) {
     this.store.dispatch( new NavigateToStoreDetailsPage({ id: item.id } ));
     // item.close();
   }
-  remove(item: GroceryStore) {
+  remove(item: GroceryStoreState) {
     console.log(`emitting notification that store delete is requested ${item.id}`);
     this.notifyDeleteStoreRequested.emit({ id: item.id});
   }
