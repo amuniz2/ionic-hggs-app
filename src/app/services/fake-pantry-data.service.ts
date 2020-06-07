@@ -35,6 +35,7 @@ export class FakePantryDataService implements IPantryDataService {
     this.pantryItemLocations = [];
     this.groceryStoreLocations = [];
   }
+
   private readonly groceryStores: GroceryStore[];
   private readonly pantryItems: PantryItem[];
   private readonly pantryItemLocations: PantryItemLocation[];
@@ -186,7 +187,7 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   getPantryItems(): Observable<PantryItem[]> {
-    return of(this.pantryItems);
+    return of([...this.pantryItems]);
   }
 
   addPantryItem(newPantryItemRequest: PantryItem): Observable<PantryItem> {
@@ -195,7 +196,7 @@ export class FakePantryDataService implements IPantryDataService {
       }
       const newPantryItem = { ...newPantryItemRequest, id: this.pantryItems.length + 1};
       this.pantryItems.push(newPantryItem);
-      return of(newPantryItem);
+      return of( { ...newPantryItem });
   }
 
   deletePantryItem(deletePantryItemRequest: DeletePantryItemRequest): Observable<boolean> {
@@ -262,7 +263,7 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   public getPantryItem(id: number): Observable<PantryItem> {
-    return of(this.findPantryItem(id));
+    return of({ ...this.findPantryItem(id)});
   }
   public getPantryItemLocations(id: number): Observable<GroceryStoreLocation[]> {
     const pantryItemLocations: PantryItemLocation[] =  this.pantryItemLocations.filter(location => location.pantryItemId === id);
