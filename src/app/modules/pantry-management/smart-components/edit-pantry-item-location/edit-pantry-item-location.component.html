@@ -1,10 +1,6 @@
-<ion-header>
-  <h2>Pantry Item Location</h2>
-</ion-header>
 <ion-content>
-<!--  <app-location [groceryStores]="groceryStores$ | async" (notifySelectedGroceryStoreChanged)="onChangeGroceryStore($event)"></app-location>-->
+  <h4>Pantry Item Location</h4>
   <ion-list>
-<!--    <ion-list-header> Single Location </ion-list-header>-->
     <form [formGroup]="locationForm" (ngSubmit)="onSubmit(locationForm.value)">
       <ion-label>Store</ion-label>
       <app-grocery-store-location-store [formGroup]="locationForm" [groceryStores]="groceryStores$ | async"
