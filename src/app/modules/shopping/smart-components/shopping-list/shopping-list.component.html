@@ -5,5 +5,5 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-<app-shopping-item-list [shoppingList]="shoppingList$ | async"></app-shopping-item-list>
+<app-shopping-item-list (notifySaveShoppingItemRequested)="onItemPlacedInOrRemovedFromCart($event)" [shoppingList]="shoppingList$ | async"></app-shopping-item-list>
 </ion-content>

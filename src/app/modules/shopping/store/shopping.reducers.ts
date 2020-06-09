@@ -80,12 +80,26 @@ export function shoppingListManagementReducer(state = initialShoppingListManagem
                                               action: ShoppingActions): ShoppingListManagementState  {
   switch (action.type) {
     case ShoppingActionTypes.LoadShoppingListSucceeded: {
+      console.log(`Loading shopping list into state: ${JSON.stringify(action.shoppingList)}`)
       return {
         ...state,
         shoppingLists: shoppingListAdapter.upsertOne( new ShoppingListState(action.storeId, action.shoppingList),
           state.shoppingLists),
       };
     }
+
+    case ShoppingActionTypes.ShoppingItemUpdateSucceeded: {
+      const shoppingList = state.shoppingLists.entities[action.storeId].shoppingItems;
+      const shoppingItem = shoppingList.find(i => i.pantryItemId === action.id);
+      console.log(`in reducer, action: ${JSON.stringify(action)}; shoppingList: ${JSON.stringify(shoppingList)}; shoppingItem: ${shoppingItem}`);
+      shoppingItem.inCart = !shoppingItem.inCart;
+      return {
+        ...state,
+        shoppingLists: shoppingListAdapter.upsertOne( new ShoppingListState(action.storeId, shoppingList),
+          state.shoppingLists),
+      };
+    }
+
     default: return state;
   }
 }

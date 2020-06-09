@@ -44,7 +44,9 @@ export class PantryItemTable {
     public static QUANTITY_NEEDED = 'quantity_needed';
     public static UNITS = 'units';
     public static NEED = 'need';
-  };
+    public static IN_CART = 'in_cart';
+    public static SELECTED = 'selected';
+  }
 }
 
 export class ShoppingItemTable {

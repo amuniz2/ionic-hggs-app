@@ -109,6 +109,7 @@ export class EditPantryItemDetailsComponent implements OnInit {
       quantityNeeded: (pantryItem.quantityNeeded === 0) ? this.pantryItemQuantity : pantryItem.quantityNeeded,
       units: this.pantryItemQuantityUnit,
       need: this.pantryItem.need,
+      inCart: this.pantryItem.inCart
     });
   }
 }

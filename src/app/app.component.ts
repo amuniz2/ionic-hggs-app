@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppState } from './store/app.state';
 import { Store } from '@ngrx/store';
 import { StartAppInitializer } from './store';

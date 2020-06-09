@@ -1,0 +1,22 @@
+//ion-content {
+//  --ion-background-color: #6495ED ; // cornflower-blue
+//
+//  ion-input {
+//    background-color: white;
+//  }
+//}
+div {
+  display: inline-block;
+}
+.edit-box {
+  background-color: white;
+  border: 1px solid blue;
+}
+.edit-box-right {
+  width: 25%;
+}
+
+.edit-box-left {
+  float: left;
+  width: 70%;
+}

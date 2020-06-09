@@ -60,4 +60,6 @@ export interface IPantryDataService {
   getGroceryStoreLocations(groceryStoreId: number): Observable<GroceryStoreLocation[]>;
 
   updateGroceryStoreAisle(groceryStoreId: number, oldName: string, newName: string): Observable<boolean>;
+
+  updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean>;
 }

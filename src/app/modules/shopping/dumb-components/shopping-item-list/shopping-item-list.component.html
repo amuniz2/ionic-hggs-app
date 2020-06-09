@@ -8,7 +8,7 @@
         </ion-row>
         <ion-row *ngFor="let shoppingItem of aisle.items">
           <ion-col>
-            <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem(shoppingItem)"></app-shopping-item>
+            <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
             <hr width="100%">
           </ion-col>
         </ion-row>
@@ -23,12 +23,21 @@
       </ion-row>
       <ion-row *ngFor="let shoppingItem of section.items">
         <ion-col>
-          <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem(shoppingItem)"></app-shopping-item>
+          <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
           <hr width="100%">
         </ion-col>
       </ion-row>
     </ion-grid>
-  </ion-item></ion-list>
+  </ion-item>
+  <ion-grid>
+    <ion-row *ngFor="let shoppingItem of shoppingList?.shoppingItems">
+      <ion-col>
+        <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
+        <hr width="100%">
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-list>
 <ion-text *ngIf="error">{{error}}</ion-text>
 <ng-template #showSpinner>
   <p>shopping items are loading...</p>

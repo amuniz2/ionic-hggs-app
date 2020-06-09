@@ -53,7 +53,7 @@ const compareByStoreLocation = ( item1: ShoppingItem, item2: ShoppingItem): numb
   // sort by location in store
   if (item1.location.aisle === item2.location.aisle) {
     if (item1.location.section === item2.location.section) {
-      return item1.pantryItem.name < item2.pantryItem.name ? -1 : 1;
+      return item1.name < item2.name ? -1 : 1;
     } else {
       return item1.location.section < item2.location.section ? -1 : 1;
     }

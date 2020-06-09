@@ -10,6 +10,7 @@ export class PantryItem {
   quantityNeeded: number;
   units: string;
   defaultQuantity: number;
+  inCart: boolean;
 
   constructor() {
     this.id = 0;
@@ -18,7 +19,8 @@ export class PantryItem {
     this.name = '';
     this.need = true;
     this.defaultQuantity = 1;
-    this.units = 'item';
+    this.units = '';
     this.quantityNeeded = 1;
+    this.inCart = false;
   }
 }

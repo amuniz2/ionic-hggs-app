@@ -8,6 +8,7 @@ import {PantryItem} from '../../model/pantry-item';
 import {MySqlCommands} from './my-sql-commands';
 import {GroceryStoreLocation} from '../../model/grocery-store-location';
 import {PantryItemLocation} from '../../model/PantryItemLocation';
+import {ShoppingItem} from '../../model/shopping-item';
 
 @Injectable()
 export class PantryDbHelper {
@@ -292,6 +293,15 @@ export class PantryDbHelper {
     });
   }
 
+  public updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      this.mySqlCommands.updateShoppingItem(pantryItemId, inCart).then((result) => {
+        observer.next(result);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
   public addPantryItemLocation(pantryItemId: number, storeId: number, aisle: string, section: string): Observable<GroceryStoreLocation> {
     return new Observable<GroceryStoreLocation>((observer) => {
       this.mySqlCommands.insertPantryItemLocation(pantryItemId, storeId,
@@ -356,6 +366,15 @@ export class PantryDbHelper {
     return new Observable<GroceryStoreLocation[]>((observer) => {
       this.mySqlCommands.queryPantryItemLocations(pantryItemId).then((pantryItemLocations) => {
         observer.next(pantryItemLocations);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
+  public queryShoppingItems(storeId: number): Observable<ShoppingItem[]> {
+    return new Observable<ShoppingItem[]>((observer) => {
+      this.mySqlCommands.queryShoppingItems(storeId).then((shoppingItems) => {
+        observer.next(shoppingItems);
         observer.complete();
       }).catch((err) => observer.error(err));
     });

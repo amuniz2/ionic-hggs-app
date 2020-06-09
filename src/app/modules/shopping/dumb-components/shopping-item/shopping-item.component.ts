@@ -1,6 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingItem} from '../../../../model/shopping-item';
 
+export class ShoppingItemUpdate {
+  id: number;
+  inCart: boolean;
+}
+
 @Component({
   selector: 'app-shopping-item',
   templateUrl: './shopping-item.component.html',
@@ -12,7 +17,7 @@ export class ShoppingItemComponent implements OnInit {
   shoppingItem: ShoppingItem;
 
   @Output()
-  notifySaveRequested: EventEmitter<ShoppingItem> = new EventEmitter();
+  notifySaveRequested: EventEmitter<ShoppingItemUpdate> = new EventEmitter();
 
   constructor() { }
 
@@ -20,20 +25,24 @@ export class ShoppingItemComponent implements OnInit {
   }
 
   itemClicked($event) {
-    this.notifySaveRequested.emit({...this.shoppingItem, inCart: $event.detail.inCart });
+    console.log(`Check event: ${JSON.stringify($event)}; shopping item: ${JSON.stringify(this.shoppingItem)}`);
+    // this.shoppingItem.inCart = !this.shoppingItem.inCart;
+    this.notifySaveRequested.emit({
+      id: this.shoppingItem.pantryItemId,
+      inCart: !this.shoppingItem.inCart });
   }
 
   getShoppingItemDescriptionLine1(shoppingItem: ShoppingItem) {
     if (!shoppingItem) {
       return '';
     }
-    return this.shoppingItem.pantryItem.name + ', ' + this.shoppingItem.pantryItem.quantityNeeded + ' ' + shoppingItem.pantryItem.units;
+    return this.shoppingItem.name + ', ' + this.shoppingItem.quantity + ' ' + shoppingItem.units;
   }
 
   getShoppingItemDescriptionLine2(shoppingItem: ShoppingItem) {
     if (!shoppingItem) {
       return '';
     }
-    return this.shoppingItem.pantryItem.description;
+    return this.shoppingItem.description;
   }
 }

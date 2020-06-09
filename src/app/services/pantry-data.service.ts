@@ -96,18 +96,10 @@ export class PantryDataService implements IPantryDataService {
   }
 
   public updatePantryItem(savePantryItemRequest: PantryItem): Observable<boolean> {
-    console.log('updatePantryItem:');
-    console.log(savePantryItemRequest);
     return this.dbHelper.updatePantryItem(savePantryItemRequest);
   }
 
   public addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
-
-    // const storeLocation = this.dbHelper.queryGroceryStoreLocation(newLocation.storeId, newLocation.aisle, newLocation.section);
-    // if (storeLocation === null) {
-    //   this.dbHelper.addGroceryStoreLocation(newLocation);
-    // }
-
     return this.dbHelper.addPantryItemLocation(itemId, newLocation.storeId, newLocation.aisle, newLocation.section);
   }
 
@@ -128,17 +120,14 @@ export class PantryDataService implements IPantryDataService {
   }
 
   getShoppingList(storeId: number): Observable<ShoppingItem[]> {
-    return undefined;
+    return this.dbHelper.queryShoppingItems(storeId);
   }
 
   updateGroceryStoreAisle(groceryStoreId: number, oldName: string, newName: string): Observable<boolean> {
     return undefined;
   }
 
-  // getPantryItemDetails(id: number): Observable<PantryItem> {
-  //   const pantryItem = this.dbHelper.queryPantryItem(id);
-  //   if (pantryItem != null) {
-  //     pantryItem.locations = this.dbHelper.queryPantryItemLocations(id);
-  //   }
-  // }
+  updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean> {
+    return this.dbHelper.updateShoppingItem(pantryItemId, inCart);
+  }
 }

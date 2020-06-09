@@ -1,8 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingItem} from '../../../../model/shopping-item';
 import {ShoppingListState} from '../../store/shopping.reducers';
+import {ShoppingItemUpdate} from '../shopping-item/shopping-item.component';
 
-
+export class StoreShoppingItemUpdate {
+  storeId: number;
+  id: number;
+  inCart: boolean;
+}
 @Component({
   selector: 'app-shopping-item-list',
   templateUrl: './shopping-item-list.component.html',
@@ -11,7 +16,7 @@ import {ShoppingListState} from '../../store/shopping.reducers';
 export class ShoppingItemListComponent implements OnInit {
 
   @Output()
-  notifySaveShoppingItemRequested: EventEmitter<ShoppingItem> = new EventEmitter();
+  notifySaveShoppingItemRequested: EventEmitter<StoreShoppingItemUpdate> = new EventEmitter();
 
   @Input()
   shoppingList: ShoppingListState;
@@ -29,7 +34,7 @@ export class ShoppingItemListComponent implements OnInit {
   //   this.getSortedShoppingItems();
   }
 
-  onSaveShoppingItem(shoppingItem: ShoppingItem) {
-    this.notifySaveShoppingItemRequested.emit(shoppingItem);
+  onSaveShoppingItem(shoppingItem: ShoppingItemUpdate) {
+    this.notifySaveShoppingItemRequested.emit({storeId: this.shoppingList.id, id: shoppingItem.id, inCart: shoppingItem.inCart});
   }
 }

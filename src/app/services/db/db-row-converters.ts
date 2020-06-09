@@ -3,6 +3,7 @@ import {LocationTable, PantryItemLocationTable, PantryItemTable, StoreTable} fro
 import {GroceryStore} from '../../model/grocery-store';
 import {GroceryStoreLocation} from '../../model/grocery-store-location';
 import {PantryItemLocation} from '../../model/PantryItemLocation';
+import {ShoppingItem} from '../../model/shopping-item';
 
 export class DbRowConverters {
   public static rowToGroceryStore(row: any): GroceryStore {
@@ -29,7 +30,8 @@ export class DbRowConverters {
       need: row[PantryItemTable.COLS.NEED],
       units: row[PantryItemTable.COLS.UNITS],
       defaultQuantity,
-      quantityNeeded: quantityNeeded === null ? defaultQuantity : quantityNeeded
+      quantityNeeded: quantityNeeded === null ? defaultQuantity : quantityNeeded,
+      inCart: row[PantryItemTable.COLS.IN_CART],
     };
   }
 
@@ -50,6 +52,20 @@ export class DbRowConverters {
     };
   }
 
+  public static rowToShoppingItem(row: any): ShoppingItem {
+    return {
+      name: row[PantryItemTable.COLS.NAME],
+      description: row[PantryItemTable.COLS.DESCRIPTION],
+      pantryItemId: row[PantryItemTable.COLS.ID],
+      units: row[PantryItemTable.COLS.UNITS],
+      quantity: row[PantryItemTable.COLS.QUANTITY_NEEDED],
+      inCart: false,
+      location: {
+        aisle: row[LocationTable.COLS.AISLE],
+        section: row[LocationTable.COLS.SECTION_NAME],
+      }
+    };
+  }
   public static rowToString(row: any, columnName: string): string {
     return row[columnName];
   }

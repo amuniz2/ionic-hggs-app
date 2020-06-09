@@ -29,7 +29,9 @@ export class FakePantryDataService implements IPantryDataService {
         description: 'Holsum',
         locations: [],
         need: false,
-        quantityNeeded: 1},
+        quantityNeeded: 1,
+        inCart: false
+      },
     ];
     this.shoppingItems = [];
     this.pantryItemLocations = [];
@@ -278,6 +280,10 @@ export class FakePantryDataService implements IPantryDataService {
     return  this.pantryItems.find(pantryItem => pantryItem.id === id);
   }
 
+  findShoppingItem(id: number): ShoppingItem {
+    return  this.shoppingItems.find(pantryItem => pantryItem.pantryItemId === id);
+  }
+
   findGroceryStoreLocation(storeId: number, aisle: string, section: string): GroceryStoreLocation {
     return this.groceryStoreLocations.find(loc => (loc.storeId === storeId) && (loc.aisle === aisle) && (loc.section === section));
   }
@@ -292,13 +298,13 @@ export class FakePantryDataService implements IPantryDataService {
         return false;
       }
       const itemFoundInStore =
-      !!this.pantryItemLocations.find((ploc) => ploc.pantryItemId === item.id &&
-        !!this.groceryStoreLocations.find((gloc) => gloc.id === ploc.groceryStoreLocationId && gloc.storeId === storeId));
+        this.pantryItemLocations.some((ploc) => ploc.pantryItemId === item.id &&
+        this.groceryStoreLocations.some((gloc) => gloc.id === ploc.groceryStoreLocationId && gloc.storeId === storeId));
 
       if (!itemFoundInStore) {
         return false;
       }
-      return !shoppingItems.find((shoppingItem => shoppingItem.pantryItemId === item.id));
+      return !shoppingItems.some((shoppingItem => shoppingItem.pantryItemId === item.id));
     });
   }
 
@@ -309,16 +315,22 @@ export class FakePantryDataService implements IPantryDataService {
       this.getPantryItemsNeededInternal(storeId, shoppingItemsStillNeeded).map((pantryItem: PantryItem) => {
       const pantryItemLocation = this.pantryItemLocations.find(ploc => ploc.pantryItemId === pantryItem.id);
       const groceryStoreLocation = this.groceryStoreLocations.find(gloc => gloc.id === pantryItemLocation.groceryStoreLocationId);
+      console.log(`found location for grocery item ${pantryItem.name}; location: ${JSON.stringify(groceryStoreLocation)}`);
       return {
-        pantryItem,
+        name: pantryItem.name,
         pantryItemId: pantryItem.id,
-        locationId: groceryStoreLocation.id,
-        location: groceryStoreLocation,
+        description: pantryItem.description,
+        quantity: pantryItem.quantityNeeded,
         inCart: false,
-        quantity: pantryItem.defaultQuantity,
+        units: pantryItem.units,
+        location: {
+          aisle: groceryStoreLocation.aisle,
+          section: groceryStoreLocation.section,
+        }
       };
     });
     shoppingItemsStillNeeded.push(...additionalShoppingItemsNeeded);
+    console.log(`returning: ${shoppingItemsStillNeeded}`);
     return of(shoppingItemsStillNeeded);
   }
 
@@ -406,4 +418,12 @@ export class FakePantryDataService implements IPantryDataService {
         this.pantryItemLocations.splice(indecesToDelete.pop(), 1);
       }
   }
+
+  updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean> {
+    const shopingItemToUpdate = this.findShoppingItem(pantryItemId);
+    shopingItemToUpdate.inCart = inCart;
+    const pantryItemToUpdate = this.findPantryItem(pantryItemId);
+    pantryItemToUpdate.need = !inCart;
+    return of(true);
+    }
 }
