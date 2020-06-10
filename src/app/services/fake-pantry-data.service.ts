@@ -426,4 +426,12 @@ export class FakePantryDataService implements IPantryDataService {
     pantryItemToUpdate.need = !inCart;
     return of(true);
     }
+
+  getAllGroceryStoreLocations(): Observable<GroceryStoreLocation[]> {
+    return of(this.groceryStoreLocations);
+  }
+
+  getAllPantryItemLocations(): Observable<PantryItemLocation[]> {
+    return of(this.pantryItemLocations);
+  }
 }

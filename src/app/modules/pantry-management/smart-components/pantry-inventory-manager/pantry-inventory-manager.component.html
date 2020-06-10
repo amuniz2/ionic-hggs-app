@@ -8,7 +8,7 @@
     <app-select-grocery-store slot="end" [groceryStores]="groceryStores$ | async"></app-select-grocery-store>
   </ion-toolbar>
 </ion-header>
-<ion-content>]
+<ion-content>
   <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"
                        (notifyNewPantryItemRequested)="onCreateItem($event)">
   </app-add-pantry-item>

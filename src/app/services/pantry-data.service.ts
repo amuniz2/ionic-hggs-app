@@ -13,6 +13,7 @@ import {PantryItem} from '../model/pantry-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {ShoppingItem} from '../model/shopping-item';
+import {PantryItemLocation} from '../model/PantryItemLocation';
 
 @Injectable()
 export class PantryDataService implements IPantryDataService {
@@ -129,5 +130,13 @@ export class PantryDataService implements IPantryDataService {
 
   updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean> {
     return this.dbHelper.updateShoppingItem(pantryItemId, inCart);
+  }
+
+  getAllGroceryStoreLocations(): Observable<GroceryStoreLocation[]> {
+    return this.dbHelper.getAllGroceryStoreLocations();
+  }
+
+  getAllPantryItemLocations(): Observable<PantryItemLocation[]> {
+    return this.dbHelper.getAllPantryItemLocations();
   }
 }

@@ -267,6 +267,27 @@ export class MySqlCommands {
     }
   }
 
+  public async queryAllGroceryStoreLocations(): Promise<GroceryStoreLocation[]> {
+    const locations = [];
+    // tslint:disable-next-line:max-line-length
+    const query = `SELECT * FROM ${LocationTable.NAME}
+      JOIN ${StoreTable.NAME}
+      ON ${StoreTable.NAME}.${StoreTable.COLS.ID} = ${LocationTable.NAME}.${LocationTable.COLS.STORE_ID}`;
+    try {
+      const data = await this.db.executeSql(query, []);
+      for (let i = 0; i < data.rows.length; i++) {
+        const groceryStoreLocation = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(i));
+        locations.push(groceryStoreLocation);
+      }
+    } catch (err) {
+      console.log(`Error querying for grocery storeLocations. Query: ${query}`);
+      console.log(err);
+    }
+    console.log('returning from query for grocery store locations');
+    console.log(locations);
+    return locations;
+  }
+
   public async queryGroceryStoreLocations(storeId: number): Promise<GroceryStoreLocation[]> {
     const locations = [];
     // tslint:disable-next-line:max-line-length
@@ -689,6 +710,22 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
       result = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
     } catch (err) {
       console.log(`Error updating pantry Item location `);
+      console.log(err);
+    }
+    return result;
+  }
+
+  public async queryAllPantryItemLocations(): Promise<PantryItemLocation[]> {
+    const selectSql = `SELECT * FROM ${PantryItemLocationTable.NAME}`;
+    const result: PantryItemLocation[] = [];
+    try {
+      const data = await this.db.executeSql(selectSql, []);
+      for (let i = 0; i < data.rows.length; i++) {
+        const pantryItemLocation = DbRowConverters.rowToPantryItemLocation(data.rows.item(i));
+        result.push(pantryItemLocation);
+      }
+    } catch (err) {
+      console.log(`Error querying for pantry Item Locations. Query: ${selectSql}`);
       console.log(err);
     }
     return result;
