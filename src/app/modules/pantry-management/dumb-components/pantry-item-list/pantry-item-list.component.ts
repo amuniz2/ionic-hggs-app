@@ -64,10 +64,12 @@ export class PantryItemListComponent implements OnInit {
   }
 
   quantityChanged($event, pantryItem: PantryItem) {
-    if (!isNaN($event.detail?.value)) {
-      console.log('ionChange event, pantryItem:');
+    console.log('ionChange event, pantryItem:');
+    if (!isNaN($event.target.value)) {
       console.log(pantryItem);
-      // this.notifySavePantryItemRequested.emit({...pantryItem, quantityNeeded: $event.detail.value });
+      this.notifySavePantryItemRequested.emit({...pantryItem, quantityNeeded: $event.target.value });
+    } else {
+      console.log(`${$event.target.value} is not a number`);
     }
   }
 }

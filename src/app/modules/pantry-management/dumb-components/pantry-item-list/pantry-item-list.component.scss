@@ -2,29 +2,31 @@ ion-content {
   --ion-background-color: #6495ED ; // cornflower-blue
 }
 
-ion-card {
-  ion-item-sliding {
-    ion-item {
-      inner-padding-end: 0px;
-      padding-start: 0px;
+ion-item-sliding {
+  ion-item {
+    inner-padding-end: 0px;
+    padding-start: 0px;
+    div {
+      display: flex;
+      align-items: center;
+      .nameLabel {
+        float: left;
+        font-weight: bold;
+      }
       div {
         display: flex;
         align-items: center;
-        .nameLabel {
-          float: left;
-          font-weight: bold;
-        }
-        div {
-          display: flex;
-          align-items: center;
-          float: right;
-          label {
-            margin-right: .5em;
-          }
+        float: right;
+        label {
+          margin-right: .5em;
         }
       }
     }
   }
+}
+.edit-box {
+  background-color: white;
+  border: 1px solid blue;
 }
 .in-item {
   margin-left: 0.5em;

@@ -25,8 +25,6 @@ export class ShoppingItemComponent implements OnInit {
   }
 
   itemClicked($event) {
-    console.log(`Check event: ${JSON.stringify($event)}; shopping item: ${JSON.stringify(this.shoppingItem)}`);
-    // this.shoppingItem.inCart = !this.shoppingItem.inCart;
     this.notifySaveRequested.emit({
       id: this.shoppingItem.pantryItemId,
       inCart: !this.shoppingItem.inCart });

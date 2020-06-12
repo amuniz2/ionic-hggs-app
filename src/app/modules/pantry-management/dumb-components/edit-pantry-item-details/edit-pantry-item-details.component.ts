@@ -104,12 +104,16 @@ export class EditPantryItemDetailsComponent implements OnInit {
       description: this.pantryItemDescription,
       id: this.pantryItem.id,
       locations: this.pantryItem.locations,
-      // quantityNeeded: this.pantryItem.quantityNeeded,
+      quantityNeeded: this.pantryItemQuantity,
       defaultQuantity: this.pantryItemQuantity,
-      quantityNeeded: (pantryItem.quantityNeeded === 0) ? this.pantryItemQuantity : pantryItem.quantityNeeded,
+      // quantityNeeded: (pantryItem.quantityNeeded === 0) ? this.pantryItemQuantity : pantryItem.quantityNeeded,
       units: this.pantryItemQuantityUnit,
       need: this.pantryItem.need,
       inCart: this.pantryItem.inCart
     });
+  }
+
+  onDeletePantryItem() {
+    // todo: emit notification to delete?
   }
 }

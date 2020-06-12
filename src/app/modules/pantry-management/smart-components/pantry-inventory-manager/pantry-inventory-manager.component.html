@@ -1,21 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-text slot="start">Pantry</ion-text>
     <ion-button  fill="clear" outline="none" (click)="onAddStoreClick()">Add
       <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
     </ion-button>
-    <!--  <app-add-pantry-item (notifyNewPantryItemRequested)="onNotifyNewPantryItemRequest($event)"></app-add-pantry-item>-->
-    <app-select-grocery-store slot="end" [groceryStores]="groceryStores$ | async"></app-select-grocery-store>
+     <app-select-grocery-store slot="end" [groceryStores]="groceryStores$ | async"></app-select-grocery-store>
+    <ion-button  fill="clear" outline="none" (click)="presentSharingOptions($event)">Share
+      <ion-icon ios="share-outline" md="share-outline" ></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"
+    <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"
                        (notifyNewPantryItemRequested)="onCreateItem($event)">
-  </app-add-pantry-item>
-  <app-pantry-item-list [pantryItems] = "(pantryItems$ | async)"
-                        [pantryItemsLoading]="pantryItemsLoading$ | async"
-                        (notifyDeletePantryItemRequested)="onDeletePantryItemRequest($event)"
-                        (notifySavePantryItemRequested)="onPantryItemModified($event)"
-                        [error] = "(error$ | async)">
-  </app-pantry-item-list>
+    </app-add-pantry-item>
+    <app-pantry-item-list [pantryItems] = "(pantryItems$ | async)"
+                          [pantryItemsLoading]="pantryItemsLoading$ | async"
+                          (notifyDeletePantryItemRequested)="onDeletePantryItemRequest($event)"
+                          (notifySavePantryItemRequested)="onPantryItemModified($event)"
+                          [error] = "(error$ | async)">
+    </app-pantry-item-list>
 </ion-content>

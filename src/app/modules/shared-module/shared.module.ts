@@ -7,13 +7,15 @@ import { GroceryStoreLocationStoreComponent } from './dumb-components/grocery-st
 // tslint:disable-next-line:max-line-length
 import { GroceryStoreLocationAisleOrSectionComponent } from './dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ShareComponent} from './share-component/share.component';
 
 @NgModule({
   declarations: [
     HggsAccordionComponent,
     SelectGroceryStoreComponent,
     GroceryStoreLocationStoreComponent,
-    GroceryStoreLocationAisleOrSectionComponent
+    GroceryStoreLocationAisleOrSectionComponent,
+    ShareComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,13 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
   ],
-  exports: [HggsAccordionComponent, GroceryStoreLocationStoreComponent, GroceryStoreLocationAisleOrSectionComponent, SelectGroceryStoreComponent],
+  exports: [
+    HggsAccordionComponent,
+    GroceryStoreLocationStoreComponent,
+    GroceryStoreLocationAisleOrSectionComponent,
+    SelectGroceryStoreComponent,
+    ShareComponent,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule { }
