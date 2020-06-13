@@ -19,9 +19,5 @@
                                  (notifyEditPantryItemLocationRequested)="onNotifyEditLocationRequest($event)"
                                  (notifyDeletePantryItemLocationRequested)="onNotifyDeleteLocationRequest($event)"></app-pantry-item-locations>
       <ion-textarea *ngIf="error">{{error.message}}</ion-textarea>
-    <ion-button  fill="clear" outline="none" (click)="onDeletePantryItem()">
-      <ion-icon slot="start" ios="trash-outline" md="trash-outline" ></ion-icon>
-    </ion-button>
   </ng-template>
-
 </ion-content>

@@ -1,10 +1,11 @@
+import {Observable, of} from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import {Location} from '@angular/common';
+import {Router} from '@angular/router';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
-import {ActivatedRoute, Router} from '@angular/router';
 import {selectPantryItem, selectPantryItemLocations, selectPantryItemsError} from '../../store/pantry-management.selectors';
 import {PantryItem} from '../../../../model/pantry-item';
-import {Observable, of} from 'rxjs';
 import * as fromActions from '../../../pantry-management/store/pantry-management.actions';
 import {EditItemLocationRequest, NewItemLocationRequest} from '../../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
@@ -23,7 +24,7 @@ export class EditPantryItemComponent implements OnInit {
   isNewItem: boolean;
   error$: Observable<Error>;
 
-  constructor(private store: Store<AppState>, private router: Router) {
+  constructor(private store: Store<AppState>, private router: Router, private location: Location) {
     this.isNewItem = this.router.getCurrentNavigation().extras.queryParams.newItem;
     this.pantryItemId = this.router.getCurrentNavigation().extras.queryParams.id;
     if (this.isNewItem) {
@@ -67,5 +68,10 @@ export class EditPantryItemComponent implements OnInit {
 
   editPantryItemLocation($event: EditItemLocationRequest) {
     this.store.dispatch((new fromActions.EditPantryItemLocationRequest($event)));
+  }
+
+  onDeletePantryItem() {
+    this.store.dispatch(new fromActions.DeletePantryItem({id: this.pantryItemId}));
+    this.location.back();
   }
 }

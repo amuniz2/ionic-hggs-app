@@ -3,6 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button>Back</ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button  fill="clear" outline="none" (click)="onDeletePantryItem()">
+        <ion-icon slot="icon-only" ios="trash-outline" md="trash-outline" ></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -12,10 +17,5 @@
     (notifyAddPantryItemRequested)="addPantryItem($event)"
   (notifyAddPantryItemLocationRequest)="addPantryItemLocation($event)"
   (notifyEditPantryItemLocationRequest)="editPantryItemLocation($event)">
-<!--                          (notifyNewPantryItemLocationRequested)="onNotifyNewPantryItemLocationRequest($event)"-->
-<!--                          (notifyDeletePantryItemLocationRequested) ="onDeletePantryItemLocationRequest($event)"-->
-<!--                          (notifyExpandLocations)="onNotifyExpandLocations($event)"-->
-<!--                          (notifyExpandSections)="onNotifyExpandSections($event)"-->
-
   </app-edit-pantry-item-details>
 </ion-content>

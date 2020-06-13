@@ -112,8 +112,4 @@ export class EditPantryItemDetailsComponent implements OnInit {
       inCart: this.pantryItem.inCart
     });
   }
-
-  onDeletePantryItem() {
-    // todo: emit notification to delete?
-  }
 }
