@@ -2,15 +2,18 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 import {UiCrudAction} from '../../../../ui-crud-actions';
+import {GroceryStoreState} from '../../../../model/grocery-store';
 
 export interface NewItemLocationRequest {
   pantryItem: PantryItem;
   action: UiCrudAction;
+  existingLocations: GroceryStoreLocation[];
 }
 
 export interface EditItemLocationRequest {
   pantryItem: PantryItem;
   storeLocation: GroceryStoreLocation;
+  action: UiCrudAction;
 }
 
 @Component({
@@ -25,6 +28,9 @@ export class PantryItemLocationsComponent implements OnInit {
 
   @Input()
   private groceryLocations: GroceryStoreLocation[];
+
+  @Input()
+  private groceryStores: GroceryStoreState[];
 
   constructor() { }
 
@@ -49,6 +55,19 @@ export class PantryItemLocationsComponent implements OnInit {
   }
 
   editLocation(loc: GroceryStoreLocation) {
-    this.notifyEditPantryItemLocationRequested.emit( { pantryItem: this.pantryItem, storeLocation: loc });
+    this.notifyEditPantryItemLocationRequested.emit( {
+      pantryItem: this.pantryItem,
+      storeLocation: loc,
+      action: UiCrudAction.Update
+    });
+  }
+
+  remove(loc: GroceryStoreLocation) {
+    console.log('emitting notification to delete itemlocation')
+    this.notifyEditPantryItemLocationRequested.emit( {
+      pantryItem: this.pantryItem,
+      storeLocation: loc,
+      action: UiCrudAction.Delete
+    });
   }
 }

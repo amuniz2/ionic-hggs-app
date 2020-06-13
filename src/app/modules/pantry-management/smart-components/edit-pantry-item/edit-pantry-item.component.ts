@@ -1,5 +1,5 @@
 import {Observable, of} from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {select, Store} from '@ngrx/store';
@@ -7,9 +7,12 @@ import {AppState} from '../../../../store/app.state';
 import {selectPantryItem, selectPantryItemLocations, selectPantryItemsError} from '../../store/pantry-management.selectors';
 import {PantryItem} from '../../../../model/pantry-item';
 import * as fromActions from '../../../pantry-management/store/pantry-management.actions';
+import {NavigatedToPantryItemPage} from '../../../pantry-management/store/pantry-management.actions';
 import {EditItemLocationRequest, NewItemLocationRequest} from '../../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
-import {NavigatedToPantryItemPage} from '../../../pantry-management/store/pantry-management.actions';
+import {GroceryStoreState} from '../../../../model/grocery-store';
+import {selectAllGroceryStores} from '../../../../store/store-management.selectors';
+import {UiCrudAction} from '../../../../ui-crud-actions';
 
 
 @Component({
@@ -19,6 +22,7 @@ import {NavigatedToPantryItemPage} from '../../../pantry-management/store/pantry
 })
 export class EditPantryItemComponent implements OnInit {
   pantryItemId: number;
+  groceryStores$: Observable<GroceryStoreState[]>;
   pantryItem$: Observable<PantryItem>;
   pantryItemLocations$: Observable<GroceryStoreLocation[]>;
   isNewItem: boolean;
@@ -27,6 +31,7 @@ export class EditPantryItemComponent implements OnInit {
   constructor(private store: Store<AppState>, private router: Router, private location: Location) {
     this.isNewItem = this.router.getCurrentNavigation().extras.queryParams.newItem;
     this.pantryItemId = this.router.getCurrentNavigation().extras.queryParams.id;
+    this.groceryStores$ = this.store.pipe(select(selectAllGroceryStores));
     if (this.isNewItem) {
       this.pantryItem$ = of({
         ...new PantryItem(),
@@ -67,7 +72,13 @@ export class EditPantryItemComponent implements OnInit {
   }
 
   editPantryItemLocation($event: EditItemLocationRequest) {
-    this.store.dispatch((new fromActions.EditPantryItemLocationRequest($event)));
+    if ($event.action === UiCrudAction.Update) {
+      console.log('recieved update notification, dispatching edit event')
+      this.store.dispatch((new fromActions.EditPantryItemLocationRequest($event)));
+    } else {
+      console.log('recieved delete notification, dispatching delete event')
+      this.store.dispatch((new fromActions.DeletePantryItemLocation($event)));
+    }
   }
 
   onDeletePantryItem() {

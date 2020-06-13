@@ -8,6 +8,7 @@ import {
 import {EditItemLocationRequest, NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 import {NewItemLocation} from '../smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
+import {PantryItemLocation} from '../../../model/PantryItemLocation';
 
 export enum PantryActionTypes {
   PantryItemLoaded = '[Pantry Item] Loaded',
@@ -28,8 +29,10 @@ export enum PantryActionTypes {
   AddPantryItemLocation = '[Pantry Item] add location',
   AddPantryItemLocationFailed = '[Pantry Item] add location failed',
   AddPantryItemLocationRequest = '[Pantry Item] add location requested',
+  DeletePantryItemLocation = '[Pantry Item] dleete location',
   EditPantryItemLocationRequest = '[Pantry Item] edit location requested',
   PantryItemLocationAdded = '[Pantry Item] add location succeeded',
+  PantryItemLocationDeleted = '[Pantry Item] location deleted',
   PantryItemLocationUpdated = '[Pantry Item] location updated',
   PantryItemLocationsLoadedSuccessfully = '[Pantry Item] locations loaded successfully',
   SavePantryItem = '[Pantry Item] Save',
@@ -58,6 +61,12 @@ export class CreatePantryItem implements Action {
     console.log('Creating CreatePantryItem action.');
     console.log(pantryItemRequest);
   }
+}
+
+export class DeletePantryItemLocation implements Action {
+  readonly type = PantryActionTypes.DeletePantryItemLocation;
+
+  constructor(public request: EditItemLocationRequest) {}
 }
 
 export class EditPantryItemLocationRequest implements Action {
@@ -98,6 +107,13 @@ export class PantryItemCreated implements Action {
 export class PantryItemLocationAdded implements Action {
   readonly type = PantryActionTypes.PantryItemLocationAdded;
   constructor(public itemId: number, public pantryItemLocation: GroceryStoreLocation) {
+  }
+}
+
+
+export class PantryItemLocationDeleted implements Action {
+  readonly type = PantryActionTypes.PantryItemLocationDeleted;
+  constructor(public itemId: number, public locationId: number) {
   }
 }
 
@@ -195,6 +211,7 @@ export type PantryActions =
   | DeletePantryItemFailed
   | DeletePantryItem
   | DeletePantryItemFailed
+  | DeletePantryItemLocation
   | EditPantryItemLocationRequest
   | PantryItemCreated
   | LoadPantryItemLocations
@@ -206,6 +223,7 @@ export type PantryActions =
   | PantryItemLocationUpdated
   | PantryItemLoaded
   | PantryLoadedSuccessfully
+  | PantryItemLocationDeleted
   | PantryItemLocationsLoadedSuccessfully
   | PantryLoadFailed
   | SaveNewPantryItem

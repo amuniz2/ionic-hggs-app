@@ -17,6 +17,7 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {AddPantryItemLocation, UpdatePantryItemLocation} from '../../store/pantry-management.actions';
 import {ActivatedRoute, Router} from '@angular/router';
 import {withLatestFrom} from 'rxjs/operators';
+import {selectGroceryStoresItemIsLocatedIn} from '../../store/pantry-management.selectors';
 
 export interface NewItemLocation {
   itemId: number;
@@ -30,10 +31,10 @@ export interface NewItemLocation {
 })
 export class EditPantryItemLocationComponent implements OnInit {
 
-  groceryStores$: Observable<GroceryStoreState[]>;
-  groceryStoreAisles$: Observable<string[]>;
-  groceryStoreSections$: Observable<string[]>;
-  selectedGroceryStore$: Observable<GroceryStoreState>;
+  private groceryStores$: Observable<GroceryStoreState[]>;
+  private groceryStoreAisles$: Observable<string[]>;
+  private groceryStoreSections$: Observable<string[]>;
+  private selectedGroceryStore$: Observable<GroceryStoreState>;
 
   selectedGroceryStoreId$: Observable<number>;
 
@@ -43,6 +44,7 @@ export class EditPantryItemLocationComponent implements OnInit {
   locationForm: FormGroup;
 
   selectedGroceryStoreLocation$: Observable<GroceryStoreLocation>;
+  groceryStoreIdsItemIsLocatedIn$: Observable<number[]>;
   selectedGroceryStoreId: number;
   selectedGroceryStoreAisle?: string;
   selectedGroceryStoreSection?: string;
@@ -58,9 +60,10 @@ export class EditPantryItemLocationComponent implements OnInit {
               private router: Router) {
     this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
-    this.groceryStores$ = this.store.select(fromSelectors.selectAllGroceryStores);
-    this.locationId = this.activeRoute.snapshot.params.locationId;
+    this.groceryStores$ =  this.store.select(fromSelectors.selectAllGroceryStores);
     this.pantryItemId = +this.activeRoute.snapshot.params.id;
+    this.groceryStoreIdsItemIsLocatedIn$ = this.store.select(selectGroceryStoresItemIsLocatedIn(this.pantryItemId));
+    this.locationId = this.activeRoute.snapshot.params.locationId;
 
     if (this.locationId != null) {
       this.selectedGroceryStoreLocation$ = this.store.select(selectGroceryStoreLocation(this.locationId));
@@ -94,21 +97,6 @@ export class EditPantryItemLocationComponent implements OnInit {
   }
 
   ngOnInit() {
-    // if (this.locationId != null) {
-    //   this.selectedGroceryStoreLocation$ = this.store.select(selectGroceryStoreLocation(this.locationId));
-    //   this.selectedGroceryStoreAisle = this.router.getCurrentNavigation().extras.queryParams.aisle;
-    //   this.selectedGroceryStoreSection = this.router.getCurrentNavigation().extras.queryParams.section;
-    //   this.selectedGroceryStoreId = this.router.getCurrentNavigation().extras.queryParams.storeId;
-    //   // this.selectedGroceryStoreName = this.router.getCurrentNavigation().extras.queryParams.storeName;
-    // } else {
-    //   this.selectedGroceryStoreLocation$ = of({
-    //       id: null,
-    //       aisle: '',
-    //       section: '',
-    //       storeId: null,
-    //       storeName: null
-    //     });
-    // }
     const tabs = document.querySelectorAll('.show-tabbar');
     if (tabs !== null) {
       Object.keys(tabs).map((key) => {

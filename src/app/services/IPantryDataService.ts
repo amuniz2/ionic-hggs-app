@@ -38,6 +38,8 @@ export interface IPantryDataService {
 
   deletePantryItem(deletePantryItemRequest: DeletePantryItemRequest): Observable<boolean>;
 
+  deletePantryItemLocation(pantryItemId: number, locationId: number): Observable<boolean>;
+
   getGroceryStoreAisles(groceryStoreId: number): Observable<Set<string>>;
 
   getGroceryStoreSections(groceryStoreId: number): Observable<Set<string>>;

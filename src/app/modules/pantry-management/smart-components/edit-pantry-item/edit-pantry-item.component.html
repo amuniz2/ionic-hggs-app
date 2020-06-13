@@ -11,7 +11,8 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <app-edit-pantry-item-details [pantryItem]="pantryItem$ | async" [error]="error$ | async"
+  <app-edit-pantry-item-details [groceryStores] = "groceryStores$ | async"
+                                [pantryItem]="pantryItem$ | async" [error]="error$ | async"
                                 [pantryItemLocations]="pantryItemLocations$ | async"
     (notifySavePantryItemRequested)="savePantryItemChanges($event)"
     (notifyAddPantryItemRequested)="addPantryItem($event)"

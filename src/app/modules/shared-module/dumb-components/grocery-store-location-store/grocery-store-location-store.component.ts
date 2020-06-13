@@ -15,13 +15,23 @@ export class GroceryStoreLocationStoreComponent implements OnInit {
   @Input()
   selectedGroceryStore: GroceryStore;
 
+  @Input()
+  groceryStoreIdsItemIsLocatedIn: number[];
+
   @Output()
   selectedGroceryStoreChange: EventEmitter<GroceryStore> = new EventEmitter<GroceryStore>();
 
+  private possibleGroceryStores: GroceryStore[];
   constructor(public controlContainer: ControlContainer) {
   }
 
   ngOnInit() {
+    if (this.selectedGroceryStore != null) {
+      this.possibleGroceryStores = this.groceryStores.filter(groceryStore =>
+        this.selectedGroceryStore.id === groceryStore.id || !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id))
+    } else {
+      this.possibleGroceryStores = this.groceryStores.filter(groceryStore => !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id));
+    }
   }
 
   onChangeGroceryStoreSelected($event: CustomEvent) {

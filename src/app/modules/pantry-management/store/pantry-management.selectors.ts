@@ -3,6 +3,8 @@ import {createFeatureSelector, createSelector} from '@ngrx/store';
 import {PantryManagementState} from './pantry-management.reducers';
 import {PantryItem} from '../../../model/pantry-item';
 import {PantryState} from './pantry-management.reducers';
+import {GroceryStoreLocation} from '../../../model/grocery-store-location';
+import {selectAllGroceryStores} from '../../../store/store-management.selectors';
 
 export const getPantryManagementState = createFeatureSelector<PantryManagementState>('pantryManagement');
 
@@ -50,5 +52,15 @@ export const selectPantryItemsError = createSelector(
   getPantryItemsState,
   (state: PantryState) => state.error
 );
+
+export const selectGroceryStoresItemIsLocatedIn = (pantryItemId: number) => createSelector(
+  selectPantryItemLocations(pantryItemId),(existingLocations: GroceryStoreLocation[]) =>
+    existingLocations.map(location => location.storeId));
+
+// export const selectGroceryStoresItemIsNotLocatedIn = (pantryItemId: number) => createSelector(
+//   selectGroceryStoresItemIsLocatedIn(pantryItemId), (existingGroceryStores: number[]) => {
+//     selectAllGroceryStores()
+//
+//   });
 
 export const getPantryItem = (state: PantryState, id: number) => state.entities[id];

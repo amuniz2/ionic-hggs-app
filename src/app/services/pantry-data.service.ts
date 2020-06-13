@@ -96,6 +96,11 @@ export class PantryDataService implements IPantryDataService {
     return this.dbHelper.deletePantryItem(deletePantryItemRequest.id);
   }
 
+  public deletePantryItemLocation(pantryItemId: number, locationId: number): Observable<boolean> {
+    console.log('inside deletePantryItemLocation');
+    return this.dbHelper.deletePantryItemLocation(pantryItemId, locationId);
+  }
+
   public updatePantryItem(savePantryItemRequest: PantryItem): Observable<boolean> {
     return this.dbHelper.updatePantryItem(savePantryItemRequest);
   }

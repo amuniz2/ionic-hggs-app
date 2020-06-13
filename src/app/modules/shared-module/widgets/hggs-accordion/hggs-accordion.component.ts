@@ -40,6 +40,9 @@ export class HggsAccordionComponent implements OnInit {
   @Output()
   addToList: EventEmitter<AddButtonClickedEvent> = new EventEmitter<AddButtonClickedEvent>();
 
+  @Input()
+  canAdd = true;
+
   public isSectionOpen = false;
 
   constructor() {

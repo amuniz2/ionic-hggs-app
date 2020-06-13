@@ -4,7 +4,7 @@
               [(ngModel)]="selectedGroceryStore"
               [formControlName]="'locationStore'"
               (ionChange)="onChangeGroceryStoreSelected($event)">
-    <ion-select-option *ngFor="let groceryStore of groceryStores" [value]="groceryStore">{{groceryStore.name}}</ion-select-option>
+    <ion-select-option *ngFor="let groceryStore of possibleGroceryStores" [value]="groceryStore">{{groceryStore.name}}</ion-select-option>
   </ion-select>
 </ion-item>
 </ng-container>

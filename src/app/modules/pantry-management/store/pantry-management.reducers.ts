@@ -149,6 +149,23 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
           selectedPantryItemId: action.pantryItemId
         };
 
+      case PantryActionTypes.PantryItemLocationDeleted:
+      {
+        const pantryItem = getPantryItem(state.pantryItems, action.itemId);
+        return {
+          ...state,
+          pantryItems: {
+            ...fromAdapter.pantryAdapter.updateOne({
+              id: action.itemId,
+              changes: {
+                locations: pantryItem.locations.filter(itemLocation => itemLocation.id !== action.locationId)
+              }
+            }, state.pantryItems),
+            error: null
+          },
+        };
+      }
+
       case PantryActionTypes.PantryItemLocationAdded:
       {
         const pantryItem = getPantryItem(state.pantryItems, action.itemId);

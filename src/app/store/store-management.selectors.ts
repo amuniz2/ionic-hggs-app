@@ -3,6 +3,8 @@ import {GroceryStore, GroceryStoreState} from '../model/grocery-store';
 import {AppState, GroceryItemLocationsState, GroceryStoresState} from './app.state';
 import * as fromAdapter from './grocery-store.adapter';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
+import {selectPantryItemLocations} from '../modules/pantry-management/store/pantry-management.selectors';
+import {PantryItemLocation} from '../model/PantryItemLocation';
 
 const getAppState = createFeatureSelector<AppState>('app');
 export const getGroceryStoresState = createSelector(

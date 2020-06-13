@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
 import {of} from 'rxjs';
 import {
@@ -8,16 +8,20 @@ import {
 import {EditItemLocationRequest, NewItemLocationRequest} from '../pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 import {UiCrudAction} from '../../../../ui-crud-actions';
+import {GroceryStoreState} from '../../../../model/grocery-store';
 
 @Component({
   selector: 'app-edit-pantry-item-details',
   templateUrl: './edit-pantry-item-details.component.html',
   styleUrls: ['./edit-pantry-item-details.component.scss']
 })
-export class EditPantryItemDetailsComponent implements OnInit {
+export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
 
   @Input()
   pantryItem: PantryItem;
+
+  @Input()
+  groceryStores: GroceryStoreState[];
 
   @Input()
   pantryItemLocations: GroceryStoreLocation[];
@@ -46,6 +50,7 @@ export class EditPantryItemDetailsComponent implements OnInit {
     label: 'Locations',
     isOpen$: of(true)
   };
+  itemCanExistInOtherStores: boolean;
 
   constructor() { }
 
@@ -55,6 +60,18 @@ export class EditPantryItemDetailsComponent implements OnInit {
       this.pantryItemDescription = this.pantryItem.description;
       this.pantryItemQuantity = this.pantryItem.defaultQuantity;
       this.pantryItemQuantityUnit = this.pantryItem.units;
+      // include this in ngOnChanges?
+      this.itemCanExistInOtherStores = this.groceryStores.length > this.pantryItemLocations.length;
+    } else {
+      this.itemCanExistInOtherStores = this.groceryStores.length > 0;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.pantryItem != null) {
+      this.itemCanExistInOtherStores = this.groceryStores.length > this.pantryItemLocations.length;
+    } else {
+      this.itemCanExistInOtherStores = this.groceryStores.length > 0;
     }
   }
 
@@ -82,14 +99,16 @@ export class EditPantryItemDetailsComponent implements OnInit {
   }
 
   onNotifyEditLocationRequest($event) {
+    console.log(`received ${$event}, re-emitting`);
     this.notifyEditPantryItemLocationRequest.emit($event);
   }
 
-  onNotifyDeleteLocationRequest($event) {
-  }
-
   onAddLocationClicked() {
-    this.notifyAddPantryItemLocationRequest.emit({ pantryItem: this.pantryItem, action: UiCrudAction.RequestCreate });
+    this.notifyAddPantryItemLocationRequest.emit({
+      pantryItem: this.pantryItem,
+      action: UiCrudAction.RequestCreate,
+      existingLocations: this.pantryItemLocations
+    });
   }
 
   private updateItem() {

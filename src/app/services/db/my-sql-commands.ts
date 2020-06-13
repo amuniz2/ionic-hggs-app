@@ -800,7 +800,7 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
       console.log(`returning ${data} from deletePantryItemLocation`);
       return data.rowsAffected;
     } catch (err) {
-      console.log(`Error deleting pantry ite  location ${pantryItemId}, ${locationId}`);
+      console.log(`Error deleting pantry item  location ${pantryItemId}, ${locationId}`);
       console.log(err);
     }
   }

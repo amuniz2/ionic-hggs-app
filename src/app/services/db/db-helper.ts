@@ -108,6 +108,13 @@ export class PantryDbHelper {
       mergeMap((success) => this.deletePantryItemById(id))
     );
   }
+
+  public deletePantryItemLocation(pantryItemId: number, locationId: number): Observable<boolean> {
+    return this.connect().pipe(
+      mergeMap((success) => this.deletePantryItemLocationUsingPromise(pantryItemId, locationId))
+    );
+  }
+
   public deleteGroceryStoreAisle(id: number, aisle: string): Observable<boolean> {
     return this.connect().pipe(
       mergeMap((success) => success ? this.deleteStoreAisle(id, aisle) :  of(false)));
@@ -204,6 +211,14 @@ export class PantryDbHelper {
   private deletePantryItemById(id: number): Observable<boolean> {
     return new Observable<boolean>((observer) => {
       this.mySqlCommands.deletePantryItem(id).then((rowsAffected) => {
+        observer.next(rowsAffected > 0);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+  private deletePantryItemLocationUsingPromise(pantryItemId: number, locationId: number): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      this.mySqlCommands.deletePantryItemLocation(pantryItemId, locationId).then((rowsAffected) => {
         observer.next(rowsAffected > 0);
         observer.complete();
       }).catch((err) => observer.error(err));

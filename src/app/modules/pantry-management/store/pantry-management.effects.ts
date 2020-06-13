@@ -15,7 +15,7 @@ import {
   PantryLoadedSuccessfully,
   PantryLoadFailed,
   SavePantryItemFailed,
-  SavePantryItemSucceeded
+  SavePantryItemSucceeded, PantryItemLocationDeleted
 } from './pantry-management.actions';
 import {Store} from '@ngrx/store';
 import {Actions, Effect, ofType} from '@ngrx/effects';
@@ -32,7 +32,7 @@ import {navigate} from 'ionicons/icons';
 export class PantryEffects {
   constructor(private store: Store<PantryState>,
               private actions$: Actions <PantryActions>,
-              @Inject('IPantryDataService') private storeManagementService: IPantryDataService,
+              @Inject('IPantryDataService') private pantryDataService: IPantryDataService,
               private router: Router,
               private activeRoute: ActivatedRoute) {
   }
@@ -42,7 +42,7 @@ export class PantryEffects {
     ofType(PantryActionTypes.DeletePantryItem),
     tap((payload) => console.log('Payload to deletePantryItem ' + JSON.stringify(payload))),
     switchMap((payload) => {
-      return this.storeManagementService.deletePantryItem(payload.deletePantryItemRequest).pipe(
+      return this.pantryDataService.deletePantryItem(payload.deletePantryItemRequest).pipe(
         map(success => new PantryItemDeleted(payload.deletePantryItemRequest.id)),
         catchError(error => [new DeletePantryItemFailed(error)])
       );
@@ -54,7 +54,7 @@ export class PantryEffects {
     ofType(PantryActionTypes.NavigatedToPantryPage),
     tap(() => console.log('calling stateManagementService.getPantryItems()')),
     switchMap(() => {
-        return this.storeManagementService.getPantryItems().pipe(
+        return this.pantryDataService.getPantryItems().pipe(
           tap((pantryItems) => {
             console.log('dispatching PantryLoadedSuccessfully action');
             console.log(pantryItems);
@@ -68,7 +68,7 @@ export class PantryEffects {
   @Effect()
   public getPantryItemDetails$ = this.actions$.pipe(
     ofType(PantryActionTypes.NavigatedToPantryItemPage),
-    switchMap(payload => this.storeManagementService.getPantryItem(payload.pantryItemId)),
+    switchMap(payload => this.pantryDataService.getPantryItem(payload.pantryItemId)),
     switchMap((x) => {
       return [
         new PantryItemLoaded(x),
@@ -81,7 +81,7 @@ export class PantryEffects {
   @Effect()
   public getPantryItemLocations$ = this.actions$.pipe(
     ofType(PantryActionTypes.LoadPantryItemLocations),
-    switchMap(payload => this.storeManagementService.getPantryItemLocations(payload.itemId).pipe(
+    switchMap(payload => this.pantryDataService.getPantryItemLocations(payload.itemId).pipe(
       map(locations => new PantryItemLocationsLoadedSuccessfully(payload.itemId, locations)),
       catchError(error => [new PantryLoadFailed(error)])
     ))
@@ -109,7 +109,7 @@ export class PantryEffects {
   public createPantryItem$ = this.actions$.pipe(
     ofType(PantryActionTypes.CreatePantryItem),
     switchMap((payload) => {
-      return this.storeManagementService.addPantryItem( {
+      return this.pantryDataService.addPantryItem( {
         ...new PantryItem(),
         name: payload.pantryItemRequest.name
       }).pipe(
@@ -138,7 +138,7 @@ export class PantryEffects {
   public saveNewPantryItem$ = this.actions$.pipe(
     ofType(PantryActionTypes.SaveNewPantryItem),
     switchMap((payload) => {
-      return this.storeManagementService.addPantryItem(payload.pantryItem).pipe(
+      return this.pantryDataService.addPantryItem(payload.pantryItem).pipe(
         tap((itemAdded) => {
           console.log(`item Added: ${itemAdded}`);
         }),
@@ -151,7 +151,7 @@ export class PantryEffects {
   public savePantryItem$ = this.actions$.pipe(
     ofType(PantryActionTypes.SavePantryItem),
     switchMap((payload) => {
-      return this.storeManagementService.updatePantryItem(payload.pantryItem).pipe(
+      return this.pantryDataService.updatePantryItem(payload.pantryItem).pipe(
         map(itemUpdated => new SavePantryItemSucceeded( payload.pantryItem )),
         catchError(error => [new SavePantryItemFailed(error, payload.pantryItem)])
       );
@@ -204,10 +204,21 @@ export class PantryEffects {
     }));
 
   @Effect()
+  public deletePantryItemLocation = this.actions$.pipe(
+    ofType(PantryActionTypes.DeletePantryItemLocation),
+      switchMap((payload) => {
+        console.log('calling deletePantryItemLocation');
+        return this.pantryDataService.deletePantryItemLocation(payload.request.pantryItem.id, payload.request.storeLocation.id).pipe(
+          map((succeeded) => new PantryItemLocationDeleted(payload.request.pantryItem.id, payload.request.storeLocation.id))
+        );
+      }));
+
+
+  @Effect()
   public addItemLocation = this.actions$.pipe(
     ofType(PantryActionTypes.AddPantryItemLocation),
     switchMap((payload) => {
-      return this.storeManagementService.addPantryItemLocation(
+      return this.pantryDataService.addPantryItemLocation(
         payload.addPantryItemLocation.itemId,
         payload.addPantryItemLocation.location).pipe(
           tap((pantryItemLocationAdded) => console.log(pantryItemLocationAdded)),
@@ -226,7 +237,7 @@ export class PantryEffects {
   public updateItemLocation = this.actions$.pipe(
     ofType(PantryActionTypes.UpdatePantryItemLocation),
     switchMap((payload) => {
-      return this.storeManagementService.updatePantryItemLocation(
+      return this.pantryDataService.updatePantryItemLocation(
         payload.updatePantryItemLocation.itemId,
         payload.originalLocationId,
         payload.updatePantryItemLocation.location).pipe(

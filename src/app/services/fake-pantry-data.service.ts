@@ -434,4 +434,10 @@ export class FakePantryDataService implements IPantryDataService {
   getAllPantryItemLocations(): Observable<PantryItemLocation[]> {
     return of(this.pantryItemLocations);
   }
+
+  deletePantryItemLocation(pantryItemId: number, locationId: number): Observable<boolean> {
+    const index = this.pantryItemLocations.findIndex((loc) => loc.groceryStoreLocationId === locationId && loc.pantryItemId === pantryItemId);
+    this.pantryItemLocations.splice(index,1);
+    return of(true);
+  }
 }

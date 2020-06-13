@@ -1,6 +1,6 @@
  <ion-list-header>
     <ion-label>{{ sectionName }}</ion-label>
-    <ion-button *ngIf="isSectionOpen" (click)="onAddClick()">
+    <ion-button *ngIf="canAdd && isSectionOpen" (click)="onAddClick()">
       <ion-icon slot="icon-only" ios="add-circle-outline" md="add-circle-outline"></ion-icon>
     </ion-button>
     <span (click)="toggleAccordion()" *ngIf="isSectionOpen">&#9650;</span>
