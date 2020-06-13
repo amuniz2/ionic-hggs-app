@@ -49,6 +49,7 @@ export class EditPantryItemLocationComponent implements OnInit {
 
   private groceryStoresLoading$: Observable<boolean>;
   private locationId: any;
+  private pantryItemId: number;
 
   constructor(private store: Store<AppState>,
               @Inject('IPantryDataService') private pantryDataService: IPantryDataService,
@@ -59,6 +60,8 @@ export class EditPantryItemLocationComponent implements OnInit {
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     this.groceryStores$ = this.store.select(fromSelectors.selectAllGroceryStores);
     this.locationId = this.activeRoute.snapshot.params.locationId;
+    this.pantryItemId = +this.activeRoute.snapshot.params.id;
+
     if (this.locationId != null) {
       this.selectedGroceryStoreLocation$ = this.store.select(selectGroceryStoreLocation(this.locationId));
       this.selectedGroceryStoreAisle = this.router.getCurrentNavigation().extras.queryParams.aisle;
@@ -138,7 +141,7 @@ export class EditPantryItemLocationComponent implements OnInit {
   }
 
   onCancel() {
-    const route = `/home/pantry-items/pantry-item-details?id=${this.activeRoute.snapshot.params.id}&isNewItem=false`;
+    const route = `/home/pantry-items/pantry-item-details?id=${this.pantryItemId}&isNewItem=false`;
     this.router.navigateByUrl(route);
   }
 
@@ -157,7 +160,7 @@ export class EditPantryItemLocationComponent implements OnInit {
     if (this.locationForm.valid) {
       if (this.locationId == null) {
         this.store.dispatch(new AddPantryItemLocation({
-          itemId: +this.activeRoute.snapshot.params.id,
+          itemId: this.pantryItemId,
           location: {
             storeName: null,
             storeId: this.selectedGroceryStoreId,
@@ -168,7 +171,7 @@ export class EditPantryItemLocationComponent implements OnInit {
         }));
       } else {
         this.store.dispatch(new UpdatePantryItemLocation(+this.locationId, {
-          itemId: +this.activeRoute.snapshot.params.id,
+          itemId: this.pantryItemId,
           location: {
             storeName: null,
             storeId: this.selectedGroceryStoreId,

@@ -26,6 +26,7 @@ import {IPantryDataService} from '../../../services/IPantryDataService';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
 import {GroceryStoreLocationPossiblyAdded} from '../../../store';
 import {PantryItem} from '../../../model/pantry-item';
+import {navigate} from 'ionicons/icons';
 
 @Injectable()
 export class PantryEffects {
