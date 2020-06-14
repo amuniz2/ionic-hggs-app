@@ -1,8 +1,17 @@
-<ion-list>
-  <ion-item (click)="sendViaEmail()">
-    Email
-  </ion-item>
-  <ion-item (click)="sendViaMessaging()()">
-    Messaging
-  </ion-item>
-</ion-list>
+<div *ngIf="promptForEmail else showOptions;">
+  <form [formGroup]="emailForm" (ngSubmit)="sendViaEmail()">
+    <ion-input class="edit-box" placeholder="Enter email address" [formControlName]="'emailAddress'" [(ngModel)]="emailAddress"></ion-input>
+    <ion-button type="submit">Send</ion-button>
+  </form>
+</div>
+
+<ng-template #showOptions>
+  <ion-list>
+    <ion-item (click)="getEmailInformation()">
+      Email
+    </ion-item>
+    <ion-item (click)="sendViaMessaging()">
+      Messaging
+    </ion-item>
+  </ion-list>
+</ng-template>

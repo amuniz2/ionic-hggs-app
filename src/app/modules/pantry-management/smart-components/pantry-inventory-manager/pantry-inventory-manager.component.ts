@@ -16,7 +16,8 @@ import {LoadGroceryStores} from '../../../../store';
 import {selectAllGroceryStores, selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
 import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 import {ShareComponent} from '../../../shared-module/share-component/share.component';
-import {PopoverController} from '@ionic/angular';
+import {PopoverController, ToastController} from '@ionic/angular';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 @Component({
   selector: 'app-pantry-inventory-manager',
@@ -33,7 +34,10 @@ export class PantryInventoryManagerComponent implements OnInit {
   groceryStores$: Observable<GroceryStoreState[]>;
   private showSharingOptions: boolean;
 
-  constructor(private popoverController: PopoverController, private store: Store<AppState>) {
+  constructor(private store: Store<AppState>,
+              private socialSharing: SocialSharing,
+              private toastController: ToastController
+              /*private popoverController: PopoverController, */) {
     this.title = 'Manage pantry items from page component';
     // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
@@ -96,14 +100,46 @@ export class PantryInventoryManagerComponent implements OnInit {
   //   return await popover.present();
   // }
 
-  async presentSharingOptions(ev: any) {
-    const popover = await this.popoverController.create({
-      component: ShareComponent,
-      cssClass: 'my-custom-class',
-      event: ev,
-      translucent: true
-    });
-    return await popover.present();
-  }
+  private async onSuccess(result) {
+    const toast = await this.toastController.create({message: 'List shared.', duration: 2000});
+    await toast.present();
+    console.log(`return from sharing ${JSON.stringify(result)}`);
+  };
 
+  private async onError(err) {
+    const toast = await this.toastController.create({message: `Email failed to send with error: ${JSON.stringify(err)}.`, duration: 5000});
+    await toast.present();
+  };
+
+  async presentSharingOptions(ev: any) {
+    // const popover = await this.popoverController.create({
+    //   component: ShareComponent,
+    //   cssClass: 'my-custom-class',
+    //   event: ev,
+    //   translucent: true
+    // });
+    // return await popover.present();
+
+      // this.events.publish('event data');
+
+      await this.socialSharing.shareWithOptions({
+        subject: 'Grocery shopping list',
+        message: 'Grocery Shopping List (subject)',
+      }).then(async r => await this.onSuccess(r)).catch(async err => await this.onError(err));
+
+      // this.socialSharing.canShareViaEmail().then((canSend) => {
+      //     if (canSend) {
+      //       this.socialSharing.shareViaEmail('Grocery shopping list', 'Grocery Shopping List (subject)', [this.emailAddress]).then(async r => {
+      //         const toast = await this.toastController.create({message: 'Email sent.', duration: 200});
+      //         await toast.present();
+      //       });
+      //       return true;
+      //     } else {
+      //       console.log('Cannot send via email');
+      //       return false
+      //     }
+      //   });
+      // console.log('send and dismiss');
+      // await this.popoverController.dismiss();
+    }
 }
