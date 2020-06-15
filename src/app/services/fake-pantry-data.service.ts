@@ -440,4 +440,20 @@ export class FakePantryDataService implements IPantryDataService {
     this.pantryItemLocations.splice(index,1);
     return of(true);
   }
+
+  getAllGroceryStoreAisles(): Observable<{ storeId: number, aisle: string}[]> {
+      const result: {storeId: number, aisle: string}[] = [];
+      this.groceryStores.forEach(gStore => {
+        gStore.aisles.forEach(aisle => result.push({storeId: gStore.id, aisle}));
+      });
+      return of(result);
+  }
+
+  getAllGroceryStoreSections(): Observable<{ storeId: number, section: string}[]> {
+    const result: {storeId: number, section: string}[] = [];
+    this.groceryStores.forEach(gStore => {
+      gStore.aisles.forEach(section => result.push({storeId: gStore.id, section}));
+    });
+    return of(result);
+  }
 }

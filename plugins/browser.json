@@ -30,6 +30,9 @@
     },
     "cordova-plugin-x-socialsharing": {
       "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },
   "dependent_plugins": {

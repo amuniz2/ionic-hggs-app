@@ -66,6 +66,10 @@ export interface IPantryDataService {
 
   getAllPantryItemLocations(): Observable<PantryItemLocation[]>;
 
+  getAllGroceryStoreAisles(): Observable<{ storeId: number, aisle: string}[]>;
+
+  getAllGroceryStoreSections(): Observable<{ storeId: number, section: string}[]>;
+
   updateGroceryStoreAisle(groceryStoreId: number, oldName: string, newName: string): Observable<boolean>;
 
   updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean>;

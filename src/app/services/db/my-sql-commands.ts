@@ -21,7 +21,6 @@ export class MySqlCommands {
   // region db commands
   public async openOrCreateDb(): Promise<boolean> {
     if (this.db !== null) {
-      console.log('returning true from openOrCreateDb');
       return true;
     }
     const openedDb = await this.sqlite.create({ name: 'hggs-app.db', location: 'default'});
@@ -164,8 +163,6 @@ export class MySqlCommands {
       console.log('Error querying for pantry items');
       console.log(err);
     }
-    console.log('returning from query');
-    console.log(pantryItems);
     return pantryItems;
   }
 
@@ -283,8 +280,6 @@ export class MySqlCommands {
       console.log(`Error querying for grocery storeLocations. Query: ${query}`);
       console.log(err);
     }
-    console.log('returning from query for grocery store locations');
-    console.log(locations);
     return locations;
   }
 
@@ -424,6 +419,31 @@ export class MySqlCommands {
     }
   }
 
+  public async queryAllGroceryStoreSections(): Promise<{ storeId: number; section: string }[]> {
+    try {
+      const ret: { storeId: number; section: string }[] = [];
+      // tslint:disable-next-line:max-line-length
+      const sqlQueryGrocerySections = `SELECT * from ${StoreGrocerySectionTable.NAME}`;
+      const data = await this.db.executeSql(sqlQueryGrocerySections, []);
+      if (data.rows.length > 0) {
+        for (let i = 0; i < data.rows.length; i++) {
+          ret.push({
+            storeId: data.rows.item(i)[StoreGrocerySectionTable.COLS.STORE_ID],
+            section: data.rows.item(i)[StoreGrocerySectionTable.COLS.GROCERY_SECTION]
+          });
+        }
+        console.log(`returning ${ret} from sql query: ${sqlQueryGrocerySections}`);
+        return ret;
+      } else {
+        return ret;
+      }
+    } catch (err) {
+      console.log('Error querying store sections');
+      console.log(err);
+      return null;
+    }
+  }
+
   public async queryGroceryStoreSections(id: number): Promise<Set<string>> {
     try {
       const ret = new Set<string>();
@@ -472,6 +492,32 @@ export class MySqlCommands {
       console.log(err);
     }
   }
+
+  public async queryAllGroceryStoreAisles(): Promise<{ storeId: number; aisle: string }[]> {
+    try {
+      const ret: { storeId: number; aisle: string }[] = [];
+      const sqlQueryAisles = `SELECT * from ${StoreGroceryAisleTable.NAME}`;
+      const data = await this.db.executeSql(sqlQueryAisles, []);
+      if (data.rows.length > 0) {
+        for (let i = 0; i < data.rows.length; i++) {
+          ret.push({
+            storeId: data.rows.item(i)[StoreGroceryAisleTable.COLS.STORE_ID],
+            aisle: data.rows.item(i)[StoreGroceryAisleTable.COLS.GROCERY_AISLE]
+          });
+        }
+        console.log(`returning ${ret} from sql query: ${sqlQueryAisles}`);
+        return ret;
+      } else {
+        console.log('no aisles returned for query store by id');
+        return ret;
+      }
+    } catch (err) {
+      console.log('Error querying store aisles by id');
+      console.log(err);
+      return null;
+    }
+  }
+
   public async queryGroceryStoreAisles(id: number): Promise<Set<string>> {
     try {
       const ret = new Set<string>();

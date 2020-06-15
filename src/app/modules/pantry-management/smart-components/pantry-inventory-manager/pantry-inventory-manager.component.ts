@@ -1,23 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, Injectable, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import * as fromActions from '../../../pantry-management/store/pantry-management.actions';
 import * as fromSelectors from '../../store/pantry-management.selectors';
-// tslint:disable-next-line:max-line-length
 import {
   CreatePantryItemRequest,
   DeletePantryItemRequest,
   NavigateToEditPantryItemRequest
 } from '../../../pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {PantryItem} from '../../../../model/pantry-item';
-import {selectPantryItemsLoading} from '../../store/pantry-management.selectors';
-import {LoadGroceryStores} from '../../../../store';
 import {selectAllGroceryStores, selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
 import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
-import {ShareComponent} from '../../../shared-module/share-component/share.component';
-import {PopoverController, ToastController} from '@ionic/angular';
+import {ToastController} from '@ionic/angular';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
+import {IGroceryDataExporter} from '../../../../services/grocery-data-exporter';
+import {File} from '@ionic-native/file/ngx';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-pantry-inventory-manager',
@@ -36,7 +35,9 @@ export class PantryInventoryManagerComponent implements OnInit {
 
   constructor(private store: Store<AppState>,
               private socialSharing: SocialSharing,
-              private toastController: ToastController
+              private toastController: ToastController,
+              private fileManager: File,
+              @Inject('IGroceryDataExporter')  private dataExporter: IGroceryDataExporter
               /*private popoverController: PopoverController, */) {
     this.title = 'Manage pantry items from page component';
     // this.store.dispatch(new LoadGroceryStores());
@@ -101,12 +102,13 @@ export class PantryInventoryManagerComponent implements OnInit {
   // }
 
   private async onSuccess(result) {
+    console.log(`return from sharing ${JSON.stringify(result)}`);
     const toast = await this.toastController.create({message: 'List shared.', duration: 2000});
     await toast.present();
-    console.log(`return from sharing ${JSON.stringify(result)}`);
   };
 
   private async onError(err) {
+    console.log(`error occured when sharing: ${JSON.stringify(err)}`);
     const toast = await this.toastController.create({message: `Email failed to send with error: ${JSON.stringify(err)}.`, duration: 5000});
     await toast.present();
   };
@@ -122,10 +124,27 @@ export class PantryInventoryManagerComponent implements OnInit {
 
       // this.events.publish('event data');
 
-      await this.socialSharing.shareWithOptions({
+    this.dataExporter.exportAll().subscribe(fileName => {
+      console.log(`file name returned: ${fileName}`)
+      this.socialSharing.shareWithOptions({
         subject: 'Grocery shopping list',
-        message: 'Grocery Shopping List (subject)',
+        files: [fileName]
       }).then(async r => await this.onSuccess(r)).catch(async err => await this.onError(err));
+    });
+    // pipe(
+    //   map(async fileName => {
+    //     this.socialSharing.shareWithOptions({
+    //       subject: 'Grocery shopping list',
+    //       message: 'Grocery Shopping List (subject)',
+    //       files: fileName
+    //     }).then(async r => await this.onSuccess(r)).catch(async err => await this.onError(err));
+    //   })
+    // );
+
+    // await this.socialSharing.shareWithOptions({
+    //   subject: 'Grocery shopping list',
+    //   message: 'Grocery Shopping List (subject)',
+    // }).then(async r => await this.onSuccess(r)).catch(async err => await this.onError(err));
 
       // this.socialSharing.canShareViaEmail().then((canSend) => {
       //     if (canSend) {

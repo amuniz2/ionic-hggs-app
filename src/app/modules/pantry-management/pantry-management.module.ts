@@ -7,6 +7,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared-module/shared.module';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import {File} from '@ionic-native/file/ngx';
 import {PantryManagementRoutes} from './pantry-management.routes';
 import {PantryEffects} from './store/pantry-management.effects';
 import { PantryInventoryManagerComponent } from './smart-components/pantry-inventory-manager/pantry-inventory-manager.component';
@@ -17,6 +18,8 @@ import { PantryItemLocationsComponent } from './dumb-components/pantry-item-loca
 import { EditPantryItemLocationComponent } from './smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
 import { AddPantryItemComponent } from './dumb-components/add-pantry-item/add-pantry-item.component';
 import {NgModule} from '@angular/core';
+import {PantryDataService} from '../../services/pantry-data.service';
+import {GroceryDataExporter} from '../../services/grocery-data-exporter';
 
 @NgModule({
   imports: [
@@ -39,7 +42,9 @@ import {NgModule} from '@angular/core';
     AddPantryItemComponent,
   ],
   providers: [
-    SocialSharing
+    SocialSharing,
+    File,
+    [{provide: 'IGroceryDataExporter', useClass: GroceryDataExporter}],
   ]
 })
 

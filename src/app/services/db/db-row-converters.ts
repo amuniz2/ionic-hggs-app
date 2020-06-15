@@ -18,8 +18,6 @@ export class DbRowConverters {
 
   public static rowToPantryItem(row: any): PantryItem {
     // todo: read aisles, sections, and locations
-    console.log('converting row to PantryItem:');
-    console.log(row);
     const defaultQuantity =  row[PantryItemTable.COLS.DEFAULT_QUANTITY];
     const quantityNeeded =  row[PantryItemTable.COLS.QUANTITY_NEEDED];
     return {
