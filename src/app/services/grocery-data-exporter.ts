@@ -14,7 +14,7 @@ export interface IGroceryDataExporter {
 
 @Injectable()
 export class GroceryDataExporter implements IGroceryDataExporter {
-  private readonly dataExported: HggsData;
+  private dataExported: HggsData;
   constructor(@Inject('IPantryDataService') private pantryDataService: IPantryDataService, private fileManager: File) {
     this.dataExported = new HggsData();
   }
@@ -30,6 +30,7 @@ export class GroceryDataExporter implements IGroceryDataExporter {
 
   private async writeDataToFile(): Promise<string> {
     try {
+      this.fileManager.readAsText()
       // this.fileManager.tempDirectory
       console.log(`temp directory: ${this.fileManager.tempDirectory}; app storage directory: ${this.fileManager.applicationStorageDirectory}`)
       const fileEntry = await this.fileManager.createFile(this.fileManager.applicationStorageDirectory, 'hggsData.json', true);
@@ -59,9 +60,14 @@ export class GroceryDataExporter implements IGroceryDataExporter {
     const exportedFile$ = forkJoin(...tasks$).pipe(
       take(1),
       switchMap(([groceryStores, pantryItems, storeAisles, storeSections, storeLocations, itemLocations])=> {
-        this.dataExported.groceryStores = groceryStores;
-        this.dataExported.pantryItems = pantryItems;
-        this.dataExported.groceryStoreLocations = storeLocations;
+        this.dataExported = {
+          groceryStores,
+          pantryItems,
+          groceryStoreLocations: storeLocations,
+          groceryStoreSections: storeSections,
+          groceryStoreAisles: storeAisles,
+          pantryItemLocations: itemLocations
+        };
         return from(this.writeDataToFile());
         // return this.writeDataToFile().then((fileName) => fileName);
       }));

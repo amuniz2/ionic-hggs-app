@@ -14,6 +14,9 @@ import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-compone
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {ShoppingItem} from '../model/shopping-item';
 import {PantryItemLocation} from '../model/PantryItemLocation';
+import {GroceryStoreAisleOrSectionSelected} from '../modules/shared-module/dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
+import {GroceryStoreAisle} from '../model/grocery-store-aisle';
+import {GroceryStoreSection} from '../model/grocery-store-section';
 
 @Injectable()
 export class PantryDataService implements IPantryDataService {
@@ -143,11 +146,11 @@ export class PantryDataService implements IPantryDataService {
     return this.dbHelper.getAllPantryItemLocations();
   }
 
-  getAllGroceryStoreAisles(): Observable<{storeId: number, aisle: string}[]> {
+  getAllGroceryStoreAisles(): Observable<GroceryStoreAisle[]> {
     return this.dbHelper.getAllGroceryStoreAisles();
   }
 
-  getAllGroceryStoreSections(): Observable<{ storeId: number, section: string}[]> {
+  getAllGroceryStoreSections(): Observable<GroceryStoreSection[]> {
     return this.dbHelper.getAllGroceryStoreSections();
   }
 }

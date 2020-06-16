@@ -11,6 +11,8 @@ import {ShoppingItem} from '../model/shopping-item';
 import {DeletePantryItemRequest} from '../modules/pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {PantryItemLocation} from '../model/PantryItemLocation';
+import {GroceryStoreSection} from '../model/grocery-store-section';
+import {GroceryStoreAisle} from '../model/grocery-store-aisle';
 
 export interface IPantryDataService {
 
@@ -66,9 +68,9 @@ export interface IPantryDataService {
 
   getAllPantryItemLocations(): Observable<PantryItemLocation[]>;
 
-  getAllGroceryStoreAisles(): Observable<{ storeId: number, aisle: string}[]>;
+  getAllGroceryStoreAisles(): Observable<GroceryStoreAisle[]>;
 
-  getAllGroceryStoreSections(): Observable<{ storeId: number, section: string}[]>;
+  getAllGroceryStoreSections(): Observable<GroceryStoreSection[]>;
 
   updateGroceryStoreAisle(groceryStoreId: number, oldName: string, newName: string): Observable<boolean>;
 

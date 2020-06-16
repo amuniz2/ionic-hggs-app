@@ -13,6 +13,8 @@ import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {PantryItemLocation} from '../model/PantryItemLocation';
 // tslint:disable-next-line:max-line-length
 import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
+import {GroceryStoreAisle} from '../model/grocery-store-aisle';
+import {GroceryStoreSection} from '../model/grocery-store-section';
 
 @Injectable()
 export class FakePantryDataService implements IPantryDataService {
@@ -441,7 +443,7 @@ export class FakePantryDataService implements IPantryDataService {
     return of(true);
   }
 
-  getAllGroceryStoreAisles(): Observable<{ storeId: number, aisle: string}[]> {
+  getAllGroceryStoreAisles(): Observable<GroceryStoreAisle[]> {
       const result: {storeId: number, aisle: string}[] = [];
       this.groceryStores.forEach(gStore => {
         gStore.aisles.forEach(aisle => result.push({storeId: gStore.id, aisle}));
@@ -449,7 +451,7 @@ export class FakePantryDataService implements IPantryDataService {
       return of(result);
   }
 
-  getAllGroceryStoreSections(): Observable<{ storeId: number, section: string}[]> {
+  getAllGroceryStoreSections(): Observable<GroceryStoreSection[]> {
     const result: {storeId: number, section: string}[] = [];
     this.groceryStores.forEach(gStore => {
       gStore.aisles.forEach(section => result.push({storeId: gStore.id, section}));

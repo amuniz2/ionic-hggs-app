@@ -11,6 +11,8 @@ import {Injectable} from '@angular/core';
 import {GroceryStoreLocation} from '../../model/grocery-store-location';
 import {PantryItemLocation} from '../../model/PantryItemLocation';
 import {ShoppingItem} from '../../model/shopping-item';
+import {GroceryStoreSection} from '../../model/grocery-store-section';
+import {GroceryStoreAisle} from '../../model/grocery-store-aisle';
 
 @Injectable()
 export class MySqlCommands {
@@ -419,7 +421,7 @@ export class MySqlCommands {
     }
   }
 
-  public async queryAllGroceryStoreSections(): Promise<{ storeId: number; section: string }[]> {
+  public async queryAllGroceryStoreSections(): Promise<GroceryStoreSection[]> {
     try {
       const ret: { storeId: number; section: string }[] = [];
       // tslint:disable-next-line:max-line-length
@@ -493,7 +495,7 @@ export class MySqlCommands {
     }
   }
 
-  public async queryAllGroceryStoreAisles(): Promise<{ storeId: number; aisle: string }[]> {
+  public async queryAllGroceryStoreAisles(): Promise<GroceryStoreAisle[]> {
     try {
       const ret: { storeId: number; aisle: string }[] = [];
       const sqlQueryAisles = `SELECT * from ${StoreGroceryAisleTable.NAME}`;

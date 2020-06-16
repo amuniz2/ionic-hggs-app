@@ -3,9 +3,12 @@
     <ion-button  fill="clear" outline="none" (click)="onAddStoreClick()">Add
       <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
     </ion-button>
-     <app-select-grocery-store slot="end" [groceryStores]="groceryStores$ | async"></app-select-grocery-store>
+<!--     <app-select-grocery-store slot="end" [groceryStores]="groceryStores$ | async"></app-select-grocery-store>-->
     <ion-button  fill="clear" outline="none" (click)="presentSharingOptions($event)">Share
       <ion-icon ios="share-outline" md="share-outline" ></ion-icon>
+    </ion-button>
+    <ion-button  fill="clear" outline="none" (click)="importData($event)">Import
+      <ion-icon ios="download-outline" md="download-outline" ></ion-icon>
     </ion-button>
   </ion-toolbar>
 </ion-header>

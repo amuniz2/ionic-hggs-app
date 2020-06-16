@@ -9,6 +9,8 @@ import {MySqlCommands} from './my-sql-commands';
 import {GroceryStoreLocation} from '../../model/grocery-store-location';
 import {PantryItemLocation} from '../../model/PantryItemLocation';
 import {ShoppingItem} from '../../model/shopping-item';
+import {GroceryStoreSection} from '../../model/grocery-store-section';
+import {GroceryStoreAisle} from '../../model/grocery-store-aisle';
 
 @Injectable()
 export class PantryDbHelper {
@@ -63,11 +65,11 @@ export class PantryDbHelper {
     );
   }
 
-  public getAllGroceryStoreAisles(): Observable<{storeId: number, aisle: string}[]> {
+  public getAllGroceryStoreAisles(): Observable<GroceryStoreAisle[]> {
     return this.queryAllGroceryStoreAisles();
   }
 
-  public getAllGroceryStoreSections(): Observable<{ storeId: number, section: string}[]> {
+  public getAllGroceryStoreSections(): Observable<GroceryStoreSection[]> {
     return this.queryAllGroceryStoreSections();
   }
 
@@ -162,7 +164,7 @@ export class PantryDbHelper {
     );
   }
 
-  private queryAllGroceryStoreAisles(): Observable<{storeId: number, aisle: string}[]> {
+  private queryAllGroceryStoreAisles(): Observable<GroceryStoreAisle[]> {
     return new Observable<{storeId: number, aisle: string}[]>((observer) => {
       this.mySqlCommands.queryAllGroceryStoreAisles().then((aisles) => {
         observer.next(aisles);
@@ -207,7 +209,7 @@ export class PantryDbHelper {
     });
   }
 
-  private queryAllGroceryStoreSections(): Observable<{ storeId: number, section: string}[]> {
+  private queryAllGroceryStoreSections(): Observable<GroceryStoreSection[]> {
     return new Observable<{ storeId: number, section: string}[]>((observer) => {
       this.mySqlCommands.queryAllGroceryStoreSections().then((sections) => {
         observer.next(sections);
