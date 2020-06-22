@@ -33,6 +33,9 @@
     },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-custom-config": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },
   "dependent_plugins": {

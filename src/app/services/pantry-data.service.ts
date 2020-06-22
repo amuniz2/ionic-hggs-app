@@ -66,6 +66,10 @@ export class PantryDataService implements IPantryDataService {
     return newPantryItem$;
   }
 
+  public getGroceryStoreByName(name: string): Observable<GroceryStore> {
+    return this.dbHelper.getGroceryStoreByName(name);
+  }
+
   public getGroceryStores(): Observable<GroceryStore[]> {
     return this.dbHelper.getAllGroceryStores();
   }
@@ -118,6 +122,11 @@ export class PantryDataService implements IPantryDataService {
   public getPantryItem(id: number): Observable<PantryItem> {
     return this.dbHelper.queryPantryItem(id);
   }
+
+  public getPantryItemByName(name: string): Observable<PantryItem> {
+    return this.dbHelper.queryPantryItemByName(name);
+  }
+
   public getPantryItemLocations(id: number): Observable<GroceryStoreLocation[]> {
     return this.dbHelper.queryPantryItemLocations(id);
   }

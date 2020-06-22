@@ -19,7 +19,7 @@ import { EditPantryItemLocationComponent } from './smart-components/edit-pantry-
 import { AddPantryItemComponent } from './dumb-components/add-pantry-item/add-pantry-item.component';
 import {NgModule} from '@angular/core';
 import {PantryDataService} from '../../services/pantry-data.service';
-import {GroceryDataExporter} from '../../services/grocery-data-exporter';
+import {GroceryDataTransporter} from '../../services/grocery-data-transporter.service';
 
 @NgModule({
   imports: [
@@ -44,7 +44,7 @@ import {GroceryDataExporter} from '../../services/grocery-data-exporter';
   providers: [
     SocialSharing,
     File,
-    [{provide: 'IGroceryDataExporter', useClass: GroceryDataExporter}],
+    [{provide: 'IGroceryDataExporter', useClass: GroceryDataTransporter}],
   ]
 })
 

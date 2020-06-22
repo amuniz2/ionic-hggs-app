@@ -29,6 +29,23 @@ export class PantryDbHelper {
     });
   }
 
+  public getGroceryStoreByName(name: string): Observable<GroceryStore> {
+    return new Observable<GroceryStore>((observer) => {
+        this.mySqlCommands.openOrCreateDb().then((result) => {
+          if (result) {
+            this.mySqlCommands.queryGroceryStoreByName(name).then((stores) => {
+              observer.next(stores);
+              observer.complete();
+            }).catch((err) => observer.error(err));
+          }
+        }).catch((err) => {
+          console.log('error in call to openOrCreateDb');
+          observer.error(err);
+        });
+      }
+    );
+  }
+
   public getAllGroceryStores(): Observable<GroceryStore[]> {
     return new Observable<GroceryStore[]>((observer) => {
         this.mySqlCommands.openOrCreateDb().then((result) => {
@@ -342,7 +359,7 @@ export class PantryDbHelper {
     });
   }
 
-  private queryPantryItemByName(name: string): Observable<PantryItem> {
+  public queryPantryItemByName(name: string): Observable<PantryItem> {
     return new Observable<PantryItem>((observer) => {
       this.mySqlCommands.queryPantryItemByName(name).then((pantryItem) => {
         observer.next(pantryItem);
@@ -412,6 +429,7 @@ export class PantryDbHelper {
       }).catch((err) => observer.error(err));
     });
   }
+
   public queryPantryItem(itemId: number): Observable<PantryItem> {
     return new Observable<PantryItem>((observer) => {
       this.mySqlCommands.queryPantryItem(itemId).then((pantryItem) => {
@@ -420,6 +438,7 @@ export class PantryDbHelper {
       }).catch((err) => observer.error(err));
     });
   }
+
   public queryPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Observable<PantryItemLocation> {
     return new Observable<PantryItemLocation>((observer) => {
       this.mySqlCommands.queryPantryItemLocation(pantryItemId, groceryStoreLocationId).then((pantryItemLocation) => {

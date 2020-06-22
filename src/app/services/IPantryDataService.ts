@@ -28,6 +28,8 @@ export interface IPantryDataService {
 
   addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation>;
 
+  getGroceryStoreByName(name: string): Observable<GroceryStore>;
+
   getGroceryStores(): Observable<GroceryStore[]>;
 
   getPantryItems(): Observable<PantryItem[]>;
@@ -51,6 +53,8 @@ export interface IPantryDataService {
   deleteGroceryStoreSection(deleteStoreSectionRequest: StoreAisleOrSection): Observable<boolean>;
 
   getPantryItem(id: number): Observable<PantryItem>;
+
+  getPantryItemByName(name: string): Observable<PantryItem>;
 
   getPantryItemLocations(id: number): Observable<GroceryStoreLocation[]>;
 

@@ -11,12 +11,11 @@ import {
 } from '../../../pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {PantryItem} from '../../../../model/pantry-item';
 import {selectAllGroceryStores, selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
-import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
-import {ToastController} from '@ionic/angular';
+import {GroceryStoreState} from '../../../../model/grocery-store';
+import {AlertController, ToastController} from '@ionic/angular';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
-import {IGroceryDataExporter} from '../../../../services/grocery-data-exporter';
+import {HggsFile, IGroceryDataTransporter} from '../../../../services/grocery-data-transporter.service';
 import {File} from '@ionic-native/file/ngx';
-import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-pantry-inventory-manager',
@@ -37,7 +36,8 @@ export class PantryInventoryManagerComponent implements OnInit {
               private socialSharing: SocialSharing,
               private toastController: ToastController,
               private fileManager: File,
-              @Inject('IGroceryDataExporter')  private dataExporter: IGroceryDataExporter
+              @Inject('IGroceryDataExporter')  private dataTransporter: IGroceryDataTransporter,
+              private alertContoller: AlertController
               /*private popoverController: PopoverController, */) {
     this.title = 'Manage pantry items from page component';
     // this.store.dispatch(new LoadGroceryStores());
@@ -124,7 +124,7 @@ export class PantryInventoryManagerComponent implements OnInit {
 
       // this.events.publish('event data');
 
-    this.dataExporter.exportAll().subscribe(fileName => {
+    this.dataTransporter.exportAll().subscribe(fileName => {
       console.log(`file name returned: ${fileName}`)
       this.socialSharing.shareWithOptions({
         subject: 'Grocery shopping list',
@@ -161,4 +161,57 @@ export class PantryInventoryManagerComponent implements OnInit {
       // console.log('send and dismiss');
       // await this.popoverController.dismiss();
     }
+
+    private async notifyNoImportFileAvailable() {
+      const alert = await this.alertContoller.create({
+        message: 'No file is available for import.',
+        buttons: [
+          {
+            text: 'Okay',
+            role: 'cancel',
+            handler: () => {
+              console.log('Okay clicked');
+            }
+          }
+        ],
+      });
+      await alert.present();
+    }
+
+    private async confirm(hggsFile: HggsFile) {
+      const alert = await this.alertContoller.create({
+        message: `Import data from ${hggsFile.name}?`,
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Import',
+            handler: async () => {
+              console.log('Yes, Import');
+              await this.dataTransporter.importFromFile(hggsFile);
+              console.log('Import call made');
+            }
+          }
+        ],
+      });
+      await alert.present();
+    }
+
+  async importData() {
+    this.dataTransporter.getFilesAvailableToDownload().subscribe(
+      async hggsFiles => {
+        if (hggsFiles.length === 0) {
+          this.notifyNoImportFileAvailable();
+        } else if (hggsFiles.length === 1) {
+          await this.confirm(hggsFiles[0]);
+        } else {
+          console.log('choose which file');
+        }
+      }, error => {});
+  }
 }

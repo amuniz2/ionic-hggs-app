@@ -34,6 +34,7 @@
     "build": "0.1.4",
     "cordova-android": "^8.1.0",
     "cordova-browser": "6.0.0",
+    "cordova-custom-config": "^5.1.0",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^6.0.2",
@@ -94,7 +95,8 @@
         "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
       },
-      "cordova-plugin-file": {}
+      "cordova-plugin-file": {},
+      "cordova-custom-config": {}
     },
     "platforms": [
       "browser",

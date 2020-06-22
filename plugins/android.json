@@ -7,7 +7,13 @@
     "files": {}
   },
   "installed_plugins": {
+    "cordova-custom-config": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
     "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-file": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-ionic-keyboard": {
@@ -26,14 +32,11 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-sqlite-storage": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
     "cordova-plugin-x-socialsharing": {
       "ANDROID_SUPPORT_V4_VERSION": "24.1.1+",
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-file": {
+    "cordova-sqlite-storage": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },

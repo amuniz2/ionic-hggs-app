@@ -458,4 +458,20 @@ export class FakePantryDataService implements IPantryDataService {
     });
     return of(result);
   }
+
+  getGroceryStoreByName(name: string): Observable<GroceryStore> {
+    const result = this.groceryStores.find((store) => store.name === name);
+    if (result) {
+      return of(result);
+    }
+    return of(null);
+  }
+
+  getPantryItemByName(name: string): Observable<PantryItem> {
+    const result =  this.pantryItems.find((item) => item.name === name);
+    if (result) {
+      return of(result);
+    }
+    return of(null);
+  }
 }

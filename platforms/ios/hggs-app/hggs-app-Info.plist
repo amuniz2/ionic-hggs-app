@@ -62,5 +62,22 @@
 	<string>This app requires photo library access to function properly.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires photo library access to function properly.</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>CFBundleTypeName</key>
+	<string>HGGS File Format</string>
+	<key>LSItemContentTypes</key>
+	<array>
+		<string>json</string>
+		<string>hggs</string>
+	</array>
+	<key>LSHandlerRank</key>
+	<string>Owner</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>mail</string>
+	</array>
 </dict>
 </plist>
