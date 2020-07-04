@@ -15,6 +15,7 @@ import {PantryItemLocation} from '../model/PantryItemLocation';
 import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {GroceryStoreAisle} from '../model/grocery-store-aisle';
 import {GroceryStoreSection} from '../model/grocery-store-section';
+import {HggsData} from '../model/hggs-data';
 
 @Injectable()
 export class FakePantryDataService implements IPantryDataService {
@@ -103,6 +104,12 @@ export class FakePantryDataService implements IPantryDataService {
     if (this.groceryStores.some(groceryStore => groceryStore.name.toUpperCase() === newStoreRequest.name.toUpperCase())) {
       return throwError(new Error(`Grocery store <${newStoreRequest.name}> already exists.`));
     }
+    const newStore = this.addNewGroceryStore(newStoreRequest);
+
+    return of(newStore);
+  }
+
+  private addNewGroceryStore(newStoreRequest: NewGroceryStoreRequest): GroceryStore {
     const newStore: GroceryStore = {
       aisles: new Set<string>(),
       id: this.groceryStores.length + 1,
@@ -111,7 +118,7 @@ export class FakePantryDataService implements IPantryDataService {
       name: newStoreRequest.name
     };
     this.groceryStores.push(newStore);
-    return of(newStore);
+    return newStore;
   }
 
   public deleteGroceryStore(deleteStoreRequest: DeleteGroceryStoreRequest): Observable<boolean> {
@@ -218,7 +225,16 @@ export class FakePantryDataService implements IPantryDataService {
     return of(true);
   }
 
-  addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
+  addPantryItemLocation(itemId: number, storeLocationId: number): Observable<boolean> {
+    this.pantryItemLocations.push({
+      pantryItemId: itemId,
+      groceryStoreLocationId: storeLocationId
+    });
+
+    return of(true);
+  }
+
+  addNewPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
     let groceryStoreLocation = this.findGroceryStoreLocation(
       newLocation.storeId,
       newLocation.aisle,
@@ -473,5 +489,18 @@ export class FakePantryDataService implements IPantryDataService {
       return of(result);
     }
     return of(null);
+  }
+
+  importHggsData(data: HggsData): Observable<boolean> {
+      data.groceryStores.forEach(groceryStoreToImport => {
+        let groceryStore: GroceryStore;
+        if (!this.groceryStores.some(candidateGroceryStore => candidateGroceryStore.name === groceryStoreToImport.name)) {
+          groceryStore = this.addNewGroceryStore({name: groceryStore.name});
+        } else {
+          groceryStore = this.groceryStores.find(candidateGroceryStore => candidateGroceryStore.name === groceryStoreToImport.name)
+        }
+      });
+      // todo: finish
+    return undefined;
   }
 }

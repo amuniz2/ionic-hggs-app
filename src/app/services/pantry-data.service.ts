@@ -17,6 +17,7 @@ import {PantryItemLocation} from '../model/PantryItemLocation';
 import {GroceryStoreAisleOrSectionSelected} from '../modules/shared-module/dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
 import {GroceryStoreAisle} from '../model/grocery-store-aisle';
 import {GroceryStoreSection} from '../model/grocery-store-section';
+import {HggsData} from '../model/hggs-data';
 
 @Injectable()
 export class PantryDataService implements IPantryDataService {
@@ -110,8 +111,12 @@ export class PantryDataService implements IPantryDataService {
     return this.dbHelper.updatePantryItem(savePantryItemRequest);
   }
 
-  public addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
-    return this.dbHelper.addPantryItemLocation(itemId, newLocation.storeId, newLocation.aisle, newLocation.section);
+  public addNewPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {
+    return this.dbHelper.addNewPantryItemLocation(itemId, newLocation.storeId, newLocation.aisle, newLocation.section);
+  }
+
+  public addPantryItemLocation(itemId: number, locationId:number): Observable<boolean> {
+    return this.dbHelper.addPantryItemLocation(itemId, locationId);
   }
 
   public updatePantryItemLocation(itemId: number,
@@ -161,5 +166,9 @@ export class PantryDataService implements IPantryDataService {
 
   getAllGroceryStoreSections(): Observable<GroceryStoreSection[]> {
     return this.dbHelper.getAllGroceryStoreSections();
+  }
+
+  importHggsData(data: HggsData): Observable<boolean> {
+    return this.dbHelper.importHggsData(data);
   }
 }

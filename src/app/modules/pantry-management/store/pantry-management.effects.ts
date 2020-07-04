@@ -218,7 +218,7 @@ export class PantryEffects {
   public addItemLocation = this.actions$.pipe(
     ofType(PantryActionTypes.AddPantryItemLocation),
     switchMap((payload) => {
-      return this.pantryDataService.addPantryItemLocation(
+      return this.pantryDataService.addNewPantryItemLocation(
         payload.addPantryItemLocation.itemId,
         payload.addPantryItemLocation.location).pipe(
           tap((pantryItemLocationAdded) => console.log(pantryItemLocationAdded)),

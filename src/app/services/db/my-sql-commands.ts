@@ -13,6 +13,14 @@ import {PantryItemLocation} from '../../model/PantryItemLocation';
 import {ShoppingItem} from '../../model/shopping-item';
 import {GroceryStoreSection} from '../../model/grocery-store-section';
 import {GroceryStoreAisle} from '../../model/grocery-store-aisle';
+import {IdMapping} from '../IPantryDataService';
+import {HggsData} from '../../model/hggs-data';
+
+interface GroceryStoreMapping {
+  storeIdMapping: IdMapping,
+  storeLocationsMappings: IdMapping[]
+};
+
 
 @Injectable()
 export class MySqlCommands {
@@ -644,22 +652,11 @@ export class MySqlCommands {
   }
   // endregion
     // region PantryItemLocation CRUD
-  public async insertPantryItemLocation(pantryItemId: number,
+  public async insertNewPantryItemLocation(pantryItemId: number,
                                         storeId: number,
                                         aisle: string,
                                         section: string): Promise<GroceryStoreLocation> {
-/*
-INSERT INTO grocery_item_locations (store_id, store_aisle, section_name)
-SELECT 1, '', ''
-WHERE NOT EXISTS(
-select location_id from grocery_Item_locations WHERE store_id=1 AND store_aisle = '' AND section_name = '' limit 1
-)
 
-INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
-	SELECT 1, location_id
-	from grocery_Item_locations
-	WHERE store_id=1 AND store_aisle = '' AND section_name = '' limit 1;
- */
     let result: GroceryStoreLocation = null;
     const fromLocationTableClause = `FROM ${LocationTable.NAME}`;
 
@@ -707,6 +704,25 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
       console.log(err);
     }
     return result;
+  }
+
+  public async insertPantryItemLocation(pantryItemId: number,
+                                           storeLocationId: number): Promise<boolean> {
+
+    const insertPantryItemLocationSql = `INSERT INTO
+     ${PantryItemLocationTable.NAME}
+     (${PantryItemLocationTable.COLS.PANTRY_ITEM_ID},
+     ${PantryItemLocationTable.COLS.LOCATION_ID})
+      VALUES (${pantryItemId}, ${storeLocationId});`;
+
+    try {
+      const rowsAffected = await this.db.executeSql(insertPantryItemLocationSql, []);
+      return (rowsAffected > 0);
+    } catch (err) {
+      console.log(`Error inserting pantry Item location `);
+      console.log(err);
+    }
+    return false;
   }
 
   public async updatePantryItemLocation(pantryItemId: number,
@@ -887,6 +903,24 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
       StoreGrocerySectionTable.COLS.STORE_ID);
   }
 
+  public async importHggsData(data: HggsData): Promise<boolean> {
+    try {
+      const pantryItemMappings = await this.importPantryItems(data.pantryItems);
+      const groceryStoreMappings = await this.importGroceryStores(data.groceryStores,
+        data.groceryStoreAisles,
+        data.groceryStoreSections,
+        data.groceryStoreLocations);
+      await this.importPantryItemLocations(data.pantryItemLocations, pantryItemMappings, groceryStoreMappings);
+      return true;
+    }
+    catch (error) {
+      console.log('Error importing data:');
+      console.log(error);
+    }
+    return false;
+
+  }
+
   private async queryGroceryStoreAislesOrSectionsInuseInUse(groceryStoreId: number,
                                                             aisleOrSectionTableName,
                                                             aisleOrSectionColumnName,
@@ -911,5 +945,136 @@ INSERT INTO pantryitemlocationtable (pantryitemid, locationid)
     console.log('returning from query');
     console.log(result);
     return result;
+  }
+
+  private async importPantryItems(pantryItems: PantryItem[]): Promise<IdMapping[]> {
+    const existingPantryItems = await this.queryPantryItems();
+    const result: IdMapping[] = [];
+    for (const newPantryItem of pantryItems) {
+      if (!existingPantryItems.some(existingItem => newPantryItem.name === existingItem.name)) {
+        const pantryItemId = await this.insertPantryItem(newPantryItem.name,
+          newPantryItem.description,
+          newPantryItem.units,
+          newPantryItem.quantityNeeded,
+          newPantryItem.defaultQuantity,
+          newPantryItem.need
+        );
+        result.push({ importedId: pantryItemId, originalId: newPantryItem.id})
+      } else {
+        const existingItem = existingPantryItems.find(pi => pi.name === newPantryItem.name);
+        await this.updatePantryItem({
+          ...newPantryItem,
+          id: existingItem.id
+        });
+        result.push({ originalId: newPantryItem.id, importedId: existingItem.id});
+      }
+    }
+    return result;
+  }
+
+  private async importGroceryStores(groceryStores: GroceryStore[],
+                                   groceryStoreAisles: GroceryStoreAisle[],
+                                   groceryStoreSections: GroceryStoreSection[],
+                                   groceryStoreLocations: GroceryStoreLocation[]): Promise<GroceryStoreMapping[]> {
+    const existingGroceryStores = await this.queryGroceryStores();
+    const result: GroceryStoreMapping[] = [];
+
+    for (const newGroceryStore of groceryStores) {
+      let idMapping: IdMapping;
+      if (!existingGroceryStores.some(existingItem => newGroceryStore.name === existingItem.name)) {
+        const groceryStoreId = await this.insertGroceryStore(newGroceryStore.name);
+        idMapping = { originalId: newGroceryStore.id, importedId: groceryStoreId };
+      } else {
+        const existingItemId = existingGroceryStores.find(groceryStore => groceryStore.name === newGroceryStore.name).id;
+        idMapping = { originalId: newGroceryStore.id, importedId: existingItemId};
+      }
+      await this.importGroceryStoreAisles(idMapping, groceryStoreAisles.filter(storeAisle => storeAisle.storeId === idMapping.originalId));
+      await this.importGroceryStoreSections(idMapping, groceryStoreSections.filter(storeSection => storeSection.storeId === idMapping.originalId));
+      const groceryLocationMappings = await this.importGroceryStoreLocations(idMapping,
+        groceryStoreLocations.filter(storeLocation => storeLocation.storeId === idMapping.originalId));
+      result.push({
+        storeIdMapping: idMapping,
+        storeLocationsMappings: groceryLocationMappings
+      });
+    }
+    return result;
+  }
+
+  private async importGroceryStoreAisles(groceryStoreMapping: IdMapping,
+                                        newAisles: GroceryStoreAisle[]) {
+    const existingAisles = await this.queryGroceryStoreAisles(groceryStoreMapping.importedId);
+    for (const newAisle of newAisles) {
+      if (!existingAisles.has(newAisle.aisle)) {
+        await this.insertGroceryStoreAisle(groceryStoreMapping.importedId, newAisle.aisle);
+      }
+    }
+  }
+
+  private async importGroceryStoreSections(groceryStoreMapping: IdMapping,
+                                         newSections: GroceryStoreSection[]) {
+    const existingSections = await this.queryGroceryStoreSections(groceryStoreMapping.importedId);
+    for (const newSection of newSections) {
+      if (!existingSections.has(newSection.section)) {
+        await this.insertGroceryStoreSection(groceryStoreMapping.importedId, newSection.section);
+      }
+    }
+  }
+
+  private async importGroceryStoreLocations(groceryStoreMapping: IdMapping,
+                                           newLocations: GroceryStoreLocation[]): Promise<IdMapping[]> {
+    const existingLocations = await this.queryGroceryStoreLocations(groceryStoreMapping.importedId);
+    let locationId: number;
+    const result: IdMapping[] = [];
+
+    for (const newLocation of newLocations) {
+      if (!existingLocations.some(existingLocation => newLocation.aisle === existingLocation.aisle &&
+      newLocation.section === newLocation.section)) {
+        locationId = await this.insertGroceryStoreLocation(groceryStoreMapping.importedId, newLocation.aisle, newLocation.section);
+      } else {
+        locationId = existingLocations.find(existingLocation => newLocation.aisle === existingLocation.aisle &&
+          newLocation.section === newLocation.section).id;
+      }
+      result.push({ originalId: newLocation.id, importedId: locationId});
+    }
+    return result;
+  }
+
+  private async importPantryItemLocations(newPantryItemLocations: PantryItemLocation[],
+                                          pantryItemMappings: IdMapping[],
+                                          groceryStoreMappings: GroceryStoreMapping[]) {
+
+    // const groceryStoreLocations = await this.queryAllGroceryStoreLocations();
+    for (const pantryItemMapping of pantryItemMappings) {
+      await this.importLocationsForPantryItem(pantryItemMapping,
+        newPantryItemLocations.filter(piLocation => piLocation.pantryItemId === pantryItemMapping.originalId),
+        groceryStoreMappings/*, groceryStoreLocations*/);
+    }
+  }
+
+  private async importLocationsForPantryItem(pantryItemMapping: IdMapping,
+                                          newPantryItemLocations: PantryItemLocation[],
+                                          groceryStoreMappings: GroceryStoreMapping[]/*,
+                                           existingGroceryStoreLocations: GroceryStoreLocation[]*/) {
+    const existingLocations = await this.queryPantryItemLocations(pantryItemMapping.importedId);
+    console.log('existing locations for item Id: ', pantryItemMapping.originalId, ' are ', JSON.stringify(existingLocations));
+    console.log('locations being imported: ', JSON.stringify(newPantryItemLocations));
+    console.log('location mappings: ', JSON.stringify(groceryStoreMappings));
+    for (const newPantryItemLocation of newPantryItemLocations) {
+      const newGroceryStoreLocationMapping = this.findImportedGroceryStoreLocationMapping(newPantryItemLocation.groceryStoreLocationId, groceryStoreMappings);
+      if (!existingLocations.some(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)) {
+        await this.insertPantryItemLocation(pantryItemMapping.importedId, newGroceryStoreLocationMapping.importedId);
+      }
+    }
+  }
+
+  private findImportedGroceryStoreLocationMapping(newGroceryStoreLocationId: number, groceryStoreMappings: GroceryStoreMapping[]): IdMapping {
+    for (const groceryStoreMapping of groceryStoreMappings) {
+      const importedLocationMapping = groceryStoreMapping.storeLocationsMappings
+        .find(locationMapping => locationMapping.originalId === newGroceryStoreLocationId);
+      if (importedLocationMapping) {
+        return importedLocationMapping;
+      }
+    }
+    return null;
   }
 }

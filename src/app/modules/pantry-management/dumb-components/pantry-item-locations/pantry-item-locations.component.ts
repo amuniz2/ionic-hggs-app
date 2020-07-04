@@ -46,10 +46,10 @@ export class PantryItemLocationsComponent implements OnInit {
   getLocationDescription(loc: GroceryStoreLocation): string {
     let desc =  loc.storeName;
     if (loc.aisle) {
-      desc +=  `, Aisle ${loc.aisle}`;
+      desc +=  `, ${loc.aisle} Aisle`;
     }
     if (loc.section) {
-      desc += `, Section ${loc.section}`;
+      desc += `, ${loc.section} Section`;
     }
     return desc;
   }

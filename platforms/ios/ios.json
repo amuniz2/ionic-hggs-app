@@ -80,7 +80,7 @@
           "LSApplicationQueriesSchemes": [
             {
               "xml": "<array><string>mail</string></array>",
-              "count": 2
+              "count": 8
             }
           ]
         }
@@ -103,9 +103,6 @@
     "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
-    },
     "cordova-sqlite-storage": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
@@ -117,10 +114,13 @@
       "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
+    "cordova-custom-config": {
+      "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     },
-    "cordova-custom-config": {
+    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
     }
   },
@@ -376,11 +376,11 @@
     "cordova-plugin-ionic-webview": "3.1.2",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "2.4.2",
-    "cordova-plugin-whitelist": "1.3.3",
     "cordova-sqlite-storage": "3.2.0",
     "es6-promise-plugin": "4.2.2",
     "cordova-plugin-x-socialsharing": "5.6.8",
+    "cordova-custom-config": "5.1.0",
     "cordova-plugin-file": "6.0.2",
-    "cordova-custom-config": "5.1.0"
+    "cordova-plugin-whitelist": "1.3.4"
   }
 }

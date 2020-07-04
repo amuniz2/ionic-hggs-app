@@ -1,23 +1,21 @@
 import {File, Entry, FileError, FileWriter, FileEntry, DirectoryEntry, Metadata, IFile} from '@ionic-native/file/ngx';
-import {IPantryDataService} from './IPantryDataService';
+import {IdMapping, IPantryDataService} from './IPantryDataService';
 import {HggsData} from '../model/hggs-data';
-import {combineAll, map, mergeAll, mergeMap, switchMap, take, takeLast} from 'rxjs/operators';
-import {forkJoin, from, Observable, of} from 'rxjs';
+import {map, switchMap, take} from 'rxjs/operators';
+import {forkJoin, from, Observable, of, zip} from 'rxjs';
 import {Inject, Injectable} from '@angular/core';
-import {GroceryStore} from '../model/grocery-store';
-import {PantryItem} from '../model/pantry-item';
 
 declare type DataReadCallback = (self: GroceryDataTransporter, data: HggsData) => Observable<boolean>;
 
-interface IdMapping {
-  originalId: number;
-  importedId: number;
+export interface GroceryStoreLocationsImport {
+  groceryStoreId: number,
+  locationMappings$: Observable<IdMapping[]>;
 };
 
 export interface IGroceryDataTransporter {
   exportAll(): Observable<string>;
 
-  importFromFile(file: HggsFile);
+  importFromFile(file: HggsFile): Observable<boolean>;
 
   getFilesAvailableToDownload(): Observable<HggsFile[]>;
 
@@ -186,7 +184,10 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
       }
 
       const returnHggsData = (data: HggsData) => {
-        action(this, data);
+        action(this, data).subscribe((succeeded) => {
+          console.log(`import returned: ${succeeded}`);
+          // todo: throw exception if not?
+        });
       };
   }
 
@@ -194,7 +195,7 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
     this.pantryDataService.getGroceryStoreAisles(groceryStoreId).pipe(
       map(existingAisles  => {
         const newAisles = aislesToImport.filter(aisleToImport => !existingAisles.has(aisleToImport));
-        newAisles.forEach(newAisle => this.pantryDataService.addGroceryStoreAisle({groceryStoreId, name: newAisle}));
+        newAisles.forEach(async newAisle => await this.pantryDataService.addGroceryStoreAisle({groceryStoreId, name: newAisle}).toPromise());
       })
     );
   }
@@ -203,116 +204,27 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
     this.pantryDataService.getGroceryStoreSections(groceryStoreId).pipe(
       map(existingSections  => {
         const newSections = sectionsToImport.filter(sectionToImport => !existingSections.has(sectionToImport));
-        newSections.forEach(newSection => this.pantryDataService.addGroceryStoreSection({groceryStoreId, name: newSection}));
+        newSections.forEach(async newSection => await this.pantryDataService.addGroceryStoreSection({groceryStoreId, name: newSection}).toPromise());
       })
     );
-  }
-
-  private importGroceryStore = (groceryStoreToImport: GroceryStore, aislesToImport, sectionsToImport): Observable<number> => {
-    return this.pantryDataService.getGroceryStoreByName(groceryStoreToImport.name).pipe(
-      map(existingGroceryStore  => {
-        if (existingGroceryStore === null) {
-          this.pantryDataService.addGroceryStore({ ...groceryStoreToImport }).subscribe((newGroceryStore) => { return newGroceryStore.id});
-        } else {
-          return existingGroceryStore.id;
-        }
-      }),
-      map((groceryStoreId: number) => {
-        this.importGroceryStoreAisles(groceryStoreId, aislesToImport);
-        this.importGroceryStoreSections(groceryStoreId, sectionsToImport);
-        return groceryStoreId;
-      })
-    );
-  };
-
-  private importPantryItem = (pantryItemToImport: PantryItem): Observable<number> => {
-    return this.pantryDataService.getPantryItemByName(pantryItemToImport.name).pipe(
-      map(existingPantryItem  => {
-        if (existingPantryItem === null) {
-          this.pantryDataService.addPantryItem({ ...pantryItemToImport }).subscribe((newPantryItem) => { return newPantryItem.id});
-        } else {
-          return existingPantryItem.id;
-        }
-      })
-    );
-  };
-  // private importGroceryStore(groceryStoreToImport: GroceryStore, aislesToImport, sectionsToImport) : Observable<boolean> {
-  //   return this.pantryDataService.getGroceryStoreByName(groceryStoreToImport.name).pipe(
-  //     map(existingGroceryStore  => {
-  //       if (existingGroceryStore === null) {
-  //         this.pantryDataService.addGroceryStore({ ...groceryStoreToImport }).subscribe((newGroceryStore) => { return newGroceryStore.id});
-  //       } else {
-  //         return existingGroceryStore.id;
-  //       }
-  //     }),
-  //     map((groceryStoreId: number) => {
-  //       this.importGroceryStoreAisles(groceryStoreId, aislesToImport);
-  //       this.importGroceryStoreSections(groceryStoreId, sectionsToImport);
-  //       return true;
-  //     })
-  //   );
-  // }
-
-  private importGroceryStores(self: GroceryDataTransporter, data: HggsData): Observable<IdMapping[]> {
-    const importedGroceryStoreIdMappings: {originalId: number, importedId: number}[] = [];
-    data.groceryStores.forEach(groceryStore => {
-      const groceryStoreImported$ = self.importGroceryStore(groceryStore,
-        data.groceryStoreAisles.filter(storeAisle => storeAisle.storeId === groceryStore.id).map(storeAisle => storeAisle.aisle),
-        data.groceryStoreSections.filter(storeSection => storeSection.storeId === groceryStore.id).map(storeSection => storeSection.section));
-      groceryStoreImported$.subscribe((resultId: number) => {
-        if (resultId > 0) {
-          console.log(`imported ${groceryStore.name}`);
-          importedGroceryStoreIdMappings.push({ originalId: groceryStore.id, importedId: resultId});
-        } else {
-          console.error(`failed to import ${groceryStore.name}`);
-        }
-      });
-    });
-    return of(importedGroceryStoreIdMappings);
-  }
-
-  private finishedImportingPantryItemsAndGroceryStores(data: HggsData, mappedGroceryStoreIds: IdMapping[], mappedPantryItemIds: IdMapping[]): boolean {
-    return (data.groceryStores.length === mappedGroceryStoreIds.length) && (data.pantryItems.length === mappedPantryItemIds.length);
   }
 
   private importData(self: GroceryDataTransporter, data: HggsData): Observable<boolean> {
     console.log(`data successfully read and parsed: ${JSON.stringify(data)}`);
-    const importedGroceryStoreIdMappings: {originalId: number, importedId: number}[] = [];
-    const importedPantryItemIdMappings: {originalId: number, importedId: number}[]= [];
-
-    data.groceryStores.forEach(groceryStore => {
-      const groceryStoreImported$ = self.importGroceryStore(groceryStore,
-        data.groceryStoreAisles.filter(storeAisle => storeAisle.storeId === groceryStore.id).map(storeAisle => storeAisle.aisle),
-        data.groceryStoreSections.filter(storeSection => storeSection.storeId === groceryStore.id).map(storeSection => storeSection.section));
-      groceryStoreImported$.subscribe((resultId: number) => {
-        if (resultId > 0) {
-          console.log(`imported ${groceryStore.name}`);
-          importedGroceryStoreIdMappings.push({ originalId: groceryStore.id, importedId: resultId});
-          self.importPantryItemLocationsForGroceryStore(groceryStore.id, resultId, importedPantryItemIdMappings);
-        } else {
-          console.error(`failed to import ${groceryStore.name}`);
-        }
-      });
-    });
-
-    data.pantryItems.forEach(pantryItem => {
-      const pantryItemImported$ = self.importPantryItem(pantryItem);
-      pantryItemImported$.subscribe((resultId: number) => {
-        if (resultId > 0) {
-          console.log(`imported ${pantryItem.name}`);
-          importedPantryItemIdMappings.push({originalId: pantryItem.id, importedId: resultId});
-          self.importPantryItemLocationsForPantryItem(pantryItem.id, resultId, importedGroceryStoreIdMappings);
-        } else {
-          console.error(`failed to import ${pantryItem.name}`);
-        }
-      });
-    });
-
-    forkJoin(importedGroceryStores, importedPantryItems)
+    return self.pantryDataService.importHggsData(data);
   }
 
-  public async importFromFile(importFile: HggsFile) {
-    await this.readFile(importFile, this.importData);
+  public importFromFile(importFile: HggsFile): Observable<boolean> {
+    return this.importFromFileAsPromise(importFile);
+  }
+
+  private importFromFileAsPromise(importFile: HggsFile): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      this.readFile(importFile, this.importData).then(() => {
+        observer.next();
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
   }
 
   public async importDataOLd(importFile: HggsFile) {

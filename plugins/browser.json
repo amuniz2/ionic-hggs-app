@@ -22,19 +22,19 @@
     "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
     "cordova-sqlite-storage": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-x-socialsharing": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
+    "cordova-custom-config": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-custom-config": {
+    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },

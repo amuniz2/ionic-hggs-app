@@ -13,6 +13,18 @@ import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {PantryItemLocation} from '../model/PantryItemLocation';
 import {GroceryStoreSection} from '../model/grocery-store-section';
 import {GroceryStoreAisle} from '../model/grocery-store-aisle';
+import {HggsData} from '../model/hggs-data';
+
+export interface StoreLocationImport {
+  importedId: number;
+  aisle: string;
+  section: string;
+}
+
+export interface IdMapping {
+  originalId: number;
+  importedId: number;
+};
 
 export interface IPantryDataService {
 
@@ -24,9 +36,13 @@ export interface IPantryDataService {
 
   addGroceryStoreSection(newGroceryStoreSectionRequest: StoreAisleOrSection): Observable<string>;
 
+  importHggsData(data: HggsData): Observable<boolean>;
+
   addPantryItem(newPantryItemRequest: PantryItem): Observable<PantryItem>;
 
-  addPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation>;
+  addNewPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation>;
+
+  addPantryItemLocation(itemId: number, storeLocationId: number): Observable<boolean>;
 
   getGroceryStoreByName(name: string): Observable<GroceryStore>;
 

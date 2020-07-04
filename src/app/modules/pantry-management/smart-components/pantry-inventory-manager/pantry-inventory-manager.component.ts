@@ -15,7 +15,7 @@ import {GroceryStoreState} from '../../../../model/grocery-store';
 import {AlertController, ToastController} from '@ionic/angular';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 import {HggsFile, IGroceryDataTransporter} from '../../../../services/grocery-data-transporter.service';
-import {File} from '@ionic-native/file/ngx';
+import {File} from  '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-pantry-inventory-manager',
@@ -191,9 +191,9 @@ export class PantryInventoryManagerComponent implements OnInit {
           },
           {
             text: 'Import',
-            handler: async () => {
+            handler: () => {
               console.log('Yes, Import');
-              await this.dataTransporter.importFromFile(hggsFile);
+              this.dataTransporter.importFromFile(hggsFile).subscribe(succeeded => console.log('import result: ', succeeded));
               console.log('Import call made');
             }
           }

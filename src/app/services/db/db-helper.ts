@@ -11,6 +11,7 @@ import {PantryItemLocation} from '../../model/PantryItemLocation';
 import {ShoppingItem} from '../../model/shopping-item';
 import {GroceryStoreSection} from '../../model/grocery-store-section';
 import {GroceryStoreAisle} from '../../model/grocery-store-aisle';
+import {HggsData} from '../../model/hggs-data';
 
 @Injectable()
 export class PantryDbHelper {
@@ -114,6 +115,10 @@ export class PantryDbHelper {
 
   public getGroceryStoreSectionsInUse(groceryStoreId: number): Observable<string[]> {
     return this.queryGroceryStoreSectionsInUse(groceryStoreId);
+  }
+
+  public importHggsData(data: HggsData): Observable<boolean> {
+    return this.importHggsDataUsingPromise(data);
   }
 
   public addGroceryStore(name: string): Observable<GroceryStore> {
@@ -386,11 +391,20 @@ export class PantryDbHelper {
     });
   }
 
-  public addPantryItemLocation(pantryItemId: number, storeId: number, aisle: string, section: string): Observable<GroceryStoreLocation> {
+  public addNewPantryItemLocation(pantryItemId: number, storeId: number, aisle: string, section: string): Observable<GroceryStoreLocation> {
     return new Observable<GroceryStoreLocation>((observer) => {
-      this.mySqlCommands.insertPantryItemLocation(pantryItemId, storeId,
+      this.mySqlCommands.insertNewPantryItemLocation(pantryItemId, storeId,
         (typeof aisle === 'undefined') ? '': aisle,
         (typeof section === 'undefined') ? '' : section).then((result) => {
+        observer.next(result);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
+  public addPantryItemLocation(pantryItemId: number, storeLocationId:number): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      this.mySqlCommands.insertPantryItemLocation(pantryItemId, storeLocationId).then((result) => {
         observer.next(result);
         observer.complete();
       }).catch((err) => observer.error(err));
@@ -479,6 +493,15 @@ export class PantryDbHelper {
     return new Observable<string[]>((observer) => {
       this.mySqlCommands.queryGroceryStoreSectionsInUse(groceryStoreId).then((aisles) => {
         observer.next(aisles);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
+  private importHggsDataUsingPromise(data: HggsData): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      this.mySqlCommands.importHggsData(data).then((success) => {
+        observer.next(success);
         observer.complete();
       }).catch((err) => observer.error(err));
     });
