@@ -25,7 +25,7 @@ export const initialPantryManagementState: PantryManagementState = {
 
 export function pantryReducer(state = initialPantryManagementState, action: PantryActions): PantryManagementState  {
     switch (action.type) {
-      case PantryActionTypes.NavigatedToPantryPage:
+      case PantryActionTypes.LoadPantryItems:
         return {
           ...state,
           pantryItems: {
@@ -123,15 +123,17 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
           },
         };
 
-      case PantryActionTypes.PantryLoadedSuccessfully:
+      case PantryActionTypes.PantryLoadedSuccessfully: {
+        console.log('in reducer, handling PantryLoadedSuccessfully')
         return {
           ...state,
           pantryItems: {
-            ...fromAdapter.pantryAdapter.addAll(action.pantryItems, state.pantryItems),
+            ...fromAdapter.pantryAdapter.addMany(action.pantryItems, state.pantryItems),
             loading: false,
             error: null
           },
         };
+      }
 
       case PantryActionTypes.PantryLoadFailed:
         return {

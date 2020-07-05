@@ -23,7 +23,7 @@ export enum PantryActionTypes {
   PantryItemCreated = '[Pantry Item] Created',
   PantryItemDeleted = '[Pantry Item] Deleted',
   LoadPantryItemLocations = '[Pantry Item] Load Locations',
-  NavigatedToPantryPage = '[Pantry] Navigated to',
+  LoadPantryItems = '[Pantry] Navigated to',
   NavigateToPantryItemPage = '[Pantry Item] Navigate to',
   NavigatedToPantryItemPage = '[Pantry Item] Navigated to',
   AddPantryItemLocation = '[Pantry Item] add location',
@@ -145,8 +145,8 @@ export class LoadPantryItemLocations implements Action {
   constructor(public itemId: number) {}
 }
 
-export class NavigatedToPantryPage implements Action {
-  readonly type = PantryActionTypes.NavigatedToPantryPage;
+export class LoadPantryItems implements Action {
+  readonly type = PantryActionTypes.LoadPantryItems;
 }
 
 export class NavigatedToPantryItemPage implements Action {
@@ -216,7 +216,7 @@ export type PantryActions =
   | PantryItemCreated
   | LoadPantryItemLocations
   | PantryItemDeleted
-  | NavigatedToPantryPage
+  | LoadPantryItems
   | NavigatedToPantryItemPage
   | NavigateToPantryItemPage
   | PantryItemLocationAdded

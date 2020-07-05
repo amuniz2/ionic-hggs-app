@@ -17,7 +17,6 @@ import {
   StoreAisleOrSectionActionRequest,
   UpdateStoreAisleOrSectionActionRequest
 } from '../../dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
-import {IPantryDataService} from '../../../../services/IPantryDataService';
 import {UiCrudAction} from '../../../../ui-crud-actions';
 
 @Component({

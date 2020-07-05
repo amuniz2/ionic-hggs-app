@@ -1,6 +1,6 @@
-import {Component, Inject, Injectable, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, Injectable, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {Store} from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import * as fromActions from '../../../pantry-management/store/pantry-management.actions';
 import * as fromSelectors from '../../store/pantry-management.selectors';
@@ -16,6 +16,9 @@ import {AlertController, ToastController} from '@ionic/angular';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 import {HggsFile, IGroceryDataTransporter} from '../../../../services/grocery-data-transporter.service';
 import {File} from  '@ionic-native/file/ngx';
+import {DataImported} from '../../../../store';
+import {HggsData} from '../../../../model/hggs-data';
+import {IPantryDataService} from '../../../../services/IPantryDataService';
 
 @Component({
   selector: 'app-pantry-inventory-manager',
@@ -37,22 +40,24 @@ export class PantryInventoryManagerComponent implements OnInit {
               private toastController: ToastController,
               private fileManager: File,
               @Inject('IGroceryDataExporter')  private dataTransporter: IGroceryDataTransporter,
-              private alertContoller: AlertController
+              @Inject('IPantryDataService')  private pantryDataService: IPantryDataService,
+              private alertContoller: AlertController,
+              private _cdr: ChangeDetectorRef
               /*private popoverController: PopoverController, */) {
     this.title = 'Manage pantry items from page component';
     // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     console.log('dispatching NavigatedToPantryPage');
-    this.store.dispatch(new fromActions.NavigatedToPantryPage());
-    this.pantryItemsLoading$ = this.store.select(fromSelectors.selectPantryItemsLoading);
-    this.groceryStores$ = this.store.select(selectAllGroceryStores);
+    this.store.dispatch(new fromActions.LoadPantryItems());
+    this.pantryItemsLoading$ = this.store.pipe(select(fromSelectors.selectPantryItemsLoading));
+    this.groceryStores$ = this.store.pipe(select(selectAllGroceryStores));
     this.showSharingOptions = false;
   }
 
   ngOnInit() {
     // dispatch action that list has been navigated to
-    this.pantryItems$ = this.store.select(fromSelectors.selectAllPantryItems);
-    this.error$ = this.store.select(fromSelectors.selectPantryItemsError);
+    this.pantryItems$ = this.store.pipe(select(fromSelectors.selectAllPantryItems));
+    this.error$ = this.store.pipe(select(fromSelectors.selectPantryItemsError));
   }
 
   onDeletePantryItemRequest($event: DeletePantryItemRequest) {
@@ -131,35 +136,6 @@ export class PantryInventoryManagerComponent implements OnInit {
         files: [fileName]
       }).then(async r => await this.onSuccess(r)).catch(async err => await this.onError(err));
     });
-    // pipe(
-    //   map(async fileName => {
-    //     this.socialSharing.shareWithOptions({
-    //       subject: 'Grocery shopping list',
-    //       message: 'Grocery Shopping List (subject)',
-    //       files: fileName
-    //     }).then(async r => await this.onSuccess(r)).catch(async err => await this.onError(err));
-    //   })
-    // );
-
-    // await this.socialSharing.shareWithOptions({
-    //   subject: 'Grocery shopping list',
-    //   message: 'Grocery Shopping List (subject)',
-    // }).then(async r => await this.onSuccess(r)).catch(async err => await this.onError(err));
-
-      // this.socialSharing.canShareViaEmail().then((canSend) => {
-      //     if (canSend) {
-      //       this.socialSharing.shareViaEmail('Grocery shopping list', 'Grocery Shopping List (subject)', [this.emailAddress]).then(async r => {
-      //         const toast = await this.toastController.create({message: 'Email sent.', duration: 200});
-      //         await toast.present();
-      //       });
-      //       return true;
-      //     } else {
-      //       console.log('Cannot send via email');
-      //       return false
-      //     }
-      //   });
-      // console.log('send and dismiss');
-      // await this.popoverController.dismiss();
     }
 
     private async notifyNoImportFileAvailable() {
@@ -178,6 +154,16 @@ export class PantryInventoryManagerComponent implements OnInit {
       await alert.present();
     }
 
+    private importDataRead(data: HggsData, state: any) {
+        this.pantryDataService.importHggsData(data)
+          .subscribe((succeeded) => {
+          console.log(`import returned: ${succeeded}`);
+          console.log('dispatching LoadPantryItems');
+          state.store.dispatch(new fromActions.LoadPantryItems());
+          state._cdr.detectChanges();
+        });
+    }
+
     private async confirm(hggsFile: HggsFile) {
       const alert = await this.alertContoller.create({
         message: `Import data from ${hggsFile.name}?`,
@@ -193,7 +179,12 @@ export class PantryInventoryManagerComponent implements OnInit {
             text: 'Import',
             handler: () => {
               console.log('Yes, Import');
-              this.dataTransporter.importFromFile(hggsFile).subscribe(succeeded => console.log('import result: ', succeeded));
+              this.dataTransporter.dataHandler = this.importDataRead;
+              this.dataTransporter.importFromFile(hggsFile, {store: this.store, _cdr: this._cdr }).subscribe(succeeded => {
+                console.log('import result: ', succeeded);
+                console.log('dispatching LoadPantryItems action');
+                this.store.dispatch(new fromActions.LoadPantryItems());
+              });
               console.log('Import call made');
             }
           }

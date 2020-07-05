@@ -13,12 +13,15 @@ export interface GroceryStoreLocationsImport {
 };
 
 export interface IGroceryDataTransporter {
+  dataHandler: (data: HggsData, state: any) => void;
+
   exportAll(): Observable<string>;
 
-  importFromFile(file: HggsFile): Observable<boolean>;
+  importFromFile(file: HggsFile, state: any): Observable<boolean>;
 
   getFilesAvailableToDownload(): Observable<HggsFile[]>;
 
+  importData(self: IGroceryDataTransporter, data: HggsData): Observable<boolean>;
 }
 
 export interface HggsFile extends Entry {
@@ -31,6 +34,9 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
   private downloadedHggsFiles: Entry[];
   private hggsFiles: HggsFile[];
   private parentDirectory: DirectoryEntry;
+  public state: any;
+
+  public dataHandler: (data: HggsData, state: any) => void;
 
   constructor(@Inject('IPantryDataService') private pantryDataService: IPantryDataService, private fileManager: File) {
     this.dataExported = new HggsData();
@@ -148,17 +154,8 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
       });
       return this.hggsFiles;
     }));
-
-    // const fileEntry = await this.fileManager.getFile(parentDirectory, 'grocery-data-2.hggs', { create: false } );
-    // let result: HggsFile;
-    // fileEntry.getMetadata((metadata => {
-    //   result = {
-    //     ...fileEntry,
-    //     dateModified: metadata.modificationTime
-    //   };
-    // }));
-    // return result;
   }
+
   private handleFileError(err: FileError) {
     console.error(err);
   }
@@ -172,7 +169,11 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
             const reader: FileReader = new FileReader();
 
             reader.onloadend = (e) => {
-              returnHggsData(JSON.parse(reader.result as string));
+              if (this.dataHandler) {
+                this.dataHandler(JSON.parse(reader.result as string), this.state);
+              } else {
+                returnHggsData(JSON.parse(reader.result as string));
+              }
             };
 
             reader.readAsText(file);
@@ -191,30 +192,13 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
       };
   }
 
-  private importGroceryStoreAisles(groceryStoreId: number, aislesToImport: string[]) {
-    this.pantryDataService.getGroceryStoreAisles(groceryStoreId).pipe(
-      map(existingAisles  => {
-        const newAisles = aislesToImport.filter(aisleToImport => !existingAisles.has(aisleToImport));
-        newAisles.forEach(async newAisle => await this.pantryDataService.addGroceryStoreAisle({groceryStoreId, name: newAisle}).toPromise());
-      })
-    );
-  }
-
-  private importGroceryStoreSections(groceryStoreId: number, sectionsToImport: string[]) {
-    this.pantryDataService.getGroceryStoreSections(groceryStoreId).pipe(
-      map(existingSections  => {
-        const newSections = sectionsToImport.filter(sectionToImport => !existingSections.has(sectionToImport));
-        newSections.forEach(async newSection => await this.pantryDataService.addGroceryStoreSection({groceryStoreId, name: newSection}).toPromise());
-      })
-    );
-  }
-
-  private importData(self: GroceryDataTransporter, data: HggsData): Observable<boolean> {
+  public importData(self: GroceryDataTransporter, data: HggsData): Observable<boolean> {
     console.log(`data successfully read and parsed: ${JSON.stringify(data)}`);
     return self.pantryDataService.importHggsData(data);
   }
 
-  public importFromFile(importFile: HggsFile): Observable<boolean> {
+  public importFromFile(importFile: HggsFile, state: any): Observable<boolean> {
+    this.state = state;
     return this.importFromFileAsPromise(importFile);
   }
 

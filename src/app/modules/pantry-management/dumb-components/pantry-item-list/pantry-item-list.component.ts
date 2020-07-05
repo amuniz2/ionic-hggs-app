@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
 import {NavigateToPantryItemPage} from '../../store/pantry-management.actions';
 import {Router} from '@angular/router';
@@ -22,7 +22,7 @@ export interface NavigateToEditPantryItemRequest {
   templateUrl: './pantry-item-list.component.html',
   styleUrls: ['./pantry-item-list.component.scss']
 })
-export class PantryItemListComponent implements OnInit {
+export class PantryItemListComponent implements OnInit, OnChanges {
   @Output()
   notifyDeletePantryItemRequested: EventEmitter<DeletePantryItemRequest> = new EventEmitter();
 
@@ -41,6 +41,11 @@ export class PantryItemListComponent implements OnInit {
   constructor(private router: Router, private store: Store<AppState>) { }
 
   ngOnInit() {
+    console.log('in onInit of pantry-item-list');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('changes: ', JSON.stringify(changes));
   }
 
   editPantryItem(item: PantryItem) {

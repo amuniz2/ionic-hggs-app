@@ -51,7 +51,7 @@ export class PantryEffects {
 
   @Effect()
   public loadPantryItems$ = this.actions$.pipe(
-    ofType(PantryActionTypes.NavigatedToPantryPage),
+    ofType(PantryActionTypes.LoadPantryItems),
     tap(() => console.log('calling stateManagementService.getPantryItems()')),
     switchMap(() => {
         return this.pantryDataService.getPantryItems().pipe(

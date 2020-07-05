@@ -49,6 +49,7 @@ export enum AppActionTypes {
   GroceryStoreLocationsLoaded = '[Store Manager] Grocery Store Locations Loaded',
   UpdateAisle = '[Store Manager] Update Store Aisle',
   UpdateSection = '[Store Manager] Update Grocery Store Section',
+  DataImported = '[HGGS] Grocery Data Imported'
 }
 
 export class StartAppInitializer implements Action {
@@ -253,6 +254,12 @@ export class UpdateSection implements Action {
   constructor(public updateRequest: UpdateStoreAisleOrSectionActionRequest) {}
   readonly type = AppActionTypes.UpdateSection;
 }
+
+export class DataImported implements Action {
+  constructor() {}
+  readonly type = AppActionTypes.DataImported;
+}
+
 // endregion
 export type AppActions = AppReady
   | StartAppInitializer
@@ -271,6 +278,7 @@ export type AppActions = AppReady
   | AddGroceryStoreSection
   | AddStoreAisle
   | AddStoreAisleFailed
+  | DataImported
   | DeleteGroceryStoreSection
   | DeleteGroceryStoreSectionFailed
   | DeleteStoreAisle

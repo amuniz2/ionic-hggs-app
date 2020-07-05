@@ -1028,11 +1028,11 @@ export class MySqlCommands {
 
     for (const newLocation of newLocations) {
       if (!existingLocations.some(existingLocation => newLocation.aisle === existingLocation.aisle &&
-      newLocation.section === newLocation.section)) {
+      newLocation.section === existingLocation.section)) {
         locationId = await this.insertGroceryStoreLocation(groceryStoreMapping.importedId, newLocation.aisle, newLocation.section);
       } else {
         locationId = existingLocations.find(existingLocation => newLocation.aisle === existingLocation.aisle &&
-          newLocation.section === newLocation.section).id;
+          newLocation.section === existingLocation.section).id;
       }
       result.push({ originalId: newLocation.id, importedId: locationId});
     }
@@ -1063,6 +1063,9 @@ export class MySqlCommands {
       const newGroceryStoreLocationMapping = this.findImportedGroceryStoreLocationMapping(newPantryItemLocation.groceryStoreLocationId, groceryStoreMappings);
       if (!existingLocations.some(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)) {
         await this.insertPantryItemLocation(pantryItemMapping.importedId, newGroceryStoreLocationMapping.importedId);
+      } else {
+        console.log('pantryItemLocation not being added, as it already exists: ',
+          JSON.stringify(existingLocations.find(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)));
       }
     }
   }
