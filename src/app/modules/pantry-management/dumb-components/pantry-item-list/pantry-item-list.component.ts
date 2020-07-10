@@ -1,4 +1,14 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component, DoCheck,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
 import {NavigateToPantryItemPage} from '../../store/pantry-management.actions';
 import {Router} from '@angular/router';
@@ -20,7 +30,8 @@ export interface NavigateToEditPantryItemRequest {
 @Component({
   selector: 'app-pantry-item-list',
   templateUrl: './pantry-item-list.component.html',
-  styleUrls: ['./pantry-item-list.component.scss']
+  styleUrls: ['./pantry-item-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class PantryItemListComponent implements OnInit, OnChanges {
   @Output()
@@ -38,7 +49,7 @@ export class PantryItemListComponent implements OnInit, OnChanges {
   @Input()
   error: Error;
 
-  constructor(private router: Router, private store: Store<AppState>) { }
+  constructor(private router: Router, private store: Store<AppState>, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     console.log('in onInit of pantry-item-list');

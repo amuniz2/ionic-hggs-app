@@ -193,8 +193,7 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
   }
 
   public importData(self: GroceryDataTransporter, data: HggsData): Observable<boolean> {
-    console.log(`data successfully read and parsed: ${JSON.stringify(data)}`);
-    return self.pantryDataService.importHggsData(data);
+    return of(true);
   }
 
   public importFromFile(importFile: HggsFile, state: any): Observable<boolean> {
@@ -207,6 +206,7 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
       this.readFile(importFile, this.importData).then(() => {
         observer.next();
         observer.complete();
+        return of(true);
       }).catch((err) => observer.error(err));
     });
   }

@@ -27,6 +27,7 @@ import {PantryActions, PantryActionTypes} from './pantry-management.actions';
 import {GroceryStoreLocationPossiblyAdded} from '../../../store';
 import {PantryItem} from '../../../model/pantry-item';
 import {navigate} from 'ionicons/icons';
+import {async} from 'rxjs/internal/scheduler/async';
 
 @Injectable()
 export class PantryEffects {
@@ -52,13 +53,8 @@ export class PantryEffects {
   @Effect()
   public loadPantryItems$ = this.actions$.pipe(
     ofType(PantryActionTypes.LoadPantryItems),
-    tap(() => console.log('calling stateManagementService.getPantryItems()')),
     switchMap(() => {
         return this.pantryDataService.getPantryItems().pipe(
-          tap((pantryItems) => {
-            console.log('dispatching PantryLoadedSuccessfully action');
-            console.log(pantryItems);
-          }),
           map(data => new PantryLoadedSuccessfully(data)),
           catchError(error => [new PantryLoadFailed(error)])
         );
@@ -157,26 +153,6 @@ export class PantryEffects {
       );
     }));
 
-  // @Effect({ dispatch: false })
-  // public pantryItemUpdated$ = this.actions$.pipe(
-  //   ofType(PantryActionTypes.SavePantryItemSucceeded),
-  //   tap((navigateBackToPantryPage: SavePantryItemSucceeded) => {
-  //     this.router.navigate(['/home/pantry-items']);
-  //     // this.router.navigate(['../../manage']);
-  //   }));
-
-  // @Effect({ dispatch: false })
-  //   public navigateToPantryPage$ = this.actions$.pipe(
-  //     ofType(PantryActionTypes.ItemCreated),
-  //     tap((navigateToPantryPage: ItemCreated) => {
-  //       const navigationExtras = { queryParams:
-  //           {
-  //             newItem: navigateToPantryPage.pantryItem
-  //           }
-  //       };
-  //       // this.router.navigate(['/home/pantry-items']);
-  //     }));
-
   @Effect({ dispatch: false })
   public navigateToNewLocationPage$ = this.actions$.pipe(
     ofType(PantryActionTypes.AddPantryItemLocationRequest),
@@ -184,6 +160,14 @@ export class PantryEffects {
       // todo: make this single '/pantry-items/{pantry-item-id}/new-pantry-item-location
       const route = `/home/pantry-items/${navigateToLocationPage.request.pantryItem.id}/new-pantry-item-location`;
       this.router.navigateByUrl(route);
+    }));
+
+  @Effect( {dispatch: false})
+  public importedPantry$ = this.actions$.pipe(
+    ofType(PantryActionTypes.PantryImportedSuccessfully),
+    tap((payload: any) => {
+      console.log('navigating to returnUrl: ', payload.returnUrl);
+      this.router.navigateByUrl(payload.returnUrl);
     }));
 
   @Effect({ dispatch: false })

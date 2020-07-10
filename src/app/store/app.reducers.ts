@@ -1,10 +1,9 @@
 import {ActionReducerMap, MetaReducer} from '@ngrx/store';
 import {environment} from '../../environments/environment';
 import {AppState} from './app.state';
-import {AddStoreAisleFailed, AppActions, AppActionTypes} from './app.actions';
+import {AppActions, AppActionTypes} from './app.actions';
 import * as fromAppAdapter from './grocery-store.adapter';
 import {getGroceryStore} from './store-management.selectors';
-import {UpdateNum, UpdateStr} from '@ngrx/entity/src/models';
 import {GroceryStoreState} from '../model/grocery-store';
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -64,6 +63,25 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
         ...state,
         groceryStores: {
           ...fromAppAdapter.sharedGroceryStoreAdapter.addMany(action.groceryStores, state.groceryStores),
+          loading: false,
+          error: null
+        },
+      };
+    }
+
+    case AppActionTypes.GroceryStoresImportedSuccessfully:
+    {
+      const groceryStoresStateData: GroceryStoreState[] = action.groceryStores.map(x => {
+        return {
+        ...x,
+        aisles: Array.from(x.aisles),
+        sections: Array.from(x.sections),
+      };
+      });
+      return {
+        ...state,
+        groceryStores: {
+          ...fromAppAdapter.sharedGroceryStoreAdapter.addMany(groceryStoresStateData, state.groceryStores),
           loading: false,
           error: null
         },
@@ -308,6 +326,7 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
         //   error: action.error
         // },
       };
+
     default: return state;
   }
 }

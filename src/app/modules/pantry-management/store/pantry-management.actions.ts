@@ -8,7 +8,6 @@ import {
 import {EditItemLocationRequest, NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 import {NewItemLocation} from '../smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
-import {PantryItemLocation} from '../../../model/PantryItemLocation';
 
 export enum PantryActionTypes {
   PantryItemLoaded = '[Pantry Item] Loaded',
@@ -39,7 +38,8 @@ export enum PantryActionTypes {
   SavePantryItemFailed = '[Pantry Item] Save Failed',
   SavePantryItemSucceeded = '[Pantry Item] Save Succeeded',
   SaveNewPantryItem = '[Pantry Item] Save New Requested',
-  UpdatePantryItemLocation = '[Pantry Item] Update Requested'
+  UpdatePantryItemLocation = '[Pantry Item] Update Requested',
+  PantryImportedSuccessfully = '[Pantry Item] Imported Successfully'
 }
 
 export class AddPantryItemLocationRequest implements Action {
@@ -161,6 +161,12 @@ export class PantryLoadedSuccessfully implements Action {
   constructor(public pantryItems: PantryItem[]) {}
 }
 
+export class PantryImportedSuccessfully implements Action {
+  readonly type = PantryActionTypes.PantryImportedSuccessfully;
+
+  constructor(public pantryItems: PantryItem[], public returnUrl: string) {}
+}
+
 export class PantryItemLocationsLoadedSuccessfully implements Action {
   readonly type = PantryActionTypes.PantryItemLocationsLoadedSuccessfully;
 
@@ -230,4 +236,5 @@ export type PantryActions =
   | SavePantryItem
   | SavePantryItemFailed
   | SavePantryItemSucceeded
-  | UpdatePantryItemLocation;
+  | UpdatePantryItemLocation
+  | PantryImportedSuccessfully;

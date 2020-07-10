@@ -2,6 +2,9 @@ import {Action} from '@ngrx/store';
 import {DeleteGroceryStoreRequest,
   NavigateToEditStoreRequest,
   NewGroceryStoreRequest} from '../dumb-components/store-list/store-list.component';
+import {PantryItem} from '../../../model/pantry-item';
+import {PantryActionTypes} from '../../pantry-management/store/pantry-management.actions';
+import {GroceryStore} from '../../../model/grocery-store';
 
 export enum StoreManagerActionTypes {
   CreateStore = '[Store Manager] Create',
@@ -14,6 +17,7 @@ export enum StoreManagerActionTypes {
   GetGroceryStoreSectionsFailed =  '[Store Manager] Store Sections Failed To Load',
   UpdateStoreAisle = '[Store Manager] Update Aisle',
   SelectStoreAisle = '[Store Manager] Select Aisle',
+  GroceryStoresImportedSuccessfully = '[Store Manager] Grocery Stores Imported',
 }
 
 export class NavigateToStoreDetailsPage implements Action {

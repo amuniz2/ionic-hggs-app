@@ -7,7 +7,7 @@
     <ion-button  fill="clear" outline="none" (click)="presentSharingOptions($event)">Share
       <ion-icon ios="share-outline" md="share-outline" ></ion-icon>
     </ion-button>
-    <ion-button  fill="clear" outline="none" (click)="importData($event)">Import
+    <ion-button  fill="clear" outline="none" (click)="importData()">Import
       <ion-icon ios="download-outline" md="download-outline" ></ion-icon>
     </ion-button>
   </ion-toolbar>
@@ -16,7 +16,7 @@
     <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"
                        (notifyNewPantryItemRequested)="onCreateItem($event)">
     </app-add-pantry-item>
-    <app-pantry-item-list [pantryItems] = "(pantryItems$ | async)"
+    <app-pantry-item-list [pantryItems] = "pantryItems$ | async"
                           [pantryItemsLoading]="pantryItemsLoading$ | async"
                           (notifyDeletePantryItemRequested)="onDeletePantryItemRequest($event)"
                           (notifySavePantryItemRequested)="onPantryItemModified($event)"

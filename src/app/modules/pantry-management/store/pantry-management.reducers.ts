@@ -3,6 +3,7 @@ import {EntityState} from '@ngrx/entity';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
 import {PantryItem} from '../../../model/pantry-item';
 import {getPantryItem} from './pantry-management.selectors';
+import {AppActions, AppActionTypes} from '../../../store';
 
 export interface PantryState extends EntityState<PantryItem> {
   loading: boolean;
@@ -23,9 +24,19 @@ export const initialPantryManagementState: PantryManagementState = {
   }
 };
 
-export function pantryReducer(state = initialPantryManagementState, action: PantryActions): PantryManagementState  {
+export function pantryReducer(state = initialPantryManagementState, action: PantryActions | AppActions): PantryManagementState  {
     switch (action.type) {
       case PantryActionTypes.LoadPantryItems:
+        return {
+          ...state,
+          pantryItems: {
+            ...state.pantryItems,
+            loading: true,
+            error: null
+          }
+        };
+
+      case AppActionTypes.LoadImportedData:
         return {
           ...state,
           pantryItems: {
@@ -135,6 +146,18 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
         };
       }
 
+      case PantryActionTypes.PantryImportedSuccessfully: {
+        console.log('in pantry reducer, handling PantryImportedSuccessfully')
+        return {
+          ...state,
+          pantryItems: {
+            ...fromAdapter.pantryAdapter.addMany(action.pantryItems, state.pantryItems),
+            loading: false,
+            error: null
+          },
+        };
+      }
+
       case PantryActionTypes.PantryLoadFailed:
         return {
           ...state,
@@ -225,7 +248,9 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
             error: null
           }
         };
-      }      case PantryActionTypes.AddPantryItemLocationFailed:
+      }
+
+      case PantryActionTypes.AddPantryItemLocationFailed:
       {
         return {
           ...state,

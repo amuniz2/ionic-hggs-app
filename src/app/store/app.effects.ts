@@ -18,7 +18,13 @@ import {
   GroceryStoreSectionAdded,
   AddGroceryStoreSectionFailed,
   GroceryStoreSectionDeleted,
-  DeleteGroceryStoreSectionFailed, GroceryStoreSectionsLoaded, DisplayError, LoadGroceryStoreLocations, LoadGroceryStores
+  DeleteGroceryStoreSectionFailed,
+  GroceryStoreSectionsLoaded,
+  DisplayError,
+  LoadGroceryStoreLocations,
+  LoadGroceryStores,
+  LoadImportedData,
+  GroceryStoresImportedSuccessfully
 } from '../store/app.actions';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {AppState} from './app.state';
@@ -26,15 +32,21 @@ import {IPantryDataService} from '../services/IPantryDataService';
 import {
   GetStoreAislesFailed, GetStoreSectionsFailed
 } from '../modules/store-management/store/store-management.actions';
-import {of, throwError} from 'rxjs';
-import {colors} from '@angular-devkit/core/src/terminal';
+import {forkJoin, of} from 'rxjs';
 import {GroceryStoreState} from '../model/grocery-store';
+import {
+  PantryImportedSuccessfully,
+  PantryLoadedSuccessfully,
+  PantryLoadFailed
+} from '../modules/pantry-management/store/pantry-management.actions';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class AppEffects {
   constructor(private store: Store<AppState>,
               private actions$: Actions<AppActions>,
-              @Inject('IPantryDataService') private storeManagementService: IPantryDataService) {
+              @Inject('IPantryDataService') private storeManagementService: IPantryDataService,
+              private router: Router) {
   }
 
   @Effect()
@@ -188,13 +200,44 @@ export class AppEffects {
               return of(new DisplayError(error));
             }));
     }),
-);
+  );
 
   @Effect({ dispatch: false})
   public displayError$ = this.actions$.pipe(
     ofType(AppActionTypes.DisplayError),
     tap((payload) => {
       window.alert(payload.error);
+    })
+  );
+
+  @Effect()
+  public ImportData$ = this.actions$.pipe(
+    ofType(AppActionTypes.ImportData),
+    switchMap((payload) => {
+      return this.storeManagementService.importHggsData(payload.data).pipe(
+        switchMap(succeeded => [
+          new LoadImportedData(payload.returnUrl),
+        ]),
+        catchError(error => {
+          return of(new DisplayError(error));
+        }));
+    }),
+  );
+
+  @Effect()
+  public loadImportedData$ = this.actions$.pipe(
+    ofType(AppActionTypes.LoadImportedData),
+    switchMap((payload) => {
+      console.log('calling stateManagementService.getPantryItems()');
+      return forkJoin([this.storeManagementService.getPantryItems(), this.storeManagementService.getGroceryStores()]).pipe(
+        switchMap(([pantryItems, groceryStores]) => {
+          return [
+            new PantryImportedSuccessfully(pantryItems, payload.returnUrl),
+            new GroceryStoresImportedSuccessfully(groceryStores, payload.returnUrl)
+          ];
+        }),
+        catchError(error => [new PantryLoadFailed(error)])
+      );
     })
   );
 }

@@ -6,6 +6,10 @@ import {
   UpdateStoreAisleOrSectionActionRequest
 } from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
+import {HggsData} from '../model/hggs-data';
+import {PantryActionTypes} from '../modules/pantry-management/store/pantry-management.actions';
+import {PantryItem} from '../model/pantry-item';
+import {StoreManagerActionTypes} from '../modules/store-management/store/store-management.actions';
 
 export const APP_READY = '[App] Ready';
 
@@ -49,7 +53,9 @@ export enum AppActionTypes {
   GroceryStoreLocationsLoaded = '[Store Manager] Grocery Store Locations Loaded',
   UpdateAisle = '[Store Manager] Update Store Aisle',
   UpdateSection = '[Store Manager] Update Grocery Store Section',
-  DataImported = '[HGGS] Grocery Data Imported'
+  ImportData = '[HGGS] Import Grocery Data',
+  LoadImportedData = '[HGGS] Load Imported Data',
+  GroceryStoresImportedSuccessfully = '[Store Manager] Imported Grocery Stores Successfully',
 }
 
 export class StartAppInitializer implements Action {
@@ -255,10 +261,22 @@ export class UpdateSection implements Action {
   readonly type = AppActionTypes.UpdateSection;
 }
 
-export class DataImported implements Action {
-  constructor() {}
-  readonly type = AppActionTypes.DataImported;
+export class ImportData implements Action {
+  constructor(public data: HggsData, public returnUrl: string) {}
+  readonly type = AppActionTypes.ImportData;
 }
+
+export class LoadImportedData implements Action {
+  readonly type = AppActionTypes.LoadImportedData;
+  constructor(public returnUrl: string) {}
+}
+
+export class GroceryStoresImportedSuccessfully implements Action {
+  readonly type = AppActionTypes.GroceryStoresImportedSuccessfully;
+
+  constructor(public groceryStores: GroceryStore[], public returnUrl: string) {}
+}
+
 
 // endregion
 export type AppActions = AppReady
@@ -278,7 +296,8 @@ export type AppActions = AppReady
   | AddGroceryStoreSection
   | AddStoreAisle
   | AddStoreAisleFailed
-  | DataImported
+  | ImportData
+  | LoadImportedData
   | DeleteGroceryStoreSection
   | DeleteGroceryStoreSectionFailed
   | DeleteStoreAisle
@@ -296,4 +315,5 @@ export type AppActions = AppReady
   | StoreDeleted
   | DeleteStoreSucceeded
   | UpdateAisle
-  | UpdateSection;
+  | UpdateSection
+  | GroceryStoresImportedSuccessfully;

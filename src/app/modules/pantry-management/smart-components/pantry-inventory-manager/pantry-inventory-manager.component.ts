@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Inject, Injectable, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, Injectable, OnInit, ViewChild} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
@@ -7,7 +7,6 @@ import * as fromSelectors from '../../store/pantry-management.selectors';
 import {
   CreatePantryItemRequest,
   DeletePantryItemRequest,
-  NavigateToEditPantryItemRequest
 } from '../../../pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {PantryItem} from '../../../../model/pantry-item';
 import {selectAllGroceryStores, selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
@@ -16,9 +15,10 @@ import {AlertController, ToastController} from '@ionic/angular';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 import {HggsFile, IGroceryDataTransporter} from '../../../../services/grocery-data-transporter.service';
 import {File} from  '@ionic-native/file/ngx';
-import {DataImported} from '../../../../store';
 import {HggsData} from '../../../../model/hggs-data';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
+import {Router} from '@angular/router';
+import {ImportData} from '../../../../store';
 
 @Component({
   selector: 'app-pantry-inventory-manager',
@@ -35,6 +35,9 @@ export class PantryInventoryManagerComponent implements OnInit {
   groceryStores$: Observable<GroceryStoreState[]>;
   private showSharingOptions: boolean;
 
+  @ViewChild('#tab-button-pantry-items')
+  private pantryItemsTab: HTMLElement;
+
   constructor(private store: Store<AppState>,
               private socialSharing: SocialSharing,
               private toastController: ToastController,
@@ -42,7 +45,8 @@ export class PantryInventoryManagerComponent implements OnInit {
               @Inject('IGroceryDataExporter')  private dataTransporter: IGroceryDataTransporter,
               @Inject('IPantryDataService')  private pantryDataService: IPantryDataService,
               private alertContoller: AlertController,
-              private _cdr: ChangeDetectorRef
+              private _cdr: ChangeDetectorRef,
+              private router: Router
               /*private popoverController: PopoverController, */) {
     this.title = 'Manage pantry items from page component';
     // this.store.dispatch(new LoadGroceryStores());
@@ -154,14 +158,10 @@ export class PantryInventoryManagerComponent implements OnInit {
       await alert.present();
     }
 
-    private importDataRead(data: HggsData, state: any) {
-        this.pantryDataService.importHggsData(data)
-          .subscribe((succeeded) => {
-          console.log(`import returned: ${succeeded}`);
-          console.log('dispatching LoadPantryItems');
-          state.store.dispatch(new fromActions.LoadPantryItems());
-          state._cdr.detectChanges();
-        });
+    private importDataRead = async (data: HggsData, state: any) => {
+      console.log('routing before dispatching');
+      await this.router.navigateByUrl('/home/pantry-items');
+        this.store.dispatch(new ImportData(data, '/home/pantry-items'));
     }
 
     private async confirm(hggsFile: HggsFile) {
@@ -177,15 +177,9 @@ export class PantryInventoryManagerComponent implements OnInit {
           },
           {
             text: 'Import',
-            handler: () => {
-              console.log('Yes, Import');
+            handler: async () => {
               this.dataTransporter.dataHandler = this.importDataRead;
-              this.dataTransporter.importFromFile(hggsFile, {store: this.store, _cdr: this._cdr }).subscribe(succeeded => {
-                console.log('import result: ', succeeded);
-                console.log('dispatching LoadPantryItems action');
-                this.store.dispatch(new fromActions.LoadPantryItems());
-              });
-              console.log('Import call made');
+              await this.dataTransporter.importFromFile(hggsFile, {store: this.store, _cdr: this._cdr, router: this.router }).toPromise();
             }
           }
         ],
@@ -193,7 +187,7 @@ export class PantryInventoryManagerComponent implements OnInit {
       await alert.present();
     }
 
-  async importData() {
+  importData() {
     this.dataTransporter.getFilesAvailableToDownload().subscribe(
       async hggsFiles => {
         if (hggsFiles.length === 0) {
