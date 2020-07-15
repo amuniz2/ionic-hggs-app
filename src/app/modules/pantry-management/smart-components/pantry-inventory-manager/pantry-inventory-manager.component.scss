@@ -1,3 +1,16 @@
+.search-container {
+  display: flex;
+  align-content: stretch;
+  flex-direction :row;
+  justify-content: space-between
+}
+
+.search-box {
+  margin-right: 2px;
+  background-color: white;
+  flex-grow: 6;
+}
+
 ion-content {
   ion-list-header {
     cursor: pointer;

@@ -49,6 +49,17 @@ export class PantryItemListComponent implements OnInit, OnChanges {
   @Input()
   error: Error;
 
+  @Input()
+  filter: string;
+
+  private get filteredPantryItems() {
+    if (!!this.filter) {
+      const lowerCaseFilter = this.filter.toLowerCase();
+      return this.pantryItems.filter(item => item.name?.toLowerCase().includes(lowerCaseFilter) || item.description?.toLowerCase().includes(lowerCaseFilter));
+    }
+    return this.pantryItems;
+  }
+
   constructor(private router: Router, private store: Store<AppState>, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {

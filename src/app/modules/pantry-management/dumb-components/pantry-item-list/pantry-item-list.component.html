@@ -1,36 +1,71 @@
 <ion-list *ngIf="!pantryItemsLoading else showSpinner;">
-    <ion-item *ngFor="let pantryItem of pantryItems">
+    <ion-item *ngFor="let pantryItem of filteredPantryItems">
       <ion-grid>
-        <ion-row >
-          <ion-col (click)="editPantryItem(pantryItem)" size="8">
-            <div class="ion-float-left">
-              <ion-label class="nameLabel">{{pantryItem.name}}</ion-label>
-            </div>
-          </ion-col>
-          <ion-col>
-            <div class="ion-float-right itemDivContents">
-              <ion-checkbox class="checkbox" (ionChange)="itemClicked($event, pantryItem)" [checked]="pantryItem.need"></ion-checkbox>
-            </div>
-          </ion-col>
-        </ion-row>
         <ion-row>
-          <ion-col (click)="editPantryItem(pantryItem)">
-            <div class="ion-float-left">
-            <ion-label class="descLabel" >{{pantryItem.description}}</ion-label>
+          <!-- name and description column -->
+          <ion-col size=8 (click)="editPantryItem(pantryItem)">
+            <div class="row">
+              <ion-label class="name-label">{{pantryItem.name}}</ion-label>
+            </div>
+            <div class="row">
+              <ion-label  class="column descLabel" >{{pantryItem.description}}</ion-label>
             </div>
           </ion-col>
-          <ion-col size="4">
-            <div class="ion-float-right" *ngIf="pantryItem.need">
-<!--                <ion-item  class="ion-float-right">-->
-                <ion-input class="edit-box" (ionBlur)="quantityChanged($event, pantryItem)"
-                           imputmode="decimal" type="number"  [ngModel]="pantryItem.quantityNeeded"></ion-input>
-<!--                  <ion-input class="leftSideElement" type="number" (ionBlur)="quantityChanged(pantryItem)" [(ngModel)]="pantryItem.quantityNeeded"></ion-input>-->
-                <ion-label class="rightSideLabel">{{pantryItem.units === null ?'n/a' : pantryItem.units }}</ion-label>
-<!--                </ion-item>-->
+          <!-- checkbox and quantity column -->
+          <ion-col>
+            <div class="checkbox-div">
+              <ion-checkbox class="item-check-box" (ionChange)="itemClicked($event, pantryItem)" [checked]="pantryItem.need"></ion-checkbox>
+            </div>
+            <div class="row" *ngIf="pantryItem.need">
+              <ion-input class="column edit-box" (ionBlur)="quantityChanged($event, pantryItem)"
+                         imputmode="decimal" type="number"  [ngModel]="pantryItem.quantityNeeded"></ion-input>
+              <ion-label class="column rightSideLabel">{{pantryItem.units === null ?'n/a' : pantryItem.units }}</ion-label>
             </div>
           </ion-col>
         </ion-row>
       </ion-grid>
+<!--      <div class="row">-->
+<!--        <div class="row">-->
+<!--          <ion-label class="name-label">{{pantryItem.name}}</ion-label>-->
+<!--          <ion-checkbox class="item-check-box" (ionChange)="itemClicked($event, pantryItem)" [checked]="pantryItem.need"></ion-checkbox>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <ion-label (click)="editPantryItem(pantryItem)" class="column descLabel" >{{pantryItem.description}}</ion-label>-->
+<!--            <div class="column">-->
+<!--              <div class="row">-->
+<!--                <ion-input class="column edit-box" (ionBlur)="quantityChanged($event, pantryItem)"-->
+<!--                           imputmode="decimal" type="number"  [ngModel]="pantryItem.quantityNeeded"></ion-input>-->
+<!--                <ion-label class="column rightSideLabel">{{pantryItem.units === null ?'n/a' : pantryItem.units }}</ion-label>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--      </div>-->
+      <!--        <ion-row >-->
+<!--          <ion-col (click)="editPantryItem(pantryItem)" size="8">-->
+<!--            <div class="ion-float-left">-->
+<!--              <ion-label class="nameLabel">{{pantryItem.name}}</ion-label>-->
+<!--            </div>-->
+<!--          </ion-col>-->
+<!--          <ion-col>-->
+<!--            <div class="ion-float-right itemDivContents">-->
+<!--              <ion-checkbox class="checkbox" (ionChange)="itemClicked($event, pantryItem)" [checked]="pantryItem.need"></ion-checkbox>-->
+<!--            </div>-->
+<!--          </ion-col>-->
+<!--        </ion-row>-->
+<!--        <ion-row>-->
+<!--          <ion-col (click)="editPantryItem(pantryItem)">-->
+<!--            <div class="ion-float-left">-->
+<!--            <ion-label class="descLabel" >{{pantryItem.description}}</ion-label>-->
+<!--            </div>-->
+<!--          </ion-col>-->
+<!--          <ion-col size="4">-->
+<!--            <div class="ion-float-right" *ngIf="pantryItem.need">-->
+<!--                <ion-input class="edit-box" (ionBlur)="quantityChanged($event, pantryItem)"-->
+<!--                           imputmode="decimal" type="number"  [ngModel]="pantryItem.quantityNeeded"></ion-input>-->
+<!--                <ion-label class="rightSideLabel">{{pantryItem.units === null ?'n/a' : pantryItem.units }}</ion-label>-->
+<!--            </div>-->
+<!--          </ion-col>-->
+<!--        </ion-row>-->
     </ion-item>
 </ion-list>
 <ion-text *ngIf="error">{{error}}</ion-text>

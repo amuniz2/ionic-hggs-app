@@ -34,6 +34,8 @@ export class PantryInventoryManagerComponent implements OnInit {
   groceryStoresLoading$: Observable<boolean>;
   groceryStores$: Observable<GroceryStoreState[]>;
   private showSharingOptions: boolean;
+  private filterList: boolean;
+  private filter = '';
 
   @ViewChild('#tab-button-pantry-items')
   private pantryItemsTab: HTMLElement;
@@ -51,11 +53,11 @@ export class PantryInventoryManagerComponent implements OnInit {
     this.title = 'Manage pantry items from page component';
     // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
-    console.log('dispatching NavigatedToPantryPage');
     this.store.dispatch(new fromActions.LoadPantryItems());
     this.pantryItemsLoading$ = this.store.pipe(select(fromSelectors.selectPantryItemsLoading));
     this.groceryStores$ = this.store.pipe(select(selectAllGroceryStores));
     this.showSharingOptions = false;
+    this.filterList = false;
   }
 
   ngOnInit() {
@@ -159,8 +161,8 @@ export class PantryInventoryManagerComponent implements OnInit {
     }
 
     private importDataRead = async (data: HggsData, state: any) => {
-      console.log('routing before dispatching');
-      await this.router.navigateByUrl('/home/pantry-items');
+      // console.log('routing before dispatching');
+      // await this.router.navigateByUrl('/home/pantry-items');
         this.store.dispatch(new ImportData(data, '/home/pantry-items'));
     }
 
@@ -198,5 +200,13 @@ export class PantryInventoryManagerComponent implements OnInit {
           console.log('choose which file');
         }
       }, error => {});
+  }
+
+  filterItems() {
+    this.filterList = true;
+  }
+
+  cancelFilter() {
+    this.filterList = false;
   }
 }

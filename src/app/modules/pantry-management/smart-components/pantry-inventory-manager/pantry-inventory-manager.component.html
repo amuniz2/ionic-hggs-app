@@ -7,17 +7,30 @@
     <ion-button  fill="clear" outline="none" (click)="presentSharingOptions($event)">Share
       <ion-icon ios="share-outline" md="share-outline" ></ion-icon>
     </ion-button>
-    <ion-button  fill="clear" outline="none" (click)="importData()">Import
+    <ion-button  fill="clear" outline="none" (click)="importData()">
       <ion-icon ios="download-outline" md="download-outline" ></ion-icon>
     </ion-button>
+    <ion-button *ngIf="!filterList" fill="clear" outline="none" (click)="filterItems()">Search
+      <ion-icon ios="search-circle-outline" md="search-circle-outline" ></ion-icon>
+    </ion-button>
   </ion-toolbar>
+  <div class="search-container" *ngIf="filterList else notFiltering;">
+    <ion-input class="search-box" placeholder="Search" [(ngModel)]="filter" >
+    </ion-input>
+    <ion-button fill="clear" outline="none" (click)="cancelFilter()">
+      <ion-icon ios="close-circle-outline" md="close-circle-outline" ></ion-icon>
+    </ion-button>
+  </div>
 </ion-header>
 <ion-content>
-    <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"
+    <ng-template #notFiltering>
+      <app-add-pantry-item [addingPantryItem]="(addingPantryItem$ | async)"
                        (notifyNewPantryItemRequested)="onCreateItem($event)">
     </app-add-pantry-item>
+    </ng-template>
     <app-pantry-item-list [pantryItems] = "pantryItems$ | async"
                           [pantryItemsLoading]="pantryItemsLoading$ | async"
+                          [filter] = "filterList ? filter : ''"
                           (notifyDeletePantryItemRequested)="onDeletePantryItemRequest($event)"
                           (notifySavePantryItemRequested)="onPantryItemModified($event)"
                           [error] = "(error$ | async)">

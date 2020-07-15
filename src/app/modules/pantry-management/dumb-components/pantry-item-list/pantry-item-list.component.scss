@@ -2,23 +2,78 @@ ion-content {
   --ion-background-color: #6495ED ; // cornflower-blue
 }
 
-ion-item-sliding {
-  ion-item {
-    inner-padding-end: 0px;
-    padding-start: 0px;
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+//.right-column {
+//  display: flex;
+//  flex-direction: column;
+//  flex-basis: 10%;
+//  flex-grow: 0;
+//}
+//
+//.left-column {
+//  display: flex;
+//  flex-direction: column;
+//  flex-basis: 90%;
+//}
+
+ion-label.name-label {
+  max-width: 90% !important;
+  flex-basis: 95%;
+  margin-right: 2px;
+  font-weight: bold;
+}
+
+.item-check-box {
+  justify-content: flex-end;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+}
+
+.descLabel {
+  font-style: italic;
+  max-width: 80% !important;
+  flex-basis: 85%;
+  flex-grow: 8;
+  flex-shrink: 1;
+}
+
+ion-item {
+  div {
+    display: flex;
+    align-items: center;
     div {
-      display: flex;
-      align-items: center;
-      .nameLabel {
-        float: left;
-        font-weight: bold;
-      }
+      //ion-label.name-label {
+      //  max-width: 90% !important;
+      //  flex-basis: 95%;
+      //  margin-right: 2px;
+      //  font-weight: bold;
+      //}
+
+      //ion-label.descLabel {
+      //  font-style: italic;
+      //  max-width: 80% !important;
+      //  flex-basis: 85%;
+      //}
       div {
-        display: flex;
-        align-items: center;
-        float: right;
-        label {
-          margin-right: .5em;
+        ion-input.edit-box {
+          background-color: white;
+          border: .5px solid lightblue;
+          margin-left: 1px;
         }
       }
     }
@@ -27,23 +82,41 @@ ion-item-sliding {
 
 .edit-box {
   background-color: white;
-  border: 1px solid blue;
+  border: .5px solid lightblue;
+  margin-left: 1em;
+  margin-right: 1em;
 }
-.in-item {
-  margin-left: 0.5em;
-  margin-top: 0em;
-  margin-bottom: 0em;
+:host(.item-check-box) {
+  margin-left: 0px;
+  margin-top: 1px;
+  margin-bottom: 1px;
   padding: 0em;
 }
 
-.descLabel {
-  font-style: italic;
-  float: left;
+:host(.in-item) {
+  margin-left: 0px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  padding: 0em;
 }
+
+.in-item {
+  margin-left: 0px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  padding: 0em;
+}
+
+//.descLabel {
+//  flex-grow: 8;
+//  font-style: italic;
+//}
+
 .rightSideLabel {
+  float: right;
   margin-left: 0.5em;
 }
-.leftSideElement {
-  display: flex;
-  padding: 0;
+
+.checkbox-div {
+  justify-content: flex-end;
 }
