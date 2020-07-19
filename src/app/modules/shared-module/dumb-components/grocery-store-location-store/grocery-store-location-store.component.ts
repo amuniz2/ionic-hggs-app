@@ -1,6 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {ControlContainer, FormControl} from '@angular/forms';
+import {ModalController, PopoverController} from '@ionic/angular';
+import {AddGroceryStoreComponent} from '../../../store-management/dumb-components/add-grocery-store/add-grocery-store';
+import {AddGroceryStoreModalComponent} from '../../add-grocery-store-modal/add-grocery-store-modal.component';
 
 @Component({
   selector: 'app-grocery-store-location-store',
@@ -22,7 +25,9 @@ export class GroceryStoreLocationStoreComponent implements OnInit {
   selectedGroceryStoreChange: EventEmitter<GroceryStore> = new EventEmitter<GroceryStore>();
 
   private possibleGroceryStores: GroceryStore[];
-  constructor(public controlContainer: ControlContainer) {
+  constructor(public controlContainer: ControlContainer,
+              public modalController: ModalController,
+              private popoverController: PopoverController) {
   }
 
   ngOnInit() {
@@ -43,5 +48,34 @@ export class GroceryStoreLocationStoreComponent implements OnInit {
 
   compareById(store1: GroceryStore, store2: GroceryStore) {
     return store1.id === store2.id;
+  }
+
+  async onAddGroceryStore ($event: CustomEvent) {
+    // todo: display popover prompting for new grocery store name
+    // await this.addGroceryStorePopover($event);
+    await this.presentModal();
+  }
+
+  async addGroceryStorePopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: AddGroceryStoreComponent,
+      event: ev,
+      componentProps: {},
+      cssClass: 'popover_class',
+    });
+
+    /** Sync event from popover component */
+    //   this.events.subscribe(''fromPopoverEvent', () => {
+    //   this.syncTasks();
+    // });
+    return await popover.present();
+  }
+
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: AddGroceryStoreModalComponent,
+      cssClass: 'add-grocery-store-modal'
+    });
+    return await modal.present();
   }
 }

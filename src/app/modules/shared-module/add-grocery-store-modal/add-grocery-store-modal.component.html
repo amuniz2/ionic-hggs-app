@@ -1,0 +1,9 @@
+<ion-modal-view class="add-grocery-store-modal">
+  <ion-item>
+    <ion-input placeholder="Enter store name" id="newStoreNameInput" [(ngModel)]="newGroceryStoreName"></ion-input>
+    <div>
+      <ion-button class="done-button" size="small" >Done</ion-button>
+      <ion-button class="cancel-button" size="small" (click)="dismiss()">Cancel</ion-button>
+    </div>
+  </ion-item>
+</ion-modal-view>

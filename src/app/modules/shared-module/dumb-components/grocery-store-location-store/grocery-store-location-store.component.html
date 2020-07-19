@@ -6,5 +6,8 @@
               (ionChange)="onChangeGroceryStoreSelected($event)">
     <ion-select-option *ngFor="let groceryStore of possibleGroceryStores" [value]="groceryStore">{{groceryStore.name}}</ion-select-option>
   </ion-select>
+  <ion-button  fill="clear" outline="none" (click)="onAddGroceryStore()">Add
+    <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
+  </ion-button>
 </ion-item>
 </ng-container>

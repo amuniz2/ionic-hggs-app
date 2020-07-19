@@ -72,7 +72,7 @@ export class PantryInventoryManagerComponent implements OnInit {
     this.store.dispatch(new fromActions.DeletePantryItem($event));
   }
 
-  onAddStoreClick() {
+  onAddPantryItemClick() {
     this.addingPantryItem$ = of(true);
     // console.log('dispatching createPantryItem event');
     // this.store.dispatch(new fromActions.CreatePantryItem({newItem: true, id: 0}));
@@ -112,14 +112,12 @@ export class PantryInventoryManagerComponent implements OnInit {
   //   return await popover.present();
   // }
 
-  private async onSuccess(result) {
-    console.log(`return from sharing ${JSON.stringify(result)}`);
+  private async onSuccessExport(result) {
     const toast = await this.toastController.create({message: 'List shared.', duration: 2000});
     await toast.present();
   };
 
-  private async onError(err) {
-    console.log(`error occured when sharing: ${JSON.stringify(err)}`);
+  private async onExportError(err) {
     const toast = await this.toastController.create({message: `Email failed to send with error: ${JSON.stringify(err)}.`, duration: 5000});
     await toast.present();
   };
@@ -140,7 +138,7 @@ export class PantryInventoryManagerComponent implements OnInit {
       this.socialSharing.shareWithOptions({
         subject: 'Grocery shopping list',
         files: [fileName]
-      }).then(async r => await this.onSuccess(r)).catch(async err => await this.onError(err));
+      }).then(async r => await this.onSuccessExport(r)).catch(async err => await this.onExportError(err));
     });
     }
 
