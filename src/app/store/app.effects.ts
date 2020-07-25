@@ -129,9 +129,13 @@ export class AppEffects {
   public addNewStoreAisle$ = this.actions$.pipe(
     ofType(AppActionTypes.AddStoreAisle),
     switchMap((payload) => {
+        console.log('calling addGroceryStoreAisle');
         return this.storeManagementService.addGroceryStoreAisle(payload.newStoreAisleRequest).pipe(
-          map(aisleAdded => new StoreAisleAdded(
-              {groceryStoreId: payload.newStoreAisleRequest.groceryStoreId, newAisle: aisleAdded})),
+          map(aisleAdded => {
+            console.log('dispatching StoreAisleAdded');
+            return new StoreAisleAdded(
+              {groceryStoreId: payload.newStoreAisleRequest.groceryStoreId, newAisle: aisleAdded});
+          }),
           catchError(error => {
             return [new DisplayError(error)];
           })

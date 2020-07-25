@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ModalController} from '@ionic/angular';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../../store/app.state';
 
 @Component({
   selector: 'app-add-grocery-store-modal',
@@ -7,9 +9,11 @@ import {ModalController} from '@ionic/angular';
   styleUrls: ['./add-grocery-store-modal.component.scss']
 })
 export class AddGroceryStoreModalComponent implements OnInit {
-  newGroceryStoreName: any;
+  newGroceryStoreName: string;
+  componentDesc: string;
 
-  constructor(public modalController: ModalController,) { }
+
+  constructor(public modalController: ModalController) { }
 
   ngOnInit(): void {
   }
@@ -22,12 +26,20 @@ export class AddGroceryStoreModalComponent implements OnInit {
   //   return await modal.present();
   // }
 
-  async dismiss() {
+  async dismiss(cancelled: boolean) {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     await this.modalController.dismiss({
-      dismissed: true,
-      storeName: this.newGroceryStoreName
+      cancelled,
+      storeName: cancelled ? '' : this.newGroceryStoreName
     });
+  }
+
+  async onCancel() {
+    await this.dismiss(true);
+  }
+
+  async onDone() {
+    await this.dismiss(false);
   }
 }

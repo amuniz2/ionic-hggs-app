@@ -6,13 +6,15 @@
       <app-grocery-store-location-store [formGroup]="locationForm" [groceryStores]="groceryStores$ | async"
                                         [selectedGroceryStore]="selectedGroceryStore$ | async"
                                         [groceryStoreIdsItemIsLocatedIn] = "groceryStoreIdsItemIsLocatedIn$ | async"
-                                        (selectedGroceryStoreChange)="onChangeLocationGroceryStore($event)"></app-grocery-store-location-store>
+                                        (selectedGroceryStoreChange)="onChangeLocationGroceryStore($event)"
+                                        (selectedNewGroceryStoreChange)="onCreateAndSelectGroceryStore($event)"></app-grocery-store-location-store>
       <ion-label>{{AisleLabel}}</ion-label>
       <app-grocery-store-location-aisle-or-section  [formGroup]="locationForm"
                                                     [inputControlName] = "'locationAisle'"
         [groceryStoreAislesOrSections]="groceryStoreAisles$ | async"
         [label] = "AisleLabel"
-        (aisleOrSectionChange)="onChangeAisle($event)">
+        (aisleOrSectionChange)="onChangeAisle($event)"
+        (selectedNewGroceryStoreAisleOrSectionChange)="onCreateAndSelectGroceryStoreAisle($event)">
       </app-grocery-store-location-aisle-or-section>
       <ion-label>{{SectionLabel}}</ion-label>
       <app-grocery-store-location-aisle-or-section
@@ -20,7 +22,8 @@
         [inputControlName] = "'locationSection'"
         [groceryStoreAislesOrSections]="groceryStoreSections$ | async"
         [label] = "SectionLabel"
-        (aisleOrSectionChange)="onChangeSection($event)">
+        (aisleOrSectionChange)="onChangeSection($event)"
+        (selectedNewGroceryStoreAisleOrSectionChange) = "onCreateAndSelectGroceryStoreSection($event)">
       </app-grocery-store-location-aisle-or-section>
       <ion-toolbar>
         <ion-button slot="start" color="primary" class="button" type="submit">Save</ion-button>

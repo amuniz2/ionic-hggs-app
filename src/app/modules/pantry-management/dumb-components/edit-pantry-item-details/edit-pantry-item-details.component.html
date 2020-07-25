@@ -9,7 +9,6 @@
     </div>
       <app-hggs-accordion [sectionName]="locationsSection.label"
                           [description]=""
-                          [canAdd]="itemCanExistInOtherStores"
                           [isOpenInitially]="true"
                           (change)="toggleLocationsSection($event)"
                           (addToList)="onAddLocationClicked()">

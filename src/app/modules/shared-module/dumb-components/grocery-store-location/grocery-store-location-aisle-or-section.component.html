@@ -1,9 +1,13 @@
 <form [formGroup]="controlContainer.control">
 <ion-item>
     <ion-select id="aisleSelectionControl" *ngIf="sectionsOrAislesExist() else noItems;" placeholder="Select Grocery Store {{label}}"
-                [formControlName]="inputControlName" (ionChange)="onChangeAisleOrSection($event)">
+                [formControlName]="inputControlName"
+                (ionChange)="onChangeAisleOrSection($event)">
       <ion-select-option *ngFor="let storeAisle of groceryStoreAislesOrSections" value="{{storeAisle}}">{{storeAisle}}</ion-select-option>
     </ion-select>
+  <ion-button  fill="clear" outline="none" (click)="onAddGroceryStoreAisleOrSection()">Add
+    <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
+  </ion-button>
   <ng-template #noItems>
     <ion-text>No {{label}} added.</ion-text>
   </ng-template>

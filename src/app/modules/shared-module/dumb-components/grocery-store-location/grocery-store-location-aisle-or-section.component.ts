@@ -1,6 +1,9 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges} from '@angular/core';
 import {ControlContainer} from '@angular/forms';
 import {GroceryStore} from '../../../../model/grocery-store';
+import {AddGroceryStoreModalComponent} from '../../add-grocery-store-modal/add-grocery-store-modal.component';
+import {ModalController} from '@ionic/angular';
+
 export interface GroceryStoreAisleOrSectionSelected {
   name: string;
 }
@@ -26,36 +29,60 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
   @Output()
   aisleOrSectionChange: EventEmitter<GroceryStoreAisleOrSectionSelected> = new EventEmitter<GroceryStoreAisleOrSectionSelected>();
 
+  @Output()
+  selectedNewGroceryStoreAisleOrSectionChange: EventEmitter<string> = new EventEmitter<string>();
+
   @Input()
   selectedGroceryStoreAisleOrSection: string;
 
-  constructor(private controlContainer: ControlContainer) { }
+  @Output()
+  selectedNewGroceryStoreComponentChange: EventEmitter<string> = new EventEmitter<string>();
+
+  constructor(private controlContainer: ControlContainer,
+              public modalController: ModalController) { }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.label !== 'Aisle') {
-      return;
-    }
-
-    // tslint:disable-next-line:forin
-    for (let propName in changes) {
-      if (propName === 'groceryStoreAislesOrSections') {
-        const chng = changes[propName];
-        const cur = JSON.stringify(chng.currentValue);
-        const prev = JSON.stringify(chng.previousValue);
-        console.log(`${propName}: currentValue = ${cur}, previousValue = ${prev}`);
-      }
-    }
+      console.log('changes for sections or ailes:');
+      console.log(changes);
   }
 
   onChangeAisleOrSection($event: CustomEvent) {
-    this.selectedGroceryStoreAisleOrSection = $event.detail.value;
-    this.aisleOrSectionChange.emit({ name: $event.detail.value});
+    this.changeSelection($event.detail.value);
   }
 
   sectionsOrAislesExist(): boolean {
     return this.groceryStoreAislesOrSections !== null && this.groceryStoreAislesOrSections.length > 0;
   }
+
+  async onAddGroceryStoreAisleOrSection() {
+    await this.presentModal();
+  }
+
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: AddGroceryStoreModalComponent,
+      componentProps: {
+        componentDesc: this.label
+      },
+      cssClass: 'add-grocery-store-modal'
+    });
+
+    modal.present();
+
+    const dataReturned = await modal.onDidDismiss();
+    if (!dataReturned.data.cancelled) {
+      this.selectedNewGroceryStoreAisleOrSectionChange.emit(dataReturned.data.storeName);
+      this.changeSelection(dataReturned.data.storeName);
+    }
+  }
+
+  private changeSelection(newValue: string) {
+    this.selectedGroceryStoreAisleOrSection = newValue;
+    this.aisleOrSectionChange.emit({name: newValue} );
+  }
+
 }
+

@@ -181,4 +181,9 @@ platforms/browser/
 platforms/android/.gradle/*.*
 platforms/android/app/
 platforms/platforms/android/app/build/
+platforms/android/CordovaLib/
 www/
+
+
+#resources
+resources/ios/

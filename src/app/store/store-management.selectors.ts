@@ -5,6 +5,7 @@ import * as fromAdapter from './grocery-store.adapter';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {selectPantryItemLocations} from '../modules/pantry-management/store/pantry-management.selectors';
 import {PantryItemLocation} from '../model/PantryItemLocation';
+import {App} from 'ionic';
 
 const getAppState = createFeatureSelector<AppState>('app');
 export const getGroceryStoresState = createSelector(
@@ -34,6 +35,9 @@ export const selectAllGroceryStores = createSelector(
 
 export const selectGroceryStore = (id: number) => createSelector(
   selectAllGroceryStores, (state: GroceryStoreState[]) => state.find((store) => store.id === id));
+
+export const selectCurrentGroceryStore = () => createSelector(
+  getAppState, (state: AppState) => state.groceryStores.selectedGroceryStore);
 
 export const selectGroceryStoreAisles = (id: number) => createSelector(
   selectGroceryStore(id), (state: GroceryStoreState) => state.aisles);
@@ -91,8 +95,8 @@ export const selectGroceryStoreSectionsInNoAisle = (id: number) => createSelecto
 
 export const selectPossibleGroceryStoreSectionsInAisle = (storeId: number, aisle) => createSelector(
   selectGroceryStore(storeId), (groceryStore: GroceryStoreState) => {
-      const sectionsInAisle = groceryStore.locations.filter((location) => location.aisle === aisle).map(location => location.section);
-      return sectionsInAisle.concat(groceryStore.sections.filter((section) =>
+      const sectionsInAisle = groceryStore.locations?.filter((location) => location.aisle === aisle).map(location => location.section);
+      return sectionsInAisle.concat(groceryStore.sections?.filter((section) =>
         !groceryStore.locations.some(loc => loc.section === section) ||
         groceryStore.locations.some(loc => !loc.aisle && loc.section === section)));
     });

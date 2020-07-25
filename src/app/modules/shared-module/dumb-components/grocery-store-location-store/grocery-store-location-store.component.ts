@@ -1,16 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {ControlContainer, FormControl} from '@angular/forms';
 import {ModalController, PopoverController} from '@ionic/angular';
-import {AddGroceryStoreComponent} from '../../../store-management/dumb-components/add-grocery-store/add-grocery-store';
 import {AddGroceryStoreModalComponent} from '../../add-grocery-store-modal/add-grocery-store-modal.component';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'app-grocery-store-location-store',
   templateUrl: './grocery-store-location-store.component.html',
   styleUrls: ['./grocery-store-location-store.component.scss']
 })
-export class GroceryStoreLocationStoreComponent implements OnInit {
+export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
 
   @Input()
   groceryStores: GroceryStore[];
@@ -24,18 +24,26 @@ export class GroceryStoreLocationStoreComponent implements OnInit {
   @Output()
   selectedGroceryStoreChange: EventEmitter<GroceryStore> = new EventEmitter<GroceryStore>();
 
+  @Output()
+  selectedNewGroceryStoreChange: EventEmitter<string> = new EventEmitter<string>();
+
   private possibleGroceryStores: GroceryStore[];
   constructor(public controlContainer: ControlContainer,
-              public modalController: ModalController,
-              private popoverController: PopoverController) {
+              public modalController: ModalController) {
   }
 
   ngOnInit() {
-    if (this.selectedGroceryStore != null) {
-      this.possibleGroceryStores = this.groceryStores.filter(groceryStore =>
-        this.selectedGroceryStore.id === groceryStore.id || !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id))
-    } else {
-      this.possibleGroceryStores = this.groceryStores.filter(groceryStore => !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id));
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.groceryStores) {
+      console.log('in ngOnChanges, updating possibleGroceryStores');
+      if (this.selectedGroceryStore != null) {
+        this.possibleGroceryStores = this.groceryStores.filter(groceryStore =>
+          this.selectedGroceryStore.id === groceryStore.id || !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id))
+      } else {
+        this.possibleGroceryStores = this.groceryStores.filter(groceryStore => !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id));
+      }
     }
   }
 
@@ -51,31 +59,23 @@ export class GroceryStoreLocationStoreComponent implements OnInit {
   }
 
   async onAddGroceryStore ($event: CustomEvent) {
-    // todo: display popover prompting for new grocery store name
-    // await this.addGroceryStorePopover($event);
     await this.presentModal();
-  }
-
-  async addGroceryStorePopover(ev: any) {
-    const popover = await this.popoverController.create({
-      component: AddGroceryStoreComponent,
-      event: ev,
-      componentProps: {},
-      cssClass: 'popover_class',
-    });
-
-    /** Sync event from popover component */
-    //   this.events.subscribe(''fromPopoverEvent', () => {
-    //   this.syncTasks();
-    // });
-    return await popover.present();
   }
 
   async presentModal() {
     const modal = await this.modalController.create({
       component: AddGroceryStoreModalComponent,
+      componentProps: {
+        componentDesc: 'Store'
+      },
       cssClass: 'add-grocery-store-modal'
     });
-    return await modal.present();
+
+    modal.present();
+
+    const dataReturned = await modal.onDidDismiss();
+    if (!dataReturned.data.cancelled) {
+      this.selectedNewGroceryStoreChange.emit(dataReturned.data.storeName);
+    }
   }
 }
