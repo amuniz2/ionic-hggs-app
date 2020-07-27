@@ -5,20 +5,21 @@ import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import * as fromSelectors from '../../../../store/store-management.selectors';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
-import {AddGroceryStoreSection, AddStoreAisle, LoadGroceryStores, LocationGroceryStoreSelected} from '../../../../store';
+import {AddGroceryStoreSection, AddStoreAisle, LoadGroceryStores, LocationGroceryStoreSelected, SelectStore} from '../../../../store';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
 import {
-  selectGroceryStore, selectGroceryStoreLocation,
+  selectGroceryStoreLocation,
   selectGroceryStoresLoading
 } from '../../../../store/store-management.selectors';
 // tslint:disable-next-line:max-line-length
 import {GroceryStoreAisleOrSectionSelected} from '../../../shared-module/dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {AddPantryItemLocation, UpdatePantryItemLocation} from '../../store/pantry-management.actions';
 import {ActivatedRoute, Router} from '@angular/router';
-import {withLatestFrom} from 'rxjs/operators';
 import {selectGroceryStoresItemIsLocatedIn} from '../../store/pantry-management.selectors';
 import {CreateStore} from '../../../store-management/store/store-management.actions';
+import {groceryStoreFromGrocerStoreState} from '../../../../model/model-helpers';
+import {withLatestFrom} from 'rxjs/operators';
 
 export interface NewItemLocation {
   itemId: number;
@@ -35,11 +36,9 @@ export class EditPantryItemLocationComponent implements OnInit {
   private groceryStores$: Observable<GroceryStoreState[]>;
   private groceryStoreAisles$: Observable<string[]>;
   private groceryStoreSections$: Observable<string[]>;
-  private selectedGroceryStore$: Observable<GroceryStore>;
+  private selectedGroceryStore$: Observable<GroceryStoreState>;
 
-  selectedGroceryStoreId$: Observable<number>;
-
-  AisleLabel = 'Aisle';
+  AisleLabel = `Aisle`;
   SectionLabel = 'Section';
 
   locationForm: FormGroup;
@@ -49,10 +48,11 @@ export class EditPantryItemLocationComponent implements OnInit {
   selectedGroceryStoreId: number;
   selectedGroceryStoreAisle?: string;
   selectedGroceryStoreSection?: string;
+  selectedGroceryStoreName?: string;
 
   private groceryStoresLoading$: Observable<boolean>;
-  private locationId: any;
-  private pantryItemId: number;
+  private readonly locationId: any;
+  private readonly pantryItemId: number;
 
   constructor(private store: Store<AppState>,
               @Inject('IPantryDataService') private pantryDataService: IPantryDataService,
@@ -67,15 +67,17 @@ export class EditPantryItemLocationComponent implements OnInit {
     this.locationId = this.activeRoute.snapshot.params.locationId;
 
     if (this.locationId != null) {
+      this.store.dispatch(new SelectStore(this.selectedGroceryStoreId));
       this.selectedGroceryStoreLocation$ = this.store.select(selectGroceryStoreLocation(this.locationId));
       this.selectedGroceryStoreAisle = this.router.getCurrentNavigation().extras.queryParams.aisle;
       this.selectedGroceryStoreSection = this.router.getCurrentNavigation().extras.queryParams.section;
       this.selectedGroceryStoreId = this.router.getCurrentNavigation().extras.queryParams.storeId;
-      // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectGroceryStore(this.selectedGroceryStoreId));
-
+      this.selectedGroceryStore$ = this.store.select(fromSelectors.selectGroceryStore(this.selectedGroceryStoreId));
       this.selectGroceryStore(this.selectedGroceryStoreId);
 
-      // this.selectedGroceryStoreName = this.router.getCurrentNavigation().extras.queryParams.storeName;
+      // this.selectGroceryStore(this.selectedGroceryStoreId);
+
+      this.selectedGroceryStoreName = this.router.getCurrentNavigation().extras.queryParams.storeName;
     } else {
       this.selectedGroceryStoreLocation$ = of({
         id: null,
@@ -85,21 +87,23 @@ export class EditPantryItemLocationComponent implements OnInit {
         storeName: null
       });
     }
-    let groceryStoreValue: GroceryStore = null;
-    if (this.selectedGroceryStore$ != null) {
-      this.selectedGroceryStore$.subscribe((groceryStore: GroceryStore) => {
-        groceryStoreValue = groceryStore;
-      });
-    }
     this.locationForm = this.fb.group({
-      locationStore: [groceryStoreValue],
+      locationStore: [this.selectedGroceryStoreName],
       locationAisle: [this.selectedGroceryStoreAisle],
       locationSection: [this.selectedGroceryStoreSection]
     });
+    if (this.selectedGroceryStore$ != null) {
+      this.selectedGroceryStore$.pipe(
+        withLatestFrom((groceryStore: GroceryStoreState) => {
+          this.locationForm.patchValue( {
+            locationStore: groceryStoreFromGrocerStoreState(groceryStore).name
+          });
+      }));
+    }
   }
 
   ngOnInit() {
-    this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
+    // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
     const tabs = document.querySelectorAll('.show-tabbar');
     if (tabs !== null) {
       Object.keys(tabs).map((key) => {
@@ -112,23 +116,20 @@ export class EditPantryItemLocationComponent implements OnInit {
     // this.groceryStoreLocation.storeId = $event.id;
     if ($event.id !== this.selectedGroceryStoreId) {
       this.selectGroceryStore($event.id);
-      // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectGroceryStore(this.selectedGroceryStoreId));
+      // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
     }
   }
 
   private selectGroceryStore(groceryStoreId: number) {
-    // todo: continue here - need to dispatch this when new store is selected;
-    // need to make storeId observable as well?
     this.store.dispatch(new LocationGroceryStoreSelected(groceryStoreId));
     this.selectedGroceryStoreId = groceryStoreId;
     this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
-      this.selectedGroceryStoreId));
+      groceryStoreId));
     this.groceryStoreSections$ = this.store.select(
-      fromSelectors.selectPossibleGroceryStoreSectionsInAisle(this.selectedGroceryStoreId, this.selectedGroceryStoreAisle));
+      fromSelectors.selectPossibleGroceryStoreSectionsInAisle(groceryStoreId, this.selectedGroceryStoreAisle));
   }
 
   onChangeAisle($event: GroceryStoreAisleOrSectionSelected) {
-    console.log(`in onChangeAisles, selectedGroceryStoreAisle: ${this.selectedGroceryStoreAisle}, new: ${$event.name}`);
     if (this.selectedGroceryStoreAisle !== $event.name) {
       this.selectedGroceryStoreAisle = $event.name;
       this.locationForm.patchValue({locationAisle: $event.name});
@@ -145,7 +146,6 @@ export class EditPantryItemLocationComponent implements OnInit {
   onChangeSection($event: GroceryStoreAisleOrSectionSelected) {
     if(this.selectedGroceryStoreSection !== $event.name) {
       this.selectedGroceryStoreSection = $event.name;
-      this.locationForm.patchValue({locationSection: $event.name});
       this.groceryStoreAisles$ = this.store.select(fromSelectors.selectPossibleGroceryStoreAislesForSection(
         this.selectedGroceryStoreId, this.selectedGroceryStoreSection));
     }
@@ -153,10 +153,6 @@ export class EditPantryItemLocationComponent implements OnInit {
 
   onSubmit(value: any) {
     // add the location to the pantry item
-    console.log(`GroceryStoreLocation: ${this.selectedGroceryStoreId},
-    aisle: ${this.selectedGroceryStoreAisle}, section: ${this.selectedGroceryStoreSection}`);
-    console.log('LocationForm: ');
-    console.log(this.locationForm);
     if (this.locationForm.valid) {
       if (this.locationId == null) {
         this.store.dispatch(new AddPantryItemLocation({
@@ -186,17 +182,21 @@ export class EditPantryItemLocationComponent implements OnInit {
 
   onCreateAndSelectGroceryStore($event: string) {
     this.store.dispatch(new CreateStore({ name: $event }));
+    // this.selectedGroceryStoreName = $event;
+    this.locationForm.patchValue(
+      { locationStore: this.selectedGroceryStoreName }
+    )
   }
 
   onCreateAndSelectGroceryStoreAisle($event: string) {
     this.store.dispatch(new AddStoreAisle(
       { groceryStoreId: this.selectedGroceryStoreId, name: $event }));
-    this.onChangeAisle({ name: $event });
+    this.locationForm.patchValue({locationAisle: $event});
   }
 
   onCreateAndSelectGroceryStoreSection($event: string) {
     this.store.dispatch(new AddGroceryStoreSection(
       { groceryStoreId: this.selectedGroceryStoreId, name: $event }));
-    this.onChangeSection({ name: $event });
+    this.locationForm.patchValue({locationSection: $event});
   }
 }

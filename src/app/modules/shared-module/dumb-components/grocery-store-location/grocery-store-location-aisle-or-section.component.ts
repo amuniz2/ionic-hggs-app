@@ -12,7 +12,7 @@ export interface GroceryStoreAisleOrSectionSelected {
   templateUrl: './grocery-store-location-aisle-or-section.component.html',
   styleUrls: ['./grocery-store-location-aisle-or-section.component.scss']
 })
-export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnChanges {
+export class GroceryStoreLocationAisleOrSectionComponent {
 
   @Input()
   inputControlName: string;
@@ -41,13 +41,6 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
   constructor(private controlContainer: ControlContainer,
               public modalController: ModalController) { }
 
-  ngOnInit() {
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-      console.log('changes for sections or ailes:');
-      console.log(changes);
-  }
 
   onChangeAisleOrSection($event: CustomEvent) {
     this.changeSelection($event.detail.value);
@@ -80,7 +73,7 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
   }
 
   private changeSelection(newValue: string) {
-    this.selectedGroceryStoreAisleOrSection = newValue;
+    // this.selectedGroceryStoreAisleOrSection = newValue;
     this.aisleOrSectionChange.emit({name: newValue} );
   }
 

@@ -14,6 +14,7 @@
         [groceryStoreAislesOrSections]="groceryStoreAisles$ | async"
         [label] = "AisleLabel"
         (aisleOrSectionChange)="onChangeAisle($event)"
+        [selectedGroceryStoreAisleOrSection] = "selectedGroceryStoreAisle"
         (selectedNewGroceryStoreAisleOrSectionChange)="onCreateAndSelectGroceryStoreAisle($event)">
       </app-grocery-store-location-aisle-or-section>
       <ion-label>{{SectionLabel}}</ion-label>
@@ -22,6 +23,7 @@
         [inputControlName] = "'locationSection'"
         [groceryStoreAislesOrSections]="groceryStoreSections$ | async"
         [label] = "SectionLabel"
+        [selectedGroceryStoreAisleOrSection] = "selectedGroceryStoreSection"
         (aisleOrSectionChange)="onChangeSection($event)"
         (selectedNewGroceryStoreAisleOrSectionChange) = "onCreateAndSelectGroceryStoreSection($event)">
       </app-grocery-store-location-aisle-or-section>

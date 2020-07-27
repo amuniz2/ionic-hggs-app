@@ -3,9 +3,8 @@ import {environment} from '../../environments/environment';
 import {AppState} from './app.state';
 import {AppActions, AppActionTypes} from './app.actions';
 import * as fromAppAdapter from './grocery-store.adapter';
-import {getGroceryStore} from './store-management.selectors';
+import {getGroceryStore, selectAllGroceryStores, selectGroceryStore} from './store-management.selectors';
 import {GroceryStoreState} from '../model/grocery-store';
-import {act} from '@ngrx/effects';
 
 export const reducers: ActionReducerMap<AppState> = {
   isReady: (isReady) => isReady,
@@ -137,7 +136,6 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
       if (groceryStore.aisles.some(aisle => aisle === action.payload.newAisle)) {
         return state;
       }
-      console.log(`in reducer, adding aisle ${action.payload.newAisle} to store`);
       return {
         ...state,
         groceryStores: {
@@ -295,7 +293,7 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
         groceryStores: {
           ...fromAppAdapter.sharedGroceryStoreAdapter.addOne(action.groceryStore, state.groceryStores),
           error: null,
-          selectedGroceryStore: { ...action.groceryStore, aisles: new Set<string>(), sections: new Set<string>() }
+          selectedGroceryStore: { ...action.groceryStore, aisles: [], sections: [] }
         },
       };
     }
@@ -329,6 +327,16 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
         //   loading: false,
         //   error: action.error
         // },
+      };
+
+    case AppActionTypes.SelectStore:
+      const storeToSelect = getGroceryStore(state.groceryStores, action.id);
+      return {
+        ...state,
+        groceryStores: {
+          ...state.groceryStores,
+          selectedGroceryStore: storeToSelect
+        }
       };
 
     default: return state;

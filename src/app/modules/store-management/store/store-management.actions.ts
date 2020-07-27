@@ -10,7 +10,6 @@ export enum StoreManagerActionTypes {
   CreateStore = '[Store Manager] Create',
   NavigateToStoreDetailsPage = '[Store Manager] Navigate to Store Details Page',
   NavigatedToStoreDetailsPage = '[Store Manager] Navigated to Store Details Page',
-  SelectStore = '[Store Manager] Select',
   UpdateStore = '[Store Manager] Update',
   DeleteStore = '[Store Manager] Delete',
   GetGroceryStoreAislesFailed =  '[Store Manager] Store Aisles Failed To Load',
@@ -60,10 +59,6 @@ export class GetStoreSectionsFailed implements Action {
   readonly type = StoreManagerActionTypes.GetGroceryStoreSectionsFailed;
 }
 
-
-export class SelectStore implements Action {
-  readonly type = StoreManagerActionTypes.SelectStore;
-}
 
 export class UpdateStore implements Action {
   readonly type = StoreManagerActionTypes.UpdateStore;

@@ -1,8 +1,8 @@
 <ng-container [formGroup]="controlContainer.control">
 <ion-item>
   <ion-select id="groceryStoreSelectionControl" placeholder="Select Grocery Store" [compareWith]="compareById"
-              [(ngModel)]="selectedGroceryStore"
               [formControlName]="'locationStore'"
+              [(ngModel)]="selectedGroceryStore"
               (ionChange)="onChangeGroceryStoreSelected($event)">
     <ion-select-option *ngFor="let groceryStore of possibleGroceryStores" [value]="groceryStore">{{groceryStore.name}}</ion-select-option>
   </ion-select>

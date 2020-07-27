@@ -15,7 +15,7 @@ import { AddGroceryStoreModalComponent } from './add-grocery-store-modal/add-gro
     SelectGroceryStoreComponent,
     GroceryStoreLocationStoreComponent,
     GroceryStoreLocationAisleOrSectionComponent,
-    AddGroceryStoreModalComponent
+    AddGroceryStoreModalComponent,
   ],
   imports: [
     CommonModule,

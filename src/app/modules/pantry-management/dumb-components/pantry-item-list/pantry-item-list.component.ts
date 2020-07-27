@@ -33,7 +33,7 @@ export interface NavigateToEditPantryItemRequest {
   styleUrls: ['./pantry-item-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class PantryItemListComponent implements OnChanges {
+export class PantryItemListComponent {
   @Output()
   notifyDeletePantryItemRequested: EventEmitter<DeletePantryItemRequest> = new EventEmitter();
 
@@ -61,10 +61,6 @@ export class PantryItemListComponent implements OnChanges {
   }
 
   constructor(private router: Router, private store: Store<AppState>, private cd: ChangeDetectorRef) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log('changes: ', JSON.stringify(changes));
-  }
 
   editPantryItem(item: PantryItem) {
     this.store.dispatch( new NavigateToPantryItemPage({ id: item.id, newItem: false }));

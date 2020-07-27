@@ -5,7 +5,7 @@ import {GroceryStoreLocation} from '../model/grocery-store-location';
 export interface GroceryStoresState extends EntityState<GroceryStoreState> {
   loading: boolean;
   error: Error;
-  selectedGroceryStore: GroceryStore;
+  selectedGroceryStore: GroceryStoreState;
 }
 
 export interface GroceryItemLocationsState extends EntityState<GroceryStoreLocation> {
