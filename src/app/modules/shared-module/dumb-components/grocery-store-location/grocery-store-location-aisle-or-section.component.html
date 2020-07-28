@@ -1,17 +1,18 @@
 <form [formGroup]="controlContainer.control">
-<div>
-    <ion-select id="aisleSelectionControl" *ngIf="sectionsOrAislesExist() else noItems;" placeholder="Select Grocery Store {{label}}"
-                [formControlName]="inputControlName"
-                [(ngModel)]="selectedGroceryStoreAisleOrSection"
-                (ionChange)="onChangeAisleOrSection($event)">
-      <ion-select-option *ngFor="let storeAisleOrSection of groceryStoreAislesOrSections" value="{{storeAisleOrSection}}">{{storeAisleOrSection}}</ion-select-option>
-    </ion-select>
+<ion-item *ngIf="sectionsOrAislesExist()" lines="none">
+  <ionic-selectable
+                    [placeholder]="getPlaceholderText()"
+                    [formControlName]="inputControlName"
+    [(ngModel)]="selectedGroceryStoreAisleOrSection"
+  [items]="groceryStoreAislesOrSections"
+  [canSearch]="true"
+  (onChange)="onChangeAisleOrSection($event)">
+  </ionic-selectable>
+</ion-item>
+<ion-item lines="none">
   <ion-button  fill="clear" outline="none" (click)="onAddGroceryStoreAisleOrSection()">Add
     <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
   </ion-button>
-  <ng-template #noItems>
-    <ion-text>No {{label}} added.</ion-text>
-  </ng-template>
-</div>
+</ion-item>
 </form>
 

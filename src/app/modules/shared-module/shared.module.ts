@@ -8,6 +8,7 @@ import { GroceryStoreLocationStoreComponent } from './dumb-components/grocery-st
 import { GroceryStoreLocationAisleOrSectionComponent } from './dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AddGroceryStoreModalComponent } from './add-grocery-store-modal/add-grocery-store-modal.component';
+import {IonicSelectableModule} from 'ionic-selectable';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { AddGroceryStoreModalComponent } from './add-grocery-store-modal/add-gro
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
+    IonicSelectableModule,
   ],
   exports: [
     HggsAccordionComponent,

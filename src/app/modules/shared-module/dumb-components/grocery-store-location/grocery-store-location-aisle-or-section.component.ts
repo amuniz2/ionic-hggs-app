@@ -42,7 +42,7 @@ export class GroceryStoreLocationAisleOrSectionComponent {
               public modalController: ModalController) { }
 
 
-  onChangeAisleOrSection($event: CustomEvent) {
+  onChangeAisleOrSection($event: any) {
     this.changeSelection($event.detail.value);
   }
 
@@ -77,5 +77,8 @@ export class GroceryStoreLocationAisleOrSectionComponent {
     this.aisleOrSectionChange.emit({name: newValue} );
   }
 
+  getPlaceholderText(): string {
+    return this.sectionsOrAislesExist() ? `Select Grocery Store ${this.label}` : `No ${this.label}s defined`;
+  }
 }
 
