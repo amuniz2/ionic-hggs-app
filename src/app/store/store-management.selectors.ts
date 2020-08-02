@@ -40,10 +40,13 @@ export const selectCurrentGroceryStore = () => createSelector(
   getAppState, (state: AppState) => state.groceryStores.selectedGroceryStore);
 
 export const selectGroceryStoreAisles = (id: number) => createSelector(
-  selectGroceryStore(id), (state: GroceryStoreState) => state.aisles);
+  selectGroceryStore(id), (state: GroceryStoreState) => state?.aisles);
 
 export const selectGroceryStoreSections = (id: number) => createSelector(
-  selectGroceryStore(id), (state: GroceryStoreState) => state.sections);
+  selectGroceryStore(id), (state: GroceryStoreState) => state?.sections);
+
+export const selectGroceryStoreLocations = (id: number) => createSelector(
+  selectGroceryStore(id), (state: GroceryStoreState) => state.locations);
 
 export const selectGroceryStoresLoading = createSelector(
   getGroceryStoresState,
@@ -96,16 +99,17 @@ export const selectGroceryStoreSectionsInNoAisle = (id: number) => createSelecto
 export const selectPossibleGroceryStoreSectionsInAisle = (storeId: number, aisle) => createSelector(
   selectGroceryStore(storeId), (groceryStore: GroceryStoreState) => {
       const sectionsInAisle = groceryStore.locations?.filter((location) => location.aisle === aisle).map(location => location.section);
-      return sectionsInAisle.concat(groceryStore.sections?.filter((section) =>
-        !groceryStore.locations.some(loc => loc.section === section) ||
-        groceryStore.locations.some(loc => !loc.aisle && loc.section === section)));
+      return sectionsInAisle.concat(groceryStore.sections?.filter((section) => {
+        const noLocationsWithSection = !groceryStore.locations.some(loc => loc.section === section);
+        const sectionNotAssignedToAnAisle = groceryStore.locations.some(loc => !loc.aisle && loc.section === section);
+        return noLocationsWithSection || sectionNotAssignedToAnAisle;
+      }));
     });
 
 export const  selectPossibleGroceryStoreAislesForSection = (storeId: number, section: string) => createSelector(
   selectGroceryStore(storeId), (groceryStore: GroceryStoreState) => {
     const locationWithSectionAndAisle = groceryStore.locations.find((location) => location.aisle && location.section === section);
     if (locationWithSectionAndAisle) {
-      console.log(`returning [locationWithSectionAndAisle.aisle] ${[locationWithSectionAndAisle.aisle]}`);
       return ([locationWithSectionAndAisle.aisle]);
     }
     console.log(`returning groceryStore.aisles ${groceryStore.aisles}`);

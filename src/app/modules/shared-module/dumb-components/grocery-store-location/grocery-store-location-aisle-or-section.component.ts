@@ -3,6 +3,8 @@ import {ControlContainer} from '@angular/forms';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {AddGroceryStoreModalComponent} from '../../add-grocery-store-modal/add-grocery-store-modal.component';
 import {ModalController} from '@ionic/angular';
+import {IonicSelectableComponent} from 'ionic-selectable';
+import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 
 export interface GroceryStoreAisleOrSectionSelected {
   name: string;
@@ -35,15 +37,18 @@ export class GroceryStoreLocationAisleOrSectionComponent {
   @Input()
   selectedGroceryStoreAisleOrSection: string;
 
-  @Output()
-  selectedNewGroceryStoreComponentChange: EventEmitter<string> = new EventEmitter<string>();
+  @Input()
+  groceryStoreLocations : GroceryStoreLocation[];
 
   constructor(private controlContainer: ControlContainer,
               public modalController: ModalController) { }
 
 
-  onChangeAisleOrSection($event: any) {
-    this.changeSelection($event.detail.value);
+  onChangeAisleOrSection($event: {
+    component: IonicSelectableComponent,
+    value: any
+  }) {
+    this.changeSelection($event.value);
   }
 
   sectionsOrAislesExist(): boolean {
@@ -68,7 +73,7 @@ export class GroceryStoreLocationAisleOrSectionComponent {
     const dataReturned = await modal.onDidDismiss();
     if (!dataReturned.data.cancelled) {
       this.selectedNewGroceryStoreAisleOrSectionChange.emit(dataReturned.data.storeName);
-      this.changeSelection(dataReturned.data.storeName);
+      // this.changeSelection(dataReturned.data.storeName);
     }
   }
 

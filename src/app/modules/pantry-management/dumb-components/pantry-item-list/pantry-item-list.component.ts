@@ -67,7 +67,6 @@ export class PantryItemListComponent {
     // item.close();
   }
   remove(item: PantryItem) {
-    console.log(`emitting notification that pantry item delete is requested ${item.id}`);
     this.notifyDeletePantryItemRequested.emit({ id: item.id});
   }
 
@@ -76,19 +75,12 @@ export class PantryItemListComponent {
   }
 
   itemClicked($event, pantryItem: PantryItem) {
-    console.log('item clicked');
-    console.log($event);
-
     this.notifySavePantryItemRequested.emit({...pantryItem, need: $event?.detail?.checked, inCart: false});
   }
 
   quantityChanged($event, pantryItem: PantryItem) {
-    console.log('ionChange event, pantryItem:');
     if (!isNaN($event.target.value)) {
-      console.log(pantryItem);
       this.notifySavePantryItemRequested.emit({...pantryItem, quantityNeeded: $event.target.value });
-    } else {
-      console.log(`${$event.target.value} is not a number`);
     }
   }
 }

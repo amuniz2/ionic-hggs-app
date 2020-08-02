@@ -132,7 +132,6 @@ export class AppEffects {
         console.log('calling addGroceryStoreAisle');
         return this.storeManagementService.addGroceryStoreAisle(payload.newStoreAisleRequest).pipe(
           map(aisleAdded => {
-            console.log('dispatching StoreAisleAdded');
             return new StoreAisleAdded(
               {groceryStoreId: payload.newStoreAisleRequest.groceryStoreId, newAisle: aisleAdded});
           }),

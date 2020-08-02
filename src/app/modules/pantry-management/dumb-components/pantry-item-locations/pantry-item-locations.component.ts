@@ -63,7 +63,6 @@ export class PantryItemLocationsComponent implements OnInit {
   }
 
   remove(loc: GroceryStoreLocation) {
-    console.log('emitting notification to delete itemlocation')
     this.notifyEditPantryItemLocationRequested.emit( {
       pantryItem: this.pantryItem,
       storeLocation: loc,

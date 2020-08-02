@@ -2,13 +2,11 @@
   <h4>Pantry Item Location</h4>
   <ion-list>
     <form [formGroup]="locationForm" (ngSubmit)="onSubmit(locationForm.value)">
-      <ion-label>Store</ion-label>
       <app-grocery-store-location-store [formGroup]="locationForm" [groceryStores]="groceryStores$ | async"
                                         [selectedGroceryStore]="selectedGroceryStore$ | async"
                                         [groceryStoreIdsItemIsLocatedIn] = "groceryStoreIdsItemIsLocatedIn$ | async"
                                         (selectedGroceryStoreChange)="onChangeLocationGroceryStore($event)"
                                         (selectedNewGroceryStoreChange)="onCreateAndSelectGroceryStore($event)"></app-grocery-store-location-store>
-      <ion-label>{{AisleLabel}}</ion-label>
       <app-grocery-store-location-aisle-or-section  [formGroup]="locationForm"
                                                     [inputControlName] = "'locationAisle'"
         [groceryStoreAislesOrSections]="groceryStoreAisles$ | async"
@@ -17,7 +15,6 @@
         [selectedGroceryStoreAisleOrSection] = "selectedGroceryStoreAisle"
         (selectedNewGroceryStoreAisleOrSectionChange)="onCreateAndSelectGroceryStoreAisle($event)">
       </app-grocery-store-location-aisle-or-section>
-      <ion-label>{{SectionLabel}}</ion-label>
       <app-grocery-store-location-aisle-or-section
         [formGroup]="locationForm"
         [inputControlName] = "'locationSection'"

@@ -99,7 +99,6 @@ export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
   }
 
   onNotifyEditLocationRequest($event) {
-    console.log(`received ${$event}, re-emitting`);
     this.notifyEditPantryItemLocationRequest.emit($event);
   }
 

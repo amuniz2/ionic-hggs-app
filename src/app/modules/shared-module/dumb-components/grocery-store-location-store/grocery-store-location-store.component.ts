@@ -44,7 +44,7 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
         this.possibleGroceryStores = this.groceryStores.filter(groceryStore =>
           this.selectedGroceryStore.id === groceryStore.id || !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id))
       } else {
-        this.possibleGroceryStores = this.groceryStores.filter(groceryStore => !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id));
+        this.possibleGroceryStores = this.groceryStores;
       }
     }
   }

@@ -1,18 +1,25 @@
 <form [formGroup]="controlContainer.control">
-<ion-item *ngIf="sectionsOrAislesExist()" lines="none">
+<!--<ion-item *ngIf="sectionsOrAislesExist()" lines="none">-->
+<ion-item lines="none">
+  <ion-label>{{label}}s</ion-label>
+  <ion-button  fill="clear" outline="none" (click)="onAddGroceryStoreAisleOrSection()">New
+    <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
+</ion-button>
+</ion-item>
+
+<ion-item lines="none">
   <ionic-selectable
-                    [placeholder]="getPlaceholderText()"
-                    [formControlName]="inputControlName"
+    [placeholder]="getPlaceholderText()"
+    [formControlName]="inputControlName"
     [(ngModel)]="selectedGroceryStoreAisleOrSection"
-  [items]="groceryStoreAislesOrSections"
-  [canSearch]="true"
-  (onChange)="onChangeAisleOrSection($event)">
+    [items]="groceryStoreAislesOrSections"
+    [canSearch]="true"
+    [canDeleteItem]="true"
+    [canClear]="true"
+    [canSaveItem]="true"
+    (onChange)="onChangeAisleOrSection($event)">
   </ionic-selectable>
 </ion-item>
-<ion-item lines="none">
-  <ion-button  fill="clear" outline="none" (click)="onAddGroceryStoreAisleOrSection()">Add
-    <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
-  </ion-button>
-</ion-item>
+<!--</ion-item>-->
 </form>
 
