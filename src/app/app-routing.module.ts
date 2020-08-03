@@ -11,9 +11,9 @@ export const routes: Routes = [
   { path: 'home',
     component: HomePageComponent,
     children: [
-      { path: 'grocery-stores',
-        loadChildren: './modules/store-management/store-management.module#StoreManagementModule',
-      },
+      // { path: 'grocery-stores',
+      //   loadChildren: './modules/store-management/store-management.module#StoreManagementModule',
+      // },
       { path: 'pantry-items',
         loadChildren: './modules/pantry-management/pantry-management.module#PantryManagementModule'
       },

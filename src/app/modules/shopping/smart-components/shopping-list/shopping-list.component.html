@@ -1,9 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-text slot="start">Shopping List</ion-text>
-    <app-select-grocery-store slot="end" [groceryStores]="groceryStores$ | async" (selectedGroceryStoreChange)="onGroceryStoreSelected($event)"></app-select-grocery-store>
+    <ion-text slot="start">{{(shoppingStore$ | async)?.name}} Shopping List</ion-text>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-<app-shopping-item-list (notifySaveShoppingItemRequested)="onItemPlacedInOrRemovedFromCart($event)" [shoppingList]="shoppingList$ | async"></app-shopping-item-list>
+  <app-select-grocery-store *ngIf="storeNotSelected(); else showList" [groceryStores]="groceryStores$ | async" (selectedGroceryStoreChange)="onGroceryStoreSelected($event)"></app-select-grocery-store>
+  <ng-template #showList>
+    <app-shopping-item-list (notifySaveShoppingItemRequested)="onItemPlacedInOrRemovedFromCart($event)" [shoppingList]="shoppingList$ | async"></app-shopping-item-list>
+  </ng-template>
 </ion-content>
