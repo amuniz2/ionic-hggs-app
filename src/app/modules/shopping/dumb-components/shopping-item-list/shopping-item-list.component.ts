@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingItem} from '../../../../model/shopping-item';
-import {ShoppingListState} from '../../store/shopping.reducers';
+import {AisleItems, SectionItems, ShoppingListState} from '../../store/shopping.reducers';
 import {ShoppingItemUpdate} from '../shopping-item/shopping-item.component';
 
 export class StoreShoppingItemUpdate {
@@ -15,19 +15,52 @@ export class StoreShoppingItemUpdate {
 })
 export class ShoppingItemListComponent implements OnInit {
 
+  constructor() {
+    this.shoppingItemsLoading = false;
+    this.error = null;
+    // this.shoppingList = null;
+  }
+
   @Output()
   notifySaveShoppingItemRequested: EventEmitter<StoreShoppingItemUpdate> = new EventEmitter();
 
   @Input()
   shoppingList: ShoppingListState;
 
+  @Input()
+  filter: string;
+
   shoppingItemsLoading: boolean;
   error: Error;
 
-  constructor() {
-    this.shoppingItemsLoading = false;
-    this.error = null;
-    // this.shoppingList = null;
+  private filteredShoppingItems(items: ShoppingItem[]): ShoppingItem[] {
+    if (!!this.filter) {
+      return items.filter(item =>
+           this.filterMatchesItem(item));
+    }
+    return items;
+  }
+
+  private filteredAisles(aisles: AisleItems[]): AisleItems[] {
+    if (!!this.filter) {
+      return aisles.filter(aisle =>
+        aisle.items.some(item => this.filterMatchesItem(item)));
+    }
+    return aisles;
+  }
+
+  private filteredSections(sections: SectionItems[]): SectionItems[] {
+    if (!!this.filter) {
+      return sections.filter(section =>
+        section.items.some(item => this.filterMatchesItem(item)));
+    }
+    return sections;
+  }
+
+  private filterMatchesItem(item: ShoppingItem): boolean {
+    const lowerCaseFilter = this.filter.toLowerCase();
+    return item.name?.toLowerCase().includes(lowerCaseFilter) ||
+      item.description?.toLowerCase().includes(lowerCaseFilter);
   }
 
   ngOnInit() {

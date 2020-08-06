@@ -1,11 +1,21 @@
 <ion-header>
   <ion-toolbar>
     <ion-text slot="start">{{(shoppingStore$ | async)?.name}} Shopping List</ion-text>
+    <ion-button slot="end" *ngIf="!filterList" fill="clear" outline="none" (click)="filterItems()">Search
+      <ion-icon ios="search-circle-outline" md="search-circle-outline" ></ion-icon>
+    </ion-button>
   </ion-toolbar>
+  <div class="search-container" *ngIf="filterList">
+    <ion-input class="search-box" placeholder="Search" [(ngModel)]="filter" >
+    </ion-input>
+    <ion-button fill="clear" outline="none" (click)="cancelFilter()">
+      <ion-icon ios="close-circle-outline" md="close-circle-outline" ></ion-icon>
+    </ion-button>
+  </div>
 </ion-header>
 <ion-content>
   <app-select-grocery-store *ngIf="storeNotSelected(); else showList" [groceryStores]="groceryStores$ | async" (selectedGroceryStoreChange)="onGroceryStoreSelected($event)"></app-select-grocery-store>
   <ng-template #showList>
-    <app-shopping-item-list (notifySaveShoppingItemRequested)="onItemPlacedInOrRemovedFromCart($event)" [shoppingList]="shoppingList$ | async"></app-shopping-item-list>
+    <app-shopping-item-list [filter]="filter" (notifySaveShoppingItemRequested)="onItemPlacedInOrRemovedFromCart($event)" [shoppingList]="shoppingList$ | async"></app-shopping-item-list>
   </ng-template>
 </ion-content>

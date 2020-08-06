@@ -1,12 +1,12 @@
 <ion-list *ngIf="!shoppingItemsLoading else showSpinner;">
-  <ion-item *ngFor="let aisle of shoppingList?.aisles">
+  <ion-item *ngFor="let aisle of filteredAisles(shoppingList?.aisles)">
       <ion-grid>
         <ion-row>
           <ion-col>
             <ion-label>Aisle {{aisle.name}}</ion-label>
           </ion-col>
         </ion-row>
-        <ion-row *ngFor="let shoppingItem of aisle.items">
+        <ion-row *ngFor="let shoppingItem of filteredShoppingItems(aisle.items)">
           <ion-col>
             <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
             <hr width="100%">
@@ -14,14 +14,14 @@
         </ion-row>
       </ion-grid>
   </ion-item>
-  <ion-item *ngFor="let section of shoppingList?.sections">
+  <ion-item *ngFor="let section of filteredSections(shoppingList?.sections)">
     <ion-grid>
       <ion-row>
         <ion-col>
           <ion-label>{{section.name}} Section</ion-label>
         </ion-col>
       </ion-row>
-      <ion-row *ngFor="let shoppingItem of section.items">
+      <ion-row *ngFor="let shoppingItem of filteredShoppingItems(section.items)">
         <ion-col>
           <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
           <hr width="100%">
@@ -30,7 +30,7 @@
     </ion-grid>
   </ion-item>
   <ion-grid>
-    <ion-row *ngFor="let shoppingItem of shoppingList?.shoppingItems">
+    <ion-row *ngFor="let shoppingItem of filteredShoppingItems(shoppingList?.shoppingItems)">
       <ion-col>
         <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
         <hr width="100%">

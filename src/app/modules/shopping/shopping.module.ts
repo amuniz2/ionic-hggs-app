@@ -11,6 +11,7 @@ import {IonicModule} from '@ionic/angular';
 import {SharedModule} from '../shared-module/shared.module';
 import {ShoppingItemListComponent} from './dumb-components/shopping-item-list/shopping-item-list.component';
 import { ShoppingItemComponent } from './dumb-components/shopping-item/shopping-item.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { ShoppingItemComponent } from './dumb-components/shopping-item/shopping-
     StoreModule.forFeature('shoppingListManagement', fromReducers.shoppingListManagementReducer),
     EffectsModule.forFeature([ShoppingListManagementEffects]),
     IonicModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   declarations: [
     ShoppingListComponent,

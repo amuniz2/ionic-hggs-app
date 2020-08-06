@@ -1,0 +1,30 @@
+.search-container {
+  display: flex;
+  align-content: stretch;
+  flex-direction :row;
+  justify-content: space-between
+}
+
+.search-box {
+  margin-right: 2px;
+  background-color: white;
+  flex-grow: 6;
+}
+
+ion-content {
+  ion-list-header {
+    cursor: pointer;
+    position: relative;
+    padding: 1em 0.35em;
+    font-size: 1.35em;
+    font-family: Verdana;
+    border-bottom: 1px solid rgba(210,210,210,1);
+    margin: 0;
+
+    ion-button {
+      position: absolute;
+      top: .1em;
+      right: .1em;
+    }
+  }
+}

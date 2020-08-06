@@ -27,11 +27,12 @@ export class ShoppingListComponent implements OnInit {
   groceryStores$: Observable<GroceryStoreState[]>;
   shoppingList$: Observable<IStoreShoppingList>;
   shoppingStore$: Observable<GroceryStoreState>;
-  // shoppingItemsGroupedByAisle$: Observable<AisleItems[]>;
-  // shoppingItems$: Observable<ShoppingItem[]>;
-  // shoppingItemsGroupedBySection$: Observable<SectionItems[]>;
 
   selectedStoreId: number;
+
+  private filterList: boolean;
+  filter: string;
+
 
   constructor(private store: Store<AppState>) {
     // this.store.dispatch(new LoadGroceryStores());
@@ -62,5 +63,13 @@ export class ShoppingListComponent implements OnInit {
 
   storeNotSelected() {
     return !!!this.selectedStoreId;
+  }
+
+  filterItems() {
+    this.filterList = true;
+  }
+
+  cancelFilter() {
+    this.filterList = false;
   }
 }
