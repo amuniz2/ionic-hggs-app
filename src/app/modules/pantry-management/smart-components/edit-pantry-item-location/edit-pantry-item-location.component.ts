@@ -39,6 +39,7 @@ export class EditPantryItemLocationComponent implements OnInit {
   private groceryStoreLocations$: Observable<GroceryStoreLocation[]>;
   private selectedGroceryStore$: Observable<GroceryStoreState>;
 
+
   AisleLabel = `Aisle`;
   SectionLabel = 'Section';
 
@@ -47,6 +48,7 @@ export class EditPantryItemLocationComponent implements OnInit {
   selectedGroceryStoreLocation$: Observable<GroceryStoreLocation>;
   groceryStoreIdsItemIsLocatedIn$: Observable<number[]>;
   selectedGroceryStoreId: number;
+  selectedGroceryStoreId$: Observable<number>
   selectedGroceryStoreAisle?: string;
   selectedGroceryStoreSection?: string;
   selectedGroceryStoreName?: string;
@@ -112,6 +114,16 @@ export class EditPantryItemLocationComponent implements OnInit {
         tabs[key].style.display = 'flex';
       });
     }
+    this.selectedGroceryStoreId$ = this.store.select(fromSelectors.selectCurrentGroceryStoreId());
+    this.selectedGroceryStoreId$.subscribe((storeId) => {
+      this.selectedGroceryStoreId = storeId;
+      this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
+        this.selectedGroceryStoreId));
+      this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(
+        this.selectedGroceryStoreId));
+      this.groceryStoreLocations$ = this.store.select(fromSelectors.selectGroceryStoreLocations(
+        this.selectedGroceryStoreId))
+    })
   }
 
   onChangeLocationGroceryStore($event: GroceryStore) {
@@ -125,13 +137,11 @@ export class EditPantryItemLocationComponent implements OnInit {
   private selectGroceryStore(groceryStoreId: number) {
     this.store.dispatch(new LocationGroceryStoreSelected(groceryStoreId));
     this.selectedGroceryStoreId = groceryStoreId;
-    this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
-      groceryStoreId));
-    this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(
-      groceryStoreId));
-    this.groceryStoreLocations$ = this.store.select(fromSelectors.selectGroceryStoreLocations(groceryStoreId))
-    // this.groceryStoreSections$ = this.store.select(
-    //   fromSelectors.selectPossibleGroceryStoreSectionsInAisle(groceryStoreId, this.selectedGroceryStoreAisle));
+    // this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
+    //   groceryStoreId));
+    // this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(
+    //   groceryStoreId));
+    // this.groceryStoreLocations$ = this.store.select(fromSelectors.selectGroceryStoreLocations(groceryStoreId))
   }
 
   onChangeAisle($event: GroceryStoreAisleOrSectionSelected) {

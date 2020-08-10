@@ -109,9 +109,7 @@ export class EditGroceryStoreComponent implements OnInit {
   }
   public toggleAislesExpandState($event: CollapsedStatusChangedEvent) {
       this.aislesSection.isOpen$ = of($event.isOpen);
-      console.log(`toggling aisles, isOpen: ${$event.isOpen}; aisles: ${this.groceryStore.aisles}; size: ${this.groceryStore.aisles.length}`);
       if ($event.isOpen && this.groceryStore.aisles.length === 0) {
-        console.log('sending notification to expand aisles');
         this.notifyExpandAisles.emit(this.groceryStore.id);
       }
   }

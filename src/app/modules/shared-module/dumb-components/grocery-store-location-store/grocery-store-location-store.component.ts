@@ -33,13 +33,10 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    console.log(`in ngOnInit, selectedGroceryStore: ${JSON.stringify(this.selectedGroceryStore)}`);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(`in ngOnChanges, changes: ${JSON.stringify(changes)}`);
     if (changes.selectedGroceryStore || changes.groceryStores) {
-      console.log(`in ngOnChanges, updating possibleGroceryStores, selectedGroceryStore: ${JSON.stringify(this.selectedGroceryStore)}`);
       if (this.selectedGroceryStore != null) {
         this.possibleGroceryStores = this.groceryStores.filter(groceryStore =>
           this.selectedGroceryStore.id === groceryStore.id || !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id))

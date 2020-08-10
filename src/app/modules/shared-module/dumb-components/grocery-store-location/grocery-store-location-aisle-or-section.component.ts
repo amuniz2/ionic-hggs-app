@@ -52,7 +52,7 @@ export class GroceryStoreLocationAisleOrSectionComponent {
   }
 
   sectionsOrAislesExist(): boolean {
-    return this.groceryStoreAislesOrSections !== null && this.groceryStoreAislesOrSections.length > 0;
+    return this.groceryStoreAislesOrSections?.length > 0;
   }
 
   async onAddGroceryStoreAisleOrSection() {

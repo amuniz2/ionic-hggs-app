@@ -66,10 +66,6 @@ export class AppEffects {
     ofType(AppActionTypes.LoadGroceryStores),
     switchMap(() => {
       return this.storeManagementService.getGroceryStores().pipe(
-        tap(data => {
-          console.log('grocery stores returned: ');
-          console.log(data);
-        }),
         map(data => {
           const stateData: GroceryStoreState[] = data.map(x => {
                 return {

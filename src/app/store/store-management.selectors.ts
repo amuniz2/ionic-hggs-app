@@ -39,6 +39,9 @@ export const selectGroceryStore = (id: number) => createSelector(
 export const selectCurrentGroceryStore = () => createSelector(
   getAppState, (state: AppState) => state.groceryStores.selectedGroceryStore);
 
+export const selectCurrentGroceryStoreId = () => createSelector(
+  selectCurrentGroceryStore(), (state: GroceryStoreState) => state?.id);
+
 export const selectGroceryStoreAisles = (id: number) => createSelector(
   selectGroceryStore(id), (state: GroceryStoreState) => state?.aisles);
 
