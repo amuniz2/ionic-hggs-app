@@ -16,6 +16,9 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
   groceryStores: GroceryStore[];
 
   @Input()
+  editingExistingStoreLocation: boolean;
+
+  @Input()
   selectedGroceryStore: GroceryStore;
 
   @Input()
@@ -28,6 +31,7 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
   selectedNewGroceryStoreChange: EventEmitter<string> = new EventEmitter<string>();
 
   private possibleGroceryStores: GroceryStore[];
+  private : boolean;
   constructor(public controlContainer: ControlContainer,
               public modalController: ModalController) {
   }
@@ -36,12 +40,14 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log('changes: ');
+    console.log(changes);
     if (changes.selectedGroceryStore || changes.groceryStores) {
-      if (this.selectedGroceryStore != null) {
-        this.possibleGroceryStores = this.groceryStores.filter(groceryStore =>
-          this.selectedGroceryStore.id === groceryStore.id || !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id))
+      if (this.editingExistingStoreLocation && changes.selectedGroceryStore && changes.selectedGroceryStore.currentValue) {
+        this.possibleGroceryStores = [changes.selectedGroceryStore.currentValue];
       } else {
-        this.possibleGroceryStores = this.groceryStores;
+          this.possibleGroceryStores = this.groceryStores.filter(groceryStore =>
+            !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id))
       }
     }
   }
@@ -77,4 +83,9 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
       this.selectedNewGroceryStoreChange.emit(dataReturned.data.storeName);
     }
   }
+
+  getPlaceholderText(): string {
+    return this.possibleGroceryStores?.length === 0 ?  'No Grocery Stores Available' : 'Select Grocery Store';
+  }
+
 }

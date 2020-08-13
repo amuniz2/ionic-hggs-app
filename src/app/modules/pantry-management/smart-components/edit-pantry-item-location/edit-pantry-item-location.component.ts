@@ -70,11 +70,11 @@ export class EditPantryItemLocationComponent implements OnInit {
     this.locationId = this.activeRoute.snapshot.params.locationId;
 
     if (this.locationId) {
+      this.selectedGroceryStoreId = this.router.getCurrentNavigation().extras.queryParams.storeId;
       this.store.dispatch(new SelectStore(this.selectedGroceryStoreId));
       this.selectedGroceryStoreLocation$ = this.store.select(selectGroceryStoreLocation(this.locationId));
       this.selectedGroceryStoreAisle = this.router.getCurrentNavigation().extras.queryParams.aisle;
       this.selectedGroceryStoreSection = this.router.getCurrentNavigation().extras.queryParams.section;
-      this.selectedGroceryStoreId = this.router.getCurrentNavigation().extras.queryParams.storeId;
 //      this.selectedGroceryStore$ = this.store.select(fromSelectors.selectGroceryStore(this.selectedGroceryStoreId));
       this.selectGroceryStore(this.selectedGroceryStoreId);
 
@@ -106,7 +106,7 @@ export class EditPantryItemLocationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
+    // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
     // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
     const tabs = document.querySelectorAll('.show-tabbar');
     if (tabs !== null) {
@@ -117,6 +117,7 @@ export class EditPantryItemLocationComponent implements OnInit {
     this.selectedGroceryStoreId$ = this.store.select(fromSelectors.selectCurrentGroceryStoreId());
     this.selectedGroceryStoreId$.subscribe((storeId) => {
       this.selectedGroceryStoreId = storeId;
+      this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
       this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
         this.selectedGroceryStoreId));
       this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(
@@ -199,7 +200,7 @@ export class EditPantryItemLocationComponent implements OnInit {
 
   onCreateAndSelectGroceryStore($event: string) {
     this.store.dispatch(new CreateStore({ name: $event }));
-    // this.selectedGroceryStoreName = $event;
+    // todo: is this why we are getting error?
     this.locationForm.patchValue(
       { locationStore: this.selectedGroceryStoreName }
     )

@@ -5,6 +5,7 @@
       <app-grocery-store-location-store [formGroup]="locationForm" [groceryStores]="groceryStores$ | async"
                                         [selectedGroceryStore]="selectedGroceryStore$ | async"
                                         [groceryStoreIdsItemIsLocatedIn] = "groceryStoreIdsItemIsLocatedIn$ | async"
+                                        [editingExistingStoreLocation]="!!locationId"
                                         (selectedGroceryStoreChange)="onChangeLocationGroceryStore($event)"
                                         (selectedNewGroceryStoreChange)="onCreateAndSelectGroceryStore($event)"></app-grocery-store-location-store>
       <app-grocery-store-location-aisle-or-section  [formGroup]="locationForm"
