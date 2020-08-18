@@ -104,8 +104,6 @@
 // expose private configuration value required for background operation
 @interface WKWebViewConfiguration ()
 
-@property (setter=_setAlwaysRunsAtForegroundPriority:, nonatomic) bool _alwaysRunsAtForegroundPriority;
-
 @end
 
 
@@ -115,10 +113,6 @@
 @implementation CDVWKWebViewEngine
 
 @synthesize engineWebView = _engineWebView;
-
-NSTimer *timer;
-
-NSString * const IONIC_SCHEME = @"ionic";
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -181,8 +175,32 @@ NSString * const IONIC_SCHEME = @"ionic";
         return configuration;
     }
 
-    //required to stop wkwebview suspending in background too eagerly (as used in background mode plugin)
-    configuration._alwaysRunsAtForegroundPriority = ![settings cordovaBoolSettingForKey:@"WKSuspendInBackground" defaultValue:YES];
+    if(![settings cordovaBoolSettingForKey:@"WKSuspendInBackground" defaultValue:YES]){
+        NSString* _BGStatus;
+        if (@available(iOS 12.2, *)) {
+            // do stuff for iOS 12.2 and newer
+            NSLog(@"iOS 12.2+ detected");
+            NSString* str = @"YWx3YXlzUnVuc0F0Rm9yZWdyb3VuZFByaW9yaXR5";
+            NSData* data  = [[NSData alloc] initWithBase64EncodedString:str options:0];
+            _BGStatus = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        } else {
+            // do stuff for iOS 12.1 and older
+            NSLog(@"iOS Below 12.2 detected");
+            NSString* str = @"X2Fsd2F5c1J1bnNBdEZvcmVncm91bmRQcmlvcml0eQ==";
+            NSData* data  = [[NSData alloc] initWithBase64EncodedString:str options:0];
+            _BGStatus = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        }
+        [configuration setValue:[NSNumber numberWithBool:YES]
+                         forKey:_BGStatus];
+    }
+    NSString *userAgent = configuration.applicationNameForUserAgent;
+    if (
+        [settings cordovaSettingForKey:@"OverrideUserAgent"] == nil &&
+        [settings cordovaSettingForKey:@"AppendUserAgent"] != nil
+        ) {
+        userAgent = [NSString stringWithFormat:@"%@ %@", userAgent, [settings cordovaSettingForKey:@"AppendUserAgent"]];
+    }
+    configuration.applicationNameForUserAgent = userAgent;
     configuration.allowsInlineMediaPlayback = [settings cordovaBoolSettingForKey:@"AllowInlineMediaPlayback" defaultValue:YES];
     configuration.suppressesIncrementalRendering = [settings cordovaBoolSettingForKey:@"SuppressesIncrementalRendering" defaultValue:NO];
     configuration.allowsAirPlayForMediaPlayback = [settings cordovaBoolSettingForKey:@"MediaPlaybackAllowsAirPlay" defaultValue:YES];
@@ -197,7 +215,11 @@ NSString * const IONIC_SCHEME = @"ionic";
     if(bind == nil){
         bind = @"localhost";
     }
-    self.CDV_LOCAL_SERVER = [NSString stringWithFormat:@"%@://%@",IONIC_SCHEME, bind];
+    NSString *scheme = [settings cordovaSettingForKey:@"iosScheme"];
+    if(scheme == nil || [scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"]  || [scheme isEqualToString:@"file"]){
+        scheme = @"ionic";
+    }
+    self.CDV_LOCAL_SERVER = [NSString stringWithFormat:@"%@://%@", scheme, bind];
 
     self.uiDelegate = [[CDVWKWebViewUIDelegate alloc] initWithTitle:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"]];
 
@@ -238,9 +260,8 @@ NSString * const IONIC_SCHEME = @"ionic";
     WKWebViewConfiguration* configuration = [self createConfigurationFromSettings:settings];
     configuration.userContentController = userContentController;
 
-    self.handler = [[IONAssetHandler alloc] init];
-    [self.handler setAssetPath:[self getStartPath]];
-    [configuration setURLSchemeHandler:self.handler forURLScheme:IONIC_SCHEME];
+    self.handler = [[IONAssetHandler alloc] initWithBasePath:[self getStartPath] andScheme:scheme];
+    [configuration setURLSchemeHandler:self.handler forURLScheme:scheme];
 
     // re-create WKWebView, since we need to update configuration
     // remove from keyWindow before recreating
@@ -254,8 +275,9 @@ NSString * const IONIC_SCHEME = @"ionic";
     // add to keyWindow to ensure it is 'active'
     [UIApplication.sharedApplication.keyWindow addSubview:self.engineWebView];
 
-    if ([self.viewController isKindOfClass:[CDVViewController class]]) {
-        wkWebView.customUserAgent = ((CDVViewController*) self.viewController).userAgent;
+    NSString * overrideUserAgent = [settings cordovaSettingForKey:@"OverrideUserAgent"];
+    if (overrideUserAgent != nil) {
+        wkWebView.customUserAgent = overrideUserAgent;
     }
 
     if ([self.viewController conformsToProtocol:@protocol(WKUIDelegate)]) {
@@ -272,9 +294,7 @@ NSString * const IONIC_SCHEME = @"ionic";
         [wkWebView.configuration.userContentController addScriptMessageHandler:(id < WKScriptMessageHandler >)self.viewController name:CDV_BRIDGE_NAME];
     }
 
-    //if (![settings cordovaBoolSettingForKey:@"KeyboardDisplayRequiresUserAction" defaultValue:NO]) {
     [self keyboardDisplayDoesNotRequireUserAction];
-    //}
 
     if ([settings cordovaBoolSettingForKey:@"KeyboardAppearanceDark" defaultValue:NO]) {
         [self setKeyboardAppearanceDark];
@@ -289,15 +309,15 @@ NSString * const IONIC_SCHEME = @"ionic";
      selector:@selector(onAppWillEnterForeground:)
      name:UIApplicationWillEnterForegroundNotification object:nil];
 
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(keyboardWillHide)
-     name:UIKeyboardWillHideNotification object:nil];
-
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(keyboardWillShow)
-     name:UIKeyboardWillShowNotification object:nil];
+    // If less than ios 13.4
+    if (@available(iOS 13.4, *)) {} else {
+        // For keyboard dismissal leaving viewport shifted (can potentially be removed when apple releases the fix for the issue discussed here: https://github.com/apache/cordova-ios/issues/417#issuecomment-423340885)
+        // Apple has released a fix in 13.4, but not in 12.x (as of 12.4.6)
+        [[NSNotificationCenter defaultCenter]
+        addObserver:self
+        selector:@selector(keyboardWillHide)
+        name:UIKeyboardWillHideNotification object:nil];
+    }
 
     NSLog(@"Using Ionic WKWebView");
 
@@ -307,9 +327,18 @@ NSString * const IONIC_SCHEME = @"ionic";
 - (void) keyboardDisplayDoesNotRequireUserAction {
     Class class = NSClassFromString(@"WKContentView");
     NSOperatingSystemVersion iOS_11_3_0 = (NSOperatingSystemVersion){11, 3, 0};
+    NSOperatingSystemVersion iOS_12_2_0 = (NSOperatingSystemVersion){12, 2, 0};
+    NSOperatingSystemVersion iOS_13_0_0 = (NSOperatingSystemVersion){13, 0, 0};
+    char * methodSignature = "_startAssistingNode:userIsInteracting:blurPreviousNode:changingActivityState:userObject:";
+
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_13_0_0]) {
+         methodSignature = "_elementDidFocus:userIsInteracting:blurPreviousNode:activityStateChanges:userObject:";
+     } else if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_12_2_0]) {
+        methodSignature = "_elementDidFocus:userIsInteracting:blurPreviousNode:changingActivityState:userObject:";
+    }
 
     if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_11_3_0]) {
-        SEL selector = sel_getUid("_startAssistingNode:userIsInteracting:blurPreviousNode:changingActivityState:userObject:");
+        SEL selector = sel_getUid(methodSignature);
         Method method = class_getInstanceMethod(class, selector);
         IMP original = method_getImplementation(method);
         IMP override = imp_implementationWithBlock(^void(id me, void* arg0, BOOL arg1, BOOL arg2, BOOL arg3, id arg4) {
@@ -355,27 +384,22 @@ NSString * const IONIC_SCHEME = @"ionic";
 
 -(void)keyboardWillHide
 {
-    if (@available(iOS 12.0, *)) {
-        timer = [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(keyboardDisplacementFix) userInfo:nil repeats:false];
-        [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    // For keyboard dismissal leaving viewport shifted (can potentially be removed when apple releases the fix for the issue discussed here: https://github.com/apache/cordova-ios/issues/417#issuecomment-423340885)
+    UIScrollView * scrollView = self.webView.scrollView;
+    // Calculate some vars for convenience
+    CGFloat contentLengthWithInsets = scrollView.contentSize.height + scrollView.adjustedContentInset.top + scrollView.adjustedContentInset.bottom;
+    CGFloat contentOffsetY = scrollView.contentOffset.y;
+    CGFloat screenHeight = scrollView.frame.size.height;
+    CGFloat maxAllowedOffsetY = fmax(contentLengthWithInsets - screenHeight, 0); // 0 is for the case where content is shorter than screen
+
+    // If the keyboard allowed the user to get to an offset beyond the max
+    if (contentOffsetY > maxAllowedOffsetY) {
+        // Reset the scroll to the max allowed so that there is no additional empty white space at the bottom where the keyboard occupied!
+        CGPoint bottomOfPage = CGPointMake(scrollView.contentOffset.x, maxAllowedOffsetY);
+        [scrollView setContentOffset:bottomOfPage];
     }
 }
 
--(void)keyboardWillShow
-{
-    if (timer != nil) {
-        [timer invalidate];
-    }
-}
-
--(void)keyboardDisplacementFix
-{
-    // https://stackoverflow.com/a/9637807/824966
-    [UIView animateWithDuration:.25 animations:^{
-        self.webView.scrollView.contentOffset = CGPointMake(0, 0);
-    }];
-
-}
 - (BOOL)shouldReloadWebView
 {
     WKWebView* wkWebView = (WKWebView*)_engineWebView;
@@ -495,7 +519,6 @@ NSString * const IONIC_SCHEME = @"ionic";
 }
 
 // This forwards the methods that are in the header that are not implemented here.
-// Both WKWebView and UIWebView implement the below:
 //     loadHTMLString:baseURL:
 //     loadRequest:
 - (id)forwardingTargetForSelector:(SEL)aSelector
@@ -647,9 +670,10 @@ NSString * const IONIC_SCHEME = @"ionic";
 
 - (void)webView:(WKWebView*)webView didFinishNavigation:(WKNavigation*)navigation
 {
-    CDVViewController* vc = (CDVViewController*)self.viewController;
-    [CDVUserAgentUtil releaseLock:vc.userAgentLockToken];
-
+    #ifndef __CORDOVA_6_0_0
+        CDVViewController* vc = (CDVViewController*)self.viewController;
+        [CDVUserAgentUtil releaseLock:vc.userAgentLockToken];
+    #endif
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPageDidLoadNotification object:webView]];
 }
 
@@ -661,17 +685,25 @@ NSString * const IONIC_SCHEME = @"ionic";
 - (void)webView:(WKWebView*)theWebView didFailNavigation:(WKNavigation*)navigation withError:(NSError*)error
 {
     CDVViewController* vc = (CDVViewController*)self.viewController;
-    [CDVUserAgentUtil releaseLock:vc.userAgentLockToken];
+    #ifndef __CORDOVA_6_0_0
+        [CDVUserAgentUtil releaseLock:vc.userAgentLockToken];
+    #endif
 
     NSString* message = [NSString stringWithFormat:@"Failed to load webpage with error: %@", [error localizedDescription]];
     NSLog(@"%@", message);
 
     NSURL* errorUrl = vc.errorURL;
     if (errorUrl) {
-        errorUrl = [NSURL URLWithString:[NSString stringWithFormat:@"?error=%@", [message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] relativeToURL:errorUrl];
+        NSCharacterSet *charSet = [NSCharacterSet URLFragmentAllowedCharacterSet];
+        errorUrl = [NSURL URLWithString:[NSString stringWithFormat:@"?error=%@", [message stringByAddingPercentEncodingWithAllowedCharacters:charSet]] relativeToURL:errorUrl];
         NSLog(@"%@", [errorUrl absoluteString]);
         [theWebView loadRequest:[NSURLRequest requestWithURL:errorUrl]];
     }
+#ifdef DEBUG
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"] message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleDefault handler:nil]];
+    [vc presentViewController:alertController animated:YES completion:nil];
+#endif
 }
 
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView
@@ -708,7 +740,11 @@ NSString * const IONIC_SCHEME = @"ionic";
             // https://issues.apache.org/jira/browse/CB-12497
             int navType = (int)navigationAction.navigationType;
             if (WKNavigationTypeOther == navigationAction.navigationType) {
-                navType = (int)UIWebViewNavigationTypeOther;
+                #ifdef __CORDOVA_6_0_0
+                    navType = -1;
+                #else
+                    navType = 5;
+                #endif
             }
             shouldAllowRequest = (((BOOL (*)(id, SEL, id, int))objc_msgSend)(plugin, selector, navigationAction.request, navType));
             if (!shouldAllowRequest) {
@@ -733,9 +769,8 @@ NSString * const IONIC_SCHEME = @"ionic";
             [scheme isEqualToString:@"mailto"] ||
             [scheme isEqualToString:@"facetime"] ||
             [scheme isEqualToString:@"sms"] ||
-            [scheme isEqualToString:@"maps"] ||
-            [scheme isEqualToString:@"itms-services"]) {
-            [[UIApplication sharedApplication] openURL:url];
+            [scheme isEqualToString:@"maps"]) {
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
             decisionHandler(WKNavigationActionPolicyCancel);
         } else {
             decisionHandler(WKNavigationActionPolicyAllow);

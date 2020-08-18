@@ -15,8 +15,10 @@ export interface GroceryItemLocationsState extends EntityState<GroceryStoreLocat
 
 export interface AppState {
   isReady: boolean;
+  isPlatformReady: boolean;
+  isDeviceReady: boolean;
+  databaseReady: boolean;
   isOffline: boolean;
-  deviceDetails: any;
   version: string;
   initializationError: string;
   groceryStores: GroceryStoresState;

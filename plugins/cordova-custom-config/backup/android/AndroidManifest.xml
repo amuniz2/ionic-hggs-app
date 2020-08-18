@@ -8,6 +8,12 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter android:label="read_hggs_file">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.hggs" android:scheme="content" />
+            </intent-filter>
         </activity>
         <receiver android:enabled="true" android:name="nl.xservices.plugins.ShareChooserPendingIntent">
             <intent-filter>

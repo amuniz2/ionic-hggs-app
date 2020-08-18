@@ -2,7 +2,7 @@
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-sqlite-storage"
-    version="3.2.0">
+    version="5.0.1">
 
     <name>Cordova sqlite storage plugin - cordova-sqlite-storage plugin version</name>
 
@@ -51,13 +51,12 @@
         <header-file src="src/ios/SQLitePlugin.h" />
         <source-file src="src/ios/SQLitePlugin.m" />
 
-        <header-file src="src/ios/PSPDFThreadSafeMutableDictionary.h" />
-        <source-file src="src/ios/PSPDFThreadSafeMutableDictionary.m"
+        <source-file src="src/ios/CustomPSPDFThreadSafeMutableDictionary.m"
                 compiler-flags="-w" />
 
         <header-file src="node_modules/cordova-sqlite-storage-dependencies/sqlite3.h" />
         <source-file src="node_modules/cordova-sqlite-storage-dependencies/sqlite3.c"
-                     compiler-flags="-w -DSQLITE_THREADSAFE=1 -DSQLITE_DEFAULT_SYNCHRONOUS=3 -DSQLITE_DEFAULT_MEMSTATUS=0 -DSQLITE_OMIT_DECLTYPE -DSQLITE_OMIT_DEPRECATED -DSQLITE_OMIT_PROGRESS_CALLBACK -DSQLITE_OMIT_SHARED_CACHE -DSQLITE_TEMP_STORE=2 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -DSQLITE_DEFAULT_PAGE_SIZE=1024" />
+                     compiler-flags="-w -DSQLITE_THREADSAFE=1 -DSQLITE_DEFAULT_SYNCHRONOUS=3 -DSQLITE_DEFAULT_MEMSTATUS=0 -DSQLITE_OMIT_DECLTYPE -DSQLITE_OMIT_DEPRECATED -DSQLITE_OMIT_PROGRESS_CALLBACK -DSQLITE_OMIT_SHARED_CACHE -DSQLITE_TEMP_STORE=2 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -DSQLITE_DEFAULT_PAGE_SIZE=4096" />
     </platform>
 
     <!-- macOS (osx) -->
@@ -72,13 +71,12 @@
         <header-file src="src/ios/SQLitePlugin.h" />
         <source-file src="src/ios/SQLitePlugin.m" />
 
-        <header-file src="src/ios/PSPDFThreadSafeMutableDictionary.h" />
-        <source-file src="src/ios/PSPDFThreadSafeMutableDictionary.m"
+        <source-file src="src/ios/CustomPSPDFThreadSafeMutableDictionary.m"
                 compiler-flags="-w" />
 
         <header-file src="node_modules/cordova-sqlite-storage-dependencies/sqlite3.h" />
         <source-file src="node_modules/cordova-sqlite-storage-dependencies/sqlite3.c"
-                     compiler-flags="-w -DSQLITE_THREADSAFE=1 -DSQLITE_DEFAULT_SYNCHRONOUS=3 -DSQLITE_DEFAULT_MEMSTATUS=0 -DSQLITE_OMIT_DECLTYPE -DSQLITE_OMIT_DEPRECATED -DSQLITE_OMIT_PROGRESS_CALLBACK -DSQLITE_OMIT_SHARED_CACHE -DSQLITE_TEMP_STORE=2 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -DSQLITE_DEFAULT_PAGE_SIZE=1024" />
+                     compiler-flags="-w -DSQLITE_THREADSAFE=1 -DSQLITE_DEFAULT_SYNCHRONOUS=3 -DSQLITE_DEFAULT_MEMSTATUS=0 -DSQLITE_OMIT_DECLTYPE -DSQLITE_OMIT_DEPRECATED -DSQLITE_OMIT_PROGRESS_CALLBACK -DSQLITE_OMIT_SHARED_CACHE -DSQLITE_TEMP_STORE=2 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -DSQLITE_DEFAULT_PAGE_SIZE=4096" />
     </platform>
 
     <!-- windows -->

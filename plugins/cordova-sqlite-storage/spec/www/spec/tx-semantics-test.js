@@ -62,7 +62,7 @@ var mytests = function() {
           // explicit database location:
           return window.sqlitePlugin.openDatabase({name: name, location: 'default'});
         }
-      };
+      }
 
         it(suiteName + 'Simple tx sql order test', function(done) {
           // This test shows that executeSql statements run in intermediate callback
@@ -390,7 +390,8 @@ var mytests = function() {
             //start();
             func(db);
           });
-        }
+        };
+
         it(suiteName + "transaction encompasses all callbacks", function(done) {
           var db = openDatabase("tx-all-callbacks.db", "1.0", "Demo", DEFAULT_SIZE);
 
@@ -807,7 +808,7 @@ var mytests = function() {
     });
   }
 
-};
+}
 
 if (window.hasBrowser) mytests();
 else exports.defineAutoTests = mytests;

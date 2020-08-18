@@ -67,7 +67,7 @@ var mytests = function() {
           // explicit database location:
           return window.sqlitePlugin.openDatabase({name: name, location: 'default'});
         }
-      };
+      }
 
       describe(suiteName + 'transaction column value insertion test(s)', function() {
 
@@ -596,7 +596,7 @@ var mytests = function() {
           db.transaction(function(tx) {
             tx.executeSql('DROP TABLE IF EXISTS test_table');
             tx.executeSql('CREATE TABLE IF NOT EXISTS test_table (data)', [], function(ignored1, ignored2) {
-              var part = '@\uD83D\uDE01\uD83D\uDE02\uD83D\uDE03\uD83D\uDE04\uD83D\uDE05';
+              var part = '@\uD83D\uDE01\uD83D\uDE02\uD83D\uDE03\uD83D\uDE04\uD83D\uDE05'
 
               tx.executeSql('INSERT INTO test_table VALUES (?)', [part + part + part + part + part], function(tx_ignored, rs1) {
                 expect(rs1).toBeDefined();
@@ -1666,7 +1666,7 @@ var mytests = function() {
     });
   }
 
-};
+}
 
 if (window.hasBrowser) mytests();
 else exports.defineAutoTests = mytests;

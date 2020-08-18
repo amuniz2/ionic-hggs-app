@@ -53,10 +53,15 @@ export class PantryEffects {
   @Effect()
   public loadPantryItems$ = this.actions$.pipe(
     ofType(PantryActionTypes.LoadPantryItems),
+    tap(() => console.log('calling getPantryItems() from effect')),
     switchMap(() => {
         return this.pantryDataService.getPantryItems().pipe(
+          tap((data) => console.log(`getPantryItems returned ${JSON.stringify(data)}`)),
           map(data => new PantryLoadedSuccessfully(data)),
-          catchError(error => [new PantryLoadFailed(error)])
+          catchError(error => {
+            console.log('Error getting Pantry Items');
+            return [new PantryLoadFailed(error)];
+          })
         );
     })
   );

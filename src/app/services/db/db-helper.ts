@@ -21,44 +21,59 @@ export class PantryDbHelper {
   // helpers
   public connect(): Observable<boolean> {
     return new Observable<boolean>((observer) => {
-      this.mySqlCommands.openOrCreateDb()
-        .then((success) => {
-          observer.next(success);
-          observer.complete();
-        })
-        .catch((err) => observer.error(err));
+      this.mySqlCommands.connect().then((success) => {
+        observer.next(success);
+        observer.complete();
+      }).catch((err) => {
+        console.log('Error connecting to db');
+        observer.error(err);
+      });
     });
+
+    // return new Observable<boolean>((observer) => {
+    //   this.mySqlCommands.openOrCreateDb()
+    //     .then((success) => {
+    //       observer.next(success);
+    //       observer.complete();
+    //     })
+    //     .catch((err) => observer.error(err));
+    // });
   }
 
   public getGroceryStoreByName(name: string): Observable<GroceryStore> {
     return new Observable<GroceryStore>((observer) => {
-        this.mySqlCommands.openOrCreateDb().then((result) => {
-          if (result) {
+        // this.mySqlCommands.openOrCreateDb().then((result) => {
+        //   if (result) {
             this.mySqlCommands.queryGroceryStoreByName(name).then((stores) => {
               observer.next(stores);
               observer.complete();
-            }).catch((err) => observer.error(err));
-          }
-        }).catch((err) => {
-          console.log('error in call to openOrCreateDb');
-          observer.error(err);
-        });
+            }).catch((err) => {
+              console.log('error in call to queryGroceryStoreByName');
+              observer.error(err)
+            });
+          // }
+        // }).catch((err) => {
+        //   console.log('error in call to openOrCreateDb');
+        //   observer.error(err);
+        // });
       }
     );
   }
 
   public getAllGroceryStores(): Observable<GroceryStore[]> {
     return new Observable<GroceryStore[]>((observer) => {
-        this.mySqlCommands.openOrCreateDb().then((result) => {
+        this.mySqlCommands.connect().then((result) => {
           console.log(`openOrCreateDb returned ${result}`);
           if (result) {
             this.mySqlCommands.queryGroceryStores().then((stores) => {
               console.log('returning observable for stores');
               observer.next(stores);
               observer.complete();
-            }).catch((err) => observer.error(err));
-          }
-        }).catch((err) => {
+            }).catch((err) => {
+              console.log('error in call to getAllGroceryStores');
+              observer.error(err);
+          });
+        }}).catch((err) => {
           console.log('error in call to openOrCreateDb');
           observer.error(err);
         });
@@ -68,14 +83,17 @@ export class PantryDbHelper {
 
   public getAllPantryItems(): Observable<PantryItem[]> {
     return new Observable<PantryItem[]>((observer) => {
-        this.mySqlCommands.openOrCreateDb().then((result) => {
+        this.mySqlCommands.connect().then((result) => {
           if (result) {
             this.mySqlCommands.queryPantryItems().then((items) => {
+              console.log('returning observable for pantry items');
               observer.next(items);
               observer.complete();
-            }).catch((err) => observer.error(err));
-          }
-        }).catch((err) => {
+            }).catch((err) => {
+              console.log('error in call to this.getAllPantryItems()');
+              observer.error(err);
+          });
+        }}).catch((err) => {
           console.log('error in call to openOrCreateDb');
           observer.error(err);
         });

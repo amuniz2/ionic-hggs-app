@@ -52,7 +52,7 @@ var mytests = function() {
           // explicit database location:
           return window.sqlitePlugin.openDatabase({name: name, location: 'default'});
         }
-      };
+      }
 
       describe(pluginScenarioList[i] + ': db.executeSql SELECT result test(s)', function() {
 
@@ -697,7 +697,7 @@ var mytests = function() {
           var db = openDatabase('DB-sql-new-String-test.db');
           expect(db).toBeDefined();
 
-          db.executeSql(String("SELECT UPPER('first') AS uppertext"), null, function(rs) {
+          db.executeSql(new String("SELECT UPPER('first') AS uppertext"), null, function(rs) {
             expect(rs).toBeDefined();
             expect(rs.rows).toBeDefined();
             expect(rs.rows.length).toBe(1);
@@ -785,10 +785,8 @@ var mytests = function() {
 
         it(suiteName + 'db.executeSql string result test with dynamic object for SQL [INCONSISTENT BEHAVIOR]', function(done) {
           // MyDynamicObject "class":
-          function MyDynamicObject() {
-            this.name = 'Alice';
-          }
-          MyDynamicObject.prototype.toString = function() {return "SELECT UPPER('" + this.name + "') as uppertext";};
+          function MyDynamicObject() { this.name = 'Alice'; };
+          MyDynamicObject.prototype.toString = function() {return "SELECT UPPER('" + this.name + "') as uppertext";}
 
           var myObject = new MyDynamicObject();
           // Check myObject:
@@ -820,9 +818,7 @@ var mytests = function() {
 
         it(suiteName + 'db.executeSql string result test with dynamic object for parameter arg [INCONSISTENT BEHAVIOR]', function(done) {
           // MyDynamicParameterObject "class":
-          function MyDynamicParameterObject() {
-            this.name = 'Alice';
-          }
+          function MyDynamicParameterObject() {this.name='Alice';};
           MyDynamicParameterObject.prototype.toString = function() {return this.name;};
 
           var myObject = new MyDynamicParameterObject();
@@ -1614,7 +1610,7 @@ var mytests = function() {
 
   }
 
-};
+}
 
 if (window.hasBrowser) mytests();
 else exports.defineAutoTests = mytests;

@@ -15,6 +15,11 @@ import {GroceryStoreSection} from '../../model/grocery-store-section';
 import {GroceryStoreAisle} from '../../model/grocery-store-aisle';
 import {IdMapping} from '../IPantryDataService';
 import {HggsData} from '../../model/hggs-data';
+import {Platform} from '@ionic/angular';
+import {DatabaseReady} from '../../store';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store/app.state';
+import {Observable} from 'rxjs';
 
 interface GroceryStoreMapping {
   storeIdMapping: IdMapping,
@@ -25,21 +30,53 @@ interface GroceryStoreMapping {
 @Injectable()
 export class MySqlCommands {
   private db: SQLiteObject;
-  constructor(private sqlite: SQLite) {
+  private platformReady: boolean;
+  constructor(private sqlite: SQLite, private platform: Platform, private store: Store<AppState>) {
     this.db = null;
+    this.platformReady = false;
   }
+
+  public async connect(): Promise<boolean> {
+    await this.platform.ready();
+    return await this.openOrCreateDb();
+  }
+
   // region db commands
-  public async openOrCreateDb(): Promise<boolean> {
+  private async openOrCreateDb() : Promise<boolean> {
+    let success = false;
     if (this.db !== null) {
       return true;
     }
-    const openedDb = await this.sqlite.create({ name: 'hggs-app.db', location: 'default'});
-    // it was successful
-    console.log('sqlite.create succeeded');
-    const success = await this.createOrOpenTables(openedDb);
-    console.log('create or open tables completed successfully');
-    this.db = openedDb;
+    console.log('creating sqlite object');
+    try {
+      this.db = await this.sqlite.create({name: 'hggs-app.db', location: 'default'});
+      // this.sqlite.create({ name: 'hggs-app.db', location: 'default'}).then((openedDb: SQLiteObject) => {
+      if (!!this.db) {
+        console.log('sqlite.create succeeded');
+        console.log(this.db);
+        success = await this.createOrOpenTables(this.db);
+        if (success) {
+          console.log('create or open tables completed successfully');
+          this.store.dispatch(new DatabaseReady());
+        } else {
+          console.log('create or open tables failed');
+        }
+        return success;
+      } else {
+        console.log('sqlite.create failed');
+      }
+    }
+    catch(err) {
+      console.log('screate or open tables failed, err: ');
+      console.log(err);
+      return false;
+    }
     return success;
+    // }).catch((err) => {
+    //   console.log('sqlite.create failed, err: ');
+    //   console.log(err);
+    // });
+    // return false;
   }
 
   private async createOrOpenTables(openedDb: SQLiteObject): Promise<boolean> {

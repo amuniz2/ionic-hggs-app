@@ -13,7 +13,7 @@ import {
 } from '../../../../store/store-management.selectors';
 // tslint:disable-next-line:max-line-length
 import {GroceryStoreAisleOrSectionSelected} from '../../../shared-module/dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AddPantryItemLocation, UpdatePantryItemLocation} from '../../store/pantry-management.actions';
 import {ActivatedRoute, Router} from '@angular/router';
 import {selectGroceryStoresItemIsLocatedIn} from '../../store/pantry-management.selectors';
@@ -62,7 +62,7 @@ export class EditPantryItemLocationComponent implements OnInit {
               private fb: FormBuilder,
               private activeRoute: ActivatedRoute,
               private router: Router) {
-    this.store.dispatch(new LoadGroceryStores());
+    // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     this.groceryStores$ =  this.store.select(fromSelectors.selectAllGroceryStores);
     this.pantryItemId = +this.activeRoute.snapshot.params.id;
@@ -91,13 +91,14 @@ export class EditPantryItemLocationComponent implements OnInit {
       });
     }
     this.locationForm = this.fb.group({
-      locationStore: [this.selectedGroceryStoreName],
+      locationStore: [{ value: this.selectedGroceryStoreName, disabled: !!this.locationId }, Validators.required ],
       locationAisle: [this.selectedGroceryStoreAisle],
       locationSection: [this.selectedGroceryStoreSection]
     });
     if (this.selectedGroceryStore$ != null) {
       this.selectedGroceryStore$.pipe(
         withLatestFrom((groceryStore: GroceryStoreState) => {
+          console.log('patching grocery store name value');
           this.locationForm.patchValue( {
             locationStore: groceryStoreFromGrocerStoreState(groceryStore).name
           });
@@ -115,16 +116,25 @@ export class EditPantryItemLocationComponent implements OnInit {
       });
     }
     this.selectedGroceryStoreId$ = this.store.select(fromSelectors.selectCurrentGroceryStoreId());
+
     this.selectedGroceryStoreId$.subscribe((storeId) => {
-      this.selectedGroceryStoreId = storeId;
-      this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
+      // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
+      this.selectedGroceryStore$ = this.store.select(fromSelectors.selectGroceryStore(storeId));
       this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
-        this.selectedGroceryStoreId));
+        storeId));
       this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(
-        this.selectedGroceryStoreId));
+        storeId));
       this.groceryStoreLocations$ = this.store.select(fromSelectors.selectGroceryStoreLocations(
-        this.selectedGroceryStoreId))
+        storeId))
+      this.selectedGroceryStoreId = storeId;
     })
+    // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
+    // this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
+    //   this.selectedGroceryStoreId));
+    // this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(
+    //   this.selectedGroceryStoreId));
+    // this.groceryStoreLocations$ = this.store.select(fromSelectors.selectGroceryStoreLocations(
+    //   this.selectedGroceryStoreId));
   }
 
   onChangeLocationGroceryStore($event: GroceryStore) {

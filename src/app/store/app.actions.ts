@@ -63,6 +63,7 @@ export class StartAppInitializer implements Action {
   public readonly type = AppActionTypes.StartAppInitializer;
 }
 
+
 export class FinishAppInitializer implements Action {
   public readonly type = AppActionTypes.FinishAppInitializer;
 }
@@ -74,7 +75,7 @@ export class DatabaseOpenFailed implements Action {
 
 export class DatabaseReady implements Action {
   public readonly type = AppActionTypes.DatabaseReady;
-  constructor(err: any) {}
+  constructor() {}
 }
 
 // region GroceryStores
@@ -290,6 +291,7 @@ export type AppActions = AppReady
   | StartAppInitializer
   | FinishAppInitializer
   | DatabaseOpenFailed
+  | DatabaseReady
   | GroceryStoreLocationsLoaded
   | LoadGroceryStoreAisles
   | LoadGroceryStoreSections

@@ -28,7 +28,7 @@ export interface IdMapping {
 
 export interface IPantryDataService {
 
-  initialize();
+  initialize(): Observable<boolean>;
 
   addGroceryStore(newStoreRequest: NewGroceryStoreRequest): Observable<GroceryStore>;
 

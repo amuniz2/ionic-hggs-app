@@ -7,10 +7,12 @@ import {getGroceryStore, selectAllGroceryStores, selectGroceryStore} from './sto
 import {GroceryStoreState} from '../model/grocery-store';
 
 export const reducers: ActionReducerMap<AppState> = {
+  databaseReady: (databaseReady) => databaseReady,
   isReady: (isReady) => isReady,
+  isDeviceReady: (isDeviceReady) => isDeviceReady,
+  isPlatformReady: (isPlatformReady) => isPlatformReady,
   isOffline: (isOffline) => isOffline,
   version: (version) => version,
-  deviceDetails: (deviceDetails) => deviceDetails,
   initializationError: (error) => error,
   groceryStores: (groceryStores) => groceryStores,
   groceryItemLocations: (groceryStoreLocations) => groceryStoreLocations,
@@ -19,9 +21,11 @@ export const reducers: ActionReducerMap<AppState> = {
 
 export const initialAppState: AppState = {
   isOffline: true,
-  deviceDetails: {},
   version: '1.0',
   isReady: false,
+  isDeviceReady: false,
+  isPlatformReady: false,
+  databaseReady: false,
   initializationError: '',
   groceryStores: {
     ...fromAppAdapter.sharedGroceryStoreAdapter.getInitialState(),
@@ -38,6 +42,12 @@ export const initialAppState: AppState = {
 
 export function appRootReducers(state: AppState = initialAppState, action: AppActions): AppState {
   switch (action.type) {
+    case AppActionTypes.DatabaseReady:
+      return {
+        ...state,
+        databaseReady: true
+      };
+
     case AppActionTypes.FinishAppInitializer:
       return {
         ...state,

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
-import {ControlContainer, FormControl} from '@angular/forms';
-import {ModalController, PopoverController} from '@ionic/angular';
+import {ControlContainer} from '@angular/forms';
+import {ModalController} from '@ionic/angular';
 import {AddGroceryStoreModalComponent} from '../../add-grocery-store-modal/add-grocery-store-modal.component';
 import {Store} from '@ngrx/store';
 
@@ -45,6 +45,7 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
     if (changes.selectedGroceryStore || changes.groceryStores) {
       if (this.editingExistingStoreLocation && changes.selectedGroceryStore && changes.selectedGroceryStore.currentValue) {
         this.possibleGroceryStores = [changes.selectedGroceryStore.currentValue];
+        // this.selectedGroceryStore = changes.selectedGroceryStore.currentValue;
       } else {
           this.possibleGroceryStores = this.groceryStores.filter(groceryStore =>
             !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id))

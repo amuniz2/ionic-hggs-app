@@ -50,7 +50,7 @@ var mytests = function() {
           // explicit database location:
           return window.sqlitePlugin.openDatabase({name: name, location: 'default'});
         }
-      };
+      }
 
       describe(pluginScenarioList[i] + ': Basic sql batch test(s)', function() {
 
@@ -346,10 +346,8 @@ var mytests = function() {
 
         it(suiteName + 'batch sql with dynamic object for SQL [INCONSISTENT BEHAVIOR]', function(done) {
           // MyDynamicObject "class":
-          function MyDynamicObject() {
-            this.name = 'Alice';
-          }
-          MyDynamicObject.prototype.toString = function() {return "INSERT INTO MyTable VALUES ('" + this.name + "')";};
+          function MyDynamicObject() { this.name = 'Alice'; };
+          MyDynamicObject.prototype.toString = function() {return "INSERT INTO MyTable VALUES ('" + this.name + "')";}
 
           var myObject = new MyDynamicObject();
           // Check myObject:
@@ -380,9 +378,7 @@ var mytests = function() {
 
         it(suiteName + 'batch sql with dynamic object for SQL arg value [INCONSISTENT BEHAVIOR]', function(done) {
           // MyDynamicParameterObject "class":
-          function MyDynamicParameterObject() {
-            this.name = 'Alice';
-          }
+          function MyDynamicParameterObject() {this.name='Alice';};
           MyDynamicParameterObject.prototype.toString = function() {return this.name;};
 
           var myObject = new MyDynamicParameterObject();
@@ -577,7 +573,7 @@ var mytests = function() {
             expect(e).toBeDefined();
             expect(e.message).toMatch(/sqlBatch expects an array/);
             db.close(done, done);
-          }
+          };
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch([]) (empty array) - reports success', function(done) {
@@ -603,7 +599,7 @@ var mytests = function() {
             expect(e.message).toBeDefined();
             expect(e.message).toBe('--');
             db.close(done, done);
-          }
+          };
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch with [] for sql batch item (BOGUS)', function(done) {
@@ -625,7 +621,7 @@ var mytests = function() {
             expect(e).toBeDefined();
             expect(e.message).toMatch(/sqlBatch array element of zero .*0.* length/);
             db.close(done, done);
-          }
+          };
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch with true for SQL statements (BOGUS)', function(done) {
@@ -647,7 +643,7 @@ var mytests = function() {
             expect(e).toBeDefined();
             expect(e.message).toMatch(/sqlBatch expects an array/);
             db.close(done, done);
-          }
+          };
         }, MYTIMEOUT);
 
         it(suiteName + 'batch sql with batch item with false for arguments array (BOGUS)', function(done) {
@@ -669,7 +665,8 @@ var mytests = function() {
           } catch(e) {
             expect('Plugin behavior changed please update this test').toBe('--');
             db.close(done, done);
-          }
+          };
+
           db.sqlBatch([
             'SELECT 1',
           ], function() {
@@ -703,7 +700,8 @@ var mytests = function() {
           } catch(e) {
             expect('Plugin behavior changed please update this test').toBe('--');
             db.close(done, done);
-          }
+          };
+
           db.sqlBatch([
             'SELECT 1',
           ], function() {
@@ -730,7 +728,7 @@ var mytests = function() {
           } catch(e) {
             expect('Plugin behavior changed please update this test').toBe('--');
             db.close(done, done);
-          }
+          };
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch with single SELECT statement, string-value for error callback (BOGUS)', function(done) {
@@ -745,7 +743,7 @@ var mytests = function() {
           } catch(e) {
             expect('Plugin behavior changed please update this test').toBe('--');
             db.close(done, done);
-          }
+          };
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch with error, false for success callback (BOGUS)', function(done) {
@@ -761,7 +759,7 @@ var mytests = function() {
           } catch(e) {
             expect('Plugin behavior changed please update this test').toBe('--');
             db.close(done, done);
-          }
+          };
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch with error, string-value for success callback (BOGUS)', function(done) {
@@ -777,14 +775,14 @@ var mytests = function() {
           } catch(e) {
             expect('Plugin behavior changed please update this test').toBe('--');
             db.close(done, done);
-          }
+          };
         }, MYTIMEOUT);
 
       });
 
     });
   }
-};
+}
 
 if (window.hasBrowser) mytests();
 else exports.defineAutoTests = mytests;

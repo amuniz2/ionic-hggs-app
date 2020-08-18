@@ -26,15 +26,16 @@ import {
   LoadImportedData,
   GroceryStoresImportedSuccessfully
 } from '../store/app.actions';
-import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import {catchError, concatAll, map, switchMap, tap} from 'rxjs/operators';
 import {AppState} from './app.state';
 import {IPantryDataService} from '../services/IPantryDataService';
 import {
   GetStoreAislesFailed, GetStoreSectionsFailed
 } from '../modules/store-management/store/store-management.actions';
-import {forkJoin, of} from 'rxjs';
+import {forkJoin, of, throwError} from 'rxjs';
 import {GroceryStoreState} from '../model/grocery-store';
 import {
+  LoadPantryItems,
   PantryImportedSuccessfully,
   PantryLoadedSuccessfully,
   PantryLoadFailed
@@ -45,21 +46,41 @@ import {Router} from '@angular/router';
 export class AppEffects {
   constructor(private store: Store<AppState>,
               private actions$: Actions<AppActions>,
-              @Inject('IPantryDataService') private storeManagementService: IPantryDataService,
-              private router: Router) {
+              @Inject('IPantryDataService') private storeManagementService: IPantryDataService) {
   }
 
   @Effect()
   public openDatabase$ = this.actions$.pipe(
     ofType(AppActionTypes.StartAppInitializer),
     switchMap(() => {
-      this.store.dispatch(new LoadGroceryStores());
+      tap(() => console.log('App is initializing (device is ready)'));
+      // this.store.dispatch(new LoadGroceryStores());
       return this.storeManagementService.initialize().pipe(
-        map((success) => new FinishAppInitializer()),
+        map((success) => {
+          if (success) {
+            console.log('Pantry Data Management Service is initialized.');
+          } else {
+            console.log('Pantry Data Management Service failed to initialize.');
+            // throwError('Pantry Data Management Service failed to initialize.');
+          }
+          return new FinishAppInitializer();
+        }),
         // map(data => new DatabaseOpenedSuccessfully({groceryStores: data})),
         catchError(error => [new DatabaseOpenFailed(error)])
       );
     }));
+
+  @Effect()
+  public loadData = this.actions$.pipe(
+    ofType(AppActionTypes.FinishAppInitializer),
+    switchMap(() => {
+        console.log('dispatch LoadPantryItems and LoadGroceryStores');
+        return [
+          new LoadPantryItems(),
+          new LoadGroceryStores()
+        ];
+      }
+    ));
 
   @Effect()
   public loadGroceryStores$ = this.actions$.pipe(

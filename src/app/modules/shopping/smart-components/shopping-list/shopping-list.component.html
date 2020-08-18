@@ -14,8 +14,6 @@
   </div>
 </ion-header>
 <ion-content>
-  <app-select-grocery-store *ngIf="storeNotSelected(); else showList" [groceryStores]="groceryStores$ | async" (selectedGroceryStoreChange)="onGroceryStoreSelected($event)"></app-select-grocery-store>
-  <ng-template #showList>
-    <app-shopping-item-list [filter]="filter" (notifySaveShoppingItemRequested)="onItemPlacedInOrRemovedFromCart($event)" [shoppingList]="shoppingList$ | async"></app-shopping-item-list>
-  </ng-template>
+  <app-select-grocery-store [groceryStores]="groceryStores$ | async" (selectedGroceryStoreChange)="onGroceryStoreSelected($event)"></app-select-grocery-store>
+  <app-shopping-item-list [filter]="filter" (notifySaveShoppingItemRequested)="onItemPlacedInOrRemovedFromCart($event)" [shoppingList]="shoppingList$ | async"></app-shopping-item-list>
 </ion-content>

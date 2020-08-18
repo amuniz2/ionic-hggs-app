@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { AppState } from './store/app.state';
 import { Store } from '@ngrx/store';
 import { StartAppInitializer } from './store';
+import {concatAll, concatMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,6 @@ export class AppComponent {
   }
   initializeApp() {
     this.platform.ready().then(() => {
-
       this.store.dispatch( new StartAppInitializer());
       // this.statusBar.styleDefault();
 
