@@ -5,14 +5,20 @@ import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import * as fromSelectors from '../../../../store/store-management.selectors';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
-import {AddGroceryStoreSection, AddStoreAisle, LoadGroceryStores, LocationGroceryStoreSelected, SelectStore} from '../../../../store';
+import {
+  AddGroceryStoreSection,
+  AddStoreAisle,
+  DeleteGroceryStoreSection,
+  LoadGroceryStores,
+  LocationGroceryStoreSelected,
+  SelectStore
+} from '../../../../store';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
 import {
   selectGroceryStoreLocation,
   selectGroceryStoresLoading
 } from '../../../../store/store-management.selectors';
 // tslint:disable-next-line:max-line-length
-import {GroceryStoreAisleOrSectionSelected} from '../../../shared-module/dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AddPantryItemLocation, UpdatePantryItemLocation} from '../../store/pantry-management.actions';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -20,6 +26,8 @@ import {selectGroceryStoresItemIsLocatedIn} from '../../store/pantry-management.
 import {CreateStore} from '../../../store-management/store/store-management.actions';
 import {groceryStoreFromGrocerStoreState} from '../../../../model/model-helpers';
 import {withLatestFrom} from 'rxjs/operators';
+import {IonicSelectableComponent} from 'ionic-selectable';
+import {GroceryStoreAisleOrSectionSelected} from '../../../shared-module/dumb-components/grocery-store-location-aisle-or-section/grocery-store-location-aisle-or-section.component';
 
 export interface NewItemLocation {
   itemId: number;
@@ -128,13 +136,6 @@ export class EditPantryItemLocationComponent implements OnInit {
         storeId))
       this.selectedGroceryStoreId = storeId;
     })
-    // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
-    // this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
-    //   this.selectedGroceryStoreId));
-    // this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(
-    //   this.selectedGroceryStoreId));
-    // this.groceryStoreLocations$ = this.store.select(fromSelectors.selectGroceryStoreLocations(
-    //   this.selectedGroceryStoreId));
   }
 
   onChangeLocationGroceryStore($event: GroceryStore) {

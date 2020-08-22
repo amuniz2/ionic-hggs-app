@@ -5,10 +5,10 @@ import {IonicModule} from '@ionic/angular';
 import { SelectGroceryStoreComponent } from './dumb-components/select-grocery-store/select-grocery-store.component';
 import { GroceryStoreLocationStoreComponent } from './dumb-components/grocery-store-location-store/grocery-store-location-store.component';
 // tslint:disable-next-line:max-line-length
-import { GroceryStoreLocationAisleOrSectionComponent } from './dumb-components/grocery-store-location/grocery-store-location-aisle-or-section.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AddGroceryStoreModalComponent } from './add-grocery-store-modal/add-grocery-store-modal.component';
 import {IonicSelectableModule} from 'ionic-selectable';
+import {GroceryStoreLocationAisleOrSectionComponent} from './dumb-components/grocery-store-location-aisle-or-section/grocery-store-location-aisle-or-section.component';
 
 @NgModule({
   declarations: [

@@ -3,6 +3,7 @@ import {PantryItem} from '../../../../model/pantry-item';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 import {UiCrudAction} from '../../../../ui-crud-actions';
 import {GroceryStoreState} from '../../../../model/grocery-store';
+import {isNumeric} from 'rxjs/internal-compatibility';
 
 export interface NewItemLocationRequest {
   pantryItem: PantryItem;
@@ -46,10 +47,18 @@ export class PantryItemLocationsComponent implements OnInit {
   getLocationDescription(loc: GroceryStoreLocation): string {
     let desc =  loc.storeName;
     if (loc.aisle) {
-      desc +=  `, ${loc.aisle} Aisle`;
+      if (isNumeric(loc.aisle)) {
+        desc += `, Aisle ${loc.aisle}`;
+      } else {
+        desc +=  `, ${loc.aisle} Aisle`;
+      }
     }
     if (loc.section) {
-      desc += `, ${loc.section} Section`;
+      if (isNumeric(loc.section)) {
+        desc += `, Section ${loc.section}`;
+      } else {
+        desc +=  `, ${loc.section} Section`;
+      }
     }
     return desc;
   }

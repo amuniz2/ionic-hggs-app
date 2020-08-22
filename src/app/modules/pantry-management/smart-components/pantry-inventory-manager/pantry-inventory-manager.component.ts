@@ -118,7 +118,7 @@ export class PantryInventoryManagerComponent implements OnInit {
   };
 
   private async onExportError(err) {
-    const toast = await this.toastController.create({message: `Email failed to send with error: ${JSON.stringify(err)}.`, duration: 5000});
+    const toast = await this.toastController.create({message: `Email failed to send with error: ${JSON.stringify(err)}.`, duration: 10000});
     await toast.present();
   };
 
@@ -137,6 +137,8 @@ export class PantryInventoryManagerComponent implements OnInit {
       console.log(`file name returned: ${fileName}`)
       this.socialSharing.shareWithOptions({
         subject: 'Grocery shopping list',
+        chooserTitle: 'Select how to send grocery list',
+        message: 'Here is the list',
         files: [fileName]
       }).then(async r => await this.onSuccessExport(r)).catch(async err => await this.onExportError(err));
     });

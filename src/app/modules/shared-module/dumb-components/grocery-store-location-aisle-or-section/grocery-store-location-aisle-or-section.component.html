@@ -1,0 +1,54 @@
+<form [formGroup]="controlContainer.control">
+<!--<ion-item *ngIf="sectionsOrAislesExist()" lines="none">-->
+<ion-item lines="none">
+  <ion-label>{{label}}s</ion-label>
+  <ion-button  fill="clear" outline="none" (click)="onAddGroceryStoreAisleOrSection()">New
+    <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
+</ion-button>
+</ion-item>
+
+<ion-item lines="none">
+  <ionic-selectable #selectableComponent
+    [placeholder]="getPlaceholderText()"
+    [formControlName]="inputControlName"
+    [(ngModel)]="selectedGroceryStoreAisleOrSection"
+    [items]="groceryStoreAislesOrSections"
+    [canSearch]="true"
+    [canClear]="true"
+    [canSaveItem]="false"
+    (onSaveItem)="onEditAisleOrSection($event)"
+    (onChange)="onChangeAisleOrSection($event)">
+    <ng-template ionicSelectableAddItemTemplate let-newName="item"
+                 let-isAdd="isAdd">
+      <form [formGroup]="editControlForm" novalidate>
+        <ion-label>{{isAdd ? 'Add' : 'New name for ' + itemBeingEdited}}</ion-label>
+        <ion-input
+          type="text"
+          formControl="editControl"
+          autocorrect="off"
+          autocapitalize="none">
+        </ion-input>
+      </form>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-row>
+            <ion-col>
+              <button ion-button full no-margin (click)="selectableComponent.hideAddItemTemplate()">
+                Cancel
+              </button>
+            </ion-col>
+            <ion-col>
+              <button ion-button full no-margin (click)="saveItem(newName)"
+                      [disabled]="!editControlForm.valid">
+                {{isAdd ? 'Add' : 'Save'}}
+              </button>
+            </ion-col>
+          </ion-row>
+        </ion-toolbar>
+      </ion-footer>    </ng-template>
+  </ionic-selectable>
+
+</ion-item>
+  <!--</ion-item>-->
+</form>
+
