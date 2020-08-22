@@ -189,12 +189,14 @@ export class PantryInventoryManagerComponent implements OnInit {
       await alert.present();
     }
 
-  importData() {
+    importData() {
+    // await this.dataTransporter.listFolders();
     this.dataTransporter.getFilesAvailableToDownload().subscribe(
       async hggsFiles => {
         if (hggsFiles.length === 0) {
           this.notifyNoImportFileAvailable();
         } else if (hggsFiles.length === 1) {
+          console.log('found fall, prompting for confirmation');
           await this.confirm(hggsFiles[0]);
         } else {
           console.log('choose which file');

@@ -194,8 +194,7 @@ export class MySqlCommands {
       console.log(`returning ${data} from insertPantryItem`);
       return data.rowsAffected;
     } catch (err) {
-      console.log(`Error inserting pantry item ${pantryItemName}`);
-      console.log(err);
+      console.log(`Error inserting pantry item ${pantryItemName}: ${JSON.stringify(err)}`);
     }
   }
 

@@ -22,10 +22,13 @@ export interface IGroceryDataTransporter {
   getFilesAvailableToDownload(): Observable<HggsFile[]>;
 
   importData(self: IGroceryDataTransporter, data: HggsData): Observable<boolean>;
+
+  listFolders();//debugging
 }
 
 export interface HggsFile extends Entry {
   dateModified?: Date;
+  parentFolder: string;
 }
 
 @Injectable()
@@ -135,12 +138,21 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
 
   public getFilesAvailableToDownload() : Observable<HggsFile[]> {
     this.hggsFiles = [];
-
-    return from(this.fileManager.listDir(this.fileManager.externalRootDirectory,'Download').then((entries) => {
+    let parentFolder: string;
+    let subFolder: string;
+    if (this.fileManager.externalRootDirectory === null) {
+      parentFolder = this.fileManager.documentsDirectory;
+      subFolder = 'NoCloud';
+    } else {
+      parentFolder = this.fileManager.externalRootDirectory;
+      subFolder = 'Download';
+    }
+    return from(this.fileManager.listDir(parentFolder,subFolder).then((entries) => {
+      console.log('files in found in folder: ', JSON.stringify(entries));
       this.downloadedHggsFiles = entries.filter(file => file.isFile && file.name.endsWith('.hggs'));
       console.log(`downloaded hggs files: ${JSON.stringify(this.downloadedHggsFiles)}`);
       this.downloadedHggsFiles.forEach((entry) => {
-        const hggsFile: HggsFile = { ...entry  };
+        const hggsFile: HggsFile = { ...entry, parentFolder };
         this.hggsFiles.push(hggsFile);
         console.log(`calling getMetadata for ${entry.name}`);
         entry.getMetadata((metadata) => {
@@ -153,6 +165,10 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
         });
       });
       return this.hggsFiles;
+    }).catch(err =>{
+      console.log('Error occurred getting list of files');
+      console.error(err);
+      return this.hggsFiles;
     }));
   }
 
@@ -163,7 +179,7 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
   private async readFile(importFile: HggsFile, action: DataReadCallback)
   {
       try {
-        const parentDirectory = await this.fileManager.resolveLocalFilesystemUrl(this.fileManager.externalRootDirectory);
+        const parentDirectory = await this.fileManager.resolveLocalFilesystemUrl(importFile.parentFolder);
         parentDirectory.filesystem.root.getFile(importFile.fullPath, { create: false }, (fileEntry:FileEntry) => {
           fileEntry.file((file: IFile) => {
             const reader: FileReader = new FileReader();
@@ -211,51 +227,54 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
     });
   }
 
-  public async importDataOLd(importFile: HggsFile) {
-    // const result: Entry[] = [];
-    // [
-    // //   {
-    // //   dir: this.fileManager.dataDirectory,
-    // //   name: 'dataDirectory'
-    // // },{
-    // //     dir: this.fileManager.applicationStorageDirectory,
-    // //     name: 'applicationStorageDirectory'
-    // //   },
-    // //   {
-    // //     dir: this.fileManager.tempDirectory,
-    // //     name: 'tempDirectory'
-    // //   },{
-    // //   dir: this.fileManager.applicationDirectory,
-    // //   name: 'applicationDirectory'
-    // // },{
-    // //   dir: this.fileManager.cacheDirectory,
-    // //   name: 'cacheDirectory'
-    // // },{
-    // //   dir: this.fileManager.documentsDirectory,
-    // //   name: 'documentsDirectory'
-    // // },
-    // //   {
-    // //   dir: this.fileManager.externalApplicationStorageDirectory,
-    // //   name: 'externalApplicationStorageDirectory'
-    // // },
-    // //   {
-    // //   dir: this.fileManager.externalCacheDirectory,
-    // //   name: 'externalCacheDirectory'
-    // // },
-    //   {
-    //   dir: this.fileManager.externalDataDirectory,
-    //   name: 'externalDataDirectory'
-    // },
-    //   {
-    //   dir: this.fileManager.externalRootDirectory,
-    //   name: 'externalRootDirectory'
-    // }
-    // ].forEach(async (dirDesc) => {
-    //   console.log(dirDesc.name);
-    //   const listing = await this.getDirectoryListing(dirDesc.dir);
-    //   result.concat(listing);
-    // });
-    // const entries = await this.getDirectoryListing(this.fileManager.externalRootDirectory, 'Download');
-    return true;
+  public async listFolders(): Promise<any> {
+    const result: Entry[][] = [];
+    await
+    [
+      {
+      dir: this.fileManager.dataDirectory,
+      name: 'dataDirectory'
+    },{
+        dir: this.fileManager.applicationStorageDirectory,
+        name: 'applicationStorageDirectory'
+      },
+      {
+        dir: this.fileManager.tempDirectory,
+        name: 'tempDirectory'
+      },{
+      dir: this.fileManager.applicationDirectory,
+      name: 'applicationDirectory'
+    },{
+      dir: this.fileManager.cacheDirectory,
+      name: 'cacheDirectory'
+    },{
+      dir: this.fileManager.documentsDirectory,
+      name: 'documentsDirectory'
+    },
+      {
+      dir: this.fileManager.externalApplicationStorageDirectory,
+      name: 'externalApplicationStorageDirectory'
+    },
+      {
+      dir: this.fileManager.externalCacheDirectory,
+      name: 'externalCacheDirectory'
+    },
+      {
+      dir: this.fileManager.externalDataDirectory,
+      name: 'externalDataDirectory'
+    },
+      {
+      dir: this.fileManager.externalRootDirectory,
+      name: 'externalRootDirectory'
+    }].forEach( async (dirDesc) => {
+      console.log(`directory name: ${dirDesc.name}; directory:${dirDesc.dir}`);
+      if (dirDesc.dir !== null) {
+        console.log('getting directory listing for: ', dirDesc.name);
+        await this.getDirectoryListing(dirDesc.dir);
+      }
+      //const listing = await this.getDirectoryListing(dirDesc.dir);
+    });
+//    const entries = await this.getDirectoryListing(this.fileManager.externalRootDirectory, 'Download');
+    return result;
   }
 }
