@@ -31,7 +31,7 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
   selectedNewGroceryStoreChange: EventEmitter<string> = new EventEmitter<string>();
 
   private possibleGroceryStores: GroceryStore[];
-  private : boolean;
+
   constructor(public controlContainer: ControlContainer,
               public modalController: ModalController) {
   }

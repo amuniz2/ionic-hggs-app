@@ -6,9 +6,29 @@
             <ion-label>Aisle {{aisle.name}}</ion-label>
           </ion-col>
         </ion-row>
-        <ion-row *ngFor="let shoppingItem of filteredShoppingItems(aisle.items)">
+        <ion-row>
           <ion-col>
-            <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
+            <ion-item *ngFor="let section of filteredSections(aisle.sections)">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <ion-label>{{section.name}} Section</ion-label>
+                  </ion-col>
+                </ion-row>
+                <ion-row *ngFor="let shoppingItem of filteredShoppingItems(section.items)">
+                  <ion-col>
+                    <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
+                    <hr width="100%">
+                  </ion-col>
+                </ion-row>
+                <ion-row *ngFor="let shoppingItem of filteredShoppingItems(aisle.items)">
+                  <ion-col>
+                    <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
+                    <hr width="100%">
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
             <hr width="100%">
           </ion-col>
         </ion-row>

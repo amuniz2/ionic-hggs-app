@@ -24,7 +24,7 @@ import {
   LoadGroceryStoreLocations,
   LoadGroceryStores,
   LoadImportedData,
-  GroceryStoresImportedSuccessfully
+  GroceryStoresImportedSuccessfully, SelectStore
 } from '../store/app.actions';
 import {catchError, concatAll, map, switchMap, tap} from 'rxjs/operators';
 import {AppState} from './app.state';
@@ -107,6 +107,7 @@ export class AppEffects {
     ofType(AppActionTypes.LocationGroceryStoreSelected),
     switchMap((payload) => {
       return [
+        new SelectStore(payload.storeId),
         new LoadGroceryStoreAisles(payload.storeId),
         new LoadGroceryStoreSections(payload.storeId),
       ];

@@ -1,7 +1,7 @@
 <ng-container [formGroup]="controlContainer.control">
 <ion-item>
   <ion-label lines="none">Store</ion-label>
-  <ion-button  fill="clear" outline="none" (click)="onAddGroceryStore()">New
+  <ion-button *ngIf="!editingExistingStoreLocation" fill="clear" outline="none" (click)="onAddGroceryStore()">New
     <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
   </ion-button>
 </ion-item>

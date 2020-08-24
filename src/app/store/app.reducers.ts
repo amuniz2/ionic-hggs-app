@@ -3,8 +3,9 @@ import {environment} from '../../environments/environment';
 import {AppState} from './app.state';
 import {AppActions, AppActionTypes} from './app.actions';
 import * as fromAppAdapter from './grocery-store.adapter';
-import {getGroceryStore, selectAllGroceryStores, selectGroceryStore} from './store-management.selectors';
+import {getGroceryStore} from './store-management.selectors';
 import {GroceryStoreState} from '../model/grocery-store';
+import {ofType} from '@ngrx/effects';
 
 export const reducers: ActionReducerMap<AppState> = {
   databaseReady: (databaseReady) => databaseReady,
@@ -298,12 +299,13 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
 
     case AppActionTypes.StoreCreated: {
       // const { id, name } = action;
+      const groceryStoreState: GroceryStoreState = { ...action.groceryStore, aisles: [], sections: [] }
       return {
         ...state,
         groceryStores: {
-          ...fromAppAdapter.sharedGroceryStoreAdapter.addOne(action.groceryStore, state.groceryStores),
+          ...fromAppAdapter.sharedGroceryStoreAdapter.addOne(groceryStoreState, state.groceryStores),
           error: null,
-          selectedGroceryStore: { ...action.groceryStore, aisles: [], sections: [] }
+          selectedGroceryStore: groceryStoreState
         },
       };
     }
