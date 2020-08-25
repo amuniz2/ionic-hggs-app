@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange,
 import {ControlContainer, Form, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {AddGroceryStoreModalComponent} from '../../add-grocery-store-modal/add-grocery-store-modal.component';
-import {ModalController} from '@ionic/angular';
+import {ModalController, ToastController} from '@ionic/angular';
 import {IonicSelectableComponent} from 'ionic-selectable';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 
@@ -59,7 +59,8 @@ export class GroceryStoreLocationAisleOrSectionComponent {
 
   constructor(private controlContainer: ControlContainer,
               public modalController: ModalController,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private toastController: ToastController) {
     // Create port form that will be used to add or save port.
     this.editControl = this.fb.control(['', Validators.required]);
     this.editControlForm = this.fb.group({
@@ -109,8 +110,13 @@ export class GroceryStoreLocationAisleOrSectionComponent {
 
     const dataReturned = await modal.onDidDismiss();
     if (!dataReturned.data.cancelled) {
-      this.selectedNewGroceryStoreAisleOrSectionChange.emit(dataReturned.data.storeName);
-      // this.changeSelection(dataReturned.data.storeName);
+      if (this.groceryStoreAislesOrSections.some(aisleOrSection => aisleOrSection.toUpperCase() === dataReturned.data.storeName.toUpperCase())) {
+        const toast = await this.toastController.create({message: `${dataReturned.data.storeName} already exists - select existing ${this.label}.`,
+          duration: 5000});
+        await toast.present();
+      } else {
+        this.selectedNewGroceryStoreAisleOrSectionChange.emit(dataReturned.data.storeName);
+      }
     }
   }
 

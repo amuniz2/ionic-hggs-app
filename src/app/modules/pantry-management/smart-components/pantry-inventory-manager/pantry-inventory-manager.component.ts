@@ -196,10 +196,10 @@ export class PantryInventoryManagerComponent implements OnInit {
         if (hggsFiles.length === 0) {
           this.notifyNoImportFileAvailable();
         } else if (hggsFiles.length === 1) {
-          console.log('found fall, prompting for confirmation');
+          console.log('found file, prompting for confirmation');
           await this.confirm(hggsFiles[0]);
         } else {
-          console.log('choose which file');
+          console.log('todo: prompt user to choose which file, or process most recent file');
         }
       }, error => {});
   }

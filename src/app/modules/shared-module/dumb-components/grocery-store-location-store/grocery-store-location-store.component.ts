@@ -82,11 +82,12 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
 
     const dataReturned = await modal.onDidDismiss();
     if (!dataReturned.data.cancelled) {
-      if (this.groceryStores.find(groceryStore => groceryStore.name.toUpperCase() === dataReturned.data.storeName.toUpperCase()) === null) {
-        this.selectedNewGroceryStoreChange.emit(dataReturned.data.storeName);
-      } else {
-        const toast = await this.toastController.create({message: 'Store already exists - select existing store.', duration: 5000});
+      if (this.groceryStores.some(groceryStore => groceryStore.name.toUpperCase() === dataReturned.data.storeName.toUpperCase())) {
+        const toast = await this.toastController.create({message: `${dataReturned.data.storeName} already exists - select the existing grocery store.`,
+          duration: 5000});
         await toast.present();
+      } else {
+        this.selectedNewGroceryStoreChange.emit(dataReturned.data.storeName);
       }
     }
   }
