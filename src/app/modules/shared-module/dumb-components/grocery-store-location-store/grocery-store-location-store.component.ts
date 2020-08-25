@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {ControlContainer} from '@angular/forms';
-import {ModalController} from '@ionic/angular';
+import {ModalController, ToastController} from '@ionic/angular';
 import {AddGroceryStoreModalComponent} from '../../add-grocery-store-modal/add-grocery-store-modal.component';
 import {Store} from '@ngrx/store';
 
@@ -33,7 +33,8 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
   private possibleGroceryStores: GroceryStore[];
 
   constructor(public controlContainer: ControlContainer,
-              public modalController: ModalController) {
+              public modalController: ModalController,
+              private toastController: ToastController) {
   }
 
   ngOnInit() {
@@ -81,7 +82,12 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
 
     const dataReturned = await modal.onDidDismiss();
     if (!dataReturned.data.cancelled) {
-      this.selectedNewGroceryStoreChange.emit(dataReturned.data.storeName);
+      if (this.groceryStores.find(groceryStore => groceryStore.name.toUpperCase() === dataReturned.data.storeName.toUpperCase()) === null) {
+        this.selectedNewGroceryStoreChange.emit(dataReturned.data.storeName);
+      } else {
+        const toast = await this.toastController.create({message: 'Store already exists - select existing store.', duration: 5000});
+        await toast.present();
+      }
     }
   }
 
