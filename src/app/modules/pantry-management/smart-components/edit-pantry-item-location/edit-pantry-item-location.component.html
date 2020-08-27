@@ -10,7 +10,8 @@
                                         (selectedNewGroceryStoreChange)="onCreateAndSelectGroceryStore($event)"></app-grocery-store-location-store>
       <app-grocery-store-location-aisle-or-section  [formGroup]="locationForm"
                                                     [inputControlName] = "'locationAisle'"
-        [groceryStoreAislesOrSections]="groceryStoreAisles$ | async"
+        [groceryStoreAislesOrSections]="groceryStoreAislesWithSection$ | async"
+        [allGroceryStoreAislesOrSections]="groceryStoreAisles$ | async"
         [label] = "AisleLabel"
         (aisleOrSectionChange)="onChangeAisle($event)"
         [selectedGroceryStoreAisleOrSection] = "selectedGroceryStoreAisle"
@@ -19,7 +20,8 @@
       <app-grocery-store-location-aisle-or-section
         [formGroup]="locationForm"
         [inputControlName] = "'locationSection'"
-        [groceryStoreAislesOrSections]="groceryStoreSections$ | async"
+        [groceryStoreAislesOrSections]="groceryStoreSectionsInAisle$ | async"
+        [allGroceryStoreAislesOrSections]="groceryStoreSections$ | async"
         [label] = "SectionLabel"
         [selectedGroceryStoreAisleOrSection] = "selectedGroceryStoreSection"
         (aisleOrSectionChange)="onChangeSection($event)"

@@ -43,7 +43,9 @@ export class EditPantryItemLocationComponent implements OnInit {
 
   private groceryStores$: Observable<GroceryStoreState[]>;
   private groceryStoreAisles$: Observable<string[]>;
+  private groceryStoreAislesWithSection$: Observable<string[]>;
   private groceryStoreSections$: Observable<string[]>;
+  private groceryStoreSectionsInAisle$: Observable<string[]>;
   private groceryStoreLocations$: Observable<GroceryStoreLocation[]>;
   private selectedGroceryStore$: Observable<GroceryStoreState>;
 
@@ -130,7 +132,11 @@ export class EditPantryItemLocationComponent implements OnInit {
       this.selectedGroceryStore$ = this.store.select(fromSelectors.selectGroceryStore(storeId));
       this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
         storeId));
+      this.groceryStoreAislesWithSection$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
+        storeId));
       this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(
+        storeId));
+      this.groceryStoreSectionsInAisle$ = this.store.select(fromSelectors.selectGroceryStoreSections(
         storeId));
       this.groceryStoreLocations$ = this.store.select(fromSelectors.selectGroceryStoreLocations(
         storeId))
@@ -174,7 +180,7 @@ export class EditPantryItemLocationComponent implements OnInit {
       this.locationForm.patchValue({locationAisle: $event.name});
       this.selectedGroceryStoreSection = undefined;
       this.locationForm.patchValue({locationSection: undefined});
-      this.groceryStoreSections$ = this.store.select(fromSelectors.selectPossibleGroceryStoreSectionsInAisle(
+      this.groceryStoreSectionsInAisle$ = this.store.select(fromSelectors.selectPossibleGroceryStoreSectionsInAisle(
         this.selectedGroceryStoreId, this.selectedGroceryStoreAisle));
     }
   }
@@ -187,7 +193,7 @@ export class EditPantryItemLocationComponent implements OnInit {
   onChangeSection($event: GroceryStoreAisleOrSectionSelected) {
     if(this.selectedGroceryStoreSection !== $event.name) {
       this.selectedGroceryStoreSection = $event.name;
-      this.groceryStoreAisles$ = this.store.select(fromSelectors.selectPossibleGroceryStoreAislesForSection(
+      this.groceryStoreAislesWithSection$ = this.store.select(fromSelectors.selectPossibleGroceryStoreAislesForSection(
         this.selectedGroceryStoreId, this.selectedGroceryStoreSection));
     }
   }

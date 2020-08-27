@@ -5,6 +5,7 @@ import {AddGroceryStoreModalComponent} from '../../add-grocery-store-modal/add-g
 import {ModalController, ToastController} from '@ionic/angular';
 import {IonicSelectableComponent} from 'ionic-selectable';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
+import {getAisleOrSectionDescription} from '../../../../helpers';
 
 export interface GroceryStoreAisleOrSectionSelected {
   name: string;
@@ -30,6 +31,9 @@ export class GroceryStoreLocationAisleOrSectionComponent {
 
   @Input()
   groceryStores: GroceryStore[];
+
+  @Input()
+  allGroceryStoreAislesOrSections: string[];
 
   @Input()
   groceryStoreAislesOrSections: string[];
@@ -110,8 +114,8 @@ export class GroceryStoreLocationAisleOrSectionComponent {
 
     const dataReturned = await modal.onDidDismiss();
     if (!dataReturned.data.cancelled) {
-      if (this.groceryStoreAislesOrSections.some(aisleOrSection => aisleOrSection.toUpperCase() === dataReturned.data.storeName.toUpperCase())) {
-        const toast = await this.toastController.create({message: `${dataReturned.data.storeName} already exists - select existing ${this.label}.`,
+      if (this.allGroceryStoreAislesOrSections.some(aisleOrSection => aisleOrSection.toUpperCase() === dataReturned.data.storeName.toUpperCase())) {
+        const toast = await this.toastController.create({message: `${getAisleOrSectionDescription(dataReturned.data.storeName, this.label)} already exists.`,
           duration: 5000});
         await toast.present();
       } else {
