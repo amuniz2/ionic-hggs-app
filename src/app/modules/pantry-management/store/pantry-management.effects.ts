@@ -15,7 +15,7 @@ import {
   PantryLoadedSuccessfully,
   PantryLoadFailed,
   SavePantryItemFailed,
-  SavePantryItemSucceeded, PantryItemLocationDeleted
+  SavePantryItemSucceeded, PantryItemLocationDeleted, NoOp
 } from './pantry-management.actions';
 import {Store} from '@ngrx/store';
 import {Actions, Effect, ofType} from '@ngrx/effects';
@@ -28,6 +28,7 @@ import {GroceryStoreLocationPossiblyAdded} from '../../../store';
 import {PantryItem} from '../../../model/pantry-item';
 import {navigate} from 'ionicons/icons';
 import {async} from 'rxjs/internal/scheduler/async';
+import {LoadShoppingList, ShoppingActionTypes, UpdateStoreShoppingList} from '../../shopping/store/shopping.actions';
 
 @Injectable()
 export class PantryEffects {
@@ -251,11 +252,19 @@ export class PantryEffects {
       // this.router.navigate(['../../manage']);
     }));
 
-  @Effect({dispatch: false})
+  @Effect()
   public itemLocationUpdated = this.actions$.pipe(
     ofType(PantryActionTypes.PantryItemLocationUpdated),
+    // todo: route to previous page, not necessarilty to pantry item details
+    // todo: update shopping list item if location of updated item is needed
     tap((navigateToItemPage: PantryItemLocationUpdated) => {
       const route = `/home/pantry-items/pantry-item-details?id=${navigateToItemPage.itemId}&isNewItem=false`;
       this.router.navigateByUrl(route);
+    }),
+    switchMap((locationUpdated: PantryItemLocationUpdated) => {
+      return this.pantryDataService.isPantryItemNeeded(locationUpdated.itemId).pipe(
+        map(isNeeded => isNeeded ?
+          new UpdateStoreShoppingList(locationUpdated.pantryItemLocation.storeId)
+            : new NoOp()));
     }));
 }

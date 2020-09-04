@@ -129,7 +129,7 @@ export function shoppingListManagementReducer(state = initialShoppingListManagem
       console.log(`Loading shopping list into state: ${JSON.stringify(action.shoppingList)}`)
       return {
         ...state,
-        shoppingLists: shoppingListAdapter.upsertOne( new ShoppingListState(action.storeId, action.shoppingList),
+        shoppingLists: shoppingListAdapter.upsertOne(new ShoppingListState(action.storeId, action.shoppingList),
           state.shoppingLists),
       };
     }

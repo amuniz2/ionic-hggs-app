@@ -503,4 +503,9 @@ export class FakePantryDataService implements IPantryDataService {
       // todo: finish
     return undefined;
   }
+
+  isPantryItemNeeded(itemId: number): Observable<boolean> {
+      const pantryItem = this.findPantryItem(itemId);
+    return of(pantryItem.need);
+  }
 }

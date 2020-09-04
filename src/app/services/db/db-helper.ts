@@ -471,6 +471,15 @@ export class PantryDbHelper {
     });
   }
 
+  public isPantryItemNeeded(itemId: number): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      this.mySqlCommands.queryPantryItem(itemId).then((pantryItem) => {
+        observer.next(pantryItem.need);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+    });
+  }
+
   public queryPantryItemLocation(pantryItemId: number, groceryStoreLocationId: number): Observable<PantryItemLocation> {
     return new Observable<PantryItemLocation>((observer) => {
       this.mySqlCommands.queryPantryItemLocation(pantryItemId, groceryStoreLocationId).then((pantryItemLocation) => {

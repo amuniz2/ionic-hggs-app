@@ -214,7 +214,7 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
       case PantryActionTypes.PantryItemLocationUpdated:
       {
         const pantryItem = getPantryItem(state.pantryItems, action.itemId);
-        console.log('in PantryItemLocationAdded reducer');
+        console.log('in PantryItemLocationUpdated reducer');
         return {
           ...state,
           pantryItems: {

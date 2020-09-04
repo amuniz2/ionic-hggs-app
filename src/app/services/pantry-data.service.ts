@@ -167,6 +167,10 @@ export class PantryDataService implements IPantryDataService {
     return this.dbHelper.getAllGroceryStoreSections();
   }
 
+  isPantryItemNeeded(itemId: number): Observable<boolean> {
+    return this.dbHelper.isPantryItemNeeded(itemId);
+  }
+
   importHggsData(data: HggsData): Observable<boolean> {
     return this.dbHelper.importHggsData(data);
   }

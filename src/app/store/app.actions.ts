@@ -56,7 +56,7 @@ export enum AppActionTypes {
   ImportData = '[HGGS] Import Grocery Data',
   LoadImportedData = '[HGGS] Load Imported Data',
   GroceryStoresImportedSuccessfully = '[Store Manager] Imported Grocery Stores Successfully',
-  SelectStore = '[Store Manager] Select Current Store',
+  SelectStore = '[Store Manager] Select Current Store'
 }
 
 export class StartAppInitializer implements Action {
@@ -283,8 +283,6 @@ export class SelectStore implements Action {
   readonly type = AppActionTypes.SelectStore;
   constructor(public id: number) {};
 }
-
-
 
 // endregion
 export type AppActions = AppReady

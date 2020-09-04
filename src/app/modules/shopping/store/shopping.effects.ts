@@ -33,6 +33,20 @@ export class ShoppingListManagementEffects {
   );
 
   @Effect()
+  public updateShoppingList = this.actions$.pipe(
+    ofType(ShoppingActionTypes.UpdateStoreShoppingList),
+    switchMap((payload) => {
+      return this.storeManagementService.getShoppingList(payload.storeId).pipe(
+        map((shoppingList) => new LoadShoppingListSucceeded(payload.storeId, shoppingList)),
+        catchError(error => {
+          console.log('getPantryItemsNeeded failed');
+          return [new LoadShoppingListFailed(payload.storeId, error)];
+        })
+      );
+    }),
+  );
+
+  @Effect()
   public saveShoppingiItem$ = this.actions$.pipe(
     ofType(ShoppingActionTypes.ItemPlacedInOrRemovedFromCart),
     switchMap((payload) => {
