@@ -21,14 +21,14 @@
                     <hr width="100%">
                   </ion-col>
                 </ion-row>
-                <ion-row *ngFor="let shoppingItem of filteredShoppingItems(aisle.items)">
-                  <ion-col>
-                    <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
-                    <hr width="100%">
-                  </ion-col>
-                </ion-row>
               </ion-grid>
             </ion-item>
+            <hr width="100%">
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let shoppingItem of filteredShoppingItems(aisle.items)">
+          <ion-col>
+            <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
             <hr width="100%">
           </ion-col>
         </ion-row>

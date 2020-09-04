@@ -39,7 +39,8 @@ export enum PantryActionTypes {
   SavePantryItemSucceeded = '[Pantry Item] Save Succeeded',
   SaveNewPantryItem = '[Pantry Item] Save New Requested',
   UpdatePantryItemLocation = '[Pantry Item] Update Requested',
-  PantryImportedSuccessfully = '[Pantry Item] Imported Successfully'
+  PantryImportedSuccessfully = '[Pantry Item] Imported Successfully',
+  NoOp = '[Pantry Item] Do nothing, needed for conditional effect'
 }
 
 export class AddPantryItemLocationRequest implements Action {
@@ -208,6 +209,10 @@ export class UpdatePantryItemLocation implements Action {
   constructor(public originalLocationId: number, public updatePantryItemLocation: NewItemLocation) {}
 }
 
+export class NoOp implements Action {
+  readonly type = PantryActionTypes.NoOp;
+}
+
 export type PantryActions =
   CreatePantryItem
   | AddPantryItemLocation
@@ -237,4 +242,5 @@ export type PantryActions =
   | SavePantryItemFailed
   | SavePantryItemSucceeded
   | UpdatePantryItemLocation
-  | PantryImportedSuccessfully;
+  | PantryImportedSuccessfully
+  | NoOp;

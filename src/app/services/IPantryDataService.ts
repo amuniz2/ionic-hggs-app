@@ -95,4 +95,6 @@ export interface IPantryDataService {
   updateGroceryStoreAisle(groceryStoreId: number, oldName: string, newName: string): Observable<boolean>;
 
   updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean>;
+
+  isPantryItemNeeded(itemId: number): Observable<boolean>;
 }
