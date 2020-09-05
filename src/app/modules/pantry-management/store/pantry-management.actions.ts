@@ -114,7 +114,7 @@ export class PantryItemLocationAdded implements Action {
 
 export class PantryItemLocationDeleted implements Action {
   readonly type = PantryActionTypes.PantryItemLocationDeleted;
-  constructor(public itemId: number, public locationId: number) {
+  constructor(public itemId: number, public location: GroceryStoreLocation) {
   }
 }
 

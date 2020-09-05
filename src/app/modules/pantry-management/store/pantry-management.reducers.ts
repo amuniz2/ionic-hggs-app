@@ -183,7 +183,7 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
             ...fromAdapter.pantryAdapter.updateOne({
               id: action.itemId,
               changes: {
-                locations: pantryItem.locations.filter(itemLocation => itemLocation.id !== action.locationId)
+                locations: pantryItem.locations.filter(itemLocation => itemLocation.id !== action.location.id)
               }
             }, state.pantryItems),
             error: null

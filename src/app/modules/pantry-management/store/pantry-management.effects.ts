@@ -199,7 +199,7 @@ export class PantryEffects {
       switchMap((payload) => {
         console.log('calling deletePantryItemLocation');
         return this.pantryDataService.deletePantryItemLocation(payload.request.pantryItem.id, payload.request.storeLocation.id).pipe(
-          map((succeeded) => new PantryItemLocationDeleted(payload.request.pantryItem.id, payload.request.storeLocation.id))
+          map((success) => new PantryItemLocationDeleted(payload.request.pantryItem.id, payload.request.storeLocation))
         );
       }));
 
@@ -272,5 +272,17 @@ export class PantryEffects {
         map(isNeeded => isNeeded ?
           new UpdateStoreShoppingList(locationUpdated.pantryItemLocation.storeId)
             : new NoOp()));
+    }));
+
+  @Effect()
+  public itemLocationDeleted = this.actions$.pipe(
+    ofType(PantryActionTypes.PantryItemLocationDeleted),
+    // todo: route to previous page, not necessarilty to pantry item details
+    // todo: update shopping list item if location of updated item is needed
+    switchMap((locationDeleted: PantryItemLocationDeleted) => {
+      return this.pantryDataService.isPantryItemNeeded(locationDeleted.itemId).pipe(
+        map(isNeeded => isNeeded ?
+          new UpdateStoreShoppingList(locationDeleted.location.storeId)
+          : new NoOp()));
     }));
 }
