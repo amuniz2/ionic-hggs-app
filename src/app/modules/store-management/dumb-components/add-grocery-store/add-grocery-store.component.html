@@ -1,6 +1,6 @@
 <ion-card *ngIf="addingStore">
   <ion-row>
-    <ion-input placeholder="Enter store name" id="newStoreNameInput" [(ngModel)]="newGroceryStoreName"></ion-input>
+    <ion-input type="text" autocapitalize="words" placeholder="Enter store name" id="newStoreNameInput" [(ngModel)]="newGroceryStoreName"></ion-input>
     <ion-button size="small" (click)="onAddStoreDoneClick()">Done</ion-button>
     <ion-button size="small" (click)="onCancelAddStoreClick()">Cancel</ion-button>
   </ion-row>

@@ -6,7 +6,7 @@
     </ion-button>
   </ion-toolbar>
   <div class="search-container" *ngIf="filterList">
-    <ion-input class="search-box" placeholder="Search" [(ngModel)]="filter" >
+    <ion-input class="search-box" placeholder="Search" autocapitalize="none" [(ngModel)]="filter" >
     </ion-input>
     <ion-button fill="clear" outline="none" (click)="cancelFilter()">
       <ion-icon ios="close-circle-outline" md="close-circle-outline" ></ion-icon>

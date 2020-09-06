@@ -1,6 +1,6 @@
 <ion-modal-view class="add-grocery-store-modal">
   <ion-item>
-    <ion-input placeholder="Enter {{componentDesc}} name" id="newStoreNameInput" [(ngModel)]="newGroceryStoreName"></ion-input>
+    <ion-input placeholder="Enter {{componentDesc}} name" id="newStoreNameInput" autocapitalize="words" [(ngModel)]="newGroceryStoreName"></ion-input>
     <div>
       <ion-button class="done-button" (click)="onDone()" size="small" >Done</ion-button>
       <ion-button class="cancel-button" size="small" (click)="onCancel()">Cancel</ion-button>

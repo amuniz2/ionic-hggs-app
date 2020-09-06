@@ -1,6 +1,6 @@
     <ion-card *ngIf="addingAisleOrSection">
       <ion-row>
-        <ion-input placeholder="Enter {{singleCollectionItemName}} name" id="newStoreAisleInput2" [(ngModel)]="newStoreAisleOrSection"></ion-input>
+        <ion-input placeholder="Enter {{singleCollectionItemName}} name" id="newStoreAisleInput2" autocapitalize="words" [(ngModel)]="newStoreAisleOrSection"></ion-input>
         <ion-button size="small" (click)="onAddStoreAisleOrSectionDoneClick()">Done</ion-button>
         <ion-button size="small" (click)="onCancelAddStoreAisleOrSectionClick()">Cancel</ion-button>
       </ion-row>
@@ -11,7 +11,7 @@
           <ion-item>
             <ion-label *ngIf="!(itemBeingEdited && groceryAisleOrSection === itemBeingEdited) else showEditBox;" >{{groceryAisleOrSection}}</ion-label>
             <ng-template #showEditBox>
-              <ion-input [(ngModel)]="newName"></ion-input>
+              <ion-input autocapitalize="words" [(ngModel)]="newName"></ion-input>
               <ion-button size="small" (click)="doneEditingItem()">Done</ion-button>
               <ion-button size="small" (click)="onCancelEditStoreAisleOrSectionClick()">Cancel</ion-button>
             </ng-template>

@@ -1,7 +1,7 @@
 <ion-content>
-  <ion-input *ngIf="!pantryItem?.id; else existingItem" placeholder="Enter name" id="newPantryItemNameInput" [(ngModel)]="pantryItemName"></ion-input>
+  <ion-input *ngIf="!pantryItem?.id; else existingItem" placeholder="Enter name" id="newPantryItemNameInput" autocapitalize="sentences" [(ngModel)]="pantryItemName"></ion-input>
   <ng-template #existingItem>
-    <ion-input class="edit-box" placeholder="Name" id="pantryItemNameInput" [(ngModel)]="pantryItemName" (ionBlur)="onNameEnteredOrChanged()"></ion-input>
+    <ion-input class="edit-box" placeholder="Name" id="pantryItemNameInput" autocapitalize="sentences" [(ngModel)]="pantryItemName" (ionBlur)="onNameEnteredOrChanged()"></ion-input>
     <ion-input class="edit-box"placeholder="Enter description" id="newPantryItemDescriptionInput" (ionBlur)="onPropertyChange()" [(ngModel)]="pantryItemDescription"></ion-input>
     <div>
       <ion-input class="edit-box edit-box-left" inputmode="decimal" placeholder="Quantity" id="pantryItemQuantityInput" (ionChange)="onPropertyChange()" [(ngModel)]="pantryItemQuantity"></ion-input>
