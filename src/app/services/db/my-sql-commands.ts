@@ -1,7 +1,7 @@
 import {PantryItem} from '../../model/pantry-item';
 import {DbRowConverters} from './db-row-converters';
 import {SQLite, SQLiteObject} from '@ionic-native/sqlite/ngx';
-import {LocationTable, PantryItemLocationTable, PantryItemTable} from './pantry-db-schema';
+import {LocationTable, PantryItemLocationTable, PantryItemTable, ShoppingItemTable} from './pantry-db-schema';
 import {GroceryStore} from '../../model/grocery-store';
 import {StoreGroceryAisleTable} from './pantry-db-schema';
 import {StoreTable} from './pantry-db-schema';
@@ -19,7 +19,6 @@ import {Platform} from '@ionic/angular';
 import {DatabaseReady} from '../../store';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../store/app.state';
-import {Observable} from 'rxjs';
 
 interface GroceryStoreMapping {
   storeIdMapping: IdMapping,
@@ -279,10 +278,13 @@ export class MySqlCommands {
   }
 
   public async deletePantryItem(id: number): Promise<number> {
+    const deleteShoppingItems = `DELETE FROM ${ShoppingItemTable.NAME} WHERE ${ShoppingItemTable.COLS.PANTRY_ITEM_ID} = ${id}`;
+    const deleteItemLocations = `DELETE FROM ${PantryItemLocationTable.NAME} WHERE ${PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${id}`;
     const  deleteSql = `DELETE FROM ${PantryItemTable.NAME} WHERE ${PantryItemTable.COLS.ID} = ${id}`;
     try {
+      const shoppingItemsDeleted = await this.db.executeSql(deleteShoppingItems, []);
+      const locationsDeleted = await this.db.executeSql(deleteItemLocations, []);
       const data = await this.db.executeSql(deleteSql, []);
-      console.log(`returning ${data} from deletePantryItem`);
       return data.rowsAffected;
     } catch (err) {
       console.log(`Error deleting pantry item ${id}`);

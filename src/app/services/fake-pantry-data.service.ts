@@ -211,7 +211,28 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   deletePantryItem(deletePantryItemRequest: DeletePantryItemRequest): Observable<boolean> {
-    return undefined;
+      let index: number;
+
+      do {
+        index = this.pantryItemLocations.findIndex((loc) => loc.pantryItemId === deletePantryItemRequest.id);
+        if (index >= 0) {
+          this.pantryItemLocations.splice(index, 1);
+        }
+      } while (index >= 0);
+
+      do {
+        index = this.shoppingItems.findIndex((item) => item.pantryItemId === deletePantryItemRequest.id);
+        if (index >= 0) {
+          this.shoppingItems.splice(index, 1);
+        }
+      } while (index >= 0);
+
+      index = this.pantryItems.findIndex(item => item.id === deletePantryItemRequest.id);
+      if (index >= 0) {
+        this.pantryItems.splice(index, 1);
+        return of(true);
+      }
+    return of(false);
   }
 
   updatePantryItem(savePantryItemRequest: PantryItem): Observable<boolean> {

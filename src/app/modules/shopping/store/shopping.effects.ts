@@ -1,10 +1,14 @@
 import {Inject, Injectable} from '@angular/core';
 import {
-  LoadShoppingListFailed, LoadShoppingListSucceeded, ShoppingActions, ShoppingActionTypes, ShoppingItemUpdateSucceeded
+  LoadShoppingListFailed,
+  LoadShoppingListSucceeded,
+  ShoppingActions,
+  ShoppingActionTypes,
+  ShoppingItemUpdateSucceeded
 } from './shopping.actions';
 import {Store} from '@ngrx/store';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {catchError, map, mapTo, switchMap, tap} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {IPantryDataService} from '../../../services/IPantryDataService';
 import {ShoppingListManagementState} from './shopping.reducers';
@@ -12,7 +16,7 @@ import {DisplayError} from '../../../store';
 
 @Injectable()
 export class ShoppingListManagementEffects {
-  constructor(private store: Store<ShoppingListManagementState>,
+  constructor(private store$: Store<ShoppingListManagementState>,
               private actions$: Actions <ShoppingActions>,
               @Inject('IPantryDataService') private storeManagementService: IPantryDataService,
               private router: Router) {

@@ -3,7 +3,6 @@ import {
   AddPantryItemLocationFailed,
   AddPantryItemLocationRequest,
   CreateItemFailed,
-  DeletePantryItemFailed,
   EditPantryItemLocationRequest,
   PantryItemCreated,
   LoadPantryItemLocations,
@@ -11,24 +10,28 @@ import {
   PantryItemDeleted,
   PantryItemLoaded,
   PantryItemLocationAdded,
-  PantryItemLocationsLoadedSuccessfully, PantryItemLocationUpdated,
+  PantryItemLocationsLoadedSuccessfully,
+  PantryItemLocationUpdated,
   PantryLoadedSuccessfully,
   PantryLoadFailed,
   SavePantryItemFailed,
-  SavePantryItemSucceeded, PantryItemLocationDeleted, NoOp
+  SavePantryItemSucceeded,
+  PantryItemLocationDeleted,
+  NoOp,
+  DeletePantryItem, DeletePantryItemFailed
 } from './pantry-management.actions';
 import {Store} from '@ngrx/store';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {catchError, concatMap, map, mapTo, switchMap, tap} from 'rxjs/operators';
+import {catchError, concatMap, map, mapTo, switchMap, tap, withLatestFrom} from 'rxjs/operators';
 import {PantryState} from './pantry-management.reducers';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IPantryDataService} from '../../../services/IPantryDataService';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
 import {GroceryStoreLocationPossiblyAdded} from '../../../store';
 import {PantryItem} from '../../../model/pantry-item';
-import {navigate} from 'ionicons/icons';
-import {async} from 'rxjs/internal/scheduler/async';
-import {LoadShoppingList, ShoppingActionTypes, UpdateStoreShoppingList} from '../../shopping/store/shopping.actions';
+import {UpdateStoreShoppingList} from '../../shopping/store/shopping.actions';
+import {selectCurrentGroceryStore} from '../../../store/store-management.selectors';
+import {GroceryStoreState} from '../../../model/grocery-store';
 
 @Injectable()
 export class PantryEffects {
@@ -42,12 +45,14 @@ export class PantryEffects {
   @Effect()
   public deletePantryItem = this.actions$.pipe(
     ofType(PantryActionTypes.DeletePantryItem),
-    tap((payload) => console.log('Payload to deletePantryItem ' + JSON.stringify(payload))),
-    switchMap((payload) => {
-      return this.pantryDataService.deletePantryItem(payload.deletePantryItemRequest).pipe(
-        map(success => new PantryItemDeleted(payload.deletePantryItemRequest.id)),
-        catchError(error => [new DeletePantryItemFailed(error)])
-      );
+    withLatestFrom(this.store.select(selectCurrentGroceryStore())),
+    switchMap(([action, groceryStore]: [DeletePantryItem, GroceryStoreState]) => {
+      return this.pantryDataService.deletePantryItem(action.deletePantryItemRequest).pipe(
+          switchMap((_) =>  [
+            new PantryItemDeleted(action.deletePantryItemRequest.id),
+            new UpdateStoreShoppingList(groceryStore.id)
+          ]),
+          catchError(error => [new DeletePantryItemFailed(error)]));
     })
   );
 
@@ -278,7 +283,6 @@ export class PantryEffects {
   public itemLocationDeleted = this.actions$.pipe(
     ofType(PantryActionTypes.PantryItemLocationDeleted),
     // todo: route to previous page, not necessarilty to pantry item details
-    // todo: update shopping list item if location of updated item is needed
     switchMap((locationDeleted: PantryItemLocationDeleted) => {
       return this.pantryDataService.isPantryItemNeeded(locationDeleted.itemId).pipe(
         map(isNeeded => isNeeded ?

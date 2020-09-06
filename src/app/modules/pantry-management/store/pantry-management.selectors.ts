@@ -38,7 +38,7 @@ export const selectPantryItem = (id: number) => createSelector(
   selectAllPantryItems, (state: PantryItem[]) => state.find((item) => item.id === id));
 
 export const selectPantryItemLocations = (id: number) => createSelector(
-  selectPantryItem(id), (state: PantryItem) => state.locations);
+  selectPantryItem(id), (state: PantryItem) => state?.locations);
 
 export const selectPantryItemsNeededFromStore = (storeId: number) => createSelector(
   selectAllPantryItems, (state: PantryItem[]) => state.filter(item => item.need && item.locations.find(loc => loc.storeId === storeId)));
