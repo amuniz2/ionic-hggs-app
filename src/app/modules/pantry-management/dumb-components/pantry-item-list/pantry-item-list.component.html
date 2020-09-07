@@ -5,10 +5,10 @@
           <!-- name and description column -->
           <ion-col size=8 (click)="editPantryItem(pantryItem)">
             <div class="row">
-              <ion-label class="name-label">{{pantryItem.name}}</ion-label>
+              <ion-label class="name-label ion-text-wrap">{{pantryItem.name}}</ion-label>
             </div>
             <div class="row">
-              <ion-label  class="column descLabel" >{{pantryItem.description}}</ion-label>
+              <ion-label  class="column descLabel ion-text-wrap" >{{pantryItem.description}}</ion-label>
             </div>
           </ion-col>
           <!-- checkbox and quantity column -->
@@ -19,7 +19,7 @@
             <div class="row" *ngIf="pantryItem.need">
               <ion-input class="column edit-box" (ionBlur)="quantityChanged($event, pantryItem)"
                          imputmode="decimal" type="number"  [ngModel]="pantryItem.quantityNeeded"></ion-input>
-              <ion-label class="column rightSideLabel">{{pantryItem.units === null ?'n/a' : pantryItem.units }}</ion-label>
+              <ion-label class="column rightSideLabel ion-text-wrap">{{pantryItem.units === null ?'n/a' : pantryItem.units }}</ion-label>
             </div>
           </ion-col>
         </ion-row>

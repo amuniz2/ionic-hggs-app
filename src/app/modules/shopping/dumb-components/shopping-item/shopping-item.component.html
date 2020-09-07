@@ -1,9 +1,9 @@
 <div id="parent">
   <div class="itemContents">
     <ion-checkbox (ionChange)="itemClicked($event)" [checked]="shoppingItem?.inCart"></ion-checkbox>
-    <ion-label class="checkboxLabel">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
+    <ion-label class="checkboxLabel ion-text-wrap">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
   </div>
   <div class="itemContents">
-    <ion-label class="descLabel">{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
+    <ion-label class="descLabel ion-text-wrap">{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
   </div>
 </div>
