@@ -83,8 +83,6 @@ ion-item {
 .edit-box {
   background-color: white;
   border: .5px solid lightblue;
-  margin-left: 1em;
-  margin-right: 1em;
 }
 :host(.item-check-box) {
   margin-left: 0px;
@@ -102,8 +100,8 @@ ion-item {
 
 .in-item {
   margin-left: 0px;
-  margin-top: 1px;
-  margin-bottom: 1px;
+  margin-top: 1em;
+  margin-bottom: 1em;
   padding: 0em;
 }
 
@@ -114,7 +112,7 @@ ion-item {
 
 .rightSideLabel {
   float: right;
-  margin-left: 0.5em;
+  margin-left: 0.25em;
 }
 
 .checkbox-div {

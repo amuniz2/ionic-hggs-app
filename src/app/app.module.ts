@@ -48,8 +48,8 @@ import {PantryDataService} from './services/pantry-data.service';
   providers: [
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     StatusBar,
-    // [{provide: 'IPantryDataService', useClass: PantryDataService}],
-    [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
+    [{provide: 'IPantryDataService', useClass: PantryDataService}],
+    // [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
     PantryDbHelper,
     MySqlCommands,
     SQLite

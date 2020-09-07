@@ -214,8 +214,9 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
       case PantryActionTypes.PantryItemLocationUpdated:
       {
         const pantryItem = getPantryItem(state.pantryItems, action.itemId);
-        console.log('in PantryItemLocationUpdated reducer');
-        return {
+        console.log(`in PantryItemLocationUpdated reducer, action: ${JSON.stringify(action)}`);
+
+        const newState = {
           ...state,
           pantryItems: {
             ...fromAdapter.pantryAdapter.updateOne({
@@ -229,6 +230,8 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
             error: null
           }
         };
+        console.log(`new state: ${JSON.stringify(newState)}`);
+        return newState;
       }
 
       case PantryActionTypes.PantryItemLocationsLoadedSuccessfully:
