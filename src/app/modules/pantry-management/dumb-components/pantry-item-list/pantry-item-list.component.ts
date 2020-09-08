@@ -6,8 +6,7 @@ import {
   Input,
   OnChanges,
   OnInit,
-  Output,
-  SimpleChanges
+  Output
 } from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
 import {NavigateToPantryItemPage} from '../../store/pantry-management.actions';

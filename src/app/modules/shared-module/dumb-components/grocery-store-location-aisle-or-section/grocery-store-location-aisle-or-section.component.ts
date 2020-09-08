@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {ControlContainer, Form, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {AddGroceryStoreModalComponent} from '../../add-grocery-store-modal/add-grocery-store-modal.component';
 import {ModalController, ToastController} from '@ionic/angular';
 import {IonicSelectableComponent} from 'ionic-selectable';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
-import {getAisleOrSectionDescription} from '../../../../helpers';
+import {getAisleOrSectionDescription, sortAislesOrSections} from '../../../../helpers';
 
 export interface GroceryStoreAisleOrSectionSelected {
   name: string;
@@ -21,7 +21,7 @@ export interface RenameAisleOrSection {
   templateUrl: './grocery-store-location-aisle-or-section.component.html',
   styleUrls: ['./grocery-store-location-aisle-or-section.component.scss']
 })
-export class GroceryStoreLocationAisleOrSectionComponent {
+export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnChanges {
 
   @Input()
   inputControlName: string;
@@ -60,6 +60,7 @@ export class GroceryStoreLocationAisleOrSectionComponent {
   private editControl: FormControl;
   private readonly editControlForm: FormGroup;
   private itemBeingEdited: string;
+  private sortedAislesOrSections: string[];
 
   constructor(private controlContainer: ControlContainer,
               public modalController: ModalController,
@@ -72,6 +73,15 @@ export class GroceryStoreLocationAisleOrSectionComponent {
     });
   }
 
+  ngOnInit() {
+    this.sortedAislesOrSections = [...this.groceryStoreAislesOrSections].sort(sortAislesOrSections);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.groceryStoreAislesOrSections) {
+      this.sortedAislesOrSections = [...this.groceryStoreAislesOrSections].sort(sortAislesOrSections);
+    }
+  }
 
   onChangeAisleOrSection($event: {
     component: IonicSelectableComponent,
