@@ -55,18 +55,20 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
   }
 
   private async writeDataToFile(): Promise<string> {
+    let fileName: string = '';
     try {
       // this.fileManager.tempDirectory
-      console.log(`temp directory: ${this.fileManager.tempDirectory}; app storage directory: ${this.fileManager.applicationStorageDirectory}`)
-      const fileEntry = await this.fileManager.createFile(this.fileManager.applicationStorageDirectory, 'grocery-data.hggs', true);
+      console.log(`data directory: ${this.fileManager.dataDirectory}; app storage directory: ${this.fileManager.applicationStorageDirectory}`)
+      const fileEntry = await this.fileManager.createFile(this.fileManager.dataDirectory, 'grocery-data.hggs', true);
       fileEntry.createWriter((fileWriter => {
         console.log('writing file');
         fileWriter.write(JSON.stringify(this.dataExported));
       }), this.failedToCreateFileWriter);
-      return fileEntry.nativeURL;
+      fileName = fileEntry.nativeURL;
+      return fileName;
     }
     catch(err) {
-      console.log(`error writing to file: ${JSON.stringify(err)}`);
+      console.log(`error: ${JSON.stringify(err)} writing to file: ${JSON.stringify(fileName)}`);
     }
   }
 
