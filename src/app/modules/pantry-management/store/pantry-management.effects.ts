@@ -50,7 +50,7 @@ export class PantryEffects {
       return this.pantryDataService.deletePantryItem(action.deletePantryItemRequest).pipe(
           switchMap((_) =>  [
             new PantryItemDeleted(action.deletePantryItemRequest.id),
-            new UpdateStoreShoppingList(groceryStore.id)
+            groceryStore ? new UpdateStoreShoppingList(groceryStore.id) : new NoOp()
           ]),
           catchError(error => [new DeletePantryItemFailed(error)]));
     })

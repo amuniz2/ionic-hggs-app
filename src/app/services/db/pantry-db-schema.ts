@@ -49,18 +49,6 @@ export class PantryItemTable {
   }
 }
 
-export class ShoppingItemTable {
-  public static NAME = 'shoppingItems';
-
-  public static COLS = class {
-    public static PANTRY_ITEM_ID = 'pantry_item_id';
-    public static SELECTED = 'selected';
-    public static IN_CART = 'in_cart';
-    public static QUANTITY = 'quantity';
-    public static UNITS = 'units';
-  };
-}
-
 export class PantryItemLocationTable {
   public static NAME = 'pantryitemlocationtable';
 

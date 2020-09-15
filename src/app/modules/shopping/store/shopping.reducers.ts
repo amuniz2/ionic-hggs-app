@@ -2,15 +2,21 @@ import {ShoppingActions, ShoppingActionTypes} from './shopping.actions';
 import {EntityState} from '@ngrx/entity';
 import {ShoppingItem} from '../../../model/shopping-item';
 import {shoppingListAdapter} from './shopping.adapter';
-import {isNumeric} from 'rxjs/internal-compatibility';
 import {sortAislesOrSections} from '../../../helpers';
 
 export class SectionItems {
   name: string;
   items: ShoppingItem[];
+
   constructor(section: string, items: ShoppingItem[]) {
     this.name = section;
     this.items = items.filter((item) => item.location.section === this.name);
+  }
+
+  public findShoppingItem(pantryItemId: number): ShoppingItem {
+    const result =  this.items.find(item => item.pantryItemId === pantryItemId);
+    console.log(`returning: ${JSON.stringify(result)} for findShoppingItem() in section: ${this.name}`);
+    return result;
   }
 }
 
@@ -31,6 +37,17 @@ export class AisleItems {
 
     distinctSectionItems.forEach( section => this.sections.push(new SectionItems(section,
       itemsInAisleWithSection.filter(shoppingItem => shoppingItem.location.section === section))));
+  }
+
+  public findShoppingItem(pantryItemId: number): ShoppingItem {
+    let result = this.items.find(item => item.pantryItemId === pantryItemId);
+    if (result == null) {
+      const sectionWithItem = this.sections.find(section => section.findShoppingItem(pantryItemId));
+      if (sectionWithItem) {
+        result = sectionWithItem.findShoppingItem(pantryItemId);
+      }
+    }
+    return result;
   }
 }
 
@@ -65,6 +82,24 @@ export class StoreShoppingList implements IStoreShoppingList {
   id: number;
   sections: SectionItems[];
   shoppingItems: ShoppingItem[];
+
+  public findShoppingItem(pantryItemId: number): ShoppingItem {
+    let result = this.shoppingItems.find(item => item.pantryItemId === pantryItemId);
+    if (result == null) {
+      const sectionWithItem = this.sections.find(section => section.findShoppingItem(pantryItemId));
+      if (sectionWithItem) {
+        result = sectionWithItem.findShoppingItem(pantryItemId);
+      }
+    }
+    if (result == null) {
+      const aisleWithItem = this.aisles.find(aisle => aisle.findShoppingItem(pantryItemId));
+      if (aisleWithItem) {
+        result = aisleWithItem.findShoppingItem(pantryItemId);
+      }
+    }
+    return result;
+  }
+
 }
 
 export class ShoppingListState extends StoreShoppingList {
@@ -102,13 +137,13 @@ export function shoppingListManagementReducer(state = initialShoppingListManagem
     }
 
     case ShoppingActionTypes.ShoppingItemUpdateSucceeded: {
-      const shoppingList = state.shoppingLists.entities[action.storeId].shoppingItems;
-      const shoppingItem = shoppingList.find(i => i.pantryItemId === action.id);
+      const shoppingList = state.shoppingLists.entities[action.storeId];
+      const shoppingItem = shoppingList.findShoppingItem(action.id);
       console.log(`in reducer, action: ${JSON.stringify(action)}; shoppingList: ${JSON.stringify(shoppingList)}; shoppingItem: ${shoppingItem}`);
       shoppingItem.inCart = !shoppingItem.inCart;
       return {
         ...state,
-        shoppingLists: shoppingListAdapter.upsertOne( new ShoppingListState(action.storeId, shoppingList),
+        shoppingLists: shoppingListAdapter.upsertOne( shoppingList,
           state.shoppingLists),
       };
     }
