@@ -1,5 +1,5 @@
 import {Observable, of} from 'rxjs';
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {select, Store} from '@ngrx/store';
@@ -13,6 +13,7 @@ import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 import {GroceryStoreState} from '../../../../model/grocery-store';
 import {selectAllGroceryStores} from '../../../../store/store-management.selectors';
 import {UiCrudAction} from '../../../../ui-crud-actions';
+import {IProductInfoService} from '../../../../services/IProductInfoService';
 
 
 @Component({
@@ -28,7 +29,11 @@ export class EditPantryItemComponent implements OnInit {
   isNewItem: boolean;
   error$: Observable<Error>;
 
-  constructor(private store: Store<AppState>, private router: Router, private location: Location) {
+  constructor(private store: Store<AppState>,
+              private router: Router,
+              private location: Location,
+              private scanner: BarcodeScanner,
+              @Inject('IProductInfoService') private productInfoService: IProductInfoService) {
     this.isNewItem = this.router.getCurrentNavigation().extras.queryParams.newItem;
     this.pantryItemId = this.router.getCurrentNavigation().extras.queryParams.id;
     this.groceryStores$ = this.store.pipe(select(selectAllGroceryStores));
@@ -84,5 +89,14 @@ export class EditPantryItemComponent implements OnInit {
   onDeletePantryItem() {
     this.store.dispatch(new fromActions.DeletePantryItem({id: this.pantryItemId}));
     this.location.back();
+  }
+
+  onScanBarcode() {
+    this.scanner.scan().then(barcodeData => {
+      console.log('Barcode data', barcodeData);
+      this.productInfoService.getProductInfo(barcodeData).subscribe((productInfo) => console.log(productInfo));
+    }).catch(err => {
+      console.log('Error', err);
+    });
   }
 }

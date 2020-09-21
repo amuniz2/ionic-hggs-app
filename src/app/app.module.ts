@@ -19,6 +19,7 @@ import {SharedModule} from './modules/shared-module/shared.module';
 import {MySqlCommands} from './services/db/my-sql-commands';
 import {FakePantryDataService} from './services/fake-pantry-data.service';
 import {PantryDataService} from './services/pantry-data.service';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {PantryDataService} from './services/pantry-data.service';
   imports: [
     BrowserModule,
     CommonModule,
+    HttpClientModule,
     RouterModule,
     AppRoutingModule,
     StoreModule.forRoot({app: appRootReducers}),

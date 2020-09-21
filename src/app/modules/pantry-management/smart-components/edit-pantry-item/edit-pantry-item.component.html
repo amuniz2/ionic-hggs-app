@@ -4,6 +4,9 @@
       <ion-back-button>Back</ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
+      <ion-button fill="clear" outline="none" (click)="onScanBarcode()">
+        <ion-icon name="scan-outline"></ion-icon>
+      </ion-button>
       <ion-button  fill="clear" outline="none" (click)="onDeletePantryItem()">
         <ion-icon slot="icon-only" ios="trash-outline" md="trash-outline" ></ion-icon>
       </ion-button>
