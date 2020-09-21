@@ -15,10 +15,10 @@
           <ion-col>
             <div class="checkbox-div">
               <ion-checkbox class="item-check-box" (ionChange)="itemClicked($event, pantryItem)" [checked]="pantryItem.need"></ion-checkbox>
+              <ion-input [hidden]="!pantryItem.need" class="column edit-box" (ionBlur)="quantityChanged($event, pantryItem)"
+                         imputmode="decimal" type="number"  [ngModel]="pantryItem.quantityNeeded"></ion-input>
             </div>
             <div class="row" *ngIf="pantryItem.need">
-              <ion-input class="column edit-box" (ionBlur)="quantityChanged($event, pantryItem)"
-                         imputmode="decimal" type="number"  [ngModel]="pantryItem.quantityNeeded"></ion-input>
               <ion-label class="column rightSideLabel ion-text-wrap">{{pantryItem.units === null ?'n/a' : pantryItem.units }}</ion-label>
             </div>
           </ion-col>
