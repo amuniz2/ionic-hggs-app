@@ -23,6 +23,14 @@ export class PantryDataService implements IPantryDataService {
   constructor(private dbHelper: PantryDbHelper) {
   }
 
+  cleanupLocations(): Observable<boolean> {
+    try {
+      return this.dbHelper.cleanupLocations();
+    } catch(error) {
+      return throwError(error);
+    }
+  }
+
   public initialize(): Observable<boolean> {
     return this.dbHelper.connect();
   }
