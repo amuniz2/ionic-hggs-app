@@ -74,12 +74,14 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
   }
 
   ngOnInit() {
-    this.sortedAislesOrSections = [...this.groceryStoreAislesOrSections].sort(sortAislesOrSections);
+    this.sortedAislesOrSections =  !!this.groceryStoreAislesOrSections ?
+      [...this.groceryStoreAislesOrSections].sort(sortAislesOrSections) : [];
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.groceryStoreAislesOrSections) {
-      this.sortedAislesOrSections = [...this.groceryStoreAislesOrSections].sort(sortAislesOrSections);
+      this.sortedAislesOrSections =  !!this.groceryStoreAislesOrSections ?
+        [...this.groceryStoreAislesOrSections].sort(sortAislesOrSections) : [];
     }
   }
 

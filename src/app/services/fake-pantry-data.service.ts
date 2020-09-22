@@ -41,11 +41,12 @@ export class FakePantryDataService implements IPantryDataService {
     this.groceryStoreLocations = [];
   }
 
-  private readonly groceryStores: GroceryStore[];
-  private readonly pantryItems: PantryItem[];
-  private readonly pantryItemLocations: PantryItemLocation[];
-  private readonly groceryStoreLocations: GroceryStoreLocation[];
-  private readonly shoppingItems: ShoppingItem[];
+    private readonly groceryStores: GroceryStore[];
+    private readonly pantryItems: PantryItem[];
+    private readonly pantryItemLocations: PantryItemLocation[];
+    private readonly groceryStoreLocations: GroceryStoreLocation[];
+    private readonly shoppingItems: ShoppingItem[];
+
     getPantryItemsNeeded(storeId: number): Observable<PantryItem[]> {
         throw new Error('Method not implemented.');
     }
@@ -528,5 +529,9 @@ export class FakePantryDataService implements IPantryDataService {
   isPantryItemNeeded(itemId: number): Observable<boolean> {
       const pantryItem = this.findPantryItem(itemId);
     return of(pantryItem.need);
+  }
+
+  cleanupLocations(): Observable<boolean> {
+    return undefined;
   }
 }

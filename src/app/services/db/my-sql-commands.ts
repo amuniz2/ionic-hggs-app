@@ -724,10 +724,6 @@ export class MySqlCommands {
     ${LocationTable.NAME}.${LocationTable.COLS.AISLE},
     ${LocationTable.NAME}.${LocationTable.COLS.SECTION_NAME}
       ${fromLocationTableWithJoinClause} ${whereLocationClause}`;
-    console.log('executing: ');
-    console.log (insertGroceryStoreIfNecessarySql);
-    console.log(insertPantryItemSql);
-    console.log(selectGroceryStoreLocation);
 
     try {
       // const data = await this.db.sqlBatch([insertGroceryStoreIfNecessarySql, insertPantryItemSql, selectGroceryStoreLocation]);
@@ -957,6 +953,14 @@ export class MySqlCommands {
 
   }
 
+  public async cleanupLocations(): Promise<boolean> {
+    let success = await this.deleteUnusedGroceryStoreLocations();
+    if (success) {
+      success = await this.deleteUnusedGroceryStoreAislesAndSections();
+    }
+    return success;
+  }
+
   private async queryGroceryStoreAislesOrSectionsInuseInUse(groceryStoreId: number,
                                                             aisleOrSectionTableName,
                                                             aisleOrSectionColumnName,
@@ -1115,5 +1119,41 @@ export class MySqlCommands {
       }
     }
     return null;
+  }
+
+  private async deleteUnusedGroceryStoreLocations() {
+    const sql = `DELETE FROM ${LocationTable.NAME} WHERE NOT EXISTS (
+    SELECT * FROM ${PantryItemLocationTable.NAME} WHERE ${LocationTable.COLS.ID} = ${PantryItemLocationTable.COLS.LOCATION_ID})`;
+
+    try {
+      await this.db.executeSql(sql, []);
+      return true;
+    } catch (err) {
+      console.log(`Error deleting unused grocery store locations, sql: ${sql}`);
+      console.log(err);
+      return false;
+    }
+  }
+
+  private async deleteUnusedGroceryStoreAislesAndSections(): Promise<boolean> {
+    const deleteAislesSql = `DELETE FROM ${StoreGroceryAisleTable.NAME} WHERE NOT EXISTS (
+    SELECT * FROM ${LocationTable.NAME}
+    WHERE ${StoreGroceryAisleTable.COLS.GROCERY_AISLE} = ${LocationTable.COLS.AISLE}
+    AND ${StoreGroceryAisleTable.COLS.STORE_ID} = ${LocationTable.COLS.STORE_ID})`;
+
+    const deleteSectionsSql = `DELETE FROM ${StoreGrocerySectionTable.NAME} WHERE NOT EXISTS (
+    SELECT * FROM ${LocationTable.NAME}
+    WHERE ${StoreGrocerySectionTable.COLS.GROCERY_SECTION} = ${LocationTable.COLS.SECTION_NAME}
+    AND ${StoreGrocerySectionTable.COLS.STORE_ID} = ${LocationTable.COLS.STORE_ID})`;
+
+    try {
+      await this.db.sqlBatch([deleteAislesSql, deleteSectionsSql]);
+      return true;
+    } catch(err) {
+      console.log(`Error deleting unused aisles and sections, error: ${err}`);
+      console.log('delete aisles sql: ', deleteAislesSql);
+      console.log('delete sections sql: ', deleteSectionsSql);
+      return false;
+    }
   }
 }

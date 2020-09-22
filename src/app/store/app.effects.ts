@@ -261,4 +261,9 @@ export class AppEffects {
       );
     })
   );
+
+  @Effect({ dispatch: false})
+  public databaseIsReady$ = this.actions$.pipe(
+    ofType(AppActionTypes.DatabaseReady),
+    switchMap(() => this.storeManagementService.cleanupLocations()));
 }

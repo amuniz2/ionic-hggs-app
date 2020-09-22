@@ -29,17 +29,11 @@ export class PantryDbHelper {
         observer.error(err);
       });
     });
-
-    // return new Observable<boolean>((observer) => {
-    //   this.mySqlCommands.openOrCreateDb()
-    //     .then((success) => {
-    //       observer.next(success);
-    //       observer.complete();
-    //     })
-    //     .catch((err) => observer.error(err));
-    // });
   }
 
+  cleanupLocations(): Observable<boolean> {
+    return this.cleanupLocationsUsingPromise();
+  }
   public getGroceryStoreByName(name: string): Observable<GroceryStore> {
     return new Observable<GroceryStore>((observer) => {
         // this.mySqlCommands.openOrCreateDb().then((result) => {
@@ -531,6 +525,18 @@ export class PantryDbHelper {
         observer.next(success);
         observer.complete();
       }).catch((err) => observer.error(err));
+    });
+  }
+
+  private cleanupLocationsUsingPromise(): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      this.mySqlCommands.cleanupLocations().then((success) => {
+        observer.next(success);
+        observer.complete();
+      }).catch((err) => {
+        console.log('Error cleaning up db ', err);
+        observer.error(err)
+      });
     });
   }
 }

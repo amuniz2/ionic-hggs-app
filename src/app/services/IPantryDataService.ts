@@ -97,4 +97,6 @@ export interface IPantryDataService {
   updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean>;
 
   isPantryItemNeeded(itemId: number): Observable<boolean>;
+
+  cleanupLocations(): Observable<boolean>;
 }
