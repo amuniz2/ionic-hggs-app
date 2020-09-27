@@ -6,23 +6,20 @@ import {BarcodeScanResult} from '@ionic-native/barcode-scanner';
 import {ProductInfo} from '../modules/pantry-management/smart-components/edit-pantry-item/edit-pantry-item.component';
 
 @Injectable()
-export class ProductInfoService implements IProductInfoService {
-  constructor(private httpClient: HttpClient) {
+export class FakeProductInfoService implements IProductInfoService {
+  constructor() {
   }
 
   getProductInfo(data: BarcodeScanResult): Observable<any> {
     const url = 'https://barcode-lookup.p.rapidapi.com/v2/products';
 
-    const barcodeApiKey = 'f0145f7934msh8a9592e288f1723p1c85a4jsnd01e7482abcd';
-    const opts = {
-        headers: {
-          'x-rapidapi-host': 'barcode-lookup.p.rapidapi.com', // product-data1.p.rapidapi.com
-          'X-RapidAPI-Key': barcodeApiKey
-        },
-        params: new HttpParams({fromString: `barcode=${data.text}`})
-      };
-
-   return this.httpClient.get(url, opts);
+    return of({ products: [
+        {
+          product_name: `name for ${data.text}`,
+          description: `description for ${data.text}`,
+          images: [ 'imageUrl']
+        }
+      ]});
   }
 
   convertToProductData(data: any): ProductInfo[] {

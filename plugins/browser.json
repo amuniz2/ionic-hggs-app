@@ -30,6 +30,9 @@
     },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "phonegap-plugin-barcodescanner": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },
   "dependent_plugins": {

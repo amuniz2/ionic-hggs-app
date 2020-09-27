@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^9.1.4",
     "@angular/platform-browser-dynamic": "^9.1.4",
     "@angular/router": "^9.1.4",
+    "@ionic-native/barcode-scanner": "^5.28.0",
     "@ionic-native/core": "^5.21.6",
     "@ionic-native/file": "^5.26.0",
     "@ionic-native/social-sharing": "^5.26.0",
@@ -45,9 +46,12 @@
     "cordova-sqlite-storage": "^5.0.1",
     "core-js": "^2.6.11",
     "es6-promise-plugin": "^4.2.2",
+    "install": "^0.13.0",
     "ionic": "^5.4.16",
     "ionic-selectable": "^4.7.1",
     "ionicons": "^5.0.1",
+    "npm": "^6.14.8",
+    "phonegap-plugin-barcodescanner": "^8.1.0",
     "rxjs": "^6.5.5",
     "tslib": "^1.11.1",
     "zone.js": "~0.10.3"
@@ -93,7 +97,10 @@
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
       },
       "cordova-sqlite-storage": {},
-      "cordova-plugin-file": {}
+      "cordova-plugin-file": {},
+      "phonegap-plugin-barcodescanner": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      }
     },
     "platforms": [
       "ios",

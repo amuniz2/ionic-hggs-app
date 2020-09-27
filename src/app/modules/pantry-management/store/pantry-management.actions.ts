@@ -8,6 +8,7 @@ import {
 import {EditItemLocationRequest, NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 import {NewItemLocation} from '../smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
+import {ProductInfo} from '../smart-components/edit-pantry-item/edit-pantry-item.component';
 
 export enum PantryActionTypes {
   PantryItemLoaded = '[Pantry Item] Loaded',
@@ -30,6 +31,8 @@ export enum PantryActionTypes {
   AddPantryItemLocationRequest = '[Pantry Item] add location requested',
   DeletePantryItemLocation = '[Pantry Item] dleete location',
   EditPantryItemLocationRequest = '[Pantry Item] edit location requested',
+  NewPantryItemScanned = '[Pantry Item] new item scanned',
+  PantryItemInfoScanned = '[Pantry Item] info scanned',
   PantryItemLocationAdded = '[Pantry Item] add location succeeded',
   PantryItemLocationDeleted = '[Pantry Item] location deleted',
   PantryItemLocationUpdated = '[Pantry Item] location updated',
@@ -156,6 +159,18 @@ export class NavigatedToPantryItemPage implements Action {
   constructor(public pantryItemId: number) {}
 }
 
+export class PantryItemInfoScanned implements Action {
+  readonly type = PantryActionTypes.PantryItemInfoScanned;
+
+  constructor(public pantryItemId: number, public infoScanned: ProductInfo[]) {}
+}
+
+export class NewPantryItemScanned implements Action {
+  readonly type = PantryActionTypes.NewPantryItemScanned;
+
+  constructor(public infoScanned: ProductInfo[]) {}
+}
+
 export class PantryLoadedSuccessfully implements Action {
   readonly type = PantryActionTypes.PantryLoadedSuccessfully;
 
@@ -230,6 +245,8 @@ export type PantryActions =
   | LoadPantryItems
   | NavigatedToPantryItemPage
   | NavigateToPantryItemPage
+  | NewPantryItemScanned
+  | PantryItemInfoScanned
   | PantryItemLocationAdded
   | PantryItemLocationUpdated
   | PantryItemLoaded

@@ -20,6 +20,7 @@ import { AddPantryItemComponent } from './dumb-components/add-pantry-item/add-pa
 import {NgModule} from '@angular/core';
 import {PantryDataService} from '../../services/pantry-data.service';
 import {GroceryDataTransporter} from '../../services/grocery-data-transporter.service';
+import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import {GroceryDataTransporter} from '../../services/grocery-data-transporter.se
   providers: [
     SocialSharing,
     File,
+    BarcodeScanner,
     [{provide: 'IGroceryDataExporter', useClass: GroceryDataTransporter}],
   ]
 })

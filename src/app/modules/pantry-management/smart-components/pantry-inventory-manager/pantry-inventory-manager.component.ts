@@ -19,6 +19,9 @@ import {HggsData} from '../../../../model/hggs-data';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
 import {Router} from '@angular/router';
 import {ImportData} from '../../../../store';
+import {NewPantryItemScanned, PantryItemInfoScanned} from '../../../pantry-management/store/pantry-management.actions';
+import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
+import {IProductInfoService} from '../../../../services/IProductInfoService';
 
 @Component({
   selector: 'app-pantry-inventory-manager',
@@ -48,8 +51,9 @@ export class PantryInventoryManagerComponent implements OnInit {
               @Inject('IPantryDataService')  private pantryDataService: IPantryDataService,
               private alertContoller: AlertController,
               private _cdr: ChangeDetectorRef,
-              private router: Router
-              /*private popoverController: PopoverController, */) {
+              private router: Router,
+              private scanner: BarcodeScanner,
+              @Inject('IProductInfoService') private productInfoService: IProductInfoService) {
     this.title = 'Manage pantry items from page component';
     // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
@@ -87,6 +91,21 @@ export class PantryInventoryManagerComponent implements OnInit {
 
   onPantryItemModified($event: PantryItem) {
     this.store.dispatch(new fromActions.SavePantryItem($event));
+  }
+
+  onScanBarcode() {
+    this.scanner.scan().then(barcodeData => {
+      this.productInfoService.getProductInfo(barcodeData).subscribe((productInfo) => {
+          console.log(productInfo);
+          const scannedProductInfo = this.productInfoService.convertToProductData(productInfo);
+          if (!!scannedProductInfo && scannedProductInfo.length > 0) {
+            this.store.dispatch(new fromActions.CreatePantryItem( { name: scannedProductInfo[0].name }));
+          }
+        },
+        (error) => console.log('error: ', error));
+    }).catch(err => {
+      console.log('Error', err);
+    });
   }
 
   onShopClick() {

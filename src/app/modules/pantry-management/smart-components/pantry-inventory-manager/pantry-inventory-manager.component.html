@@ -10,6 +10,9 @@
     <ion-button  fill="clear" outline="none" (click)="importData()">
       <ion-icon ios="download-outline" md="download-outline" ></ion-icon>
     </ion-button>
+    <ion-button fill="clear" outline="none" (click)="onScanBarcode()">
+      <ion-icon name="scan-outline"></ion-icon>
+    </ion-button>
     <ion-button *ngIf="!filterList" fill="clear" outline="none" (click)="filterItems()">
       <ion-icon ios="search-circle-outline" md="search-circle-outline" ></ion-icon>
     </ion-button>

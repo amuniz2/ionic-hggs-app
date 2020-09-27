@@ -7,14 +7,20 @@ import {AppState} from '../../../../store/app.state';
 import {selectPantryItem, selectPantryItemLocations, selectPantryItemsError} from '../../store/pantry-management.selectors';
 import {PantryItem} from '../../../../model/pantry-item';
 import * as fromActions from '../../../pantry-management/store/pantry-management.actions';
-import {NavigatedToPantryItemPage} from '../../../pantry-management/store/pantry-management.actions';
+import {NavigatedToPantryItemPage, PantryItemInfoScanned} from '../../store/pantry-management.actions';
 import {EditItemLocationRequest, NewItemLocationRequest} from '../../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 import {GroceryStoreState} from '../../../../model/grocery-store';
 import {selectAllGroceryStores} from '../../../../store/store-management.selectors';
 import {UiCrudAction} from '../../../../ui-crud-actions';
 import {IProductInfoService} from '../../../../services/IProductInfoService';
+import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
 
+export interface ProductInfo {
+  name: string;
+  description: string;
+  imageUri: string;
+}
 
 @Component({
   selector: 'app-edit-pantry-item',
@@ -93,8 +99,12 @@ export class EditPantryItemComponent implements OnInit {
 
   onScanBarcode() {
     this.scanner.scan().then(barcodeData => {
-      console.log('Barcode data', barcodeData);
-      this.productInfoService.getProductInfo(barcodeData).subscribe((productInfo) => console.log(productInfo));
+      this.productInfoService.getProductInfo(barcodeData).subscribe((productInfo) => {
+        console.log(productInfo);
+        const scannedProductInfo = this.productInfoService.convertToProductData(productInfo);
+        this.store.dispatch(new PantryItemInfoScanned(this.pantryItemId, scannedProductInfo));
+        },
+        (error) => console.log('error: ', error));
     }).catch(err => {
       console.log('Error', err);
     });

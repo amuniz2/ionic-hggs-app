@@ -73,6 +73,30 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
         };
       }
 
+      case PantryActionTypes.PantryItemInfoScanned: {
+        const pantryItem = getPantryItem(state.pantryItems, action.pantryItemId);
+        let name = pantryItem.name;
+        let description = pantryItem.description;
+        if (!!name) {
+          description = action.infoScanned[0].name;
+        } else {
+          name = action.infoScanned[0].name;
+        }
+        return {
+          ...state,
+          pantryItems: {
+            ...fromAdapter.pantryAdapter.updateOne({
+              id: action.pantryItemId,
+              changes: {
+                name,
+                description
+              }
+            }, state.pantryItems),
+            error: null
+          }
+        };
+      }
+
       case PantryActionTypes.SavePantryItemSucceeded:
         return {
           ...state,
@@ -214,8 +238,6 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
       case PantryActionTypes.PantryItemLocationUpdated:
       {
         const pantryItem = getPantryItem(state.pantryItems, action.itemId);
-        console.log(`in PantryItemLocationUpdated reducer, action: ${JSON.stringify(action)}`);
-
         const newState = {
           ...state,
           pantryItems: {
@@ -230,7 +252,6 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
             error: null
           }
         };
-        console.log(`new state: ${JSON.stringify(newState)}`);
         return newState;
       }
 

@@ -20,6 +20,10 @@ import {MySqlCommands} from './services/db/my-sql-commands';
 import {FakePantryDataService} from './services/fake-pantry-data.service';
 import {PantryDataService} from './services/pantry-data.service';
 import {HttpClientModule} from '@angular/common/http';
+import {ProductInfoService} from './services/product-info-service';
+import {IProductInfoService} from './services/IProductInfoService';
+import {BarcodeScanner} from '@ionic-native/barcode-scanner';
+import {FakeProductInfoService} from './services/fake-product-info-service';
 
 
 @NgModule({
@@ -52,6 +56,8 @@ import {HttpClientModule} from '@angular/common/http';
     StatusBar,
     [{provide: 'IPantryDataService', useClass: PantryDataService}],
     // [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
+    // [{provide: 'IProductInfoService', useClass: ProductInfoService}],
+    [{provide: 'IProductInfoService', useClass: FakeProductInfoService}],
     PantryDbHelper,
     MySqlCommands,
     SQLite

@@ -155,6 +155,13 @@ export class PantryEffects {
     }));
 
   @Effect()
+  public editNewPantryItem$ = this.actions$.pipe(
+    ofType(PantryActionTypes.PantryItemCreated),
+    map((payload) => {
+        return new NavigateToPantryItemPage({ id: payload.pantryItem.id, newItem: false });
+      }));
+
+  @Effect()
   public savePantryItem$ = this.actions$.pipe(
     ofType(PantryActionTypes.SavePantryItem),
     switchMap((payload) => {
