@@ -3,7 +3,6 @@ import {PantryItem} from '../../../../model/pantry-item';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 import {UiCrudAction} from '../../../../ui-crud-actions';
 import {GroceryStoreState} from '../../../../model/grocery-store';
-import {isNumeric} from 'rxjs/internal-compatibility';
 import {getAisleOrSectionDescription} from '../../../../helpers';
 
 export interface NewItemLocationRequest {
@@ -13,7 +12,7 @@ export interface NewItemLocationRequest {
 }
 
 export interface EditItemLocationRequest {
-  pantryItem: PantryItem;
+  pantryItemId: number;
   storeLocation: GroceryStoreLocation;
   action: UiCrudAction;
 }
@@ -58,7 +57,7 @@ export class PantryItemLocationsComponent implements OnInit {
 
   editLocation(loc: GroceryStoreLocation) {
     this.notifyEditPantryItemLocationRequested.emit( {
-      pantryItem: this.pantryItem,
+      pantryItemId: this.pantryItem.id,
       storeLocation: loc,
       action: UiCrudAction.Update
     });
@@ -66,7 +65,7 @@ export class PantryItemLocationsComponent implements OnInit {
 
   remove(loc: GroceryStoreLocation) {
     this.notifyEditPantryItemLocationRequested.emit( {
-      pantryItem: this.pantryItem,
+      pantryItemId: this.pantryItem.id,
       storeLocation: loc,
       action: UiCrudAction.Delete
     });

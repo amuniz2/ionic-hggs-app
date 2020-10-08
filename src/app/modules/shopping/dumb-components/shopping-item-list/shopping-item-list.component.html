@@ -18,7 +18,9 @@
                   </ion-row>
                   <ion-row *ngFor="let shoppingItem of filteredShoppingItems(section.items)">
                     <ion-col>
-                      <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
+                      <app-shopping-item [shoppingItem]="shoppingItem"
+                                         (notifyEditPantryItemLocationRequested)="onChangeShoppingItemLocation($event)"
+                                         (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
                       <hr width="100%">
                     </ion-col>
                   </ion-row>
@@ -30,7 +32,9 @@
         </ion-row>
         <ion-row *ngFor="let shoppingItem of filteredShoppingItems(aisle.items)">
           <ion-col>
-            <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
+            <app-shopping-item [shoppingItem]="shoppingItem"
+                               (notifyEditPantryItemLocationRequested)="onChangeShoppingItemLocation($event)"
+                               (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
             <hr width="100%">
           </ion-col>
         </ion-row>
@@ -45,7 +49,9 @@
       </ion-row>
       <ion-row *ngFor="let shoppingItem of filteredShoppingItems(section.items)">
         <ion-col>
-          <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
+          <app-shopping-item [shoppingItem]="shoppingItem"
+                             (notifyEditPantryItemLocationRequested)="onChangeShoppingItemLocation($event)"
+                             (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
           <hr width="100%">
         </ion-col>
       </ion-row>
@@ -54,7 +60,9 @@
   <ion-grid>
     <ion-row *ngFor="let shoppingItem of filteredShoppingItems(shoppingList?.shoppingItems)">
       <ion-col>
-        <app-shopping-item [shoppingItem]="shoppingItem" (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
+        <app-shopping-item [shoppingItem]="shoppingItem"
+                           (notifyEditPantryItemLocationRequested)="onChangeShoppingItemLocation($event)"
+                           (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
         <hr width="100%">
       </ion-col>
     </ion-row>

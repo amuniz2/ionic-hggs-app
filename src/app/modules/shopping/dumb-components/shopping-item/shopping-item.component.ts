@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingItem} from '../../../../model/shopping-item';
+import {UiCrudAction} from '../../../../ui-crud-actions';
+import {EditItemLocationRequest} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
 
 export class ShoppingItemUpdate {
   id: number;
@@ -18,6 +20,9 @@ export class ShoppingItemComponent implements OnInit {
 
   @Output()
   notifySaveRequested: EventEmitter<ShoppingItemUpdate> = new EventEmitter();
+
+  @Output()
+  notifyEditPantryItemLocationRequested: EventEmitter<EditItemLocationRequest> = new EventEmitter<EditItemLocationRequest>();
 
   constructor() { }
 
@@ -42,5 +47,13 @@ export class ShoppingItemComponent implements OnInit {
       return '';
     }
     return this.shoppingItem.description;
+  }
+
+  editLocation() {
+    this.notifyEditPantryItemLocationRequested.emit( {
+      pantryItemId: this.shoppingItem.pantryItemId,
+      storeLocation: { ...this.shoppingItem.location, storeId: this.shoppingItem.storeId, storeName: '', id: this.shoppingItem.location.locationId},
+      action: UiCrudAction.Update
+    });
   }
 }

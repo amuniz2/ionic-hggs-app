@@ -201,7 +201,7 @@ export class PantryEffects {
           }
       };
       // tslint:disable-next-line:max-line-length
-      const route = `/home/pantry-items/${navigateToLocationPage.request.pantryItem.id}/pantry-item-location/${navigateToLocationPage.request.storeLocation.id}`;
+      const route = `/home/pantry-items/${navigateToLocationPage.request.pantryItemId}/pantry-item-location/${navigateToLocationPage.request.storeLocation.id}`;
       this.router.navigateByUrl(route, navigationExtras);
     }));
 
@@ -210,8 +210,8 @@ export class PantryEffects {
     ofType(PantryActionTypes.DeletePantryItemLocation),
       switchMap((payload) => {
         console.log('calling deletePantryItemLocation');
-        return this.pantryDataService.deletePantryItemLocation(payload.request.pantryItem.id, payload.request.storeLocation.id).pipe(
-          map((success) => new PantryItemLocationDeleted(payload.request.pantryItem.id, payload.request.storeLocation))
+        return this.pantryDataService.deletePantryItemLocation(payload.request.pantryItemId, payload.request.storeLocation.id).pipe(
+          map((success) => new PantryItemLocationDeleted(payload.request.pantryItemId, payload.request.storeLocation))
         );
       }));
 

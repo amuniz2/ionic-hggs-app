@@ -9,13 +9,12 @@ import {ItemPlacedInOrRemovedFromCart, LoadShoppingList} from '../../store/shopp
 import {ShoppingItem} from '../../../../model/shopping-item';
 import {
   selectShoppingList,
-  selectShoppingListItemsGroupedByAisle,
-  selectShoppingListItemsGroupedBySection
 } from '../../store/shopping.selectors';
-import {AisleItems, IStoreShoppingList, SectionItems, ShoppingListState} from '../../store/shopping.reducers';
-import {ShoppingItemUpdate} from '../../dumb-components/shopping-item/shopping-item.component';
+import {IStoreShoppingList} from '../../store/shopping.reducers';
 import {StoreShoppingItemUpdate} from '../../dumb-components/shopping-item-list/shopping-item-list.component';
 import {map, withLatestFrom} from 'rxjs/operators';
+import {EditItemLocationRequest} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
+import {EditPantryItemLocationRequest} from '../../../pantry-management/store/pantry-management.actions';
 
 @Component({
   selector: 'app-shopping-list',
@@ -71,5 +70,9 @@ export class ShoppingListComponent implements OnInit {
 
   cancelFilter() {
     this.filterList = false;
+  }
+
+  onItemLocationChangeRequested($event: EditItemLocationRequest) {
+    this.store.dispatch((new EditPantryItemLocationRequest($event)));
   }
 }

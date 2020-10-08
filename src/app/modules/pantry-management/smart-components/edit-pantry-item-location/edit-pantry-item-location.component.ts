@@ -8,8 +8,6 @@ import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 import {
   AddGroceryStoreSection,
   AddStoreAisle,
-  DeleteGroceryStoreSection,
-  LoadGroceryStores,
   LocationGroceryStoreSelected,
   SelectStore
 } from '../../../../store';

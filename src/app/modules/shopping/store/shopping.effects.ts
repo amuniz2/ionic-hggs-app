@@ -55,8 +55,8 @@ export class ShoppingListManagementEffects {
     ofType(ShoppingActionTypes.ItemPlacedInOrRemovedFromCart),
     switchMap((payload) => {
 
-      return this.storeManagementService.updateShoppingItem(payload.update.id, payload.update.inCart).pipe(
-        map((succeeded) => new ShoppingItemUpdateSucceeded(payload.update.storeId, payload.update.id)),
+      return this.storeManagementService.updateShoppingItem(payload.update.storeId, payload.update.id, payload.update.inCart).pipe(
+        map((shoppingItem) => new ShoppingItemUpdateSucceeded(payload.update.storeId, shoppingItem)),
         catchError(error => {
           console.log('update shopping item failed');
           return [new DisplayError(error)];

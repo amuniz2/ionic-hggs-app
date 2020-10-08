@@ -58,7 +58,9 @@ export class DbRowConverters {
       units: row[PantryItemTable.COLS.UNITS],
       quantity: row[PantryItemTable.COLS.QUANTITY_NEEDED],
       inCart: false,
+      storeId: row[LocationTable.COLS.STORE_ID],
       location: {
+        locationId: row[LocationTable.COLS.ID],
         aisle: row[LocationTable.COLS.AISLE],
         section: row[LocationTable.COLS.SECTION_NAME],
       }

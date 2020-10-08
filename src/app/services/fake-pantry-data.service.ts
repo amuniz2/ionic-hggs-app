@@ -363,7 +363,9 @@ export class FakePantryDataService implements IPantryDataService {
         quantity: pantryItem.quantityNeeded,
         inCart: false,
         units: pantryItem.units,
+        storeId: groceryStoreLocation.storeId,
         location: {
+          locationId: groceryStoreLocation.id,
           aisle: groceryStoreLocation.aisle,
           section: groceryStoreLocation.section,
         }
@@ -459,12 +461,12 @@ export class FakePantryDataService implements IPantryDataService {
       }
   }
 
-  updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean> {
+  updateShoppingItem(storeId: number, pantryItemId: number, inCart: boolean): Observable<ShoppingItem> {
     const shopingItemToUpdate = this.findShoppingItem(pantryItemId);
     shopingItemToUpdate.inCart = inCart;
     const pantryItemToUpdate = this.findPantryItem(pantryItemId);
     pantryItemToUpdate.need = !inCart;
-    return of(true);
+    return of({...shopingItemToUpdate});
     }
 
   getAllGroceryStoreLocations(): Observable<GroceryStoreLocation[]> {

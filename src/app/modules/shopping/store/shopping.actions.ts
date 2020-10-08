@@ -36,7 +36,7 @@ export class ItemPlacedInOrRemovedFromCart implements Action {
 
 export class ShoppingItemUpdateSucceeded implements Action {
   readonly type = ShoppingActionTypes.ShoppingItemUpdateSucceeded;
-  constructor(public storeId: number, public id: number){}
+  constructor(public storeId: number, public shoppingItem: ShoppingItem){}
 }
 
 export class UpdateStoreShoppingList implements Action {

@@ -1,4 +1,5 @@
 export class ShoppingItem {
+  storeId: number;
   pantryItemId: number;
   name: string;
   description: string;
@@ -6,6 +7,7 @@ export class ShoppingItem {
   inCart: boolean;
   units: string;
   location: {
+    locationId: number,
     aisle: string;
     section: string;
   };

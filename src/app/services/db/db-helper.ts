@@ -394,9 +394,9 @@ export class PantryDbHelper {
     });
   }
 
-  public updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean> {
-    return new Observable<boolean>((observer) => {
-      this.mySqlCommands.updateShoppingItem(pantryItemId, inCart).then((result) => {
+  public updateShoppingItem(storeId: number, pantryItemId: number, inCart: boolean): Observable<ShoppingItem> {
+    return new Observable<ShoppingItem>((observer) => {
+      this.mySqlCommands.updateShoppingItem(storeId, pantryItemId, inCart).then((result) => {
         observer.next(result);
         observer.complete();
       }).catch((err) => observer.error(err));

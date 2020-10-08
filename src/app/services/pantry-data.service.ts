@@ -155,8 +155,8 @@ export class PantryDataService implements IPantryDataService {
     return undefined;
   }
 
-  updateShoppingItem(pantryItemId: number, inCart: boolean): Observable<boolean> {
-    return this.dbHelper.updateShoppingItem(pantryItemId, inCart);
+  updateShoppingItem(storeId: number, pantryItemId: number, inCart: boolean): Observable<ShoppingItem> {
+    return this.dbHelper.updateShoppingItem(storeId, pantryItemId, inCart);
   }
 
   getAllGroceryStoreLocations(): Observable<GroceryStoreLocation[]> {

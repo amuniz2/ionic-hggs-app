@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ShoppingItem} from '../../../../model/shopping-item';
 import {AisleItems, SectionItems, ShoppingListState} from '../../store/shopping.reducers';
 import {ShoppingItemUpdate} from '../shopping-item/shopping-item.component';
+import {EditItemLocationRequest} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
 
 export class StoreShoppingItemUpdate {
   storeId: number;
@@ -23,6 +24,9 @@ export class ShoppingItemListComponent implements OnInit {
 
   @Output()
   notifySaveShoppingItemRequested: EventEmitter<StoreShoppingItemUpdate> = new EventEmitter();
+
+  @Output()
+  notifyChangeShoppingItemLocationRequested: EventEmitter<EditItemLocationRequest> = new EventEmitter();
 
   @Input()
   shoppingList: ShoppingListState;
@@ -69,5 +73,9 @@ export class ShoppingItemListComponent implements OnInit {
 
   onSaveShoppingItem(shoppingItem: ShoppingItemUpdate) {
     this.notifySaveShoppingItemRequested.emit({storeId: this.shoppingList.id, id: shoppingItem.id, inCart: shoppingItem.inCart});
+  }
+
+  onChangeShoppingItemLocation($event: EditItemLocationRequest) {
+   this.notifyChangeShoppingItemLocationRequested.emit($event);
   }
 }

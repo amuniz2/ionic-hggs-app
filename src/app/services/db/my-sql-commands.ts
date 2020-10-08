@@ -237,23 +237,18 @@ export class MySqlCommands {
     }
   }
 
-  public async updateShoppingItem(pantryItemId: number, inCart: boolean): Promise<boolean> {
+  public async updateShoppingItem(storeId: number, pantryItemId: number, inCart: boolean): Promise<ShoppingItem> {
     const sqlUpdate = `UPDATE ${PantryItemTable.NAME} SET
        ${PantryItemTable.COLS.IN_CART}=${inCart ? 1 : 0}
        , ${PantryItemTable.COLS.NEED}=${inCart ? 0 : 1}
         WHERE ${PantryItemTable.COLS.ID} = ${pantryItemId}`;
     try {
       const data = await this.db.executeSql(sqlUpdate, []);
-      if (data.rowsAffected > 0) {
-        return true;
-      } else {
-        console.log(`update shopping item failed - sql: ${sqlUpdate}`);
-        return false;
-      }
+      return this.queryShoppingItem(storeId, pantryItemId);
     } catch (err) {
       console.log(`Error updating shopping item. Sql: ${sqlUpdate}`);
       console.log(err);
-      return false;
+      return null;
     }
   }
 
@@ -870,6 +865,29 @@ export class MySqlCommands {
       console.log(err);
     }
     return result;
+  }
+
+  public async queryShoppingItem(storeId: number, pantryItemId: number): Promise<ShoppingItem> {
+    const selectSql = `SELECT * FROM ${PantryItemTable.NAME}
+    JOIN ${PantryItemLocationTable.NAME} ON
+      ${PantryItemLocationTable.NAME}.${PantryItemLocationTable.COLS.PANTRY_ITEM_ID}=
+      ${PantryItemTable.NAME}.${PantryItemTable.COLS.ID}
+    JOIN ${LocationTable.NAME} ON ${LocationTable.NAME}.${LocationTable.COLS.ID}=
+    ${PantryItemLocationTable.NAME}.${PantryItemLocationTable.COLS.LOCATION_ID}
+      WHERE ${LocationTable.NAME}.${LocationTable.COLS.STORE_ID} = ${storeId}
+      AND ${PantryItemTable.NAME}.${PantryItemTable.COLS.ID} = ${pantryItemId}`;
+
+    try {
+      console.log(`sql query for shopping items ${selectSql}`)
+      const data = await this.db.executeSql(selectSql, []);
+      if (data.rows.length > 0) {
+        return DbRowConverters.rowToShoppingItem(data.rows.item(0));
+      }
+    } catch (err) {
+      console.log(`Error querying for shopping items. Query: ${selectSql}`);
+      console.log(err);
+    }
+    return null;
   }
 
   public async queryPantryItemLocation(pantryitemId: number, groceryStoreLocationId: number): Promise<PantryItemLocation> {

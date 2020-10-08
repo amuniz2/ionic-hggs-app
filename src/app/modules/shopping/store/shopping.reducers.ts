@@ -18,6 +18,15 @@ export class SectionItems {
     console.log(`returning: ${JSON.stringify(result)} for findShoppingItem() in section: ${this.name}`);
     return result;
   }
+
+  public updateShoppingItem(updatedItem: ShoppingItem): ShoppingItem[] {
+    const index = this.items.findIndex(item => item.pantryItemId === updatedItem.pantryItemId);
+    const result = [...this.items];
+    if (index >= 0) {
+      result.splice(index, 1, updatedItem);
+    }
+    return result;
+  }
 }
 
 export class AisleItems {
@@ -31,15 +40,15 @@ export class AisleItems {
 
     const itemsInAisle = items.filter((item) => item.location.aisle === this.name);
     this.items = itemsInAisle.filter(item => !!!item.location.section);
-    const itemsInAisleWithSection =  itemsInAisle.filter(item => item.location.section);
+    const itemsInAisleWithSection = itemsInAisle.filter(item => item.location.section);
 
     const distinctSectionItems = Array.from(new Set(itemsInAisleWithSection.map(x => x.location.section))).sort(sortAislesOrSections);
 
-    distinctSectionItems.forEach( section => this.sections.push(new SectionItems(section,
+    distinctSectionItems.forEach(section => this.sections.push(new SectionItems(section,
       itemsInAisleWithSection.filter(shoppingItem => shoppingItem.location.section === section))));
   }
 
-  public findShoppingItem(pantryItemId: number): ShoppingItem {
+  public findShoppingItem = (pantryItemId: number): ShoppingItem  => {
     let result = this.items.find(item => item.pantryItemId === pantryItemId);
     if (result == null) {
       const sectionWithItem = this.sections.find(section => section.findShoppingItem(pantryItemId));
@@ -48,6 +57,19 @@ export class AisleItems {
       }
     }
     return result;
+  };
+
+  public updateShoppingItem(updatedItem: ShoppingItem) {
+    const index = this.items.findIndex(item => item.pantryItemId === updatedItem.pantryItemId);
+    if (index >= 0) {
+      this.items.splice(index, 1, updatedItem);
+      return;
+    }
+    const sectionWithItem = this.sections.find(section => section.findShoppingItem(updatedItem.pantryItemId));
+    if (sectionWithItem) {
+      sectionWithItem.updateShoppingItem(updatedItem);
+      return;
+    }
   }
 }
 
@@ -82,6 +104,26 @@ export class StoreShoppingList implements IStoreShoppingList {
   id: number;
   sections: SectionItems[];
   shoppingItems: ShoppingItem[];
+
+  public copyAndReplaceShoppingItem(updatedItem: ShoppingItem): StoreShoppingList {
+    const result = JSON.parse(JSON.stringify(this));
+    const index = result.findIndex(item => item.pantryItemId === updatedItem.pantryItemId);
+    if (index >= 0) {
+      result.splice(index, 1, updatedItem);
+      return result;
+    }
+    const sectionWithItem = result.sections.find(section => section.findShoppingItem(updatedItem.pantryItemId));
+    if (sectionWithItem) {
+      sectionWithItem.updateShoppingItem(updatedItem);
+      return result;
+    }
+    const aisleWithItem = result.aisles.find(aisle => aisle.findShoppingItem(updatedItem.pantryItemId));
+    if (aisleWithItem) {
+      aisleWithItem.updateShoppingItem(updatedItem);
+      return result;
+    }
+    return result;
+  }
 
   public findShoppingItem(pantryItemId: number): ShoppingItem {
     let result = this.shoppingItems.find(item => item.pantryItemId === pantryItemId);
@@ -137,15 +179,25 @@ export function shoppingListManagementReducer(state = initialShoppingListManagem
     }
 
     case ShoppingActionTypes.ShoppingItemUpdateSucceeded: {
-      const shoppingList = state.shoppingLists.entities[action.storeId];
-      const shoppingItem = shoppingList.findShoppingItem(action.id);
-      console.log(`in reducer, action: ${JSON.stringify(action)}; shoppingList: ${JSON.stringify(shoppingList)}; shoppingItem: ${shoppingItem}`);
-      shoppingItem.inCart = !shoppingItem.inCart;
-      return {
-        ...state,
-        shoppingLists: shoppingListAdapter.upsertOne( shoppingList,
-          state.shoppingLists),
-      };
+      const currentShoppingList: ShoppingListState = state.shoppingLists.entities[action.storeId];
+      const updatedShoppingItem = action.shoppingItem;
+      if (currentShoppingList) {
+        console.log('ShoppingList');
+        console.log(currentShoppingList);
+        const updatedShoppingList = currentShoppingList.copyAndReplaceShoppingItem(updatedShoppingItem);
+        // currentShoppingList.findShoppingItem(action.shoppingItem.pantryItemId);
+        return {
+          ...state,
+          shoppingLists: shoppingListAdapter.upsertOne({ id: action.storeId, loading: false, error: null, updatedShoppingList},
+            state.shoppingLists),
+        };
+      } else {
+        console.log('no shopping list in reducer')
+      }
+      console.log(`in reducer, action: ${JSON.stringify(action)};`,
+        `shoppingList: ${JSON.stringify(currentShoppingList)}; shoppingItem: ${JSON.stringify(updatedShoppingItem)}`);
+      // updatedShoppingItem.inCart = !updatedShoppingItem.inCart;
+      return state;
     }
 
     default: return state;
