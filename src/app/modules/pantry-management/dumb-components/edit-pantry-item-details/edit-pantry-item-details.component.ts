@@ -76,7 +76,6 @@ export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
     if (changes.pantryItem) {
       this.pantryItemDescription = changes.pantryItem.currentValue.description;
       this.pantryItemName = changes.pantryItem.currentValue.name;
-      console.log('inside ngOnChanges ', changes.pantryItem);
     }
   }
 

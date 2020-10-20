@@ -19,7 +19,7 @@ export class ShoppingItemComponent implements OnInit {
   shoppingItem: ShoppingItem;
 
   @Output()
-  notifySaveRequested: EventEmitter<ShoppingItemUpdate> = new EventEmitter();
+  notifySaveRequested: EventEmitter<ShoppingItem> = new EventEmitter();
 
   @Output()
   notifyEditPantryItemLocationRequested: EventEmitter<EditItemLocationRequest> = new EventEmitter<EditItemLocationRequest>();
@@ -29,10 +29,13 @@ export class ShoppingItemComponent implements OnInit {
   ngOnInit() {
   }
 
-  itemClicked($event) {
-    this.notifySaveRequested.emit({
-      id: this.shoppingItem.pantryItemId,
-      inCart: !this.shoppingItem.inCart });
+  itemClicked($event: any) {
+    console.log('item cart clicked', $event);
+    const event = {
+      ...this.shoppingItem,
+      inCart: $event.detail.checked };
+    console.log('emitting event from shopping-item-component', event);
+    this.notifySaveRequested.emit(event);
   }
 
   getShoppingItemDescriptionLine1(shoppingItem: ShoppingItem) {

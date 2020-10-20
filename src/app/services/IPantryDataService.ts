@@ -26,6 +26,11 @@ export interface IdMapping {
   importedId: number;
 };
 
+export interface UpdatePantryItemResult {
+  success: boolean;
+  updatedPantryItem: PantryItem
+};
+
 export interface IPantryDataService {
 
   initialize(): Observable<boolean>;
@@ -74,7 +79,7 @@ export interface IPantryDataService {
 
   getPantryItemLocations(id: number): Observable<GroceryStoreLocation[]>;
 
-  updatePantryItem(savePantryItemRequest: PantryItem): Observable<boolean>;
+  updatePantryItem(savePantryItemRequest: PantryItem): Observable<PantryItem>;
 
   updatePantryItemLocation(itemId: number, originalLocationId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation>;
 

@@ -1,53 +1,54 @@
 import * as fromAdapter from './shopping.adapter';
 import {createFeatureSelector, createSelector} from '@ngrx/store';
-import {ShoppingListManagementState, ShoppingListState} from './shopping.reducers';
+import {ShoppingListManagementState} from './shopping.reducers';
 import {ShoppingItem} from '../../../model/shopping-item';
-import {LoadShoppingListSucceeded} from './shopping.actions';
-import {PantryManagementState} from '../../pantry-management/store/pantry-management.reducers';
-import {getPantryManagementState} from '../../pantry-management/store/pantry-management.selectors';
+import {ShoppingItemState} from './shopping.adapter';
 
 export const getShoppingListManagementState = createFeatureSelector<ShoppingListManagementState>('shoppingListManagement');
 
 export const getShoppingListsState = createSelector(
   getShoppingListManagementState,
-  (state: ShoppingListManagementState) => state.shoppingLists
+  (state: ShoppingListManagementState) => state.shoppingItems
 );
 
 export const selectShoppingListEntities = createSelector(
   getShoppingListsState,
-  fromAdapter.selectShoppingListEntities
+  fromAdapter.selectShoppingItemEntities
 );
 
 export const selectShoppingListIds = createSelector(
   getShoppingListsState,
-  fromAdapter.selectShoppingListIds
+  fromAdapter.selectShoppingItemIds
 );
 
 export const selectShoppingListCount = createSelector(
   getShoppingListsState,
-  fromAdapter.shoppingListCount
+  fromAdapter.shoppingItemCount
 );
 
-export const selectAllShoppingLists = createSelector(
+export const selectAllShoppingItems = createSelector(
   getShoppingListsState,
-  fromAdapter.selectAllShoppingLists
+  fromAdapter.selectAllShoppingItems
 );
 
-export const selectShoppingList = (id: number) => createSelector(
-  selectAllShoppingLists, (state: ShoppingListState[]) => state.find((list) => list.id === id));
+export const selectStoreShoppingItems = (storeId: number) => createSelector(
+  selectAllShoppingItems, (state: ShoppingItemState[]) => state.filter((item) => item.shoppingItem.storeId === storeId)
+    .map((item) => {
+      return {...item.shoppingItem};
+    }));
 
 // export const selectShoppingListItems = (id: number) => createSelector(
 //   selectAllShoppingLists, (state: ShoppingListState) => state.shoppingItems.sort(compareByStoreLocation));
 
-export const selectShoppingListItemsGroupedByAisle = (id: number) => createSelector(
-  selectShoppingList(id), (state: ShoppingListState) => state.aisles);
+// export const selectShoppingListItemsGroupedByAisle = (id: number) => createSelector(
+//   selectStoreShoppingItems(id), (state: ShoppingListState) => state.aisles);
+//
+// export const selectShoppingListItemsGroupedBySection = (id: number) => createSelector(
+//   selectStoreShoppingItems(id), (state: ShoppingListState) => state.sections);
 
-export const selectShoppingListItemsGroupedBySection = (id: number) => createSelector(
-  selectShoppingList(id), (state: ShoppingListState) => state.sections);
+export const getShoppingList = (state: ShoppingListManagementState, id: number) => state.shoppingItems.entities[id];
 
-export const getShoppingList = (state: ShoppingListManagementState, id: number) => state.shoppingLists.entities[id];
-
-export const getShoppingListItems = (state: ShoppingListManagementState, id: number) => getShoppingList(state, id).shoppingItems;
+/// export const getShoppingListItems = (state: ShoppingListManagementState, id: number) => getShoppingList(state, id).shoppingItems;
 
 const compareByStoreLocation = ( item1: ShoppingItem, item2: ShoppingItem): number => {
   // sort by location in store

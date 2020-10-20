@@ -9,8 +9,10 @@ import {EditItemLocationRequest, NewItemLocationRequest} from '../dumb-component
 import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 import {NewItemLocation} from '../smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
 import {ProductInfo} from '../smart-components/edit-pantry-item/edit-pantry-item.component';
+import {ToggleAction} from '@ngrx/store-devtools/src/actions';
 
 export enum PantryActionTypes {
+  ToggleNeed = '[Pantry Item] Toggle Need',
   PantryItemLoaded = '[Pantry Item] Loaded',
   PantryLoadedSuccessfully = '[Pantry] Loaded',
   PantryLoadFailed = '[Pantry] Load Failed',
@@ -44,6 +46,12 @@ export enum PantryActionTypes {
   UpdatePantryItemLocation = '[Pantry Item] Update Requested',
   PantryImportedSuccessfully = '[Pantry Item] Imported Successfully',
   NoOp = '[Pantry Item] Do nothing, needed for conditional effect'
+}
+
+export class ToggleNeed implements Action {
+  readonly type = PantryActionTypes.ToggleNeed;
+
+  constructor(public request: PantryItem){}
 }
 
 export class AddPantryItemLocationRequest implements Action {
@@ -260,4 +268,5 @@ export type PantryActions =
   | SavePantryItemSucceeded
   | UpdatePantryItemLocation
   | PantryImportedSuccessfully
+  | ToggleNeed
   | NoOp;

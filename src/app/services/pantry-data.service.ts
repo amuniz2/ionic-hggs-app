@@ -4,7 +4,7 @@ import {GroceryStore} from '../model/grocery-store';
 // tslint:disable-next-line:max-line-length
 import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {PantryDbHelper} from './db/db-helper';
-import {IPantryDataService} from './IPantryDataService';
+import {IPantryDataService, UpdatePantryItemResult} from './IPantryDataService';
 import {
   DeleteGroceryStoreRequest,
   NewGroceryStoreRequest
@@ -17,6 +17,7 @@ import {PantryItemLocation} from '../model/PantryItemLocation';
 import {GroceryStoreAisle} from '../model/grocery-store-aisle';
 import {GroceryStoreSection} from '../model/grocery-store-section';
 import {HggsData} from '../model/hggs-data';
+import {combineLatest} from 'rxjs'
 
 @Injectable()
 export class PantryDataService implements IPantryDataService {
@@ -114,8 +115,8 @@ export class PantryDataService implements IPantryDataService {
     return this.dbHelper.deletePantryItemLocation(pantryItemId, locationId);
   }
 
-  public updatePantryItem(savePantryItemRequest: PantryItem): Observable<boolean> {
-    return this.dbHelper.updatePantryItem(savePantryItemRequest);
+  public updatePantryItem(savePantryItemRequest: PantryItem): Observable<PantryItem> {
+    return this.dbHelper.updatePantryItem(savePantryItemRequest)
   }
 
   public addNewPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation> {

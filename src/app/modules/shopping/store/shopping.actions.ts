@@ -1,14 +1,23 @@
 import {Action} from '@ngrx/store';
 import {ShoppingItem} from '../../../model/shopping-item';
 import {StoreShoppingItemUpdate} from '../dumb-components/shopping-item-list/shopping-item-list.component';
+import {PantryItem} from '../../../model/pantry-item';
+import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 
 export enum ShoppingActionTypes {
+  AddOrRemoveItemFromShoppingLists = '[Shopping] Add or remove item',
   LoadShoppingList = '[Shopping] Load Shopping List',
   LoadShoppingListFailed = '[Shopping] Load Shopping List Failed',
   LoadShoppingListSucceeded = '[Shopping] Load Shopping List Save Succeeded',
   ItemPlacedInOrRemovedFromCart = '[Shopping] Item update requested',
   ShoppingItemUpdateSucceeded = '[Shopping] Item update succeeded',
   UpdateStoreShoppingList = '[Store Manager] Update store shopping list',
+}
+
+export class AddOrRemoveItemFromShoppingLists implements Action {
+  readonly type = ShoppingActionTypes.AddOrRemoveItemFromShoppingLists;
+
+  constructor(public pantryItem: PantryItem, public locations: GroceryStoreLocation[]) {}
 }
 
 export class LoadShoppingList implements Action {
@@ -50,4 +59,5 @@ export type ShoppingActions =
   | LoadShoppingListFailed
   | ItemPlacedInOrRemovedFromCart
   | ShoppingItemUpdateSucceeded
-  | UpdateStoreShoppingList;
+  | UpdateStoreShoppingList
+  | AddOrRemoveItemFromShoppingLists;

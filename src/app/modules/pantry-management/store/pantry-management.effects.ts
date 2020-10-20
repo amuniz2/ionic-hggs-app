@@ -18,10 +18,11 @@ import {
   SavePantryItemSucceeded,
   PantryItemLocationDeleted,
   NoOp,
-  DeletePantryItem, DeletePantryItemFailed
+  DeletePantryItem, DeletePantryItemFailed, SavePantryItem
 } from './pantry-management.actions';
 import {Store} from '@ngrx/store';
 import {Actions, Effect, ofType} from '@ngrx/effects';
+import {combineLatest} from 'rxjs'
 import {catchError, concatMap, map, mapTo, switchMap, tap, withLatestFrom} from 'rxjs/operators';
 import {PantryState} from './pantry-management.reducers';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -29,7 +30,7 @@ import {IPantryDataService} from '../../../services/IPantryDataService';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
 import {GroceryStoreLocationPossiblyAdded} from '../../../store';
 import {PantryItem} from '../../../model/pantry-item';
-import {UpdateStoreShoppingList} from '../../shopping/store/shopping.actions';
+import {AddOrRemoveItemFromShoppingLists, UpdateStoreShoppingList} from '../../shopping/store/shopping.actions';
 import {selectCurrentGroceryStore} from '../../../store/store-management.selectors';
 import {GroceryStoreState} from '../../../model/grocery-store';
 
@@ -170,6 +171,28 @@ export class PantryEffects {
         catchError(error => [new SavePantryItemFailed(error, payload.pantryItem)])
       );
     }));
+
+  // @Effect()
+  // public toggleNeedFlag$ = this.actions$.pipe(
+  //   ofType(PantryActionTypes.ToggleNeed),
+  //   switchMap((payload) => this.pantryDataService.updatePantryItem(payload.request)),
+  //   switchMap(itemUpdated => [
+  //             new SavePantryItemSucceeded(itemUpdated),
+  //             new AddOrRemoveItemFromShoppingLists(itemUpdated)
+  //       ]),
+  //   catchError(error => [new SavePantryItemFailed(error, null)]));
+
+  @Effect()
+  public toggleNeedFlag$ = this.actions$.pipe(
+    ofType(PantryActionTypes.ToggleNeed),
+    switchMap((payload) =>
+      combineLatest([this.pantryDataService.updatePantryItem(payload.request),
+      this.pantryDataService.getPantryItemLocations(payload.request.id)])),
+    switchMap(([itemUpdated, locations]) => [
+      new SavePantryItemSucceeded(itemUpdated),
+      new AddOrRemoveItemFromShoppingLists(itemUpdated, locations)
+    ]),
+    catchError(error => [new SavePantryItemFailed(error, null)]));
 
   @Effect({ dispatch: false })
   public navigateToNewLocationPage$ = this.actions$.pipe(

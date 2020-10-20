@@ -385,8 +385,8 @@ export class PantryDbHelper {
     });
   }
 
-  public updatePantryItem(pantryItem: PantryItem): Observable<boolean> {
-    return new Observable<boolean>((observer) => {
+  public updatePantryItem(pantryItem: PantryItem): Observable<PantryItem> {
+    return new Observable<PantryItem>((observer) => {
       this.mySqlCommands.updatePantryItem(pantryItem).then((result) => {
         observer.next(result);
         observer.complete();

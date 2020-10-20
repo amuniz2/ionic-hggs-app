@@ -36,6 +36,7 @@
                           [filter] = "filterList ? filter : ''"
                           (notifyDeletePantryItemRequested)="onDeletePantryItemRequest($event)"
                           (notifySavePantryItemRequested)="onPantryItemModified($event)"
+                          (notifyAddOrRemoveFromShoppingList) ="onAddOrRemoveFromShoppingList($event)"
                           [error] = "(error$ | async)">
     </app-pantry-item-list>
 </ion-content>

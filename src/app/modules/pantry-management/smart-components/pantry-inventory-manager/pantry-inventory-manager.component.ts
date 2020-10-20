@@ -19,7 +19,6 @@ import {HggsData} from '../../../../model/hggs-data';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
 import {Router} from '@angular/router';
 import {ImportData} from '../../../../store';
-import {NewPantryItemScanned, PantryItemInfoScanned} from '../../../pantry-management/store/pantry-management.actions';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
 import {IProductInfoService} from '../../../../services/IProductInfoService';
 
@@ -229,5 +228,10 @@ export class PantryInventoryManagerComponent implements OnInit {
 
   cancelFilter() {
     this.filterList = false;
+  }
+
+  onAddOrRemoveFromShoppingList($event: PantryItem) {
+    console.log('dispatching action AddOrRemoveFromShoppingLists with: ', $event);
+    this.store.dispatch(new fromActions.ToggleNeed($event));
   }
 }

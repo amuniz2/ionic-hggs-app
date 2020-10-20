@@ -211,7 +211,7 @@ export class MySqlCommands {
     return pantryItems;
   }
 
-  public async updatePantryItem(updatedPantryItem: PantryItem): Promise<boolean> {
+  public async updatePantryItem(updatedPantryItem: PantryItem): Promise<PantryItem> {
     const sqlUpdate = `UPDATE ${PantryItemTable.NAME} SET
        ${PantryItemTable.COLS.NAME}=\'${updatedPantryItem.name}\'
        , ${PantryItemTable.COLS.DESCRIPTION}=\'${updatedPantryItem.description}\'
@@ -224,16 +224,11 @@ export class MySqlCommands {
     try {
       console.log(`updating pantry item: ${sqlUpdate}`);
       const data = await this.db.executeSql(sqlUpdate, []);
-      if (data.rowsAffected > 0) {
-        return true;
-      } else {
-        console.log(`update pantry item failed - sql: ${sqlUpdate}`);
-        return false;
-      }
+      return this.queryPantryItem(updatedPantryItem.id);
     } catch (err) {
       console.log(`Error updating pantry item. Sql: ${sqlUpdate}`);
       console.log(err);
-      return false;
+      return updatedPantryItem;
     }
   }
 
@@ -243,6 +238,7 @@ export class MySqlCommands {
        , ${PantryItemTable.COLS.NEED}=${inCart ? 0 : 1}
         WHERE ${PantryItemTable.COLS.ID} = ${pantryItemId}`;
     try {
+      console.log('updating shopping item in db', sqlUpdate);
       const data = await this.db.executeSql(sqlUpdate, []);
       return this.queryShoppingItem(storeId, pantryItemId);
     } catch (err) {
@@ -878,10 +874,12 @@ export class MySqlCommands {
       AND ${PantryItemTable.NAME}.${PantryItemTable.COLS.ID} = ${pantryItemId}`;
 
     try {
-      console.log(`sql query for shopping items ${selectSql}`)
+      console.log(`sql query for shopping item ${selectSql}`)
       const data = await this.db.executeSql(selectSql, []);
       if (data.rows.length > 0) {
-        return DbRowConverters.rowToShoppingItem(data.rows.item(0));
+        const shoppingItemReturned = DbRowConverters.rowToShoppingItem(data.rows.item(0));
+        console.log('returning shopping item:', shoppingItemReturned);
+        return shoppingItemReturned;
       }
     } catch (err) {
       console.log(`Error querying for shopping items. Query: ${selectSql}`);

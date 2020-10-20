@@ -4,8 +4,6 @@ import {
   Component, DoCheck,
   EventEmitter,
   Input,
-  OnChanges,
-  OnInit,
   Output
 } from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
@@ -26,6 +24,7 @@ export interface NavigateToEditPantryItemRequest {
   id: number;
   newItem: boolean;
 }
+
 @Component({
   selector: 'app-pantry-item-list',
   templateUrl: './pantry-item-list.component.html',
@@ -33,6 +32,9 @@ export interface NavigateToEditPantryItemRequest {
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class PantryItemListComponent {
+  @Output()
+  notifyAddOrRemoveFromShoppingList: EventEmitter<PantryItem> = new EventEmitter<PantryItem>();
+
   @Output()
   notifyDeletePantryItemRequested: EventEmitter<DeletePantryItemRequest> = new EventEmitter();
 
@@ -74,7 +76,9 @@ export class PantryItemListComponent {
   }
 
   itemClicked($event, pantryItem: PantryItem) {
-    this.notifySavePantryItemRequested.emit({...pantryItem, need: $event?.detail?.checked, inCart: false});
+    console.log('emitting event: ', {...pantryItem, need: $event?.detail?.checked, inCart: false});
+     this.notifyAddOrRemoveFromShoppingList.emit({...pantryItem, need: $event?.detail?.checked, inCart: false});
+    // this.notifySavePantryItemRequested.emit({...pantryItem, need: $event?.detail?.checked, inCart: false});
   }
 
   quantityChanged($event, pantryItem: PantryItem) {

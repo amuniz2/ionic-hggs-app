@@ -97,7 +97,7 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
         };
       }
 
-      case PantryActionTypes.SavePantryItemSucceeded:
+      case PantryActionTypes.SavePantryItemSucceeded: {
         return {
           ...state,
           pantryItems: {
@@ -112,10 +112,11 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
                 quantityNeeded: action.pantryItem.quantityNeeded,
                 inCart: action.pantryItem.inCart
               }
-              }, state.pantryItems),
+            }, state.pantryItems),
             error: null
           }
         };
+      }
 
       case PantryActionTypes.PantryItemDeleted:
         // const { id, name } = action.payload;

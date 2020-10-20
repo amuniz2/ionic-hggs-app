@@ -8,7 +8,7 @@ import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 import {ItemPlacedInOrRemovedFromCart, LoadShoppingList} from '../../store/shopping.actions';
 import {ShoppingItem} from '../../../../model/shopping-item';
 import {
-  selectShoppingList,
+  selectStoreShoppingItems,
 } from '../../store/shopping.selectors';
 import {IStoreShoppingList} from '../../store/shopping.reducers';
 import {StoreShoppingItemUpdate} from '../../dumb-components/shopping-item-list/shopping-item-list.component';
@@ -24,7 +24,7 @@ import {EditPantryItemLocationRequest} from '../../../pantry-management/store/pa
 export class ShoppingListComponent implements OnInit {
   groceryStoresLoading$: Observable<boolean>;
   groceryStores$: Observable<GroceryStoreState[]>;
-  shoppingList$: Observable<IStoreShoppingList>;
+  shoppingList$: Observable<ShoppingItem[]>;
   shoppingStore$: Observable<GroceryStoreState>;
 
   selectedStoreId: number;
@@ -44,6 +44,7 @@ export class ShoppingListComponent implements OnInit {
     this.shoppingStore$.pipe(
       withLatestFrom(store => {
         this.selectedStoreId = store.id;
+        this.shoppingList$ = this.store.select(selectStoreShoppingItems(this.selectedStoreId));
       }));
   }
 
@@ -52,7 +53,7 @@ export class ShoppingListComponent implements OnInit {
     this.selectedStoreId = $event.id;
     console.log('disatching LoadShoppingList');
     this.store.dispatch(new LoadShoppingList(this.selectedStoreId));
-    this.shoppingList$ = this.store.select(selectShoppingList(this.selectedStoreId));
+    this.shoppingList$ = this.store.select(selectStoreShoppingItems(this.selectedStoreId));
   }
 
   onItemPlacedInOrRemovedFromCart($event: StoreShoppingItemUpdate) {
