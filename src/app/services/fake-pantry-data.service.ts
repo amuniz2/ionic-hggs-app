@@ -36,7 +36,7 @@ export class FakePantryDataService implements IPantryDataService {
         inCart: false
       },
     ];
-    this.shoppingItems = [];
+    // this.shoppingItems = [];
     this.pantryItemLocations = [];
     this.groceryStoreLocations = [];
   }
@@ -45,7 +45,7 @@ export class FakePantryDataService implements IPantryDataService {
     private readonly pantryItems: PantryItem[];
     private readonly pantryItemLocations: PantryItemLocation[];
     private readonly groceryStoreLocations: GroceryStoreLocation[];
-    private readonly shoppingItems: ShoppingItem[];
+//    private readonly shoppingItems: ShoppingItem[];
 
     getPantryItemsNeeded(storeId: number): Observable<PantryItem[]> {
         throw new Error('Method not implemented.');
@@ -221,12 +221,12 @@ export class FakePantryDataService implements IPantryDataService {
         }
       } while (index >= 0);
 
-      do {
-        index = this.shoppingItems.findIndex((item) => item.pantryItemId === deletePantryItemRequest.id);
-        if (index >= 0) {
-          this.shoppingItems.splice(index, 1);
-        }
-      } while (index >= 0);
+      // do {
+      //   index = this.shoppingItems.findIndex((item) => item.pantryItemId === deletePantryItemRequest.id);
+      //   if (index >= 0) {
+      //     this.shoppingItems.splice(index, 1);
+      //   }
+      // } while (index >= 0);
 
       index = this.pantryItems.findIndex(item => item.id === deletePantryItemRequest.id);
       if (index >= 0) {
@@ -243,6 +243,7 @@ export class FakePantryDataService implements IPantryDataService {
     pantryItemToUpdate.need = savePantryItemRequest.need;
     pantryItemToUpdate.defaultQuantity = savePantryItemRequest.defaultQuantity;
     pantryItemToUpdate.quantityNeeded = savePantryItemRequest.quantityNeeded;
+    pantryItemToUpdate.inCart = savePantryItemRequest.inCart;
     pantryItemToUpdate.units = savePantryItemRequest.units;
     return of(pantryItemToUpdate);
   }
@@ -320,9 +321,9 @@ export class FakePantryDataService implements IPantryDataService {
     return  this.pantryItems.find(pantryItem => pantryItem.id === id);
   }
 
-  findShoppingItem(id: number): ShoppingItem {
-    return  this.shoppingItems.find(pantryItem => pantryItem.pantryItemId === id);
-  }
+  // findShoppingItem(id: number): ShoppingItem {
+  //   return  this.shoppingItems.find(pantryItem => pantryItem.pantryItemId === id);
+  // }
 
   findGroceryStoreLocation(storeId: number, aisle: string, section: string): GroceryStoreLocation {
     return this.groceryStoreLocations.find(loc => (loc.storeId === storeId) && (loc.aisle === aisle) && (loc.section === section));
@@ -332,6 +333,14 @@ export class FakePantryDataService implements IPantryDataService {
     return this.groceryStores.find(store => store.id === id);
   }
 
+  findPantryItemLocation(itemId: number, storeId: number): GroceryStoreLocation {
+
+      const itemLocations = this.pantryItemLocations.filter(pantryItemLocation =>
+        pantryItemLocation.pantryItemId === itemId);
+
+      return this.groceryStoreLocations.find(storeLocation => storeLocation.storeId === storeId &&
+      itemLocations.some(itemLocation => itemLocation.groceryStoreLocationId === storeLocation.id));
+  }
   private getPantryItemsNeededInternal(storeId: number, shoppingItems: ShoppingItem[]): PantryItem[] {
     return this.pantryItems.filter((item) => {
       if (!item.need) {
@@ -349,13 +358,9 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   getShoppingList(storeId: number): Observable<ShoppingItem[]> {
-    // remove items in shoppingList already purchased / loaded into cart
-    const shoppingItemsStillNeeded = this.shoppingItems.filter(shoppingItem => !shoppingItem.inCart);
-    const additionalShoppingItemsNeeded: ShoppingItem[] =
-      this.getPantryItemsNeededInternal(storeId, shoppingItemsStillNeeded).map((pantryItem: PantryItem) => {
+    const pantryItemsStillNeeded = this.pantryItems.filter(pantryItem => pantryItem.need && !pantryItem.inCart).map( pantryItem => {
       const pantryItemLocation = this.pantryItemLocations.find(ploc => ploc.pantryItemId === pantryItem.id);
       const groceryStoreLocation = this.groceryStoreLocations.find(gloc => gloc.id === pantryItemLocation.groceryStoreLocationId);
-      console.log(`found location for grocery item ${pantryItem.name}; location: ${JSON.stringify(groceryStoreLocation)}`);
       return {
         name: pantryItem.name,
         pantryItemId: pantryItem.id,
@@ -364,16 +369,15 @@ export class FakePantryDataService implements IPantryDataService {
         inCart: false,
         units: pantryItem.units,
         storeId: groceryStoreLocation.storeId,
-        location: {
+        location:
+        {
           locationId: groceryStoreLocation.id,
           aisle: groceryStoreLocation.aisle,
-          section: groceryStoreLocation.section,
+          section: groceryStoreLocation.section
         }
       };
     });
-    shoppingItemsStillNeeded.push(...additionalShoppingItemsNeeded);
-    console.log(`returning: ${shoppingItemsStillNeeded}`);
-    return of(shoppingItemsStillNeeded);
+    return of(pantryItemsStillNeeded);
   }
 
   getAislesInUse(groceryStoreId: number): Observable<string[]> {
@@ -462,11 +466,21 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   updateShoppingItem(storeId: number, pantryItemId: number, inCart: boolean): Observable<ShoppingItem> {
-    const shopingItemToUpdate = this.findShoppingItem(pantryItemId);
-    shopingItemToUpdate.inCart = inCart;
     const pantryItemToUpdate = this.findPantryItem(pantryItemId);
+    const pantryItemLocation = this.findPantryItemLocation(pantryItemId, storeId);
     pantryItemToUpdate.need = !inCart;
-    return of({...shopingItemToUpdate});
+    pantryItemToUpdate.inCart = inCart;
+    return of({
+      ...pantryItemToUpdate,
+      quantity: pantryItemToUpdate.quantityNeeded,
+      pantryItemId,
+      storeId,
+      location: {
+        locationId: pantryItemLocation.id,
+        aisle: pantryItemLocation.aisle,
+        section: pantryItemLocation.section
+      }
+    });
     }
 
   getAllGroceryStoreLocations(): Observable<GroceryStoreLocation[]> {

@@ -54,8 +54,8 @@ import {FakeProductInfoService} from './services/fake-product-info-service';
   providers: [
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     StatusBar,
-    [{provide: 'IPantryDataService', useClass: PantryDataService}],
-    // [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
+    // [{provide: 'IPantryDataService', useClass: PantryDataService}],
+    [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
     // [{provide: 'IProductInfoService', useClass: ProductInfoService}],
     [{provide: 'IProductInfoService', useClass: FakeProductInfoService}],
     PantryDbHelper,
