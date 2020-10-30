@@ -17,14 +17,13 @@ import {
   selectGroceryStoresLoading
 } from '../../../../store/store-management.selectors';
 // tslint:disable-next-line:max-line-length
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AddPantryItemLocation, UpdatePantryItemLocation} from '../../store/pantry-management.actions';
 import {ActivatedRoute, Router} from '@angular/router';
 import {selectGroceryStoresItemIsLocatedIn} from '../../store/pantry-management.selectors';
 import {CreateStore} from '../../../store-management/store/store-management.actions';
 import {groceryStoreFromGrocerStoreState} from '../../../../model/model-helpers';
 import {withLatestFrom} from 'rxjs/operators';
-import {IonicSelectableComponent} from 'ionic-selectable';
 import {GroceryStoreAisleOrSectionSelected} from '../../../shared-module/dumb-components/grocery-store-location-aisle-or-section/grocery-store-location-aisle-or-section.component';
 
 export interface NewItemLocation {
@@ -64,6 +63,7 @@ export class EditPantryItemLocationComponent implements OnInit {
   private groceryStoresLoading$: Observable<boolean>;
   private readonly locationId: any;
   private readonly pantryItemId: number;
+  private readonly returnUrl: string;
 
   constructor(private store: Store<AppState>,
               @Inject('IPantryDataService') private pantryDataService: IPantryDataService,
@@ -98,6 +98,7 @@ export class EditPantryItemLocationComponent implements OnInit {
         storeName: null
       });
     }
+    this.returnUrl = this.router.getCurrentNavigation().extras.state.returnUrl;
     this.locationForm = this.fb.group({
       locationStore: [{ value: this.selectedGroceryStoreName, disabled: !!this.locationId }, Validators.required ],
       locationAisle: [this.selectedGroceryStoreAisle],
@@ -106,7 +107,6 @@ export class EditPantryItemLocationComponent implements OnInit {
     if (this.selectedGroceryStore$ != null) {
       this.selectedGroceryStore$.pipe(
         withLatestFrom((groceryStore: GroceryStoreState) => {
-          console.log('patching grocery store name value');
           this.locationForm.patchValue( {
             locationStore: groceryStoreFromGrocerStoreState(groceryStore).name
           });
@@ -183,9 +183,8 @@ export class EditPantryItemLocationComponent implements OnInit {
     }
   }
 
-  onCancel() {
-    const route = `/home/pantry-items/pantry-item-details?id=${this.pantryItemId}&isNewItem=false`;
-    this.router.navigateByUrl(route);
+  async onCancel() {
+    this.router.navigateByUrl(this.returnUrl);
   }
 
   onChangeSection($event: GroceryStoreAisleOrSectionSelected) {
@@ -219,8 +218,9 @@ export class EditPantryItemLocationComponent implements OnInit {
             aisle: this.selectedGroceryStoreAisle,
             section: this.selectedGroceryStoreSection,
             id: +this.locationId
-          }
-        }));
+          },
+        }, this.returnUrl
+          ));
       }
     }
   }

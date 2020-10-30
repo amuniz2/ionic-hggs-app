@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
+import {GroceryStoreState} from '../../../../model/grocery-store';
 import {
   selectAislesInUse,
   selectGroceryStore,

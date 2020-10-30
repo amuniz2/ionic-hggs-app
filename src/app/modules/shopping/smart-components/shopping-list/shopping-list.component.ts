@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {LoadGroceryStores, SelectStore} from '../../../../store';
+import {SelectStore} from '../../../../store';
 import {selectAllGroceryStores, selectCurrentGroceryStore, selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
@@ -10,11 +10,11 @@ import {ShoppingItem} from '../../../../model/shopping-item';
 import {
   selectStoreShoppingItems,
 } from '../../store/shopping.selectors';
-import {IStoreShoppingList} from '../../store/shopping.reducers';
 import {StoreShoppingItemUpdate} from '../../dumb-components/shopping-item-list/shopping-item-list.component';
 import {map, withLatestFrom} from 'rxjs/operators';
 import {EditItemLocationRequest} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {EditPantryItemLocationRequest} from '../../../pantry-management/store/pantry-management.actions';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-shopping-list',
@@ -27,13 +27,13 @@ export class ShoppingListComponent implements OnInit {
   shoppingList$: Observable<ShoppingItem[]>;
   shoppingStore$: Observable<GroceryStoreState>;
 
-  selectedStoreId: number;
+  selectedStore: GroceryStore;
 
   private filterList: boolean;
   filter: string;
 
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private router: Router) {
     // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     this.groceryStores$ = this.store.select(selectAllGroceryStores);
@@ -43,26 +43,26 @@ export class ShoppingListComponent implements OnInit {
     this.shoppingStore$ = this.store.select(selectCurrentGroceryStore());
     this.shoppingStore$.pipe(
       withLatestFrom(store => {
-        this.selectedStoreId = store.id;
-        this.shoppingList$ = this.store.select(selectStoreShoppingItems(this.selectedStoreId));
+        this.selectedStore = {
+          ...store,
+          aisles: new Set(store.aisles),
+          sections: new Set(store.sections)
+        };
+        this.shoppingList$ = this.store.select(selectStoreShoppingItems(this.selectedStore?.id));
       }));
   }
 
   onGroceryStoreSelected($event: GroceryStore) {
     this.store.dispatch(new SelectStore($event.id));
-    this.selectedStoreId = $event.id;
+    this.selectedStore = $event;
     console.log('disatching LoadShoppingList');
-    this.store.dispatch(new LoadShoppingList(this.selectedStoreId));
-    this.shoppingList$ = this.store.select(selectStoreShoppingItems(this.selectedStoreId));
+    this.store.dispatch(new LoadShoppingList(this.selectedStore?.id));
+    this.shoppingList$ = this.store.select(selectStoreShoppingItems(this.selectedStore?.id));
   }
 
   onItemPlacedInOrRemovedFromCart($event: StoreShoppingItemUpdate) {
     console.log(`dispatching ItemPlacedInOrRemovedFromCart: ${JSON.stringify($event)}`);
     this.store.dispatch(new ItemPlacedInOrRemovedFromCart($event))
-  }
-
-  storeNotSelected() {
-    return !!!this.selectedStoreId;
   }
 
   filterItems() {
@@ -74,6 +74,6 @@ export class ShoppingListComponent implements OnInit {
   }
 
   onItemLocationChangeRequested($event: EditItemLocationRequest) {
-    this.store.dispatch((new EditPantryItemLocationRequest($event)));
+    this.store.dispatch((new EditPantryItemLocationRequest($event, this.router.routerState.snapshot.url)));
   }
 }

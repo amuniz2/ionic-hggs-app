@@ -20,8 +20,4 @@ export const PantryManagementRoutes: Routes = [
     path: 'pantry-item-details',
     component: EditPantryItemComponent
   },
-  {
-    path: 'pantry-item-locations',
-    component: EditPantryItemLocationComponent
-  },
 ];

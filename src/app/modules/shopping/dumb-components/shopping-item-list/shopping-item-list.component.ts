@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ShoppingItem} from '../../../../model/shopping-item';
 import {EditItemLocationRequest} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
+import {UiCrudAction} from '../../../../ui-crud-actions';
 
 class ShoppingItemGroup {
   name: string;
@@ -152,5 +153,19 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
     this.itemsWithNoStoreLocation = this.filteredItems.filter(item =>
       !item.location ||
       (!item.location || (!distinctAisles.has(item.location.aisle) && !distinctSections.has(item.location.section))));
+  }
+
+  editLocation(shoppingItem: ShoppingItem) {
+    this.notifyChangeShoppingItemLocationRequested.emit({
+      pantryItemId: shoppingItem.pantryItemId,
+      storeLocation: {
+        id: shoppingItem.location.locationId,
+        storeId: shoppingItem.storeId,
+        storeName: '',
+        ...shoppingItem.location
+      },
+      action: UiCrudAction.Update
+    });
+
   }
 }

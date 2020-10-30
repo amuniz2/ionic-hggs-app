@@ -57,7 +57,7 @@ export class ToggleNeed implements Action {
 export class AddPantryItemLocationRequest implements Action {
   readonly type = PantryActionTypes.AddPantryItemLocationRequest;
 
-  constructor(public request: NewItemLocationRequest) {}
+  constructor(public request: NewItemLocationRequest, public returnUrl: string) {}
 }
 
 export class AddPantryItemLocation implements Action {
@@ -84,7 +84,7 @@ export class DeletePantryItemLocation implements Action {
 export class EditPantryItemLocationRequest implements Action {
   readonly type = PantryActionTypes.EditPantryItemLocationRequest;
 
-  constructor(public request: EditItemLocationRequest) {}
+  constructor(public request: EditItemLocationRequest, public returnUrl: string) {}
 }
 
 export class NavigateToPantryItemPage implements Action {
@@ -132,7 +132,7 @@ export class PantryItemLocationDeleted implements Action {
 export class PantryItemLocationUpdated implements Action {
   readonly type = PantryActionTypes.PantryItemLocationUpdated
 
-  constructor(public itemId: number, public originalLocationId: number, public pantryItemLocation: GroceryStoreLocation) {
+  constructor(public itemId: number, public originalLocationId: number, public pantryItemLocation: GroceryStoreLocation, public returnUrl: string) {
   }
 }
 export class AddPantryItemLocationFailed implements Action {
@@ -229,7 +229,7 @@ export class SavePantryItemFailed implements Action {
 export class UpdatePantryItemLocation implements Action {
   readonly type = PantryActionTypes.UpdatePantryItemLocation;
 
-  constructor(public originalLocationId: number, public updatePantryItemLocation: NewItemLocation) {}
+  constructor(public originalLocationId: number, public updatePantryItemLocation: NewItemLocation, public returnUrl: string) {}
 }
 
 export class NoOp implements Action {
