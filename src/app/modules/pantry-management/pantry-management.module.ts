@@ -23,31 +23,34 @@ import {GroceryDataTransporter} from '../../services/grocery-data-transporter.se
 import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(PantryManagementRoutes),
-    StoreModule.forFeature('pantryManagement', fromReducers.pantryReducer),
-    EffectsModule.forFeature([PantryEffects]),
-    IonicModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  declarations: [
-    PantryInventoryManagerComponent,
-    PantryItemListComponent,
-    EditPantryItemComponent,
-    EditPantryItemDetailsComponent,
-    PantryItemLocationsComponent,
-    EditPantryItemLocationComponent,
-    AddPantryItemComponent,
-  ],
-  providers: [
-    SocialSharing,
-    File,
-    BarcodeScanner,
-    [{provide: 'IGroceryDataExporter', useClass: GroceryDataTransporter}],
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(PantryManagementRoutes),
+        StoreModule.forFeature('pantryManagement', fromReducers.pantryReducer),
+        EffectsModule.forFeature([PantryEffects]),
+        IonicModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule
+    ],
+    declarations: [
+        PantryInventoryManagerComponent,
+        PantryItemListComponent,
+        EditPantryItemComponent,
+        EditPantryItemDetailsComponent,
+        PantryItemLocationsComponent,
+        EditPantryItemLocationComponent,
+        AddPantryItemComponent,
+    ],
+    exports: [
+        AddPantryItemComponent
+    ],
+    providers: [
+        SocialSharing,
+        File,
+        BarcodeScanner,
+        [{provide: 'IGroceryDataExporter', useClass: GroceryDataTransporter}],
+    ]
 })
 
 export class PantryManagementModule { }

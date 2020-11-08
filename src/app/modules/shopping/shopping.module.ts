@@ -12,21 +12,24 @@ import {SharedModule} from '../shared-module/shared.module';
 import {ShoppingItemListComponent} from './dumb-components/shopping-item-list/shopping-item-list.component';
 import { ShoppingItemComponent } from './dumb-components/shopping-item/shopping-item.component';
 import {FormsModule} from '@angular/forms';
+import {AddShoppingItemComponent} from "./dumb-components/add-shopping-item/add-shopping-item.component";
+// import {PantryManagementModule} from "../pantry-management/pantry-management.module";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(ShoppingRoutes),
-    StoreModule.forFeature('shoppingListManagement', fromReducers.shoppingListManagementReducer),
-    EffectsModule.forFeature([ShoppingListManagementEffects]),
-    IonicModule,
-    SharedModule,
-    FormsModule
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(ShoppingRoutes),
+        StoreModule.forFeature('shoppingListManagement', fromReducers.shoppingListManagementReducer),
+        EffectsModule.forFeature([ShoppingListManagementEffects]),
+        IonicModule,
+        SharedModule,
+        FormsModule
+    ],
   declarations: [
     ShoppingListComponent,
     ShoppingItemListComponent,
     ShoppingItemComponent,
+    AddShoppingItemComponent
   ],
   providers: [],
 })

@@ -70,8 +70,6 @@ export class CreatePantryItem implements Action {
   readonly type = PantryActionTypes.CreatePantryItem;
 
   constructor(public pantryItemRequest: CreatePantryItemRequest) {
-    console.log('Creating CreatePantryItem action.');
-    console.log(pantryItemRequest);
   }
 }
 

@@ -1,0 +1,7 @@
+<ion-item lines="none" *ngIf="addingShoppingItem">
+  <ion-row>
+    <ion-input class="edit-box" autocapitalize="sentences" placeholder="Pantry item name" id="newItemNameInput" [(ngModel)]="newPantryItemName"></ion-input>
+    <ion-button size="small" (click)="onAddPantryItemDoneClick()">Done</ion-button>
+    <ion-button size="small" (click)="onCancelAddPantryItemClick()">Cancel</ion-button>
+  </ion-row>
+</ion-item>

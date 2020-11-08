@@ -1,17 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {CreatePantryItemRequest} from '../pantry-item-list/pantry-item-list.component';
-import {GroceryStore} from "../../../../model/grocery-store";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {GroceryStoreLocation} from "../../../../model/grocery-store-location";
+import {CreatePantryItemRequest} from "../../../pantry-management/dumb-components/pantry-item-list/pantry-item-list.component";
 
 @Component({
-  selector: 'app-add-pantry-item',
-  templateUrl: './add-pantry-item.component.html',
-  styleUrls: ['./add-pantry-item.component.scss']
+  selector: 'app-add-shopping-item',
+  templateUrl: './add-shopping-item.component.html',
+  styleUrls: ['./add-shopping-item.component.scss']
 })
-export class AddPantryItemComponent implements OnInit {
+export class AddShoppingItemComponent implements OnInit {
 
   @Input()
-  addingPantryItem: boolean;
+  addingShoppingItem: boolean;
 
   @Input()
   initialStoreLocation: GroceryStoreLocation;

@@ -11,6 +11,7 @@ import {NavigateToPantryItemPage} from '../../store/pantry-management.actions';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
+import {GroceryStoreLocation} from "../../../../model/grocery-store-location";
 
 export interface DeletePantryItemRequest {
   id: number;
@@ -18,6 +19,7 @@ export interface DeletePantryItemRequest {
 
 export interface CreatePantryItemRequest {
   name: string;
+  initialStoreLocation?: GroceryStoreLocation;
 }
 
 export interface NavigateToEditPantryItemRequest {

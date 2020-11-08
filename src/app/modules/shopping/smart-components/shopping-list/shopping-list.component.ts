@@ -3,7 +3,7 @@ import {SelectStore} from '../../../../store';
 import {selectAllGroceryStores, selectCurrentGroceryStore, selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 import {ItemPlacedInOrRemovedFromCart, LoadShoppingList} from '../../store/shopping.actions';
 import {ShoppingItem} from '../../../../model/shopping-item';
@@ -15,6 +15,8 @@ import {map, withLatestFrom} from 'rxjs/operators';
 import {EditItemLocationRequest} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {EditPantryItemLocationRequest} from '../../../pantry-management/store/pantry-management.actions';
 import {Router} from '@angular/router';
+import {CreatePantryItemRequest} from "../../../pantry-management/dumb-components/pantry-item-list/pantry-item-list.component";
+import * as fromActions from "../../../pantry-management/store/pantry-management.actions";
 
 @Component({
   selector: 'app-shopping-list',
@@ -26,6 +28,7 @@ export class ShoppingListComponent implements OnInit {
   groceryStores$: Observable<GroceryStoreState[]>;
   shoppingList$: Observable<ShoppingItem[]>;
   shoppingStore$: Observable<GroceryStoreState>;
+  addingShoppingItem$: Observable<boolean>;
 
   selectedStore: GroceryStore;
 
@@ -40,6 +43,7 @@ export class ShoppingListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.addingShoppingItem$ = of(false);
     this.shoppingStore$ = this.store.select(selectCurrentGroceryStore());
     this.shoppingStore$.pipe(
       withLatestFrom(store => {
@@ -76,4 +80,19 @@ export class ShoppingListComponent implements OnInit {
   onItemLocationChangeRequested($event: EditItemLocationRequest) {
     this.store.dispatch((new EditPantryItemLocationRequest($event, this.router.routerState.snapshot.url)));
   }
+
+  onAddShoppingItemClick() {
+    this.addingShoppingItem$ = of(true);
+
+    // ?
+    // this.store.dispatch(new AddShoppingItemRequest(this.selectedStore));
+  }
+
+  onCreateItem($event: CreatePantryItemRequest) {
+    this.addingShoppingItem$ = of(false);
+    if ($event.name) {
+      this.store.dispatch(new fromActions.CreatePantryItem($event));
+    }
+  }
 }
+
