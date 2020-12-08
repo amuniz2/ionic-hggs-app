@@ -24,6 +24,7 @@ import {ProductInfoService} from './services/product-info-service';
 import {IProductInfoService} from './services/IProductInfoService';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {FakeProductInfoService} from './services/fake-product-info-service';
+import {FakePantryDataServiceHelper} from './services/fake-pantry-data-service-helper';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import {FakeProductInfoService} from './services/fake-product-info-service';
     [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
     // [{provide: 'IProductInfoService', useClass: ProductInfoService}],
     [{provide: 'IProductInfoService', useClass: FakeProductInfoService}],
+    FakePantryDataServiceHelper,
     PantryDbHelper,
     MySqlCommands,
     SQLite

@@ -1,0 +1,14 @@
+<ion-content>
+  <ion-input class="edit-box" placeholder="Name" id="pantryItemNameInput" autocapitalize="sentences" [(ngModel)]="pantryItemName" (ionBlur)="onNameEnteredOrChanged()"></ion-input>
+  <ion-input class="edit-box"placeholder="Enter description" id="newPantryItemDescriptionInput" (ionBlur)="onPropertyChange()" [(ngModel)]="pantryItemDescription"></ion-input>
+  <div>
+    <ion-input class="edit-box edit-box-left" inputmode="decimal" placeholder="Quantity" id="pantryItemQuantityInput" (ionChange)="onPropertyChange()" [(ngModel)]="pantryItemQuantity"></ion-input>
+    <ion-input class="edit-box edit-box-right" placeholder="Units" id="pantryItemQuantityUnitInput" (ionChange)="onPropertyChange()" [(ngModel)]="pantryItemQuantityUnit"></ion-input>
+  </div>
+    <app-edit-shopping-item-location
+                               [pantryItem]="pantryItem"
+                               [groceryStore] = "groceryStore"
+                               (notifyEditPantryItemLocationRequested)="onNotifyAddLocationRequest($event)">
+    </app-edit-shopping-item-location>
+    <ion-textarea *ngIf="error">{{error.message}}</ion-textarea>
+</ion-content>

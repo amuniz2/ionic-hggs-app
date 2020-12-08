@@ -1,6 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {GroceryStoreLocation} from "../../../../model/grocery-store-location";
-import {CreatePantryItemRequest} from "../../../pantry-management/dumb-components/pantry-item-list/pantry-item-list.component";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
+import {CreatePantryItemRequest} from '../../../../helpers';
+import {CreateShoppingItemForNewPantryItem, CreateShoppingItemRequest} from '../../store/shopping.actions';
 
 @Component({
   selector: 'app-add-shopping-item',
@@ -16,7 +17,7 @@ export class AddShoppingItemComponent implements OnInit {
   initialStoreLocation: GroceryStoreLocation;
 
   @Output()
-  notifyNewPantryItemRequested: EventEmitter<CreatePantryItemRequest> = new EventEmitter();
+  notifyNewPantryItemRequested: EventEmitter<CreateShoppingItemRequest> = new EventEmitter();
 
   newPantryItemName: string;
 
@@ -26,14 +27,14 @@ export class AddShoppingItemComponent implements OnInit {
   }
 
   onCancelAddPantryItemClick() {
-    this.notifyNewPantryItemRequested.emit({ name: null});
+    this.notifyNewPantryItemRequested.emit({ name: null, storeId: null});
     this.newPantryItemName = '';
   }
 
   onAddPantryItemDoneClick() {
     this.notifyNewPantryItemRequested.emit({
       name: this.newPantryItemName,
-      initialStoreLocation: this.initialStoreLocation
+      storeId: this.initialStoreLocation.storeId
     });
     this.newPantryItemName = '';
   }

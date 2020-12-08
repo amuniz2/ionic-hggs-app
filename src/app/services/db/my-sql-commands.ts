@@ -197,6 +197,29 @@ export class MySqlCommands {
     }
   }
 
+  public async insertPantryItemInNewLocation(pantryItemName: string, description: string,
+                                units: string,
+                                quantityNeeded: number,
+                                defaultQuantity: number,
+                                need: boolean, groceryStoreId: number, aisle: string, section: string): Promise<ShoppingItem>
+  {
+      const pantryItemId = await this.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need);
+      const location = await this.insertNewPantryItemLocation(pantryItemId, groceryStoreId, aisle, section);
+      return await this.queryShoppingItem(groceryStoreId, pantryItemId);
+  }
+
+
+  public async insertPantryItemInLocation(pantryItemName: string, description: string,
+                                          units: string,
+                                          quantityNeeded: number,
+                                          defaultQuantity: number,
+                                          need: boolean,
+                                          locationId: number): Promise<boolean>
+  {
+    const newItemId = await this.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need);
+    return await this.insertPantryItemLocation(newItemId, locationId);
+  }
+
   public async queryPantryItems(): Promise<PantryItem[]> {
     const pantryItems: PantryItem[] = [];
     try {

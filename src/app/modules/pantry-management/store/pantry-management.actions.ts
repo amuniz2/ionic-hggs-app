@@ -1,7 +1,6 @@
 import {Action} from '@ngrx/store';
 import {PantryItem} from '../../../model/pantry-item';
 import {
-  CreatePantryItemRequest,
   DeletePantryItemRequest,
   NavigateToEditPantryItemRequest
 } from '../dumb-components/pantry-item-list/pantry-item-list.component';
@@ -10,6 +9,7 @@ import {GroceryStoreLocation} from '../../../model/grocery-store-location';
 import {NewItemLocation} from '../smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
 import {ProductInfo} from '../smart-components/edit-pantry-item/edit-pantry-item.component';
 import {ToggleAction} from '@ngrx/store-devtools/src/actions';
+import {CreatePantryItemRequest} from '../../../helpers';
 
 export enum PantryActionTypes {
   ToggleNeed = '[Pantry Item] Toggle Need',

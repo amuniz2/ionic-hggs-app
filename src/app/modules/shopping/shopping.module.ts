@@ -11,8 +11,11 @@ import {IonicModule} from '@ionic/angular';
 import {SharedModule} from '../shared-module/shared.module';
 import {ShoppingItemListComponent} from './dumb-components/shopping-item-list/shopping-item-list.component';
 import { ShoppingItemComponent } from './dumb-components/shopping-item/shopping-item.component';
-import {FormsModule} from '@angular/forms';
-import {AddShoppingItemComponent} from "./dumb-components/add-shopping-item/add-shopping-item.component";
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AddShoppingItemComponent} from './dumb-components/add-shopping-item/add-shopping-item.component';
+import {EditShoppingItemDetailsComponent} from './dumb-components/edit-shopping-item-details/edit-shopping-item-details.component';
+import {EditShoppingItemComponent} from './smart-components/edit-shopping-item/edit-shopping-item.component';
+import {EditShoppingItemLocationComponent} from './smart-components/edit-shopping-item-location/edit-shopping-item-location.component';
 // import {PantryManagementModule} from "../pantry-management/pantry-management.module";
 
 @NgModule({
@@ -23,13 +26,17 @@ import {AddShoppingItemComponent} from "./dumb-components/add-shopping-item/add-
         EffectsModule.forFeature([ShoppingListManagementEffects]),
         IonicModule,
         SharedModule,
-        FormsModule
+        FormsModule,
+        ReactiveFormsModule
     ],
   declarations: [
     ShoppingListComponent,
     ShoppingItemListComponent,
     ShoppingItemComponent,
-    AddShoppingItemComponent
+    AddShoppingItemComponent,
+    EditShoppingItemComponent,
+    EditShoppingItemDetailsComponent,
+    EditShoppingItemLocationComponent
   ],
   providers: [],
 })

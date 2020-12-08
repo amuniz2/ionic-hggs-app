@@ -42,9 +42,10 @@ import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
         EditPantryItemLocationComponent,
         AddPantryItemComponent,
     ],
-    exports: [
-        AddPantryItemComponent
-    ],
+  exports: [
+    AddPantryItemComponent,
+    EditPantryItemDetailsComponent
+  ],
     providers: [
         SocialSharing,
         File,

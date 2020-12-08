@@ -123,7 +123,10 @@ export class PantryEffects {
         tap((itemAdded) => {
           console.log(`item Added: ${itemAdded}`);
         }),
-        map(itemAdded => new PantryItemCreated( itemAdded )),
+        switchMap(itemAdded => [
+          new PantryItemCreated( itemAdded ),
+          new NavigateToPantryItemPage({ newItem: false, id: itemAdded.id})
+        ]),
         catchError(error => [new CreateItemFailed(payload.pantryItemRequest.name, error)])
       );
     }));
@@ -149,17 +152,20 @@ export class PantryEffects {
         tap((itemAdded) => {
           console.log(`item Added: ${itemAdded}`);
         }),
-        map(itemAdded => new PantryItemCreated( itemAdded )),
+        switchMap(itemAdded => [
+          new PantryItemCreated( itemAdded ),
+          new NavigateToPantryItemPage({ newItem: false, id: itemAdded.id})
+          ]),
         catchError(error => [new CreateItemFailed(payload.pantryItem.name, error)])
       );
     }));
 
-  @Effect()
-  public editNewPantryItem$ = this.actions$.pipe(
-    ofType(PantryActionTypes.PantryItemCreated),
-    map((payload) => {
-        return new NavigateToPantryItemPage({ id: payload.pantryItem.id, newItem: false });
-      }));
+  // @Effect()
+  // public editNewPantryItem$ = this.actions$.pipe(
+  //   ofType(PantryActionTypes.PantryItemCreated),
+  //   map((payload) => {
+  //       return new NavigateToPantryItemPage({ id: payload.pantryItem.id, newItem: false });
+  //     }));
 
   @Effect()
   public savePantryItem$ = this.actions$.pipe(

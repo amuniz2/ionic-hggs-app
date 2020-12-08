@@ -17,11 +17,6 @@ export interface DeletePantryItemRequest {
   id: number;
 }
 
-export interface CreatePantryItemRequest {
-  name: string;
-  initialStoreLocation?: GroceryStoreLocation;
-}
-
 export interface NavigateToEditPantryItemRequest {
   id: number;
   newItem: boolean;

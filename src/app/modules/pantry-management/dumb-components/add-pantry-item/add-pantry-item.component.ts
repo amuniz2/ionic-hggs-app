@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {CreatePantryItemRequest} from '../pantry-item-list/pantry-item-list.component';
-import {GroceryStore} from "../../../../model/grocery-store";
-import {GroceryStoreLocation} from "../../../../model/grocery-store-location";
+import {CreatePantryItemRequest} from '../../../../helpers';
+import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 
 @Component({
   selector: 'app-add-pantry-item',

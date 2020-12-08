@@ -1,18 +1,27 @@
 import {Inject, Injectable} from '@angular/core';
 import {
   LoadShoppingListFailed,
-  LoadShoppingListSucceeded,
+  LoadShoppingListSucceeded, NavigatedToShoppingItemPage, NavigateToNewShoppingItemPage,
   ShoppingActions,
   ShoppingActionTypes,
-  ShoppingItemUpdateSucceeded
+  ShoppingItemUpdateSucceeded, UpdateStoreShoppingList
 } from './shopping.actions';
 import {Store} from '@ngrx/store';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {catchError, map, switchMap} from 'rxjs/operators';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {IPantryDataService} from '../../../services/IPantryDataService';
 import {ShoppingListManagementState} from './shopping.reducers';
 import {DisplayError} from '../../../store';
+import {
+  CreateItemFailed,
+  CreatePantryItem,
+  LoadPantryItemLocations, LoadPantryItems,
+  PantryActionTypes, PantryItemCreated,
+  PantryItemLoaded,
+  PantryLoadFailed
+} from '../../pantry-management/store/pantry-management.actions';
+import {PantryItem} from '../../../model/pantry-item';
 
 @Injectable()
 export class ShoppingListManagementEffects {
@@ -64,4 +73,54 @@ export class ShoppingListManagementEffects {
       );
     }),
   );
+
+  @Effect()
+  public getShoppingItemDetails$ = this.actions$.pipe(
+    ofType(ShoppingActionTypes.NavigatedToShoppingItemPage),
+    switchMap(payload => this.storeManagementService.getPantryItem(payload)),
+    switchMap((x) => {
+      return [
+        new PantryItemLoaded(x),
+        new LoadPantryItemLocations(x.id),
+      ];
+    }),
+    catchError(err => [new PantryLoadFailed(err)])
+  );
+
+  @Effect()
+  public createShoppingItemInStore$ = this.actions$.pipe(
+    ofType(ShoppingActionTypes.CreateShoppingItemForNewPantryItem),
+    switchMap((payload) => {
+      return this.storeManagementService.addShoppingItemInNewLocation( {
+        ...new PantryItem(),
+        name: payload.request.name,
+      }, {
+          id: null,
+          storeName: null,
+          storeId: payload.request.storeId,
+          aisle: '',
+          section: ''
+      }).pipe(
+        tap((itemAdded) => {
+          console.log(`item Added: ${JSON.stringify(itemAdded)}`);
+        }),
+        switchMap(itemAdded => [
+          new UpdateStoreShoppingList( payload.request.storeId),
+          new PantryItemCreated({
+            ...itemAdded,
+            locations: [ {
+              ...itemAdded.location,
+              id: itemAdded.location.locationId,
+              storeId: payload.request.storeId,
+              storeName: ''
+            }],
+            id: itemAdded.pantryItemId,
+            need: true,
+            quantityNeeded: itemAdded.quantity,
+            defaultQuantity: itemAdded.quantity,
+          })]
+        ),
+        catchError(error => [new CreateItemFailed(payload.request.name, error)])
+      );
+    }));
 }

@@ -43,7 +43,11 @@ export interface IPantryDataService {
 
   importHggsData(data: HggsData): Observable<boolean>;
 
-  addPantryItem(newPantryItemRequest: PantryItem): Observable<PantryItem>;
+  addPantryItem (newPantryItemRequest: PantryItem): Observable<PantryItem>;
+
+  addShoppingItemInNewLocation (newPantryItemRequest: PantryItem, storeLocation: GroceryStoreLocation): Observable<ShoppingItem>;
+
+  addShoppingItemInLocation (newPantryItemRequest: PantryItem, locationId: number): Observable<PantryItem>;
 
   addNewPantryItemLocation(itemId: number, newLocation: GroceryStoreLocation): Observable<GroceryStoreLocation>;
 

@@ -539,4 +539,24 @@ export class PantryDbHelper {
       });
     });
   }
+
+  addShoppingItemInNewLocation(newPantryItemRequest: PantryItem, storeLocation: GroceryStoreLocation): Observable<ShoppingItem> {
+    return new Observable<ShoppingItem>( (observer) => {
+      this.mySqlCommands.insertPantryItemInNewLocation(
+        newPantryItemRequest.name,
+        newPantryItemRequest.description,
+        newPantryItemRequest.units,
+        newPantryItemRequest.quantityNeeded,
+        newPantryItemRequest.defaultQuantity,
+        true,
+        storeLocation.storeId, storeLocation.aisle, storeLocation.section).then((shoppingItemAdded) => {
+          observer.next(shoppingItemAdded);
+          observer.complete();
+        }).catch( (err) => {
+          console.log('Error adding shopping item', err);
+          observer.error(err);
+        }
+      );
+    });
+  }
 }

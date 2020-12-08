@@ -75,6 +75,13 @@ export class PantryDataService implements IPantryDataService {
     return newPantryItem$;
   }
 
+
+  public addPantryItemInLocation(newPantryItemRequest: PantryItem, storeLocation: GroceryStoreLocation): Observable<PantryItem> {
+    const { name, description, units, quantityNeeded, defaultQuantity, need } = newPantryItemRequest;
+    const newPantryItem$ = this.dbHelper.addPantryItem(name, description, units, quantityNeeded, defaultQuantity, need);
+    return newPantryItem$;
+  }
+
   public getGroceryStoreByName(name: string): Observable<GroceryStore> {
     return this.dbHelper.getGroceryStoreByName(name);
   }
@@ -182,5 +189,13 @@ export class PantryDataService implements IPantryDataService {
 
   importHggsData(data: HggsData): Observable<boolean> {
     return this.dbHelper.importHggsData(data);
+  }
+
+  addShoppingItemInLocation(newPantryItemRequest: PantryItem, locationId: number): Observable<PantryItem> {
+    return undefined;
+  }
+
+  addShoppingItemInNewLocation(newPantryItemRequest: PantryItem, storeLocation: GroceryStoreLocation): Observable<ShoppingItem> {
+    return this.dbHelper.addShoppingItemInNewLocation(newPantryItemRequest, storeLocation);
   }
 }

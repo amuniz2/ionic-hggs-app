@@ -1,4 +1,11 @@
 import {isNumeric} from 'rxjs/internal-compatibility';
+import {GroceryStoreLocation} from './model/grocery-store-location';
+
+// belongs someewhere else
+export interface CreatePantryItemRequest {
+  name: string;
+  initialStoreLocation?: GroceryStoreLocation;
+}
 
 export function getAisleOrSectionDescription(name: string, label: string): string {
   if (name) {

@@ -1,0 +1,30 @@
+<ion-content>
+  <h4>Shopping Item Location</h4>
+  <ion-list>
+    <form [formGroup]="locationForm" (ngSubmit)="onSubmit(locationForm.value)">
+      <app-grocery-store-location-aisle-or-section  [formGroup]="locationForm"
+                                                    [inputControlName] = "'locationAisle'"
+        [groceryStoreAislesOrSections]="groceryStoreAislesWithSection$ | async"
+        [allGroceryStoreAislesOrSections]="groceryStoreAisles$ | async"
+        [label] = "AisleLabel"
+        (aisleOrSectionChange)="onChangeAisle($event)"
+        [selectedGroceryStoreAisleOrSection] = "selectedGroceryStoreAisle"
+        (selectedNewGroceryStoreAisleOrSectionChange)="onCreateAndSelectGroceryStoreAisle($event)">
+      </app-grocery-store-location-aisle-or-section>
+      <app-grocery-store-location-aisle-or-section
+        [formGroup]="locationForm"
+        [inputControlName] = "'locationSection'"
+        [groceryStoreAislesOrSections]="groceryStoreSectionsInAisle$ | async"
+        [allGroceryStoreAislesOrSections]="groceryStoreSections$ | async"
+        [label] = "SectionLabel"
+        [selectedGroceryStoreAisleOrSection] = "selectedGroceryStoreSection"
+        (aisleOrSectionChange)="onChangeSection($event)"
+        (selectedNewGroceryStoreAisleOrSectionChange) = "onCreateAndSelectGroceryStoreSection($event)">
+      </app-grocery-store-location-aisle-or-section>
+      <ion-toolbar>
+        <ion-button slot="start" color="primary" class="button" type="submit">Save</ion-button>
+        <ion-button class="button" color="secondary" (click)="onCancel()">Cancel</ion-button>
+      </ion-toolbar>
+    </form>
+  </ion-list>
+</ion-content>

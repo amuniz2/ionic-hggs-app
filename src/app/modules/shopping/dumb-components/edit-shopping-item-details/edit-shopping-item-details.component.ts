@@ -5,26 +5,26 @@ import {
   CollapsedStatusChangedEvent,
   PageSection
 } from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
-import {EditItemLocationRequest, NewItemLocationRequest} from '../pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 import {UiCrudAction} from '../../../../ui-crud-actions';
 import {GroceryStoreState} from '../../../../model/grocery-store';
+import {
+  EditItemLocationRequest,
+  NewItemLocationRequest
+} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
 
 @Component({
-  selector: 'app-edit-pantry-item-details',
-  templateUrl: './edit-pantry-item-details.component.html',
-  styleUrls: ['./edit-pantry-item-details.component.scss']
+  selector: 'app-edit-shopping-item-details',
+  templateUrl: './edit-shopping-item-details.component.html',
+  styleUrls: ['./edit-shopping-item-details.component.scss']
 })
-export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
+export class EditShoppingItemDetailsComponent implements OnInit, OnChanges {
 
   @Input()
   pantryItem: PantryItem;
 
   @Input()
   groceryStores: GroceryStoreState[];
-
-  @Input()
-  pantryItemLocations: GroceryStoreLocation[];
 
   @Input()
   error: Error;
@@ -60,20 +60,10 @@ export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
       this.pantryItemDescription = this.pantryItem.description;
       this.pantryItemQuantity = this.pantryItem.defaultQuantity;
       this.pantryItemQuantityUnit = this.pantryItem.units;
-      // include this in ngOnChanges?
-      this.itemCanExistInOtherStores = this.groceryStores.length > this.pantryItemLocations.length;
-    } else {
-      console.log('pantry item is null!');
-      this.itemCanExistInOtherStores = this.groceryStores.length > 0;
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.pantryItem != null) {
-      this.itemCanExistInOtherStores = this.groceryStores.length > this.pantryItemLocations.length;
-    } else {
-      this.itemCanExistInOtherStores = this.groceryStores.length > 0;
-    }
     if (changes.pantryItem) {
       this.pantryItemDescription = changes.pantryItem.currentValue.description;
       this.pantryItemName = changes.pantryItem.currentValue.name;
@@ -96,24 +86,17 @@ export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
     this.updateItem();
   }
 
-  toggleLocationsSection($event: CollapsedStatusChangedEvent) {
-    this.locationsSection.isOpen$ = of($event.isOpen);
-    // if ($event.isOpen && this.pantryItem.locations.length === 0) {
-    //   this.notifyExpandLocations.emit(this.pantryItem.id);
-    // }
-  }
-
   onNotifyEditLocationRequest($event) {
     this.notifyEditPantryItemLocationRequest.emit($event);
   }
 
-  onAddLocationClicked() {
-    this.notifyAddPantryItemLocationRequest.emit({
-      pantryItem: this.pantryItem,
-      action: UiCrudAction.RequestCreate,
-      existingLocations: this.pantryItemLocations
-    });
-  }
+  // onAddLocationClicked() {
+  //   this.notifyAddPantryItemLocationRequest.emit({
+  //     pantryItem: this.pantryItem,
+  //     action: UiCrudAction.RequestCreate,
+  //     existingLocations: this.pantryItemLocations
+  //   });
+  // }
 
   private updateItem() {
     let pantryItem = this.pantryItem;
@@ -134,5 +117,9 @@ export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
       need: this.pantryItem.need,
       inCart: this.pantryItem.inCart
     });
+  }
+
+  onNotifyAddLocationRequest($event) {
+    
   }
 }

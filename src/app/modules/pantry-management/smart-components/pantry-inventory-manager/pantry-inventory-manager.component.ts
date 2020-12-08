@@ -1,11 +1,10 @@
-import {ChangeDetectorRef, Component, Inject, Injectable, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import * as fromActions from '../../../pantry-management/store/pantry-management.actions';
 import * as fromSelectors from '../../store/pantry-management.selectors';
 import {
-  CreatePantryItemRequest,
   DeletePantryItemRequest,
 } from '../../../pantry-management/dumb-components/pantry-item-list/pantry-item-list.component';
 import {PantryItem} from '../../../../model/pantry-item';
@@ -21,6 +20,7 @@ import {Router} from '@angular/router';
 import {ImportData} from '../../../../store';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
 import {IProductInfoService} from '../../../../services/IProductInfoService';
+import {CreatePantryItemRequest} from '../../../../helpers';
 
 @Component({
   selector: 'app-pantry-inventory-manager',

@@ -18,7 +18,7 @@
 </ion-header>
 <ion-content>
   <app-select-grocery-store [groceryStores]="groceryStores$ | async" (selectedGroceryStoreChange)="onGroceryStoreSelected($event)"></app-select-grocery-store>
-  <app-add-shopping-item [addingShoppingItem]="(addingShoppingItem$ | async)"
+  <app-add-shopping-item [addingShoppingItem]="(addingShoppingItem$ | async)" [initialStoreLocation]="selectedStore"
                        (notifyNewPantryItemRequested)="onCreateItem($event)">
   </app-add-shopping-item>
   <app-shopping-item-list [filter]="filter" (notifySaveShoppingItemRequested)="onItemPlacedInOrRemovedFromCart($event)"
