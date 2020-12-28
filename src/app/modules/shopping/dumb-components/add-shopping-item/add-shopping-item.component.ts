@@ -27,14 +27,15 @@ export class AddShoppingItemComponent implements OnInit {
   }
 
   onCancelAddPantryItemClick() {
-    this.notifyNewPantryItemRequested.emit({ name: null, storeId: null});
+    this.notifyNewPantryItemRequested.emit({ name: null, storeId: null, aisle: null});
     this.newPantryItemName = '';
   }
 
   onAddPantryItemDoneClick() {
     this.notifyNewPantryItemRequested.emit({
       name: this.newPantryItemName,
-      storeId: this.initialStoreLocation.storeId
+      storeId: this.initialStoreLocation.storeId,
+      aisle: this.initialStoreLocation.aisle
     });
     this.newPantryItemName = '';
   }

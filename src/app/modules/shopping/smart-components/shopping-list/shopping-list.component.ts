@@ -14,7 +14,10 @@ import {ShoppingItem} from '../../../../model/shopping-item';
 import {
   selectStoreShoppingItems,
 } from '../../store/shopping.selectors';
-import {StoreShoppingItemUpdate} from '../../dumb-components/shopping-item-list/shopping-item-list.component';
+import {
+  AddPantryItemToStoreShoppingList,
+  StoreShoppingItemUpdate
+} from '../../dumb-components/shopping-item-list/shopping-item-list.component';
 import {withLatestFrom} from 'rxjs/operators';
 import {EditItemLocationRequest} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {EditPantryItemLocationRequest} from '../../../pantry-management/store/pantry-management.actions';
@@ -37,6 +40,7 @@ export class ShoppingListComponent implements OnInit {
   shoppingList$: Observable<ShoppingItem[]>;
   shoppingStore$: Observable<GroceryStoreState>;
   addingShoppingItem$: Observable<boolean>;
+  addingShoppingItemInAisle$: Observable<boolean>;
 
   selectedStore: GroceryStore;
 
@@ -52,6 +56,7 @@ export class ShoppingListComponent implements OnInit {
 
   ngOnInit() {
     this.addingShoppingItem$ = of(false);
+    this.addingShoppingItemInAisle$ = of (false);
     this.shoppingStore$ = this.store.select(selectCurrentGroceryStore());
     this.shoppingStore$.pipe(
       withLatestFrom(store => {
@@ -96,14 +101,32 @@ export class ShoppingListComponent implements OnInit {
     // this.store.dispatch(new AddNewShoppingItem( { itemId: this., storeId: this.selectedStore.id});
   }
 
+  onAddShoppingItemInAisleClick() {
+    this.addingShoppingItemInAisle$ = of(true);
+
+    // ?
+    // this.store.dispatch(new AddNewShoppingItem( { itemId: this., storeId: this.selectedStore.id});
+  }
+
   onCreateItem($event: CreatePantryItemRequest) {
     this.addingShoppingItem$ = of(false);
+    this.addingShoppingItemInAisle$ = of(false);
     if ($event.name) {
       this.store.dispatch(new CreateShoppingItemForNewPantryItem({
         name: $event.name,
+        aisle: null,
         storeId: this.selectedStore.id
       }));
     }
+  }
+
+  onAddPantryItemToStoreShoppingList($event: AddPantryItemToStoreShoppingList) {
+    this.addingShoppingItem$ = of(true);
+    // this.store.dispatch(new CreateShoppingItemForNewPantryItem({
+    //   name: $event.name,
+    //   aisle: $event.aisle.name,
+    //   storeId: this.selectedStore.id
+    // }));
   }
 }
 

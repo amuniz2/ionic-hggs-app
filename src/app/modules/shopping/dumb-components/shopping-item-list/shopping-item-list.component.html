@@ -3,12 +3,23 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-            <ion-label>Aisle {{aisle.name}}</ion-label>
+            <div class="itemContents">
+              <ion-label>Aisle {{aisle.name}}</ion-label>
+              <ion-button  fill="clear" outline="none" (click)="onAddShoppingItemClickInAisle(aisle)">
+                <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
+              </ion-button>
+            </div>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
             <ion-list lines="none">
+
+              <app-add-shopping-item [addingShoppingItem]="addingShoppingItemInAisle"
+                                     [initialStoreLocation]="{ storeId: groceryStore.id, storeName: groceryStore.name, id: null, aisle: aisle, section: null}"
+                                     (notifyNewPantryItemRequested)="onAddShoppingItemClickInAisle(aisle.name)">
+              </app-add-shopping-item>
+
               <ion-item *ngFor="let section of aisle.sections">
                 <ion-grid>
 <!--                  <ion-row>-->
@@ -40,6 +51,9 @@
                                (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
             <hr width="100%">
           </ion-col>
+          <ion-col>
+            <ion-button class="ion-float-sm-right" (click)="editLocation(shoppingItem)" >Move</ion-button>
+          </ion-col>
         </ion-row>
       </ion-grid>
   </ion-item>
@@ -56,6 +70,9 @@
                              (notifyEditPantryItemLocationRequested)="onChangeShoppingItemLocation($event)"
                              (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
           <hr width="100%">
+        </ion-col>
+        <ion-col>
+          <ion-button class="ion-float-sm-right" (click)="editLocation(shoppingItem)" >Move</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

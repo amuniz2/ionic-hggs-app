@@ -1,7 +1,16 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ShoppingItem} from '../../../../model/shopping-item';
-import {EditItemLocationRequest} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
+import {
+  EditItemLocationRequest
+} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {UiCrudAction} from '../../../../ui-crud-actions';
+import {CreateShoppingItemForNewPantryItem, CreateShoppingItemRequest} from '../../store/shopping.actions';
+import {GroceryStore} from '../../../../model/grocery-store';
+import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
+
+export interface AddPantryItemToStoreShoppingList {
+  aisle: Aisle;
+}
 
 class ShoppingItemGroup {
   name: string;
@@ -41,6 +50,15 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
 
   @Input()
   filter: string;
+
+  @Output()
+  notifyAddNewPantryItemToStoreShoppingList: EventEmitter<string> = new EventEmitter<string>();
+
+  @Input()
+  addingShoppingItemInAisle: boolean;
+
+  @Input()
+  groceryStore: GroceryStore;
 
   aisles: Aisle[];
   sections: ShoppingItemGroup[];
@@ -167,5 +185,9 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
       action: UiCrudAction.Update
     });
 
+  }
+
+  onAddShoppingItemClickInAisle(aisleName: string) {
+    this.notifyAddNewPantryItemToStoreShoppingList.emit(aisleName)
   }
 }

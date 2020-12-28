@@ -24,6 +24,7 @@ export enum ShoppingActionTypes {
 export interface CreateShoppingItemRequest {
   name: string;
   storeId: number;
+  aisle: string;
 }
 
 export class AddOrRemoveItemFromShoppingLists implements Action {
