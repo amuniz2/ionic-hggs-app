@@ -42,8 +42,6 @@ export class CreateStore implements Action {
 export class DeleteStore implements Action {
   readonly type = StoreManagerActionTypes.DeleteStore;
   constructor(public deleteGroceryStorePayload: DeleteGroceryStoreRequest) {
-    console.log ('created DeleteStore action with ');
-    console.log(deleteGroceryStorePayload);
   }
 }
 

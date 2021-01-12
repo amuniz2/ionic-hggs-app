@@ -23,7 +23,7 @@ export interface IGroceryDataTransporter {
 
   importData(self: IGroceryDataTransporter, data: HggsData): Observable<boolean>;
 
-  listFolders();//debugging
+  listFolders(); // debugging
 }
 
 export interface HggsFile extends Entry {
@@ -134,7 +134,9 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
   private logListing(storageDir: string, dirName: string, entries: Entry[]) {
     console.log(`Listing for ${storageDir} with dirName ${dirName}:`);
     entries.forEach(entry => {
-      console.log(entry);
+      if (entry.isFile) {
+        console.log(entry);
+      }
     })
   }
 
@@ -145,12 +147,14 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
     if (this.fileManager.externalRootDirectory === null) {
       parentFolder = this.fileManager.documentsDirectory;
       subFolder = 'NoCloud';
+      subFolder = '';
     } else {
       parentFolder = this.fileManager.externalRootDirectory;
       subFolder = 'Download';
     }
+    console.log(`parentFolder: ${parentFolder}, subFolder: ${subFolder}`);
     return from(this.fileManager.listDir(parentFolder,subFolder).then((entries) => {
-      console.log('files in found in folder: ', JSON.stringify(entries));
+      console.log('files found in folder: ', JSON.stringify(entries));
       this.downloadedHggsFiles = entries.filter(file => file.isFile && file.name.endsWith('.hggs'));
       console.log(`downloaded hggs files: ${JSON.stringify(this.downloadedHggsFiles)}`);
       this.downloadedHggsFiles.forEach((entry) => {
@@ -233,42 +237,44 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
     const result: Entry[][] = [];
     await
     [
+    //   {
+    //   dir: this.fileManager.dataDirectory,
+    //   name: 'dataDirectory'
+    // },{
+    //     dir: this.fileManager.applicationStorageDirectory,
+    //     name: 'applicationStorageDirectory'
+    //   },
+    //   {
+    //     dir: this.fileManager.tempDirectory,
+    //     name: 'tempDirectory'
+    //   },{
+    //   dir: this.fileManager.applicationDirectory,
+    //   name: 'applicationDirectory'
+    // },{
+    //   dir: this.fileManager.cacheDirectory,
+    //   name: 'cacheDirectory'
+    // },
       {
-      dir: this.fileManager.dataDirectory,
-      name: 'dataDirectory'
-    },{
-        dir: this.fileManager.applicationStorageDirectory,
-        name: 'applicationStorageDirectory'
-      },
-      {
-        dir: this.fileManager.tempDirectory,
-        name: 'tempDirectory'
-      },{
-      dir: this.fileManager.applicationDirectory,
-      name: 'applicationDirectory'
-    },{
-      dir: this.fileManager.cacheDirectory,
-      name: 'cacheDirectory'
-    },{
       dir: this.fileManager.documentsDirectory,
       name: 'documentsDirectory'
     },
-      {
-      dir: this.fileManager.externalApplicationStorageDirectory,
-      name: 'externalApplicationStorageDirectory'
-    },
-      {
-      dir: this.fileManager.externalCacheDirectory,
-      name: 'externalCacheDirectory'
-    },
-      {
-      dir: this.fileManager.externalDataDirectory,
-      name: 'externalDataDirectory'
-    },
-      {
-      dir: this.fileManager.externalRootDirectory,
-      name: 'externalRootDirectory'
-    }].forEach( async (dirDesc) => {
+    //   {
+    //   dir: this.fileManager.externalApplicationStorageDirectory,
+    //   name: 'externalApplicationStorageDirectory'
+    // },
+    //   {
+    //   dir: this.fileManager.externalCacheDirectory,
+    //   name: 'externalCacheDirectory'
+    // },
+    //   {
+    //   dir: this.fileManager.externalDataDirectory,
+    //   name: 'externalDataDirectory'
+    // },
+    //   {
+    //   dir: this.fileManager.externalRootDirectory,
+    //   name: 'externalRootDirectory'
+    // }
+    ].forEach( async (dirDesc) => {
       console.log(`directory name: ${dirDesc.name}; directory:${dirDesc.dir}`);
       if (dirDesc.dir !== null) {
         console.log('getting directory listing for: ', dirDesc.name);

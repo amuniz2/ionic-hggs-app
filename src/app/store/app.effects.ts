@@ -53,8 +53,6 @@ export class AppEffects {
   public openDatabase$ = this.actions$.pipe(
     ofType(AppActionTypes.StartAppInitializer),
     switchMap(() => {
-      tap(() => console.log('App is initializing (device is ready)'));
-      // this.store.dispatch(new LoadGroceryStores());
       return this.storeManagementService.initialize().pipe(
         map((success) => {
           if (success) {
@@ -74,7 +72,6 @@ export class AppEffects {
   public loadData = this.actions$.pipe(
     ofType(AppActionTypes.FinishAppInitializer),
     switchMap(() => {
-        console.log('dispatch LoadPantryItems and LoadGroceryStores');
         return [
           new LoadPantryItems(),
           new LoadGroceryStores()
@@ -147,7 +144,6 @@ export class AppEffects {
   public addNewStoreAisle$ = this.actions$.pipe(
     ofType(AppActionTypes.AddStoreAisle),
     switchMap((payload) => {
-        console.log('calling addGroceryStoreAisle');
         return this.storeManagementService.addGroceryStoreAisle(payload.newStoreAisleRequest).pipe(
           map(aisleAdded => {
             return new StoreAisleAdded(
@@ -195,9 +191,6 @@ export class AppEffects {
       return this.storeManagementService.deleteGroceryStoreSection({
         groceryStoreId: payload.deleteGroceryStoreSectionRequest.groceryStoreId,
         name: payload.deleteGroceryStoreSectionRequest.name}).pipe(
-        tap((sectionDeleted) => {
-          console.log(`sectionDeleted: ${sectionDeleted}`);
-        }),
         map(sectionDeleted => new GroceryStoreSectionDeleted( {
           groceryStoreId: payload.deleteGroceryStoreSectionRequest.groceryStoreId,
           section: payload.deleteGroceryStoreSectionRequest.name })),

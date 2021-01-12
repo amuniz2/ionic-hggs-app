@@ -46,16 +46,12 @@ export class MySqlCommands {
     if (this.db !== null) {
       return true;
     }
-    console.log('creating sqlite object');
+
     try {
       this.db = await this.sqlite.create({name: 'hggs-app.db', location: 'default'});
-      // this.sqlite.create({ name: 'hggs-app.db', location: 'default'}).then((openedDb: SQLiteObject) => {
       if (!!this.db) {
-        console.log('sqlite.create succeeded');
-        console.log(this.db);
         success = await this.createOrOpenTables(this.db);
         if (success) {
-          console.log('create or open tables completed successfully');
           this.store.dispatch(new DatabaseReady());
         } else {
           console.log('create or open tables failed');
@@ -177,7 +173,7 @@ export class MySqlCommands {
                                 units: string,
                                 quantityNeeded: number,
                                 defaultQuantity: number,
-                                need: boolean): Promise<number> {
+                                need: boolean): Promise<PantryItem> {
     const insertSql = `INSERT INTO
      ${PantryItemTable.NAME}
      (${PantryItemTable.COLS.NAME},
@@ -187,11 +183,10 @@ export class MySqlCommands {
      ${PantryItemTable.COLS.DEFAULT_QUANTITY},
      ${PantryItemTable.COLS.NEED})
       VALUES(\'${pantryItemName}\', \'${description}\', '${units}', ${quantityNeeded}, ${defaultQuantity}, ${need ? 1 : 0})`;
-    console.log('executing: ' + insertSql);
+
     try {
       const data = await this.db.executeSql(insertSql, []);
-      console.log(`returning ${data} from insertPantryItem`);
-      return data.rowsAffected;
+      return await this.queryPantryItemByName(pantryItemName);
     } catch (err) {
       console.log(`Error inserting pantry item ${pantryItemName}: ${JSON.stringify(err)}`);
     }
@@ -203,9 +198,12 @@ export class MySqlCommands {
                                 defaultQuantity: number,
                                 need: boolean, groceryStoreId: number, aisle: string, section: string): Promise<ShoppingItem>
   {
-      const pantryItemId = await this.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need);
-      const location = await this.insertNewPantryItemLocation(pantryItemId, groceryStoreId, aisle, section);
-      return await this.queryShoppingItem(groceryStoreId, pantryItemId);
+      const newPantryItem = await this.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need);
+      if (newPantryItem) {
+        await this.insertNewPantryItemLocation(newPantryItem.id, groceryStoreId, aisle, section);
+        return await this.queryShoppingItem(groceryStoreId, newPantryItem.id);
+      }
+      throw new Error('Error adding shopping item.');
   }
 
 
@@ -216,7 +214,7 @@ export class MySqlCommands {
                                           need: boolean,
                                           locationId: number): Promise<boolean>
   {
-    const newItemId = await this.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need);
+    const newItemId = (await this.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need)).id;
     return await this.insertPantryItemLocation(newItemId, locationId);
   }
 
@@ -245,7 +243,6 @@ export class MySqlCommands {
        , ${PantryItemTable.COLS.IN_CART}=${updatedPantryItem.inCart ? 1 : 0}
         WHERE ${PantryItemTable.COLS.ID} = ${updatedPantryItem.id}`;
     try {
-      console.log(`updating pantry item: ${sqlUpdate}`);
       const data = await this.db.executeSql(sqlUpdate, []);
       return this.queryPantryItem(updatedPantryItem.id);
     } catch (err) {
@@ -261,7 +258,6 @@ export class MySqlCommands {
        , ${PantryItemTable.COLS.NEED}=${inCart ? 0 : 1}
         WHERE ${PantryItemTable.COLS.ID} = ${pantryItemId}`;
     try {
-      console.log('updating shopping item in db', sqlUpdate);
       const data = await this.db.executeSql(sqlUpdate, []);
       return this.queryShoppingItem(storeId, pantryItemId);
     } catch (err) {
@@ -275,8 +271,8 @@ export class MySqlCommands {
     try {
       const sqlQueryByName = `SELECT * from ${PantryItemTable.NAME}
        WHERE ${PantryItemTable.COLS.NAME} = \'${name}\'`;
-      console.log(`running query: ${sqlQueryByName}`);
       const data = await this.db.executeSql(sqlQueryByName, []);
+
       if (data.rows.length > 0) {
         console.log('at least 1 row returned, converting first row to pantryItem');
         return DbRowConverters.rowToPantryItem(data.rows.item(0));
@@ -313,10 +309,10 @@ export class MySqlCommands {
      ${LocationTable.COLS.AISLE},
      ${LocationTable.COLS.SECTION_NAME})
       VALUES(${storeId}, \'${aisle}\', \'${section}\')`;
-    console.log('executing: ' + insertSql);
+
     try {
       const data = await this.db.executeSql(insertSql, []);
-      console.log(`returning ${data} from insertGroceryStoreLocation`);
+      console.log(`returning ${data.rowsAffected} from insertGroceryStoreLocation`);
       return data.rowsAffected;
     } catch (err) {
       console.log(`Error inserting grocery store location  ${insertSql}`);
@@ -360,8 +356,6 @@ export class MySqlCommands {
       console.log(`Error querying for grocery storeLocations. Query: ${query}`);
       console.log(err);
     }
-    console.log('returning from query for grocery store locations');
-    console.log(locations);
     return locations;
   }
 
@@ -375,7 +369,6 @@ export class MySqlCommands {
       console.log(`running sql update: ${sqlUpdate}`);
       const data = await this.db.executeSql(sqlUpdate, []);
       if (data.rows.length > 0) {
-        console.log('grocery store location updated in db');
         return true;
       } else {
         console.log('grocery store location update failed');
@@ -390,14 +383,12 @@ export class MySqlCommands {
   public async queryGroceryStoreLocation(storeId: number, aisle: string, section: string): Promise<GroceryStoreLocation> {
     try {
       const sqlQueryByName = `SELECT * from ${LocationTable.NAME}
-      JOIN ${StoreTable.NAME} on ${StoreTable.COLS.ID}=${LocationTable.COLS.STORE_ID}
-       WHERE ${LocationTable.COLS.STORE_ID} = \'${name}\'
-       AND ${LocationTable.COLS.AISLE} = \'${aisle}\'
-       AND ${LocationTable.COLS.STORE_ID} = \'${section}\'`;
-      console.log(`running query: ${sqlQueryByName}`);
+      JOIN ${StoreTable.NAME} on ${StoreTable.NAME}.${StoreTable.COLS.ID}=${LocationTable.NAME}.${LocationTable.COLS.STORE_ID}
+       WHERE ${LocationTable.NAME}.${LocationTable.COLS.STORE_ID} = ${storeId}
+       AND ${LocationTable.NAME}.${LocationTable.COLS.AISLE} = \'${aisle}\'
+       AND ${LocationTable.NAME}.${LocationTable.COLS.SECTION_NAME} = \'${section}\'`;
       const data = await this.db.executeSql(sqlQueryByName, []);
       if (data.rows.length > 0) {
-        console.log('at least 1 row returned, converting first row to GroceryStoreLocation');
         return DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
       } else {
         console.log('no grocery store location returned for query by storeId, aisle, section');
@@ -414,7 +405,6 @@ export class MySqlCommands {
       const sqlQueryById = `SELECT * from ${LocationTable.NAME}
       JOIN ${StoreTable.NAME} ON ${LocationTable.COLS.STORE_ID} = ${StoreTable.COLS.ID}
        WHERE ${LocationTable.COLS.STORE_ID} = ${id}`;
-      console.log(`running query: ${sqlQueryById}`);
       const data = await this.db.executeSql(sqlQueryById, []);
       if (data.rows.length > 0) {
         console.log('at least 1 row returned, converting first row to GroceryStoreLocation');
@@ -433,10 +423,8 @@ export class MySqlCommands {
       try {
         const sqlQueryById = `SELECT * from ${PantryItemTable.NAME}
        WHERE ${PantryItemTable.COLS.ID} = ${id}`;
-        console.log(`running query: ${sqlQueryById}`);
         const data = await this.db.executeSql(sqlQueryById, []);
         if (data.rows.length > 0) {
-          console.log('at least 1 row returned, converting first row to PantryItem');
           return DbRowConverters.rowToPantryItem(data.rows.item(0));
       } else {
         console.log('no pantryItem returned for query by id');
@@ -452,7 +440,6 @@ export class MySqlCommands {
     const  deleteSql = `DELETE FROM ${LocationTable.NAME} WHERE ${LocationTable.COLS.ID} = ${id}`;
     try {
       const data = await this.db.executeSql(deleteSql, []);
-      console.log(`returning ${data} from deleteGroceryStoreLocation`);
       return data.rowsAffected;
     } catch (err) {
       console.log(`Error deleting grocery store location ${id}`);
@@ -492,7 +479,6 @@ export class MySqlCommands {
             section: data.rows.item(i)[StoreGrocerySectionTable.COLS.GROCERY_SECTION]
           });
         }
-        console.log(`returning ${ret} from sql query: ${sqlQueryGrocerySections}`);
         return ret;
       } else {
         return ret;
@@ -511,7 +497,6 @@ export class MySqlCommands {
       const sqlQueryGrocerySections = `SELECT * from ${StoreGrocerySectionTable.NAME} WHERE ${StoreGrocerySectionTable.COLS.STORE_ID} = \'${id}\'`;
       const data = await this.db.executeSql(sqlQueryGrocerySections, []);
       if (data.rows.length > 0) {
-        console.log('at least 1 row returned, converting first row to grocery section');
         for (let i = 0; i < data.rows.length; i++) {
           ret.add(data.rows.item(i)[StoreGrocerySectionTable.COLS.GROCERY_SECTION]);
         }
@@ -565,7 +550,6 @@ export class MySqlCommands {
             aisle: data.rows.item(i)[StoreGroceryAisleTable.COLS.GROCERY_AISLE]
           });
         }
-        console.log(`returning ${ret} from sql query: ${sqlQueryAisles}`);
         return ret;
       } else {
         console.log('no aisles returned for query store by id');
@@ -581,10 +565,8 @@ export class MySqlCommands {
   public async queryGroceryStoreAisles(id: number): Promise<Set<string>> {
     try {
       const ret = new Set<string>();
-      console.log(`In queryGroceryStoreAislesPromise ${id}`);
       // tslint:disable-next-line:max-line-length
       const sqlQueryAisles = `SELECT * from ${StoreGroceryAisleTable.NAME} WHERE ${StoreGroceryAisleTable.COLS.STORE_ID} = \'${id}\'`;
-      console.log(`running query: ${sqlQueryAisles}`);
       const data = await this.db.executeSql(sqlQueryAisles, []);
       if (data.rows.length > 0) {
         console.log('at least 1 row returned, converting first row to grocery aisle');
@@ -621,10 +603,8 @@ export class MySqlCommands {
      ${StoreTable.NAME}
      (${StoreTable.COLS.STORE_NAME})
       VALUES(\'${groceryStoreName}\')`;
-    console.log('executing: ' + insertSql);
     try {
       const data = await this.db.executeSql(insertSql, []);
-      console.log(`returning ${data} from insertGroceryStore`);
       return data.rowsAffected;
     } catch (err) {
       console.log(`Error inserting grocery store ${groceryStoreName}`);
@@ -634,12 +614,9 @@ export class MySqlCommands {
 
   public async queryGroceryStoreByName(name: string): Promise<GroceryStore> {
     try {
-      console.log(`In queryGroceryStoreByName ${name}`);
       const sqlQueryByName = `SELECT * from ${StoreTable.NAME} WHERE ${StoreTable.COLS.STORE_NAME} = \'${name}\'`;
-      console.log(`running query: ${sqlQueryByName}`);
       const data = await this.db.executeSql(sqlQueryByName, []);
       if (data.rows.length > 0) {
-        console.log('at least 1 row returned, converting first row to groceryStore');
         return DbRowConverters.rowToGroceryStore(data.rows.item(0));
       } else {
         console.log('no groceryStore returned for query store by name');
@@ -654,14 +631,11 @@ export class MySqlCommands {
 
   public async queryGroceryStoreById(id: number): Promise<GroceryStore> {
     try {
-      console.log(`In queryGroceryStoreById ${id}`);
       // tslint:disable-next-line:max-line-length
       const sqlQueryById = `SELECT * from ${StoreTable.NAME} INNER JOIN ${StoreGroceryAisleTable.NAME} ON ${StoreGroceryAisleTable.NAME}.${StoreGroceryAisleTable.COLS.STORE_ID} = ${StoreTable.NAME}.${StoreTable.COLS.ID}\n
       WHERE ${StoreTable.NAME}.${StoreTable.COLS.ID} = \'${id}\'`;
-      console.log(`running query: ${sqlQueryById}`);
       const data = await this.db.executeSql(sqlQueryById, []);
       if (data.rows.length > 0) {
-        console.log('at least 1 row returned, converting first row to groceryStore');
         return DbRowConverters.rowToGroceryStore(data.rows.item(0));
       } else {
         console.log('no groceryStore returned for query store by id');
@@ -685,7 +659,6 @@ export class MySqlCommands {
       console.log('Error querying for grocery stores');
       console.log(err);
     }
-    console.log('returning from query');
     console.log(groceryStores);
     return groceryStores;
   }
@@ -717,7 +690,7 @@ export class MySqlCommands {
      AND ${LocationTable.NAME}.${LocationTable.COLS.AISLE} = '${aisle}'
      AND ${LocationTable.NAME}.${LocationTable.COLS.SECTION_NAME} = '${section}' limit 1`;
 
-    const insertGroceryStoreIfNecessarySql = `INSERT INTO ${LocationTable.NAME} (
+    const insertGroceryStoreLocationIfNecessarySql = `INSERT INTO ${LocationTable.NAME} (
     ${LocationTable.COLS.STORE_ID},
     ${LocationTable.COLS.AISLE},
     ${LocationTable.COLS.SECTION_NAME})
@@ -741,9 +714,8 @@ export class MySqlCommands {
 
     try {
       // const data = await this.db.sqlBatch([insertGroceryStoreIfNecessarySql, insertPantryItemSql, selectGroceryStoreLocation]);
-      await this.db.sqlBatch([insertGroceryStoreIfNecessarySql, insertPantryItemSql]);
+      await this.db.sqlBatch([insertGroceryStoreLocationIfNecessarySql, insertPantryItemSql]);
       const data = await(this.db.executeSql(selectGroceryStoreLocation, []));
-      console.log(`returning ${data} from insertPantryItemLocation`);
       result = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
     } catch (err) {
       console.log(`Error inserting pantry Item location `);
@@ -755,13 +727,10 @@ export class MySqlCommands {
   public async insertPantryItemLocation(pantryItemId: number,
                                            storeLocationId: number): Promise<boolean> {
 
-    const insertPantryItemLocationSql = `INSERT INTO
-     ${PantryItemLocationTable.NAME}
-     (${PantryItemLocationTable.COLS.PANTRY_ITEM_ID},
-     ${PantryItemLocationTable.COLS.LOCATION_ID})
-      VALUES (${pantryItemId}, ${storeLocationId});`;
+    const insertPantryItemLocationSql = `INSERT INTO ${PantryItemLocationTable.NAME} (${PantryItemLocationTable.COLS.PANTRY_ITEM_ID}, ${PantryItemLocationTable.COLS.LOCATION_ID}) VALUES (${pantryItemId}, ${storeLocationId});`;
 
     try {
+      console.log('insert statement: ', insertPantryItemLocationSql);
       const rowsAffected = await this.db.executeSql(insertPantryItemLocationSql, []);
       return (rowsAffected > 0);
     } catch (err) {
@@ -808,15 +777,10 @@ export class MySqlCommands {
     ${LocationTable.COLS.AISLE},
     ${LocationTable.COLS.SECTION_NAME}
       ${fromLocationTableWithJoinClause} ${whereLocationClause}`;
-    console.log('executing: ');
-    console.log (insertGroceryLocationIfNecessarySql);
-    console.log(updatePantryItemLocationSql);
-    console.log(selectGroceryStoreLocation);
 
     try {
       await this.db.sqlBatch([insertGroceryLocationIfNecessarySql, updatePantryItemLocationSql]);
       const data = await this.db.executeSql(selectGroceryStoreLocation, []);
-      console.log(`returning ${data} from updatePantryItemLocation`);
       result = DbRowConverters.rowToGroceryStoreLocation(data.rows.item(0));
     } catch (err) {
       console.log(`Error updating pantry Item location `);
@@ -845,7 +809,7 @@ export class MySqlCommands {
     const selectSql = `SELECT * FROM ${LocationTable.NAME}
     JOIN ${StoreTable.NAME} ON
       ${StoreTable.NAME}.${StoreTable.COLS.ID}=${LocationTable.NAME}.${LocationTable.COLS.STORE_ID}
-      WHERE ${LocationTable.NAME}.${LocationTable.COLS.ID} IN
+    WHERE ${LocationTable.NAME}.${LocationTable.COLS.ID} IN
       (SELECT ${PantryItemLocationTable.COLS.LOCATION_ID} FROM ${PantryItemLocationTable.NAME}
       WHERE ${PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${pantryItemId})`;
     const result: GroceryStoreLocation[] = [];
@@ -859,21 +823,18 @@ export class MySqlCommands {
       console.log(`Error querying for pantry Item Locations. Query: ${selectSql}`);
       console.log(err);
     }
+    console.log(`Returning these locations for pantry item: ${pantryItemId}`, JSON.stringify(result));
     return result;
   }
 
   public async queryShoppingItems(storeId: number): Promise<ShoppingItem[]> {
-    const selectSql = `SELECT * FROM ${PantryItemTable.NAME}
-    JOIN ${PantryItemLocationTable.NAME} ON
-      ${PantryItemLocationTable.NAME}.${PantryItemLocationTable.COLS.PANTRY_ITEM_ID}=
-      ${PantryItemTable.NAME}.${PantryItemTable.COLS.ID}
-    JOIN ${LocationTable.NAME} ON ${LocationTable.NAME}.${LocationTable.COLS.ID}=
-    ${PantryItemLocationTable.NAME}.${PantryItemLocationTable.COLS.LOCATION_ID}
-      WHERE ${LocationTable.NAME}.${LocationTable.COLS.STORE_ID} = ${storeId}
+    const selectSql = `SELECT * FROM ${PantryItemTable.NAME} INNER JOIN ${PantryItemLocationTable.NAME} ON ${PantryItemLocationTable.NAME}.${PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${PantryItemTable.NAME}.${PantryItemTable.COLS.ID} \
+    INNER JOIN ${LocationTable.NAME} ON ${LocationTable.NAME}.${LocationTable.COLS.ID}= \
+    ${PantryItemLocationTable.NAME}.${PantryItemLocationTable.COLS.LOCATION_ID} \
+      WHERE ${LocationTable.NAME}.${LocationTable.COLS.STORE_ID} = ${storeId} \
       AND ${PantryItemTable.NAME}.${PantryItemTable.COLS.NEED} = 1`;
     const result: ShoppingItem[] = [];
     try {
-      console.log(`sql query for shopping items ${selectSql}`)
       const data = await this.db.executeSql(selectSql, []);
       for (let i = 0; i < data.rows.length; i++) {
         const shoppingItem = DbRowConverters.rowToShoppingItem(data.rows.item(i));
@@ -897,11 +858,9 @@ export class MySqlCommands {
       AND ${PantryItemTable.NAME}.${PantryItemTable.COLS.ID} = ${pantryItemId}`;
 
     try {
-      console.log(`sql query for shopping item ${selectSql}`)
       const data = await this.db.executeSql(selectSql, []);
       if (data.rows.length > 0) {
         const shoppingItemReturned = DbRowConverters.rowToShoppingItem(data.rows.item(0));
-        console.log('returning shopping item:', shoppingItemReturned);
         return shoppingItemReturned;
       }
     } catch (err) {
@@ -915,10 +874,8 @@ export class MySqlCommands {
     const sqlQueryByName = `SELECT * from ${PantryItemLocationTable.NAME}
        WHERE ${PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${pantryitemId}
        AND ${PantryItemLocationTable.COLS.LOCATION_ID} = ${groceryStoreLocationId}`;
-    console.log(`running query: ${sqlQueryByName}`);
     const data = await this.db.executeSql(sqlQueryByName, []);
     if (data.rows.length > 0) {
-      console.log('at least 1 row returned, converting first row to pantryItemLocation');
       return DbRowConverters.rowToPantryItemLocation(data.rows.item(0));
     } else {
       console.log('no pantryItem returned for query pantryItem by name');
@@ -977,11 +934,11 @@ export class MySqlCommands {
   public async importHggsData(data: HggsData): Promise<boolean> {
     try {
       const pantryItemMappings = await this.importPantryItems(data.pantryItems);
-      const groceryStoreMappings = await this.importGroceryStores(data.groceryStores,
+      const groceryStoreLocationMappings = await this.importGroceryStores(data.groceryStores,
         data.groceryStoreAisles,
         data.groceryStoreSections,
         data.groceryStoreLocations);
-      await this.importPantryItemLocations(data.pantryItemLocations, pantryItemMappings, groceryStoreMappings);
+      await this.importPantryItemLocations(data.pantryItemLocations, pantryItemMappings, groceryStoreLocationMappings);
       return true;
     }
     catch (error) {
@@ -1021,8 +978,6 @@ export class MySqlCommands {
       console.log('Error querying for pantry Item store aisles or sections in use');
       console.log(err);
     }
-    console.log('returning from query');
-    console.log(result);
     return result;
   }
 
@@ -1031,14 +986,14 @@ export class MySqlCommands {
     const result: IdMapping[] = [];
     for (const newPantryItem of pantryItems) {
       if (!existingPantryItems.some(existingItem => newPantryItem.name === existingItem.name)) {
-        const pantryItemId = await this.insertPantryItem(newPantryItem.name,
+        const pantryItem = await this.insertPantryItem(newPantryItem.name,
           newPantryItem.description,
           newPantryItem.units,
           newPantryItem.quantityNeeded,
           newPantryItem.defaultQuantity,
           newPantryItem.need
         );
-        result.push({ importedId: pantryItemId, originalId: newPantryItem.id})
+        result.push({ importedId: pantryItem.id, originalId: newPantryItem.id})
       } else {
         const existingItem = existingPantryItems.find(pi => pi.name === newPantryItem.name);
         await this.updatePantryItem({
@@ -1059,20 +1014,22 @@ export class MySqlCommands {
     const result: GroceryStoreMapping[] = [];
 
     for (const newGroceryStore of groceryStores) {
-      let idMapping: IdMapping;
-      if (!existingGroceryStores.some(existingItem => newGroceryStore.name === existingItem.name)) {
-        const groceryStoreId = await this.insertGroceryStore(newGroceryStore.name);
-        idMapping = { originalId: newGroceryStore.id, importedId: groceryStoreId };
+      let storeIdMapping: IdMapping;
+      if (!existingGroceryStores.some(existingStore => newGroceryStore.name === existingStore.name)) {
+        if (await this.insertGroceryStore(newGroceryStore.name) > 0) {
+          const insertedGroceryStore = await this.queryGroceryStoreByName(newGroceryStore.name)
+          storeIdMapping = {originalId: newGroceryStore.id, importedId: insertedGroceryStore.id};
+        }
       } else {
         const existingItemId = existingGroceryStores.find(groceryStore => groceryStore.name === newGroceryStore.name).id;
-        idMapping = { originalId: newGroceryStore.id, importedId: existingItemId};
+        storeIdMapping = { originalId: newGroceryStore.id, importedId: existingItemId};
       }
-      await this.importGroceryStoreAisles(idMapping, groceryStoreAisles.filter(storeAisle => storeAisle.storeId === idMapping.originalId));
-      await this.importGroceryStoreSections(idMapping, groceryStoreSections.filter(storeSection => storeSection.storeId === idMapping.originalId));
-      const groceryLocationMappings = await this.importGroceryStoreLocations(idMapping,
-        groceryStoreLocations.filter(storeLocation => storeLocation.storeId === idMapping.originalId));
+      await this.importGroceryStoreAisles(storeIdMapping, groceryStoreAisles.filter(storeAisle => storeAisle.storeId === storeIdMapping.originalId));
+      await this.importGroceryStoreSections(storeIdMapping, groceryStoreSections.filter(storeSection => storeSection.storeId === storeIdMapping.originalId));
+      const groceryLocationMappings = await this.importGroceryStoreLocations(storeIdMapping,
+        groceryStoreLocations.filter(storeLocation => storeLocation.storeId === storeIdMapping.originalId));
       result.push({
-        storeIdMapping: idMapping,
+        storeIdMapping,
         storeLocationsMappings: groceryLocationMappings
       });
     }
@@ -1106,11 +1063,16 @@ export class MySqlCommands {
     const result: IdMapping[] = [];
 
     for (const newLocation of newLocations) {
-      if (!existingLocations.some(existingLocation => newLocation.aisle === existingLocation.aisle &&
-      newLocation.section === existingLocation.section)) {
-        locationId = await this.insertGroceryStoreLocation(groceryStoreMapping.importedId, newLocation.aisle, newLocation.section);
+      if (!existingLocations.some(existingLocation =>
+        newLocation.aisle === existingLocation.aisle &&
+        newLocation.section === existingLocation.section)) {
+        if (await this.insertGroceryStoreLocation(groceryStoreMapping.importedId, newLocation.aisle, newLocation.section) > 0) {
+          const importedLocation = await this.queryGroceryStoreLocation(groceryStoreMapping.importedId, newLocation.aisle, newLocation.section);
+          locationId = importedLocation.id;
+        }
       } else {
-        locationId = existingLocations.find(existingLocation => newLocation.aisle === existingLocation.aisle &&
+        locationId = existingLocations.find(existingLocation =>
+          newLocation.aisle === existingLocation.aisle &&
           newLocation.section === existingLocation.section).id;
       }
       result.push({ originalId: newLocation.id, importedId: locationId});
@@ -1130,21 +1092,25 @@ export class MySqlCommands {
     }
   }
 
+  // todo: study...
   private async importLocationsForPantryItem(pantryItemMapping: IdMapping,
                                           newPantryItemLocations: PantryItemLocation[],
                                           groceryStoreMappings: GroceryStoreMapping[]/*,
                                            existingGroceryStoreLocations: GroceryStoreLocation[]*/) {
-    const existingLocations = await this.queryPantryItemLocations(pantryItemMapping.importedId);
-    console.log('existing locations for item Id: ', pantryItemMapping.originalId, ' are ', JSON.stringify(existingLocations));
+    const existingPantryItemLocations = await this.queryPantryItemLocations(pantryItemMapping.importedId);
+    console.log('pantryItemMapping:');
+    console.log(pantryItemMapping);
+    console.log('existing locations for item Id: ', pantryItemMapping.originalId, ' are ', JSON.stringify(existingPantryItemLocations));
     console.log('locations being imported: ', JSON.stringify(newPantryItemLocations));
-    console.log('location mappings: ', JSON.stringify(groceryStoreMappings));
+    // console.log('store mappings: ', JSON.stringify(groceryStoreMappings));
     for (const newPantryItemLocation of newPantryItemLocations) {
       const newGroceryStoreLocationMapping = this.findImportedGroceryStoreLocationMapping(newPantryItemLocation.groceryStoreLocationId, groceryStoreMappings);
-      if (!existingLocations.some(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)) {
+      if (!existingPantryItemLocations.some(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)) {
+        console.log('pantryItemLocation being added: ', newGroceryStoreLocationMapping.importedId, ' for pantry item: ', pantryItemMapping.originalId, ' imported id: ',pantryItemMapping.importedId);
         await this.insertPantryItemLocation(pantryItemMapping.importedId, newGroceryStoreLocationMapping.importedId);
       } else {
-        console.log('pantryItemLocation not being added, as it already exists: ',
-          JSON.stringify(existingLocations.find(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)));
+          console.log('pantryItemLocation not being added, as it already exists: ',
+          JSON.stringify(existingPantryItemLocations.find(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)));
       }
     }
   }

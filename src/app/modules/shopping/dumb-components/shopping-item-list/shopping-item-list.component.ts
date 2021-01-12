@@ -4,9 +4,10 @@ import {
   EditItemLocationRequest
 } from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {UiCrudAction} from '../../../../ui-crud-actions';
-import {CreateShoppingItemForNewPantryItem, CreateShoppingItemRequest} from '../../store/shopping.actions';
+import {CreateShoppingItemRequest} from '../../store/shopping.actions';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
+import {CreatePantryItemRequest} from '../../../../helpers';
 
 export interface AddPantryItemToStoreShoppingList {
   aisle: Aisle;
@@ -52,7 +53,13 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
   filter: string;
 
   @Output()
-  notifyAddNewPantryItemToStoreShoppingList: EventEmitter<string> = new EventEmitter<string>();
+  notifyAddNewPantryItemToStoreShoppingList: EventEmitter<CreateShoppingItemRequest> = new EventEmitter<CreateShoppingItemRequest>();
+
+  @Output()
+  notifyCancelAddItem: EventEmitter<GroceryStoreLocation> = new EventEmitter<GroceryStoreLocation>();
+
+  @Output()
+  notifyDoneAddingItem: EventEmitter<CreateShoppingItemRequest> = new EventEmitter<CreateShoppingItemRequest>();
 
   @Input()
   addingShoppingItemInAisle: boolean;
@@ -104,7 +111,6 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
   }
 
   onSaveShoppingItem(shoppingItem: ShoppingItem) {
-    console.log('emitting', {storeId: shoppingItem.storeId, id: shoppingItem.pantryItemId, inCart: shoppingItem.inCart});
     this.notifySaveShoppingItemRequested.emit({storeId: shoppingItem.storeId, id: shoppingItem.pantryItemId, inCart: shoppingItem.inCart});
   }
 
@@ -187,7 +193,18 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
 
   }
 
-  onAddShoppingItemClickInAisle(aisleName: string) {
-    this.notifyAddNewPantryItemToStoreShoppingList.emit(aisleName)
+  onFinishAddingShoppingItemInAisle(newItem: CreateShoppingItemRequest) {
+    this.notifyDoneAddingItem.emit(newItem);
+  }
+  onAddShoppingItemClickInAisle(shoppingItemRequest: CreateShoppingItemRequest) {
+    this.notifyAddNewPantryItemToStoreShoppingList.emit(shoppingItemRequest);
+  }
+
+  // onCancelAddItem($event: GroceryStoreLocation) {
+  //   this.addingShoppingItemInAisle = false;
+  // }
+
+  onCancelAddShoppingItemRequest($event: GroceryStoreLocation) {
+    this.notifyCancelAddItem.emit($event);
   }
 }

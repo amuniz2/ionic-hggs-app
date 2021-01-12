@@ -235,8 +235,6 @@ export class FakePantryDataServiceHelper {
   }
 
   public addGroceryStore(newStoreRequest: NewGroceryStoreRequest): GroceryStore {
-    console.log(`adding: ${JSON.stringify(newStoreRequest)}`);
-
     if (this.groceryStores.some(groceryStore => groceryStore.name.toUpperCase() === newStoreRequest.name.toUpperCase())) {
       throw new Error(`Grocery store <${newStoreRequest.name}> already exists.`);
     }

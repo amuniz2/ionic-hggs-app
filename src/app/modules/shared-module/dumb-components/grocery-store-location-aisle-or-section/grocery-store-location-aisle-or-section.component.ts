@@ -152,19 +152,14 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
       newAisleOrSectionName: this.editControl.value
     };
     this.renameAisleOrSection.emit(renameItemEvent);
-    console.log('emitting event to rename aisle or component');
     console.log(renameItemEvent);
 
-    console.log('editControl: ');
     console.log(this.editControl);
 
-    console.log('itemToSave: ');
     console.log(itemToSave);
 
-    console.log('itemBeingEdited: ');
     console.log(this.itemBeingEdited);
 
-    console.log('editControlForm: ');
     console.log(this.editControlForm);
 
     this.itemBeingEdited = '';

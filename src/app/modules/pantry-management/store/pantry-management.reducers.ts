@@ -160,7 +160,6 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
         };
 
       case PantryActionTypes.PantryLoadedSuccessfully: {
-        console.log('in reducer, handling PantryLoadedSuccessfully')
         return {
           ...state,
           pantryItems: {
@@ -219,7 +218,6 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
       case PantryActionTypes.PantryItemLocationAdded:
       {
         const pantryItem = getPantryItem(state.pantryItems, action.itemId);
-        console.log('in PantryItemLocationAdded reducer');
         return {
           ...state,
           pantryItems: {

@@ -65,7 +65,6 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   getGroceryStoreAisles(groceryStoreId: number): Observable<Set<string>> {
-    console.log('Inside getGroceryStoreAisles()');
     const groceryStore = this.helper.findGroceryStore(groceryStoreId);
     if (groceryStore === null) {
       return of(new Set<string>());
@@ -74,7 +73,6 @@ export class FakePantryDataService implements IPantryDataService {
   }
 
   getGroceryStoreSections(groceryStoreId: number): Observable<Set<string>> {
-    console.log('Inside getGroceryStoreSections()');
     const groceryStore = this.helper.findGroceryStore(groceryStoreId);
     if (groceryStore === null) {
       return of(new Set<string>());

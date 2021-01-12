@@ -63,7 +63,6 @@ export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
       // include this in ngOnChanges?
       this.itemCanExistInOtherStores = this.groceryStores.length > this.pantryItemLocations.length;
     } else {
-      console.log('pantry item is null!');
       this.itemCanExistInOtherStores = this.groceryStores.length > 0;
     }
   }

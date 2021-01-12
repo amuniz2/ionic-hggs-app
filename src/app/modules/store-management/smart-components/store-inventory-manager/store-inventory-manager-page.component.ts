@@ -33,8 +33,6 @@ export class StoreInventoryManagerPageComponent implements OnInit {
   }
 
   onNotifyNewStoreRequest($event: NewGroceryStoreRequest) {
-    console.log('dispatching createStore event');
-    console.log($event);
     this.addingStore$ = of(false);
     if ($event.name) {
       this.store.dispatch(new fromActions.CreateStore($event));
@@ -42,8 +40,6 @@ export class StoreInventoryManagerPageComponent implements OnInit {
   }
 
   onDeleteStoreRequest($event: DeleteGroceryStoreRequest) {
-    console.log('dispatching deleteStore event');
-    console.log($event);
     this.store.dispatch(new fromActions.DeleteStore($event));
   }
 

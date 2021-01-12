@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 import {
   LoadShoppingListFailed,
-  LoadShoppingListSucceeded, NavigatedToShoppingItemPage, NavigateToNewShoppingItemPage,
+  LoadShoppingListSucceeded,
   ShoppingActions,
   ShoppingActionTypes,
   ShoppingItemUpdateSucceeded, UpdateStoreShoppingList
@@ -15,9 +15,8 @@ import {ShoppingListManagementState} from './shopping.reducers';
 import {DisplayError} from '../../../store';
 import {
   CreateItemFailed,
-  CreatePantryItem,
-  LoadPantryItemLocations, LoadPantryItems,
-  PantryActionTypes, PantryItemCreated,
+  LoadPantryItemLocations,
+  PantryItemCreated,
   PantryItemLoaded,
   PantryLoadFailed
 } from '../../pantry-management/store/pantry-management.actions';
@@ -91,6 +90,7 @@ export class ShoppingListManagementEffects {
   public createShoppingItemInStore$ = this.actions$.pipe(
     ofType(ShoppingActionTypes.CreateShoppingItemForNewPantryItem),
     switchMap((payload) => {
+      console.log('calling addShoppingItemInNewLocation');
       return this.storeManagementService.addShoppingItemInNewLocation( {
         ...new PantryItem(),
         name: payload.request.name,
@@ -98,12 +98,9 @@ export class ShoppingListManagementEffects {
           id: null,
           storeName: null,
           storeId: payload.request.storeId,
-          aisle: '',
-          section: ''
+          aisle: payload.request.aisle,
+          section: payload.request.section
       }).pipe(
-        tap((itemAdded) => {
-          console.log(`item Added: ${JSON.stringify(itemAdded)}`);
-        }),
         switchMap(itemAdded => [
           new UpdateStoreShoppingList( payload.request.storeId),
           new PantryItemCreated({

@@ -20,6 +20,10 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
+    <allow-navigation href="http://localhost:8080/*" />
+    <preference name="CordovaWebViewEngine" value="CDVUIWebViewEngine" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarStyle" value="lightcontent" />
     <platform name="android">
         <allow-navigation href="*" />
         <allow-intent href="http://*/*" />
@@ -110,6 +114,10 @@
         <splash height="2436" src="resources/ios/splash/Default-2436h.png" width="1125" />
         <splash height="1125" src="resources/ios/splash/Default-Landscape-2436h.png" width="2436" />
         <preference name="iosPersistentFileLocation" value="Compatibility" />
+        <feature name="CDVWKWebViewEngine">
+            <param name="ios-package" value="CDVWKWebViewEngine" />
+        </feature>
+        <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
         <custom-config-file mode="replace" parent="UIFileSharingEnabled" platform="ios" target="*-Info.plist">
             <true />
         </custom-config-file>

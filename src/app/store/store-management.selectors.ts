@@ -115,7 +115,6 @@ export const  selectPossibleGroceryStoreAislesForSection = (storeId: number, sec
     if (locationWithSectionAndAisle) {
       return ([locationWithSectionAndAisle.aisle]);
     }
-    console.log(`returning groceryStore.aisles ${groceryStore.aisles}`);
     return groceryStore.aisles;
   });
 

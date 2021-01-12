@@ -6,7 +6,7 @@ import {AppState} from '../../../../store/app.state';
 import {Observable, of} from 'rxjs';
 import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 import {
-  CreateShoppingItemForNewPantryItem,
+  CreateShoppingItemForNewPantryItem, CreateShoppingItemRequest,
   ItemPlacedInOrRemovedFromCart,
   LoadShoppingList
 } from '../../store/shopping.actions';
@@ -20,9 +20,11 @@ import {
 } from '../../dumb-components/shopping-item-list/shopping-item-list.component';
 import {withLatestFrom} from 'rxjs/operators';
 import {EditItemLocationRequest} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
-import {EditPantryItemLocationRequest} from '../../../pantry-management/store/pantry-management.actions';
+import {
+  EditPantryItemLocationRequest
+} from '../../../pantry-management/store/pantry-management.actions';
 import {Router} from '@angular/router';
-import {CreatePantryItemRequest} from '../../../../helpers';
+import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 
 export class AddShoppingItemRequest {
   public itemId: number;
@@ -72,13 +74,11 @@ export class ShoppingListComponent implements OnInit {
   onGroceryStoreSelected($event: GroceryStore) {
     this.store.dispatch(new SelectStore($event.id));
     this.selectedStore = $event;
-    console.log('dispatching LoadShoppingList');
     this.store.dispatch(new LoadShoppingList(this.selectedStore?.id));
     this.shoppingList$ = this.store.select(selectStoreShoppingItems(this.selectedStore?.id));
   }
 
   onItemPlacedInOrRemovedFromCart($event: StoreShoppingItemUpdate) {
-    console.log(`dispatching ItemPlacedInOrRemovedFromCart: ${JSON.stringify($event)}`);
     this.store.dispatch(new ItemPlacedInOrRemovedFromCart($event))
   }
 
@@ -101,22 +101,25 @@ export class ShoppingListComponent implements OnInit {
     // this.store.dispatch(new AddNewShoppingItem( { itemId: this., storeId: this.selectedStore.id});
   }
 
-  onAddShoppingItemInAisleClick() {
+  onAddShoppingItemInAisleClick(request: CreateShoppingItemRequest) {
     this.addingShoppingItemInAisle$ = of(true);
 
-    // ?
-    // this.store.dispatch(new AddNewShoppingItem( { itemId: this., storeId: this.selectedStore.id});
+    // this.store.dispatch(new CreatePantryItem(
+    //   {name: request.name, initialStoreLocation:
+    //       { storeName: '', id: 0, storeId: request.storeId, aisle: request.aisle}}));
   }
 
-  onCreateItem($event: CreatePantryItemRequest) {
+  onCreateShoppingItem($event: CreateShoppingItemRequest) {
     this.addingShoppingItem$ = of(false);
     this.addingShoppingItemInAisle$ = of(false);
     if ($event.name) {
-      this.store.dispatch(new CreateShoppingItemForNewPantryItem({
+      const request = {
         name: $event.name,
-        aisle: null,
-        storeId: this.selectedStore.id
-      }));
+        aisle: $event.aisle,
+        storeId: this.selectedStore?.id,
+        section: $event.section
+      };
+      this.store.dispatch(new CreateShoppingItemForNewPantryItem(request));
     }
   }
 
@@ -127,6 +130,11 @@ export class ShoppingListComponent implements OnInit {
     //   aisle: $event.aisle.name,
     //   storeId: this.selectedStore.id
     // }));
+  }
+
+  onCancelAddShoppingItem($event: GroceryStoreLocation) {
+    this.addingShoppingItemInAisle$ = of(false);
+    this.addingShoppingItem$ = of(false);
   }
 }
 

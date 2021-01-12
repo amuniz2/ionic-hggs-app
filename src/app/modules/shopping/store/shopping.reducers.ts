@@ -162,7 +162,6 @@ export function shoppingListManagementReducer(state = initialShoppingListManagem
   switch (action.type) {
     case ShoppingActionTypes.LoadShoppingListSucceeded: {
       const shoppingItemsState = action.shoppingList.map(item => new ShoppingItemState(item));
-      console.log(`Loading shopping list into state: ${JSON.stringify(action.shoppingList)}`)
       return {
         ...state,
         currentShoppingStoreId: action.storeId,
@@ -181,39 +180,19 @@ export function shoppingListManagementReducer(state = initialShoppingListManagem
               shoppingItem: action.shoppingItem},
             state.shoppingItems)
         };
-        console.log('state after shoppingItemUpdateSucceeded:', newState);
         return newState;
     }
 
     case ShoppingActionTypes.AddOrRemoveItemFromShoppingLists: {
-      console.log('in reducer, handling AddOrRemoveItemFromShoppingLists');
       if (!state.currentShoppingStoreId) {
-        console.log('no shopping list loaded; no change to state');
         return state;
       }
-      console.log('currentShoppingStoreId ', state.currentShoppingStoreId);
       const storeLocation = action.locations.find(location => location.storeId === state.currentShoppingStoreId);
       if (!storeLocation) {
         return state;
       }
       const shoppingItemId = buildShopppingItemId(state.currentShoppingStoreId, action.pantryItem.id);
-      console.log('shopping item id ', shoppingItemId)
-      console.log('state.shoppingItems', state.shoppingItems);
       const currentShoppingItem = state.shoppingItems[shoppingItemId];
-      console.log('state.shoppingItems[shoppingItemId]', currentShoppingItem);
-        // {
-        // ...action.pantryItem,
-        // pantryItemId: action.pantryItem.id,
-        // storeId: state.currentShoppingStoreId,
-        // quantity: action.pantryItem.quantityNeeded,
-        // location: {
-        //   ...pantryItemLocation,
-        //   locationId: pantryItemLocation.id,
-        //   aisle: pantryItemLocation.aisle ? pantryItemLocation.aisle : null,
-        //   section: pantryItemLocation.section ? pantryItemLocation.section : null,
-        // }
-      // };
-      console.log('current shopping item state: ', currentShoppingItem);
       let newState: ShoppingListManagementState;
       if (action.pantryItem.need) {
         newState = {
@@ -244,7 +223,6 @@ export function shoppingListManagementReducer(state = initialShoppingListManagem
             state.shoppingItems)
         };
       }
-      console.log('new state for shopping: ', newState);
       return newState;
     }
 

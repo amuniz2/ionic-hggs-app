@@ -101,7 +101,6 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
     // item.close();
   }
   remove(item: string) {
-    console.log('emitting notifyDeleteStoreAisleRequested');
     this.notifyDeleteStoreAisleOrSectionRequested.emit({
       groceryStoreId: this.groceryStore.id,
       name: item

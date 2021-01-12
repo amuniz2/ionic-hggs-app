@@ -38,19 +38,12 @@ export class StoreListComponent implements OnInit {
   }
 
   ngOnInit() {
-      // .subscribe( groceryStores  => this.groceryStores$ = groceryStores);
-    // to do get list of stores from the ngrx store
-    // this.groceryStores = [...this.groceryStores, { id: 2, name: 'Test'}];
-
-    console.log(`Stores onInit ${this.groceryStores}, ${this.groceryStoresLoading}`);
   }
 
   editGroceryStore(item: GroceryStoreState) {
     this.store.dispatch( new NavigateToStoreDetailsPage({ id: item.id } ));
-    // item.close();
   }
   remove(item: GroceryStoreState) {
-    console.log(`emitting notification that store delete is requested ${item.id}`);
     this.notifyDeleteStoreRequested.emit({ id: item.id});
   }
 }

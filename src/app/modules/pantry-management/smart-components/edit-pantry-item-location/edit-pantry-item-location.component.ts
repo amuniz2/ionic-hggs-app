@@ -145,20 +145,8 @@ export class EditPantryItemLocationComponent implements OnInit {
   onChangeLocationGroceryStore($event: GroceryStore) {
     // this.groceryStoreLocation.storeId = $event.id;
     if ($event.id !== this.selectedGroceryStoreId) {
-      console.log(`calling selectGroceryStore(${$event.id})`);
       this.selectGroceryStore($event.id);
       this.selectedGroceryStoreId$ = this.store.select(fromSelectors.selectCurrentGroceryStoreId());
-      // this.selectedGroceryStoreId$.subscribe((storeId) => {
-      //   // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
-      //   this.selectedGroceryStore$ = this.store.select(fromSelectors.selectGroceryStore(storeId));
-      //   this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
-      //     storeId));
-      //   this.groceryStoreSections$ = this.store.select(fromSelectors.selectGroceryStoreSections(
-      //     storeId));
-      //   this.groceryStoreLocations$ = this.store.select(fromSelectors.selectGroceryStoreLocations(
-      //     storeId))
-      //   this.selectedGroceryStoreId = storeId;
-      // })      // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
     }
   }
 

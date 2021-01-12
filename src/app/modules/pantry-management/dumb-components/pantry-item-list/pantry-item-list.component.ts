@@ -73,9 +73,7 @@ export class PantryItemListComponent {
   }
 
   itemClicked($event, pantryItem: PantryItem) {
-    console.log('emitting event: ', {...pantryItem, need: $event?.detail?.checked, inCart: false});
      this.notifyAddOrRemoveFromShoppingList.emit({...pantryItem, need: $event?.detail?.checked, inCart: false});
-    // this.notifySavePantryItemRequested.emit({...pantryItem, need: $event?.detail?.checked, inCart: false});
   }
 
   quantityChanged($event, pantryItem: PantryItem) {

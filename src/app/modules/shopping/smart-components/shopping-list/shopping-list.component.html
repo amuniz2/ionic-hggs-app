@@ -20,12 +20,14 @@
   <app-select-grocery-store [groceryStores]="groceryStores$ | async" (selectedGroceryStoreChange)="onGroceryStoreSelected($event)"></app-select-grocery-store>
   <app-add-shopping-item *ngIf="!!selectedStore" [addingShoppingItem]="(addingShoppingItem$ | async)"
                          [initialStoreLocation]="{ storeId: selectedStore.id, storeName: selectedStore.name, id: null, section: null, aisle: null }"
-                       (notifyNewPantryItemRequested)="onCreateItem($event)">
+                       (notifyNewPantryItemRequested)="onCreateShoppingItem($event)">
   </app-add-shopping-item>
   <app-shopping-item-list *ngIf="!!selectedStore" [filter]="filter" (notifySaveShoppingItemRequested)="onItemPlacedInOrRemovedFromCart($event)"
                           [addingShoppingItemInAisle]="(addingShoppingItemInAisle$ | async)"
                           (notifyChangeShoppingItemLocationRequested)="onItemLocationChangeRequested($event)"
-                          (notifyAddNewPantryItemToStoreShoppingList)="onAddShoppingItemInAisleClick()"
+                          (notifyAddNewPantryItemToStoreShoppingList)="onAddShoppingItemInAisleClick($event)"
+                          (notifyCancelAddItem)="onCancelAddShoppingItem($event)"
+                          (notifyDoneAddingItem)="onCreateShoppingItem($event)"
                           [groceryStore]="selectedStore"
                           [shoppingList]="shoppingList$ | async"></app-shopping-item-list>
 </ion-content>

@@ -211,7 +211,6 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
 
     case AppActionTypes.GroceryStoreSectionsLoaded: {
       const groceryStore = getGroceryStore(state.groceryStores, action.payload.groceryStoreId);
-      console.log(`grocery store in reducer: ${groceryStore}`);
       return {
         ...state,
         groceryStores: {

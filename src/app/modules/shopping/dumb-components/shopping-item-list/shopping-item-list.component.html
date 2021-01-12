@@ -16,8 +16,9 @@
             <ion-list lines="none">
 
               <app-add-shopping-item [addingShoppingItem]="addingShoppingItemInAisle"
-                                     [initialStoreLocation]="{ storeId: groceryStore.id, storeName: groceryStore.name, id: null, aisle: aisle, section: null}"
-                                     (notifyNewPantryItemRequested)="onAddShoppingItemClickInAisle(aisle.name)">
+                                     [initialStoreLocation]="{ storeId: groceryStore.id, storeName: groceryStore.name, id: null, aisle: aisle.name, section: null}"
+                                     (notifyNewPantryItemRequestCancelled)="onCancelAddShoppingItemRequest($event)"
+                                     (notifyNewPantryItemRequested)="onFinishAddingShoppingItemInAisle($event)">
               </app-add-shopping-item>
 
               <ion-item *ngFor="let section of aisle.sections">

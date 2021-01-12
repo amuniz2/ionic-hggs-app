@@ -57,10 +57,8 @@ export class PantryDbHelper {
   public getAllGroceryStores(): Observable<GroceryStore[]> {
     return new Observable<GroceryStore[]>((observer) => {
         this.mySqlCommands.connect().then((result) => {
-          console.log(`openOrCreateDb returned ${result}`);
           if (result) {
             this.mySqlCommands.queryGroceryStores().then((stores) => {
-              console.log('returning observable for stores');
               observer.next(stores);
               observer.complete();
             }).catch((err) => {
@@ -80,7 +78,6 @@ export class PantryDbHelper {
         this.mySqlCommands.connect().then((result) => {
           if (result) {
             this.mySqlCommands.queryPantryItems().then((items) => {
-              console.log('returning observable for pantry items');
               observer.next(items);
               observer.complete();
             }).catch((err) => {
@@ -173,9 +170,6 @@ export class PantryDbHelper {
   need: boolean): Observable<PantryItem> {
     return this.connect().pipe(
       mergeMap((success) => this.insertPantryItem(name, description, units, quantityNeeded, defaultQuantity, need)),
-      switchMap((rowsAffected) => {
-        return this.queryPantryItemByName(name);
-      })
     );
   }
 
@@ -317,7 +311,6 @@ export class PantryDbHelper {
   private insertGroceryStoreAisle(groceryStoreId: number, aisle: string): Observable<string> {
     return new Observable<string>((observer) => {
       this.mySqlCommands.insertGroceryStoreAisle(groceryStoreId, aisle).then((rowsAffected) => {
-        console.log(`${rowsAffected} aisle rows affected`);
         if (rowsAffected > 0) {
           observer.next(aisle);
         }
@@ -332,7 +325,6 @@ export class PantryDbHelper {
   private insertGroceryStoreSection(groceryStoreId: number, section: string): Observable<string> {
     return new Observable<string>((observer) => {
       this.mySqlCommands.insertGroceryStoreSection(groceryStoreId, section).then((rowsAffected) => {
-        console.log(`${rowsAffected} aisle rows affected`);
         if (rowsAffected > 0) {
           observer.next(section);
         }
@@ -349,10 +341,10 @@ export class PantryDbHelper {
                            units: string,
                            quantityNeeded: number,
                            defaultQuantity: number,
-                           need: boolean): Observable<number> {
-    return new Observable<number>((observer) => {
-      this.mySqlCommands.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need).then((rowsAffected) => {
-        observer.next(rowsAffected);
+                           need: boolean): Observable<PantryItem> {
+    return new Observable<PantryItem>((observer) => {
+      this.mySqlCommands.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need).then((insertedItem) => {
+        observer.next(insertedItem);
         observer.complete();
       }).catch((err) => observer.error(err));
     });

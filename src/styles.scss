@@ -9,6 +9,13 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
+//.ios.platform-mobile ion-menu.menu-enabled, .ios.platform-mobile ion-menu.menu-enabled, .ios.platform-mobile ion-modal.show-page {
+//
+//  margin-top: environment.safe-area-inset-top; // for ios 11.2 and onwards
+//  margin-bottom: constant(safe-area-inset-bottom);
+//  height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+//}
+
 /* Application-wide Styles */
 //h1 {
 //  color: #369;

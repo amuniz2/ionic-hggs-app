@@ -118,7 +118,6 @@ export class PantryDataService implements IPantryDataService {
   }
 
   public deletePantryItemLocation(pantryItemId: number, locationId: number): Observable<boolean> {
-    console.log('inside deletePantryItemLocation');
     return this.dbHelper.deletePantryItemLocation(pantryItemId, locationId);
   }
 
@@ -196,6 +195,7 @@ export class PantryDataService implements IPantryDataService {
   }
 
   addShoppingItemInNewLocation(newPantryItemRequest: PantryItem, storeLocation: GroceryStoreLocation): Observable<ShoppingItem> {
+    console.log('calling this.dbHelper.addShoppingItemInNewLocation');
     return this.dbHelper.addShoppingItemInNewLocation(newPantryItemRequest, storeLocation);
   }
 }

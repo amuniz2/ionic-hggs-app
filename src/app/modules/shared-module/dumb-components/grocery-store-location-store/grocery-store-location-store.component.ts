@@ -41,12 +41,9 @@ export class GroceryStoreLocationStoreComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('changes: ');
-    console.log(changes);
     if (changes.selectedGroceryStore || changes.groceryStores) {
       if (this.editingExistingStoreLocation && changes.selectedGroceryStore && changes.selectedGroceryStore.currentValue) {
         this.possibleGroceryStores = [changes.selectedGroceryStore.currentValue];
-        // this.selectedGroceryStore = changes.selectedGroceryStore.currentValue;
       } else {
           this.possibleGroceryStores = this.groceryStores.filter(groceryStore =>
             !this.groceryStoreIdsItemIsLocatedIn.some(id => id === groceryStore.id))

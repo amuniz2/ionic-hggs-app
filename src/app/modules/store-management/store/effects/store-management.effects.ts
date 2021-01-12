@@ -30,7 +30,6 @@ export class StoreManagementEffects {
   @Effect()
   public addNewGroceryStore$ = this.actions$.pipe(
     ofType(StoreManagerActionTypes.CreateStore),
-    tap((payload) => console.log('Payload to addNewStore$ ' + JSON.stringify(payload))),
     switchMap((payload) => {
       return this.storeManagementService.addGroceryStore(payload.createGroceryStorePayload).pipe(
         map(newGroceryStore => new StoreCreated({
@@ -50,7 +49,6 @@ export class StoreManagementEffects {
   @Effect()
   public deleteGroceryStore$ = this.actions$.pipe(
     ofType(StoreManagerActionTypes.DeleteStore),
-    tap((payload) => console.log('Payload to deleteGroceryStore ' + JSON.stringify(payload))),
     switchMap((payload) => {
       return this.storeManagementService.deleteGroceryStore(payload.deleteGroceryStorePayload).pipe(
         map(success => success ? new StoreDeleted(payload.deleteGroceryStorePayload.id) : null),

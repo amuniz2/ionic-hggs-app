@@ -5,6 +5,8 @@ import { AppState } from './store/app.state';
 import { Store } from '@ngrx/store';
 import { StartAppInitializer } from './store';
 import {concatAll, concatMap} from 'rxjs/operators';
+import {SplashScreenOriginal} from "@ionic-native/splash-screen";
+import {SplashScreen} from "@ionic-native/splash-screen/ngx";
 
 @Component({
   selector: 'app-root',
@@ -25,7 +27,7 @@ export class AppComponent {
       this.store.dispatch( new StartAppInitializer());
       // this.statusBar.styleDefault();
 
-//      this.splashScreen.hide();
+      // SplashScreen.hide();
     });
   }
 }

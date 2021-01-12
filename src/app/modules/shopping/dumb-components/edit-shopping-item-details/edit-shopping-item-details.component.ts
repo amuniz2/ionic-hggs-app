@@ -103,7 +103,6 @@ export class EditShoppingItemDetailsComponent implements OnInit, OnChanges {
     if (pantryItem === null) {
       pantryItem = new PantryItem();
     }
-    console.log('emitting notfiySavePantryItemRequested');
     this.notifySavePantryItemRequested.emit({
       ...pantryItem,
       name: this.pantryItemName,
@@ -120,6 +119,6 @@ export class EditShoppingItemDetailsComponent implements OnInit, OnChanges {
   }
 
   onNotifyAddLocationRequest($event) {
-    
+
   }
 }

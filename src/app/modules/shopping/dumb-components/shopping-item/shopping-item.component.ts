@@ -30,11 +30,9 @@ export class ShoppingItemComponent implements OnInit {
   }
 
   itemClicked($event: any) {
-    console.log('item cart clicked', $event);
     const event = {
       ...this.shoppingItem,
       inCart: $event.detail.checked };
-    console.log('emitting event from shopping-item-component', event);
     this.notifySaveRequested.emit(event);
   }
 

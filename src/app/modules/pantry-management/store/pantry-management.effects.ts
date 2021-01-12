@@ -59,7 +59,6 @@ export class PantryEffects {
   @Effect()
   public loadPantryItems$ = this.actions$.pipe(
     ofType(PantryActionTypes.LoadPantryItems),
-    tap(() => console.log('calling getPantryItems() from effect')),
     switchMap(() => {
         return this.pantryDataService.getPantryItems().pipe(
           tap((data) => console.log(`getPantryItems returned ${JSON.stringify(data)}`)),
@@ -93,24 +92,6 @@ export class PantryEffects {
       catchError(error => [new PantryLoadFailed(error)])
     ))
   );
-
-  // @Effect()
-  // public addNewPantryItem$ = this.actions$.pipe(
-  //   ofType(PantryActionTypes.CreateItem),
-  //   tap((payload) => console.log('Payload to addNewPantryItem$ ' + JSON.stringify(payload))),
-  //   switchMap((payload) => {
-  //     console.log('calling stateManagementService.addPantryItem()');
-  //     return this.storeManagementService.addPantryItem(payload.pantryItemRequest).pipe(
-  //       tap((something) => console.log(
-  //         'return from addPantryItem, dispatching PantryItemCreated' + JSON.stringify(something))),
-  //       map(newPantryitem => new ItemCreated(newPantryitem)),
-  //       catchError(error => {
-  //         console.log('CreatePantryItem failed');
-  //         return [new CreateItemFailed(error)];
-  //       })
-  //     );
-  //   }),
-  // );
 
   @Effect()
   public createPantryItem$ = this.actions$.pipe(
@@ -149,9 +130,6 @@ export class PantryEffects {
     ofType(PantryActionTypes.SaveNewPantryItem),
     switchMap((payload) => {
       return this.pantryDataService.addPantryItem(payload.pantryItem).pipe(
-        tap((itemAdded) => {
-          console.log(`item Added: ${itemAdded}`);
-        }),
         switchMap(itemAdded => [
           new PantryItemCreated( itemAdded ),
           new NavigateToPantryItemPage({ newItem: false, id: itemAdded.id})
@@ -255,7 +233,6 @@ export class PantryEffects {
       return this.pantryDataService.addNewPantryItemLocation(
         payload.addPantryItemLocation.itemId,
         payload.addPantryItemLocation.location).pipe(
-          tap((pantryItemLocationAdded) => console.log(pantryItemLocationAdded)),
           concatMap((pantryItemLocationAdded) => [
             new PantryItemLocationAdded(payload.addPantryItemLocation.itemId, pantryItemLocationAdded),
             new GroceryStoreLocationPossiblyAdded(pantryItemLocationAdded),

@@ -85,10 +85,8 @@ export class EditShoppingItemComponent implements OnInit {
 
   editPantryItemLocation($event: EditItemLocationRequest) {
     if ($event.action === UiCrudAction.Update) {
-      console.log('recieved update notification, dispatching edit event')
       this.store.dispatch(new fromActions.EditPantryItemLocationRequest($event, this.router.routerState.snapshot.url));
     } else {
-      console.log('recieved delete notification, dispatching delete event')
       this.store.dispatch((new fromActions.DeletePantryItemLocation($event)));
     }
   }

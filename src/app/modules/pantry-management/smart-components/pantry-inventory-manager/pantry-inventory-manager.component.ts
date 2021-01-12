@@ -54,7 +54,6 @@ export class PantryInventoryManagerComponent implements OnInit {
               private scanner: BarcodeScanner,
               @Inject('IProductInfoService') private productInfoService: IProductInfoService) {
     this.title = 'Manage pantry items from page component';
-    // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     this.store.dispatch(new fromActions.LoadPantryItems());
     this.pantryItemsLoading$ = this.store.pipe(select(fromSelectors.selectPantryItemsLoading));
@@ -77,7 +76,6 @@ export class PantryInventoryManagerComponent implements OnInit {
 
   onAddPantryItemClick() {
     this.addingPantryItem$ = of(true);
-    // console.log('dispatching createPantryItem event');
     // this.store.dispatch(new fromActions.CreatePantryItem({newItem: true, id: 0}));
   }
 
@@ -207,8 +205,8 @@ export class PantryInventoryManagerComponent implements OnInit {
       await alert.present();
     }
 
-    importData() {
-    // await this.dataTransporter.listFolders();
+    async importData() {
+    await this.dataTransporter.listFolders();
     this.dataTransporter.getFilesAvailableToDownload().subscribe(
       async hggsFiles => {
         if (hggsFiles.length === 0) {
@@ -231,7 +229,6 @@ export class PantryInventoryManagerComponent implements OnInit {
   }
 
   onAddOrRemoveFromShoppingList($event: PantryItem) {
-    console.log('dispatching action AddOrRemoveFromShoppingLists with: ', $event);
     this.store.dispatch(new fromActions.ToggleNeed($event));
   }
 }
