@@ -45,9 +45,9 @@ export class ShoppingItemComponent implements OnInit {
 
   getShoppingItemDescriptionLine2(shoppingItem: ShoppingItem) {
     if (!shoppingItem) {
-      return '';
+      return null;
     }
-    return this.shoppingItem.description;
+    return this.shoppingItem?.description;
   }
 
   editLocation() {

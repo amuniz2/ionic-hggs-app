@@ -4,7 +4,8 @@
     <ion-label class="checkboxLabel ion-text-wrap">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
   </div>
   <div class="itemContents">
-    <ion-label class="descLabel ion-text-wrap">{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
+    <ion-label *ngIf=shoppingItem.description class="descLabel ion-text-wrap ion-float-sm-left">{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
 <!--    <ion-button class="ion-float-sm-right" (click)="editLocation()" >Move</ion-button>-->
+    <ion-button class="move-button ion-float-end" (click)="editLocation()" >Move</ion-button>
   </div>
 </div>
