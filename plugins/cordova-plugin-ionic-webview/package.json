@@ -1,4 +1,10 @@
 {
+  "_args": [
+    [
+      "cordova-plugin-ionic-webview@5.0.0",
+      "/Users/anamuniz/projects/ionic-hggs-app"
+    ]
+  ],
   "_from": "cordova-plugin-ionic-webview@5.0.0",
   "_id": "cordova-plugin-ionic-webview@5.0.0",
   "_inBundle": false,
@@ -16,26 +22,22 @@
     "fetchSpec": "5.0.0"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-ionic-webview/-/cordova-plugin-ionic-webview-5.0.0.tgz",
-  "_shasum": "d58741af85754d80da82c7f673842a3e71bde630",
-  "_spec": "cordova-plugin-ionic-webview@5.0.0",
-  "_where": "C:\\Projects\\ionic\\hggs-app",
+  "_spec": "5.0.0",
+  "_where": "/Users/anamuniz/projects/ionic-hggs-app",
   "author": {
     "name": "Ionic Team"
   },
   "bugs": {
     "url": "https://github.com/ionic-team/cordova-plugin-ionic-webview/issues"
   },
-  "bundleDependencies": false,
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "deprecated": false,
   "description": "Ionic Web View Engine Plugin",
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.0",

@@ -1,35 +1,38 @@
 {
-  "_from": "cordova-plugin-x-socialsharing",
-  "_id": "cordova-plugin-x-socialsharing@5.6.8",
+  "_args": [
+    [
+      "cordova-plugin-x-socialsharing@6.0.1",
+      "/Users/anamuniz/projects/ionic-hggs-app"
+    ]
+  ],
+  "_from": "cordova-plugin-x-socialsharing@6.0.1",
+  "_id": "cordova-plugin-x-socialsharing@6.0.1",
   "_inBundle": false,
-  "_integrity": "sha512-R31ZQq00YNzLBwUM4VTE/uKhh/T0GEMuz/MZOw/Pu5AYIAAQkd7EMqFVhMtKs7wfHl1koiRz8+6nLDb19r2tBQ==",
+  "_integrity": "sha512-Jleai2DT6nZcKeJdb4XwrrqVGdn7lmcCJ1nO27VPKPtiyXaIZJGdHtvkjyCB98wH+NgdDjphdympLaIIq4G40g==",
   "_location": "/cordova-plugin-x-socialsharing",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "version",
     "registry": true,
-    "raw": "cordova-plugin-x-socialsharing",
+    "raw": "cordova-plugin-x-socialsharing@6.0.1",
     "name": "cordova-plugin-x-socialsharing",
     "escapedName": "cordova-plugin-x-socialsharing",
-    "rawSpec": "",
+    "rawSpec": "6.0.1",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "6.0.1"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-x-socialsharing/-/cordova-plugin-x-socialsharing-5.6.8.tgz",
-  "_shasum": "81993336fa4260eb76a23ed1680cd63e1c72b040",
-  "_spec": "cordova-plugin-x-socialsharing",
-  "_where": "C:\\Projects\\ionic\\hggs-app",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-x-socialsharing/-/cordova-plugin-x-socialsharing-6.0.1.tgz",
+  "_spec": "6.0.1",
+  "_where": "/Users/anamuniz/projects/ionic-hggs-app",
   "author": {
     "name": "Eddy Verbruggen - @EddyVerbruggen"
   },
   "bugs": {
     "url": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin/issues"
   },
-  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-x-socialsharing",
     "platforms": [
@@ -40,7 +43,6 @@
       "web"
     ]
   },
-  "deprecated": false,
   "description": "Share text, images (and other files), or a link via the native sharing widget of your device. Android is fully supported, as well as iOS 6 and up. WP8 has somewhat limited support.",
   "engines": [
     {
@@ -74,5 +76,5 @@
     "url": "git+https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git"
   },
   "types": "./types/index.d.ts",
-  "version": "5.6.8"
+  "version": "6.0.1"
 }

@@ -16,13 +16,29 @@
 		<data>
 		C/PbN0m71yufdN5y1s23UAPrgTk=
 		</data>
+		<key>CDVBarcodeScanner.bundle/beep.caf</key>
+		<data>
+		n1wlp+nz0IyIf+ijW5tP91UI+x0=
+		</data>
+		<key>CDVBarcodeScanner.bundle/torch.png</key>
+		<data>
+		mYWzuFJCMsJIhwSNCTbYr/pw8d0=
+		</data>
+		<key>CDVBarcodeScanner.bundle/torch@2x.png</key>
+		<data>
+		CVe1Jr1OtHA5BjC37Jmll1AI9VA=
+		</data>
+		<key>CDVBarcodeScanner.bundle/torch@3x.png</key>
+		<data>
+		oh3qPwRm+DuBEovNszjn/0P9z1U=
+		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib/objects-13.0+.nib</key>
 		<data>
-		hbkfNh+MvTChhM6ZZy+mMaoe+3k=
+		fqJ0U1wvXlS4xtwYE6sCo1z0Z+0=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib/runtime.nib</key>
 		<data>
-		ePYjrYE2rzLDyYiaC84W0n60gBc=
+		FiBn7JelT24cFSd9cN5zlIaCqqU=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -30,11 +46,11 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib/objects-13.0+.nib</key>
 		<data>
-		zmCfLfQZJnMr2XpAvHjrM4h3bIg=
+		wTKPMV9Q3QqLgqtlzgeV3A1u4rg=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib/runtime.nib</key>
 		<data>
-		D6j+tutnlDKaDO+/LjlXRTYOjb4=
+		jjgizAZwReJKgpTSlb0RoNrt+zs=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -42,7 +58,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		SMR0t0PDqz4ib+BSLcyo2FpKUQw=
+		xXTWkYsbJmb4VFKwivHm/92mWX4=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -50,11 +66,15 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		JTmnr1YLa0jdRHcgr0c37C+dJQM=
+		Jm+daF0Uw24cE2jB8apesRriKJY=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
 		p95mpEs9gUhtqQEUp/KiFZzW2ao=
+		</data>
+		<key>scannerOverlay.nib</key>
+		<data>
+		MiMVruXwKyJ077GwE9PFS46m2QQ=
 		</data>
 		<key>www/0.js</key>
 		<data>
@@ -726,7 +746,7 @@
 		</data>
 		<key>www/cordova_plugins.js</key>
 		<data>
-		cB5Hq7GPRQxH970cgf6dmLfN/f8=
+		BIqZC0xsgBmUqHMnZRMkyJ0E2kc=
 		</data>
 		<key>www/default~modules-pantry-management-pantry-management-module~modules-shopping-shopping-module.js</key>
 		<data>
@@ -734,7 +754,7 @@
 		</data>
 		<key>www/default~modules-pantry-management-pantry-management-module~modules-shopping-shopping-module.js.map</key>
 		<data>
-		FB9A7Jtl6z/1j5m611pV6ka+mms=
+		6MG7HYEKD28KzhLHQCsj97ee06Q=
 		</data>
 		<key>www/favicon.ico</key>
 		<data>
@@ -770,27 +790,27 @@
 		</data>
 		<key>www/main.js</key>
 		<data>
-		bjwSIP4YIYymCHtga+DDFhWSlg4=
+		lIt4qvJI+oaUaKxBRrqhN283L6Q=
 		</data>
 		<key>www/main.js.map</key>
 		<data>
-		Y5tUvJWfBBEG3r+VydY94vxcFJY=
+		0GsAmKQEBezlKcM57rTYWmQhKRw=
 		</data>
 		<key>www/modules-pantry-management-pantry-management-module.js</key>
 		<data>
-		U23z7XlruiO3fhPvhX4CppKShwE=
+		gLW1mszRE4/iWzyWVCFXL1sm6J0=
 		</data>
 		<key>www/modules-pantry-management-pantry-management-module.js.map</key>
 		<data>
-		uMZSBmfVorOA2ieEgH9EdBX9W48=
+		zkT7sKJIPH59jm7nhaeMXWAEGhU=
 		</data>
 		<key>www/modules-shopping-shopping-module.js</key>
 		<data>
-		Oim27bgXpK6t7+tRIgR2q3fk7vE=
+		DOoq2dNjJrjNUcpwC+b2M0RRWMs=
 		</data>
 		<key>www/modules-shopping-shopping-module.js.map</key>
 		<data>
-		OloLN9ZHn4GBgnf4oJgfOMhUZOI=
+		0MBeVUYw0L0AY+oSgq/j6K/KOQ4=
 		</data>
 		<key>www/plugins/cordova-plugin-device/www/device.js</key>
 		<data>
@@ -907,6 +927,10 @@
 		<key>www/plugins/es6-promise-plugin/www/promise.js</key>
 		<data>
 		SaYUot7eUOO74AAVeBga+HSnf/E=
+		</data>
+		<key>www/plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js</key>
+		<data>
+		haJXivDxwB2BCbPcMrODx5ojVqQ=
 		</data>
 		<key>www/polyfills-core-js.js</key>
 		<data>
@@ -5948,18 +5972,46 @@
 			dQn9OElEf76JAhNck5sEgt/ZzNb9H1i8UX+BO9QV3OU=
 			</data>
 		</dict>
+		<key>CDVBarcodeScanner.bundle/beep.caf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			NN7HB8+IcBwGLL11Xktd4ifwAZDSoNs8hKwROCcXamo=
+			</data>
+		</dict>
+		<key>CDVBarcodeScanner.bundle/torch.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			YBOo9aq0DkdCyPDUfovzqb28RDxhETooGasgESTO7h8=
+			</data>
+		</dict>
+		<key>CDVBarcodeScanner.bundle/torch@2x.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ZJjK832+YjToJzjslWS6RFl3QAwpQ4P6Zu/+nftv9Os=
+			</data>
+		</dict>
+		<key>CDVBarcodeScanner.bundle/torch@3x.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+atwPqV7gjdNiqOUmw7i2B/yfFZFh+BVUEXDVKRMVP8=
+			</data>
+		</dict>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib/objects-13.0+.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			wYllt7vcFTApxR/l5fixOp5X6TD+dPv4PPoVvM69AKA=
+			4+qY7qHxhGEC/IipZD2k35d959WUI5s9yBO3fHhGr9M=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib/runtime.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			tTII2f0FNWY96l+BND7mrxISm3jUNlz7wjT2sRJyj8c=
+			0bqzsJM1wvLJI+2a8+fkS3VrBpS0OspowBbvkBDn61s=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -5973,28 +6025,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			uIvemS7xZZdoLPl1sxsfror14ykfCuRpL0jSQg/X7CE=
+			V9ov5MGF1Qov5XeJnpKUBbFktChghURfQEqPGsQTX28=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib/runtime.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			6ZBPPR7Qj6cg2Mq7X8NGoL75mmr1FajQI/mZ7SK4gxo=
+			xIuEfeo24vxWOjjdg1vB+UcUotiqy9xzADe2+NoNgPs=
 			</data>
 		</dict>
 		<key>MainViewController.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TbX9ziIaPcMq+KG2oKvrN4rGLgzMiOplbtTXXr8CQUg=
+			ekPiKOez7uPOTTdEzR28gdHTGr+DMDG1KxEq7rHwr8Q=
 			</data>
 		</dict>
 		<key>config.xml</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			K1HiPcpFQ5zCrcE4MS7cWa3Gulyphwvp9xYohStQ+x8=
+			bi/ikVKRceoX/oN4i02dQ0IOIwjucpG5BD8QNGRVasA=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
@@ -6002,6 +6054,13 @@
 			<key>hash2</key>
 			<data>
 			G/wZSxmN4YxQzaTLbwMzuCYTffEGrxVz5+Tnbj5r7LU=
+			</data>
+		</dict>
+		<key>scannerOverlay.nib</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			pLd3jb/b3QiaVGEPRVVupOWqqn+/B8EFtcGavWxp2lo=
 			</data>
 		</dict>
 		<key>www/0.js</key>
@@ -7177,7 +7236,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			GlnC4ZHzmyG6Kj0LWEqwRGA+muIiKJzpHTwbk35E8RQ=
+			r2XNusc7oTgJkWYSRCfYkdZ58ADIjArBygRY3S6dJzI=
 			</data>
 		</dict>
 		<key>www/default~modules-pantry-management-pantry-management-module~modules-shopping-shopping-module.js</key>
@@ -7191,7 +7250,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			h02spGkzYP3pWdcBZcCSafAyxz168IAPOz+WKNjkSi0=
+			8Z3P273Py6kEVBePsyoCnFU8KAhyi3eteTD8vNBzNJ0=
 			</data>
 		</dict>
 		<key>www/favicon.ico</key>
@@ -7254,42 +7313,42 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			t69QDG1in5e9wMNzS3j4fFbnutQlW/9LfBEf+0fvRVY=
+			JCKJMb63VyQdIpOQ7vkPN0kvH3qyLA4vgxo3F5oUtN0=
 			</data>
 		</dict>
 		<key>www/main.js.map</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			YsNZSBBMuDSCI5ZYTYbl01TdV+cJtLn0HmaikxNUIQk=
+			ebCXyL9LTsMpI8svqfrTVslW0D+dvLBGBe5O3yQ96Vc=
 			</data>
 		</dict>
 		<key>www/modules-pantry-management-pantry-management-module.js</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			CHJYSaq2PAasO6OaZLG/xh6bwvFAFBmvsih6Tv306i8=
+			5bya6cfZ29Jy/JOgeY7kJTFm6nlQ1cT9nOXCTcujc68=
 			</data>
 		</dict>
 		<key>www/modules-pantry-management-pantry-management-module.js.map</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			QxCrPqjCWLi6DVc9k+4AE1c1j+uyEoYTeFNk2u1Dd1Q=
+			jTUl56DVpyEbUvPDrYkX0V9BwVT0Bt/ogf9Sp9ISMcU=
 			</data>
 		</dict>
 		<key>www/modules-shopping-shopping-module.js</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			CSg52iuk81l1r6iIxObVaJLvzBJQxnQbs6ujXJnezEg=
+			lx2C8gVuz414/gKuvt6Jtqo0GvTnqxX1U3rh4UKHdDg=
 			</data>
 		</dict>
 		<key>www/modules-shopping-shopping-module.js.map</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5t9GxRCoT1jLDa7AoGxfIeiVk9yg2Z/C20BM6t+RVFQ=
+			NErYsT5yygapGueTuZqIJKJ0FBht0q0rkiZeHZoGBQA=
 			</data>
 		</dict>
 		<key>www/plugins/cordova-plugin-device/www/device.js</key>
@@ -7493,6 +7552,13 @@
 			<key>hash2</key>
 			<data>
 			9CIW7f5Dk7yEK84D9evgQc6ryThptFDJtCnHYeOvWAo=
+			</data>
+		</dict>
+		<key>www/plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ipGt28hFN1NR8Xi0CUelPM2biucyXPZ5M3iiW/KXQa4=
 			</data>
 		</dict>
 		<key>www/polyfills-core-js.js</key>

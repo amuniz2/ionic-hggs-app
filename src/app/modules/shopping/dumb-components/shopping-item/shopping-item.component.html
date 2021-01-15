@@ -1,11 +1,19 @@
-<div id="parent">
-  <div class="itemContents">
-    <ion-checkbox (ionChange)="itemClicked($event)" [checked]="shoppingItem?.inCart"></ion-checkbox>
-    <ion-label class="checkboxLabel ion-text-wrap">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
-  </div>
-  <div class="itemContents">
-    <ion-label *ngIf=shoppingItem.description class="descLabel ion-text-wrap ion-float-sm-left">{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
+<ion-grid id="parent">
+  <ion-row class="itemContents">
+    <ion-col aria-colspan="2">
+      <div class="row">
+        <ion-checkbox (ionChange)="itemClicked($event)" [checked]="shoppingItem?.inCart"></ion-checkbox>
+        <ion-label class="checkboxLabel ion-text-wrap">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row class="itemContents">
+    <ion-col>
+      <ion-label *ngIf=shoppingItem.description class="descLabel ion-text-wrap ion-float-sm-left">{{getShoppingItemDescriptionLine2(shoppingItem)}}</ion-label>
+    </ion-col>
+    <ion-col>
+      <ion-button class="move-button ion-float-end" (click)="editLocation()" >Move</ion-button>
+    </ion-col>
 <!--    <ion-button class="ion-float-sm-right" (click)="editLocation()" >Move</ion-button>-->
-    <ion-button class="move-button ion-float-end" (click)="editLocation()" >Move</ion-button>
-  </div>
-</div>
+  </ion-row>
+</ion-grid>

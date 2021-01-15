@@ -1,4 +1,10 @@
 {
+  "_args": [
+    [
+      "cordova-plugin-file@6.0.2",
+      "/Users/anamuniz/projects/ionic-hggs-app"
+    ]
+  ],
   "_from": "cordova-plugin-file@6.0.2",
   "_id": "cordova-plugin-file@6.0.2",
   "_inBundle": false,
@@ -16,20 +22,17 @@
     "fetchSpec": "6.0.2"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-file/-/cordova-plugin-file-6.0.2.tgz",
-  "_shasum": "f3911479f8357e9aacb5576674f8d95b31a1fb20",
-  "_spec": "cordova-plugin-file@6.0.2",
-  "_where": "C:\\Projects\\ionic\\hggs-app",
+  "_spec": "6.0.2",
+  "_where": "/Users/anamuniz/projects/ionic-hggs-app",
   "author": {
     "name": "Apache Software Foundation"
   },
   "bugs": {
     "url": "https://github.com/apache/cordova-plugin-file/issues"
   },
-  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-file",
     "platforms": [
@@ -40,7 +43,6 @@
       "windows"
     ]
   },
-  "deprecated": false,
   "description": "Cordova File Plugin",
   "devDependencies": {
     "eslint": "^3.19.0",

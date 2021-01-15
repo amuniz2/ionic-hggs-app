@@ -7,37 +7,39 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-x-socialsharing": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
     "cordova-custom-config": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-ionic-webview": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-whitelist": {
+    "phonegap-plugin-barcodescanner": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-sqlite-storage": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
+    "cordova-plugin-ionic-webview": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-x-socialsharing": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "phonegap-plugin-barcodescanner": {
+    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.amuniz.ionic"
-    }
-  },
-  "dependent_plugins": {
+    },
     "es6-promise-plugin": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     }
-  }
+  },
+  "dependent_plugins": {}
 }

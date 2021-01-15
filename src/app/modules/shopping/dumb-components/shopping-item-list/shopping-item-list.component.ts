@@ -196,8 +196,15 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
   onFinishAddingShoppingItemInAisle(newItem: CreateShoppingItemRequest) {
     this.notifyDoneAddingItem.emit(newItem);
   }
-  onAddShoppingItemClickInAisle(shoppingItemRequest: CreateShoppingItemRequest) {
-    this.notifyAddNewPantryItemToStoreShoppingList.emit(shoppingItemRequest);
+
+  onAddShoppingItemClickInAisle(aisle: Aisle) {
+    /* todo: emit different notification to not have to include item name */
+    this.notifyAddNewPantryItemToStoreShoppingList.emit({
+      aisle: aisle.name,
+      storeId: this.groceryStore.id,
+      name: '',
+      section: null
+    });
   }
 
   // onCancelAddItem($event: GroceryStoreLocation) {
@@ -206,5 +213,12 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
 
   onCancelAddShoppingItemRequest($event: GroceryStoreLocation) {
     this.notifyCancelAddItem.emit($event);
+  }
+
+  itemsInAisle(aisle: Aisle): ShoppingItem[] {
+    const result:ShoppingItem[] = [];
+    aisle.sections.forEach(section => result.push(...section.shoppingItems));
+    result.push(...aisle.shoppingItems);
+    return result;
   }
 }
