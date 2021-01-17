@@ -1,10 +1,10 @@
 <ion-grid id="parent">
-  <ion-row class="itemContents">
-    <ion-col aria-colspan="2">
-      <div class="row">
+  <ion-row>
+    <ion-col aria-colspan="2" class="itemContents">
+<!--      <div class="row">-->
         <ion-checkbox (ionChange)="itemClicked($event)" [checked]="shoppingItem?.inCart"></ion-checkbox>
         <ion-label class="checkboxLabel ion-text-wrap">{{getShoppingItemDescriptionLine1(shoppingItem)}}</ion-label>
-      </div>
+<!--      </div>-->
     </ion-col>
   </ion-row>
   <ion-row class="itemContents">

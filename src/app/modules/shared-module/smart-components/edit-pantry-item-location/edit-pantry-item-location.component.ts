@@ -18,13 +18,13 @@ import {
 } from '../../../../store/store-management.selectors';
 // tslint:disable-next-line:max-line-length
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AddPantryItemLocation, UpdatePantryItemLocation} from '../../store/pantry-management.actions';
+import {AddPantryItemLocation, UpdatePantryItemLocation} from '../../../pantry-management/store/pantry-management.actions';
 import {ActivatedRoute, Router} from '@angular/router';
-import {selectGroceryStoresItemIsLocatedIn} from '../../store/pantry-management.selectors';
+import {selectGroceryStoresItemIsLocatedIn} from '../../../pantry-management/store/pantry-management.selectors';
 import {CreateStore} from '../../../store-management/store/store-management.actions';
 import {groceryStoreFromGrocerStoreState} from '../../../../model/model-helpers';
 import {withLatestFrom} from 'rxjs/operators';
-import {GroceryStoreAisleOrSectionSelected} from '../../../shared-module/dumb-components/grocery-store-location-aisle-or-section/grocery-store-location-aisle-or-section.component';
+import {GroceryStoreAisleOrSectionSelected} from '../../dumb-components/grocery-store-location-aisle-or-section/grocery-store-location-aisle-or-section.component';
 
 export interface NewItemLocation {
   itemId: number;
@@ -172,6 +172,7 @@ export class EditPantryItemLocationComponent implements OnInit {
   }
 
   async onCancel() {
+    console.log('returning to: ', this.returnUrl);
     this.router.navigateByUrl(this.returnUrl);
   }
 

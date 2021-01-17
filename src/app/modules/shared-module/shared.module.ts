@@ -9,6 +9,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AddGroceryStoreModalComponent } from './add-grocery-store-modal/add-grocery-store-modal.component';
 import {IonicSelectableModule} from 'ionic-selectable';
 import {GroceryStoreLocationAisleOrSectionComponent} from './dumb-components/grocery-store-location-aisle-or-section/grocery-store-location-aisle-or-section.component';
+import {RouterModule} from "@angular/router";
+import {SharedRoutes} from "./shared.routes";
+import {EditPantryItemLocationComponent} from "./smart-components/edit-pantry-item-location/edit-pantry-item-location.component";
 
 @NgModule({
   declarations: [
@@ -17,6 +20,7 @@ import {GroceryStoreLocationAisleOrSectionComponent} from './dumb-components/gro
     GroceryStoreLocationStoreComponent,
     GroceryStoreLocationAisleOrSectionComponent,
     AddGroceryStoreModalComponent,
+    EditPantryItemLocationComponent,
   ],
   imports: [
     CommonModule,
@@ -24,6 +28,7 @@ import {GroceryStoreLocationAisleOrSectionComponent} from './dumb-components/gro
     FormsModule,
     ReactiveFormsModule,
     IonicSelectableModule,
+    RouterModule.forChild(SharedRoutes)
   ],
   exports: [
     HggsAccordionComponent,

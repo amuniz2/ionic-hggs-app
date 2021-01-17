@@ -10,7 +10,7 @@
           "LSApplicationQueriesSchemes": [
             {
               "xml": "<array><string>mail</string></array>",
-              "count": 105
+              "count": 122
             }
           ],
           "NSPhotoLibraryAddUsageDescription": [

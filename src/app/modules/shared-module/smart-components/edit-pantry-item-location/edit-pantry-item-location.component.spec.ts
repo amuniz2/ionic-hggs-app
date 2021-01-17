@@ -4,7 +4,7 @@ import { EditPantryItemLocationComponent } from './edit-pantry-item-location.com
 import {IonicModule} from '@ionic/angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 // tslint:disable-next-line:max-line-length
-import {GroceryStoreLocationStoreComponent} from '../../../shared-module/dumb-components/grocery-store-location-store/grocery-store-location-store.component';
+import {GroceryStoreLocationStoreComponent} from '../../dumb-components/grocery-store-location-store/grocery-store-location-store.component';
 // tslint:disable-next-line:max-line-length
 import {RouterTestingModule} from '@angular/router/testing';
 import {StoreModule} from '@ngrx/store';
@@ -12,7 +12,7 @@ import {reducers} from '../../../../store/app.reducers';
 import {FakePantryDataService} from '../../../../services/fake-pantry-data.service';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
 import {Inject} from '@angular/core';
-import {GroceryStoreLocationAisleOrSectionComponent} from '../../../shared-module/dumb-components/grocery-store-location-aisle-or-section/grocery-store-location-aisle-or-section.component';
+import {GroceryStoreLocationAisleOrSectionComponent} from '../../dumb-components/grocery-store-location-aisle-or-section/grocery-store-location-aisle-or-section.component';
 
 describe('EditPantryItemLocationComponent', () => {
   let component: EditPantryItemLocationComponent;

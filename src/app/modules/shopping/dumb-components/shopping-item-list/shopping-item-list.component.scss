@@ -1,3 +1,6 @@
+.aisleOrSectionHeading {
+  background-color: #669999;
+}
 .itemContents {
   align-items: center;
   flex-direction: row;
@@ -25,4 +28,7 @@
 .in-item {
   margin: 0em 0.5em 0.5em 0em;
   padding: 0em;
+}
+hr.solid {
+  border-top: 3px solid #bbb;
 }

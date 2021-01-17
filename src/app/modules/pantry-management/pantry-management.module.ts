@@ -15,10 +15,9 @@ import { PantryItemListComponent } from './dumb-components/pantry-item-list/pant
 import {EditPantryItemComponent} from './smart-components/edit-pantry-item/edit-pantry-item.component';
 import { EditPantryItemDetailsComponent } from './dumb-components/edit-pantry-item-details/edit-pantry-item-details.component';
 import { PantryItemLocationsComponent } from './dumb-components/pantry-item-locations/pantry-item-locations.component';
-import { EditPantryItemLocationComponent } from './smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
+import { EditPantryItemLocationComponent } from '../shared-module/smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
 import { AddPantryItemComponent } from './dumb-components/add-pantry-item/add-pantry-item.component';
 import {NgModule} from '@angular/core';
-import {PantryDataService} from '../../services/pantry-data.service';
 import {GroceryDataTransporter} from '../../services/grocery-data-transporter.service';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
 
@@ -39,7 +38,6 @@ import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
         EditPantryItemComponent,
         EditPantryItemDetailsComponent,
         PantryItemLocationsComponent,
-        EditPantryItemLocationComponent,
         AddPantryItemComponent,
     ],
   exports: [

@@ -221,4 +221,14 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
     result.push(...aisle.shoppingItems);
     return result;
   }
+
+  isLastItemInAisle(aisle: Aisle, shoppingItem: ShoppingItem): boolean {
+    const list = this.itemsInAisle(aisle);
+    return list[list.length - 1] === shoppingItem ;
+  }
+
+  isLastItemInSection(section: ShoppingItemGroup, shoppingItem: ShoppingItem): boolean {
+    const list = section.shoppingItems;
+    return list[list.length - 1] === shoppingItem ;
+  }
 }

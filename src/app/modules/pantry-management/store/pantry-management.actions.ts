@@ -6,7 +6,7 @@ import {
 } from '../dumb-components/pantry-item-list/pantry-item-list.component';
 import {EditItemLocationRequest, NewItemLocationRequest} from '../dumb-components/pantry-item-locations/pantry-item-locations.component';
 import {GroceryStoreLocation} from '../../../model/grocery-store-location';
-import {NewItemLocation} from '../smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
+import {NewItemLocation} from '../../shared-module/smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
 import {ProductInfo} from '../smart-components/edit-pantry-item/edit-pantry-item.component';
 import {ToggleAction} from '@ngrx/store-devtools/src/actions';
 import {CreatePantryItemRequest} from '../../../helpers';
@@ -82,7 +82,9 @@ export class DeletePantryItemLocation implements Action {
 export class EditPantryItemLocationRequest implements Action {
   readonly type = PantryActionTypes.EditPantryItemLocationRequest;
 
-  constructor(public request: EditItemLocationRequest, public returnUrl: string) {}
+  constructor(public request: EditItemLocationRequest, public returnUrl: string) {
+    console.log('return url: ', returnUrl);
+  }
 }
 
 export class NavigateToPantryItemPage implements Action {

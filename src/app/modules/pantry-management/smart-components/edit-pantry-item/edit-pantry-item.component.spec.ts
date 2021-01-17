@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditPantryItemComponent } from './edit-pantry-item.component';
-import {EditPantryItemLocationComponent} from '../edit-pantry-item-location/edit-pantry-item-location.component';
+import {EditPantryItemLocationComponent} from '../../../shared-module/smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
 import {EditPantryItemDetailsComponent} from '../../dumb-components/edit-pantry-item-details/edit-pantry-item-details.component';
 import {IonicModule} from '@ionic/angular';
 import {FormsModule} from '@angular/forms';

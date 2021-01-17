@@ -210,8 +210,10 @@ export class PantryEffects {
           returnUrl: navigateToLocationPage.returnUrl
         }
       };
+      // todo: should this be going to shopping url instead: ?
       // tslint:disable-next-line:max-line-length
-      const route = `/home/pantry-items/${navigateToLocationPage.request.pantryItemId}/pantry-item-location/${navigateToLocationPage.request.storeLocation.id}`;
+      const route = `/shared/pantry-items/${navigateToLocationPage.request.pantryItemId}/pantry-item-location/${navigateToLocationPage.request.storeLocation.id}`;
+      console.log('full url to navigate to: ', route);
       this.router.navigateByUrl(route, navigationExtras);
     }));
 

@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {HomePageComponent} from './home/home.page';
+import {EditPantryItemLocationRequest} from "./modules/pantry-management/store/pantry-management.actions";
+import {EditPantryItemLocationComponent} from "./modules/shared-module/smart-components/edit-pantry-item-location/edit-pantry-item-location.component";
 
 export const routes: Routes = [
   // { path: 'manage-stores', component: StoreListComponent  },
@@ -22,13 +24,17 @@ export const routes: Routes = [
       },
     ]
   },
+  {
+    path: 'shared',
+    loadChildren: './modules/shared-module/shared.module#SharedModule'
+  },
   { path: '', redirectTo: 'home', pathMatch: 'full'},
   // { path: '', redirectTo: 'manage-stores', pathMatch: 'full'},
   // { path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { enableTracing: false })],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
   exports: [RouterModule]
  })
 export class AppRoutingModule { }
