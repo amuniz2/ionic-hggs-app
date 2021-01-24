@@ -126,6 +126,7 @@ export class EditPantryItemLocationComponent implements OnInit {
     this.selectedGroceryStoreId$ = this.store.select(fromSelectors.selectCurrentGroceryStoreId());
 
     this.selectedGroceryStoreId$.subscribe((storeId) => {
+      this.store.dispatch(new LocationGroceryStoreSelected(storeId));
       // this.selectedGroceryStore$ = this.store.select(fromSelectors.selectCurrentGroceryStore());
       this.selectedGroceryStore$ = this.store.select(fromSelectors.selectGroceryStore(storeId));
       this.groceryStoreAisles$ = this.store.select(fromSelectors.selectGroceryStoreAisles(
@@ -164,8 +165,6 @@ export class EditPantryItemLocationComponent implements OnInit {
     if (this.selectedGroceryStoreAisle !== $event.name) {
       this.selectedGroceryStoreAisle = $event.name;
       this.locationForm.patchValue({locationAisle: $event.name});
-      this.selectedGroceryStoreSection = undefined;
-      this.locationForm.patchValue({locationSection: undefined});
       this.groceryStoreSectionsInAisle$ = this.store.select(fromSelectors.selectPossibleGroceryStoreSectionsInAisle(
         this.selectedGroceryStoreId, this.selectedGroceryStoreAisle));
     }
@@ -179,6 +178,7 @@ export class EditPantryItemLocationComponent implements OnInit {
   onChangeSection($event: GroceryStoreAisleOrSectionSelected) {
     if(this.selectedGroceryStoreSection !== $event.name) {
       this.selectedGroceryStoreSection = $event.name;
+      this.locationForm.patchValue({locationSection: $event.name});
       this.groceryStoreAislesWithSection$ = this.store.select(fromSelectors.selectPossibleGroceryStoreAislesForSection(
         this.selectedGroceryStoreId, this.selectedGroceryStoreSection));
     }

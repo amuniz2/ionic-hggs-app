@@ -24,12 +24,13 @@ import {
   LoadGroceryStoreLocations,
   LoadGroceryStores,
   LoadImportedData,
-  GroceryStoresImportedSuccessfully, SelectStore
+  GroceryStoresImportedSuccessfully, SelectStore, GroceryStoreLocationsLoaded
 } from '../store/app.actions';
 import {catchError, concatAll, map, switchMap, tap} from 'rxjs/operators';
 import {AppState} from './app.state';
 import {IPantryDataService} from '../services/IPantryDataService';
 import {
+  GetGroceryStoreLocationsFailed,
   GetStoreAislesFailed, GetStoreSectionsFailed
 } from '../modules/store-management/store/store-management.actions';
 import {forkJoin, of, throwError} from 'rxjs';
@@ -107,9 +108,21 @@ export class AppEffects {
         new SelectStore(payload.storeId),
         new LoadGroceryStoreAisles(payload.storeId),
         new LoadGroceryStoreSections(payload.storeId),
+        new LoadGroceryStoreLocations(payload.storeId)
       ];
     })
   );
+
+  @Effect()
+  public getStoreLocations$ = this.actions$.pipe(
+    ofType(AppActionTypes.LoadGroceryStoreLocations),
+    switchMap((payload) => {
+      return this.storeManagementService.getGroceryStoreLocations(payload.groceryStoreId).pipe(
+        map(locations => new GroceryStoreLocationsLoaded( payload.groceryStoreId,
+          locations)),
+        catchError(error => [new GetGroceryStoreLocationsFailed(error)])
+      );
+    }));
 
   @Effect()
   public getStoreAisles$ = this.actions$.pipe(

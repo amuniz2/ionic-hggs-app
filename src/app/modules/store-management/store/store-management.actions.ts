@@ -14,6 +14,7 @@ export enum StoreManagerActionTypes {
   DeleteStore = '[Store Manager] Delete',
   GetGroceryStoreAislesFailed =  '[Store Manager] Store Aisles Failed To Load',
   GetGroceryStoreSectionsFailed =  '[Store Manager] Store Sections Failed To Load',
+  GetGroceryStoreLocationsFailed = '[Store Manager] Store Locations Failed to Load',
   UpdateStoreAisle = '[Store Manager] Update Aisle',
   SelectStoreAisle = '[Store Manager] Select Aisle',
   GroceryStoresImportedSuccessfully = '[Store Manager] Grocery Stores Imported',
@@ -43,6 +44,11 @@ export class DeleteStore implements Action {
   readonly type = StoreManagerActionTypes.DeleteStore;
   constructor(public deleteGroceryStorePayload: DeleteGroceryStoreRequest) {
   }
+}
+export class GetGroceryStoreLocationsFailed implements Action {
+  constructor(public error: Error) {
+  }
+  readonly type = StoreManagerActionTypes.GetGroceryStoreLocationsFailed;
 }
 
 export class GetStoreAislesFailed implements Action {
@@ -74,4 +80,5 @@ export type StoreManagementActions =
   | CreateStore
   | DeleteStore
   | NavigateToStoreDetailsPage
-  | NavigatedToStoreDetailsPage;
+  | NavigatedToStoreDetailsPage
+  | GetGroceryStoreLocationsFailed;

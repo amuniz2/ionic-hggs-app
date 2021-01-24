@@ -24,6 +24,7 @@
     <preference name="CordovaWebViewEngine" value="CDVUIWebViewEngine" />
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="AndroidXEnabled" value="true" />
     <platform name="android">
         <allow-navigation href="*" />
         <allow-intent href="http://*/*" />
@@ -54,6 +55,9 @@
                 <data android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.hggs" android:scheme="content" />
             </intent-filter>
         </custom-config-file>
+        <preference name="AndroidXEnabled" value="true" />
+        <preference name="android-minSdkVersion" value="22" />
+        <preference name="android-targetSdkVersion" value="27" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

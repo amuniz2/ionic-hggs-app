@@ -150,5 +150,6 @@
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="AndroidXEnabled" value="true" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />
 </widget>

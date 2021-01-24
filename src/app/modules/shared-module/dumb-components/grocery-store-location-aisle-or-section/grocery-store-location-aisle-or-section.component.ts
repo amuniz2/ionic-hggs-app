@@ -49,6 +49,7 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
 
   @Output()
   renameAisleOrSection: EventEmitter<RenameAisleOrSection> = new EventEmitter<RenameAisleOrSection>();
+
   @Input()
   selectedGroceryStoreAisleOrSection: string;
 
@@ -74,14 +75,25 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
   }
 
   ngOnInit() {
-    this.sortedAislesOrSections =  !!this.groceryStoreAislesOrSections ?
-      [...this.groceryStoreAislesOrSections].sort(sortAislesOrSections) : [];
+    // if (!!!this.selectedGroceryStoreAisleOrSection
+    //   && this.groceryStoreAislesOrSections?.length > 0) {
+    //   this.selectedGroceryStoreAisleOrSection = this.groceryStoreAislesOrSections[0];
+    // }
+    // this.sortedAislesOrSections =  !!this.groceryStoreAislesOrSections ?
+    //   [...this.groceryStoreAislesOrSections].sort(sortAislesOrSections) : [];
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.groceryStoreAislesOrSections) {
+      console.log(`ngOnChanges for ${this.label}s`);
       this.sortedAislesOrSections =  !!this.groceryStoreAislesOrSections ?
         [...this.groceryStoreAislesOrSections].sort(sortAislesOrSections) : [];
+      console.log(JSON.stringify(this.sortedAislesOrSections));
+      if (this.sortedAislesOrSections?.length > 0) {
+        this.selectedGroceryStoreAisleOrSection = this.sortedAislesOrSections[0];
+      } else {
+        this.selectedGroceryStoreAisleOrSection = '';
+      }
     }
   }
 
