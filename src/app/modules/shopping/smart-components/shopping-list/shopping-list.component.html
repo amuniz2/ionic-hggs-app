@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-text slot="start">{{(shoppingStore$ | async)?.name}} Shopping List</ion-text>
-    <ion-button  fill="clear" outline="none" (click)="onAddShoppingItemClick()">
+    <ion-button *ngIf="!(addingShoppingItem$ | async) && ((addingShoppingItemInAisle$ | async) == null)" fill="clear" outline="none" (click)="onAddShoppingItemClick()">
       <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
     </ion-button>
     <ion-button slot="end" *ngIf="!filterList" fill="clear" outline="none" (click)="filterItems()">Search
@@ -18,7 +18,7 @@
 </ion-header>
 <ion-content>
   <app-select-grocery-store [groceryStores]="groceryStores$ | async" (selectedGroceryStoreChange)="onGroceryStoreSelected($event)"></app-select-grocery-store>
-  <app-add-shopping-item *ngIf="!!selectedStore" [addingShoppingItem]="(addingShoppingItem$ | async)"
+  <app-add-shopping-item *ngIf="!!selectedStore && (addingShoppingItem$ | async)"
                          [initialStoreLocation]="{ storeId: selectedStore.id, storeName: selectedStore.name, id: null, section: null, aisle: null }"
                        (notifyNewPantryItemRequested)="onCreateShoppingItem($event)">
   </app-add-shopping-item>

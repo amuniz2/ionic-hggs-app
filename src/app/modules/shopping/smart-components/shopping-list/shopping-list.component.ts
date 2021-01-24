@@ -42,7 +42,7 @@ export class ShoppingListComponent implements OnInit {
   shoppingList$: Observable<ShoppingItem[]>;
   shoppingStore$: Observable<GroceryStoreState>;
   addingShoppingItem$: Observable<boolean>;
-  addingShoppingItemInAisle$: Observable<boolean>;
+  addingShoppingItemInAisle$: Observable<string>;
 
   selectedStore: GroceryStore;
 
@@ -58,7 +58,7 @@ export class ShoppingListComponent implements OnInit {
 
   ngOnInit() {
     this.addingShoppingItem$ = of(false);
-    this.addingShoppingItemInAisle$ = of (false);
+    this.addingShoppingItemInAisle$ = of (null);
     this.shoppingStore$ = this.store.select(selectCurrentGroceryStore());
     this.shoppingStore$.pipe(
       withLatestFrom(store => {
@@ -102,8 +102,7 @@ export class ShoppingListComponent implements OnInit {
   }
 
   onAddShoppingItemInAisleClick(request: CreateShoppingItemRequest) {
-    this.addingShoppingItemInAisle$ = of(true);
-
+    this.addingShoppingItemInAisle$ = of(request.aisle);
     // this.store.dispatch(new CreatePantryItem(
     //   {name: request.name, initialStoreLocation:
     //       { storeName: '', id: 0, storeId: request.storeId, aisle: request.aisle}}));
@@ -111,7 +110,7 @@ export class ShoppingListComponent implements OnInit {
 
   onCreateShoppingItem($event: CreateShoppingItemRequest) {
     this.addingShoppingItem$ = of(false);
-    this.addingShoppingItemInAisle$ = of(false);
+    this.addingShoppingItemInAisle$ = of(null);
     if ($event.name) {
       const request = {
         name: $event.name,
@@ -133,7 +132,7 @@ export class ShoppingListComponent implements OnInit {
   }
 
   onCancelAddShoppingItem($event: GroceryStoreLocation) {
-    this.addingShoppingItemInAisle$ = of(false);
+    this.addingShoppingItemInAisle$ = of(null);
     this.addingShoppingItem$ = of(false);
   }
 }

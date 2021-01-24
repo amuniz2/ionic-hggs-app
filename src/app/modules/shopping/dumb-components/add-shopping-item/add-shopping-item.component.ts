@@ -10,9 +10,6 @@ import {CreateShoppingItemRequest} from '../../store/shopping.actions';
 export class AddShoppingItemComponent implements OnInit {
 
   @Input()
-  addingShoppingItem: boolean;
-
-  @Input()
   initialStoreLocation: GroceryStoreLocation;
 
   @Output()

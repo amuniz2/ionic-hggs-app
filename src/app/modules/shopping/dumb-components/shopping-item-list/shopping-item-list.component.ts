@@ -62,7 +62,7 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
   notifyDoneAddingItem: EventEmitter<CreateShoppingItemRequest> = new EventEmitter<CreateShoppingItemRequest>();
 
   @Input()
-  addingShoppingItemInAisle: boolean;
+  addingShoppingItemInAisle: string;
 
   @Input()
   groceryStore: GroceryStore;
@@ -121,6 +121,9 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if ((changes.shoppingList || changes.filter) && this.shoppingList) {
       this.buildShoppingList();
+    }
+    if (changes.addingShoppingItemInAisle) {
+
     }
   }
 

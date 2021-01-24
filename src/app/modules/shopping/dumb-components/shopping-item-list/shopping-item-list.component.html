@@ -5,7 +5,7 @@
           <ion-col>
             <div class="itemContents">
               <ion-label>Aisle {{aisle.name}}</ion-label>
-              <ion-button  fill="clear" outline="none" (click)="onAddShoppingItemClickInAisle(aisle)">
+              <ion-button *ngIf="addingShoppingItemInAisle === null" fill="clear" outline="none" (click)="onAddShoppingItemClickInAisle(aisle)">
                 <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" color="dark"></ion-icon>
               </ion-button>
             </div>
@@ -14,7 +14,7 @@
         <ion-row>
           <ion-col>
             <ion-list>
-              <app-add-shopping-item [addingShoppingItem]="addingShoppingItemInAisle"
+              <app-add-shopping-item *ngIf="addingShoppingItemInAisle === aisle.name"
                                      [initialStoreLocation]="{ storeId: groceryStore.id, storeName: groceryStore.name, id: null, aisle: aisle.name, section: null}"
                                      (notifyNewPantryItemRequestCancelled)="onCancelAddShoppingItemRequest($event)"
                                      (notifyNewPantryItemRequested)="onFinishAddingShoppingItemInAisle($event)">
