@@ -61,7 +61,6 @@ export class PantryEffects {
     ofType(PantryActionTypes.LoadPantryItems),
     switchMap(() => {
         return this.pantryDataService.getPantryItems().pipe(
-          tap((data) => console.log(`getPantryItems returned ${JSON.stringify(data)}`)),
           map(data => new PantryLoadedSuccessfully(data)),
           catchError(error => {
             console.log('Error getting Pantry Items');

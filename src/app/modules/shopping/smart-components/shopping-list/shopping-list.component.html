@@ -1,10 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-text slot="start">{{(shoppingStore$ | async)?.name}} Shopping List</ion-text>
+    <ion-text slot="start">Shopping List</ion-text>
     <ion-button *ngIf="!(addingShoppingItem$ | async) && ((addingShoppingItemInAisle$ | async) == null)" fill="clear" outline="none" (click)="onAddShoppingItemClick()">
       <ion-icon slot="start" ios="add-circle-outline" md="add-circle-outline" ></ion-icon>
     </ion-button>
-    <ion-button slot="end" *ngIf="!filterList" fill="clear" outline="none" (click)="filterItems()">Search
+    <ion-button  fill="clear" outline="none" (click)="presentSharingOptions()">
+      <ion-icon ios="share-outline" md="share-outline" ></ion-icon>
+    </ion-button>
+    <ion-button slot="end" *ngIf="!filterList" fill="clear" outline="none" (click)="filterItems()">
       <ion-icon ios="search-circle-outline" md="search-circle-outline" ></ion-icon>
     </ion-button>
   </ion-toolbar>
@@ -29,5 +32,7 @@
                           (notifyCancelAddItem)="onCancelAddShoppingItem($event)"
                           (notifyDoneAddingItem)="onCreateShoppingItem($event)"
                           [groceryStore]="selectedStore"
-                          [shoppingList]="shoppingList$ | async"></app-shopping-item-list>
+                          [shoppingItems]="shoppingItems$ | async"
+                          (notifyShoppingListAvailable) = updateShoppingList($event)
+                        ></app-shopping-item-list>
 </ion-content>

@@ -12,7 +12,7 @@ import {selectAllGroceryStores, selectGroceryStoresLoading} from '../../../../st
 import {GroceryStoreState} from '../../../../model/grocery-store';
 import {AlertController, ToastController} from '@ionic/angular';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
-import {HggsFile, IGroceryDataTransporter} from '../../../../services/grocery-data-transporter.service';
+import {HggsFile, IGroceryDataExporter} from '../../../../services/grocery-data-exporter.service';
 import {File} from  '@ionic-native/file/ngx';
 import {HggsData} from '../../../../model/hggs-data';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
@@ -46,7 +46,7 @@ export class PantryInventoryManagerComponent implements OnInit {
               private socialSharing: SocialSharing,
               private toastController: ToastController,
               private fileManager: File,
-              @Inject('IGroceryDataExporter')  private dataTransporter: IGroceryDataTransporter,
+              @Inject('IGroceryDataExporter')  private exporter: IGroceryDataExporter,
               @Inject('IPantryDataService')  private pantryDataService: IPantryDataService,
               private alertContoller: AlertController,
               private _cdr: ChangeDetectorRef,
@@ -139,17 +139,7 @@ export class PantryInventoryManagerComponent implements OnInit {
   };
 
   async presentSharingOptions(ev: any) {
-    // const popover = await this.popoverController.create({
-    //   component: ShareComponent,
-    //   cssClass: 'my-custom-class',
-    //   event: ev,
-    //   translucent: true
-    // });
-    // return await popover.present();
-
-      // this.events.publish('event data');
-
-    this.dataTransporter.exportAll().subscribe(fileName => {
+    this.exporter.exportAll().subscribe(fileName => {
       console.log(`file name returned: ${fileName}`)
       this.socialSharing.shareWithOptions({
         subject: 'Grocery shopping list',
@@ -196,8 +186,8 @@ export class PantryInventoryManagerComponent implements OnInit {
           {
             text: 'Import',
             handler: async () => {
-              this.dataTransporter.dataHandler = this.importDataRead;
-              await this.dataTransporter.importFromFile(hggsFile, {store: this.store, _cdr: this._cdr, router: this.router }).toPromise();
+              this.exporter.dataHandler = this.importDataRead;
+              await this.exporter.importFromFile(hggsFile, {store: this.store, _cdr: this._cdr, router: this.router }).toPromise();
             }
           }
         ],
@@ -206,8 +196,8 @@ export class PantryInventoryManagerComponent implements OnInit {
     }
 
     async importData() {
-    await this.dataTransporter.listFolders();
-    this.dataTransporter.getFilesAvailableToDownload().subscribe(
+    await this.exporter.listFolders();
+    this.exporter.getFilesAvailableToDownload().subscribe(
       async hggsFiles => {
         if (hggsFiles.length === 0) {
           this.notifyNoImportFileAvailable();

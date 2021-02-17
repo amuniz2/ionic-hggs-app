@@ -16,6 +16,10 @@ import {AddShoppingItemComponent} from './dumb-components/add-shopping-item/add-
 import {EditShoppingItemDetailsComponent} from './dumb-components/edit-shopping-item-details/edit-shopping-item-details.component';
 import {EditShoppingItemComponent} from './smart-components/edit-shopping-item/edit-shopping-item.component';
 import {EditShoppingItemLocationComponent} from './smart-components/edit-shopping-item-location/edit-shopping-item-location.component';
+import {SocialSharing} from "@ionic-native/social-sharing/ngx";
+import {File} from "@ionic-native/file/ngx";
+import {BarcodeScanner} from "@ionic-native/barcode-scanner/ngx";
+import {GroceryDataExporter} from "../../services/grocery-data-exporter.service";
 // import {PantryManagementModule} from "../pantry-management/pantry-management.module";
 
 @NgModule({
@@ -38,6 +42,10 @@ import {EditShoppingItemLocationComponent} from './smart-components/edit-shoppin
     EditShoppingItemDetailsComponent,
     EditShoppingItemLocationComponent
   ],
-  providers: [],
+  providers: [
+    SocialSharing,
+    File,
+    [{provide: 'IGroceryDataExporter', useClass: GroceryDataExporter}]
+  ],
 })
 export class ShoppingModule { }

@@ -93,10 +93,10 @@
       },
       "cordova-sqlite-storage": {},
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-statusbar": {},
       "cordova-plugin-x-socialsharing": {},
       "cordova-plugin-file": {},
-      "es6-promise-plugin": {}
+      "es6-promise-plugin": {},
+      "cordova-plugin-statusbar": {}
     },
     "platforms": []
   }

@@ -25,6 +25,9 @@ import {IProductInfoService} from './services/IProductInfoService';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {FakeProductInfoService} from './services/fake-product-info-service';
 import {FakePantryDataServiceHelper} from './services/fake-pantry-data-service-helper';
+import {GroceryDataExporter} from "./services/grocery-data-exporter.service";
+import {SocialSharing} from "@ionic-native/social-sharing/ngx";
+import {File} from "@ionic-native/file/ngx";
 
 
 @NgModule({

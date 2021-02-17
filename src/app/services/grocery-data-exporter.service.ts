@@ -4,24 +4,33 @@ import {HggsData} from '../model/hggs-data';
 import {map, switchMap, take} from 'rxjs/operators';
 import {forkJoin, from, Observable, of, zip} from 'rxjs';
 import {Inject, Injectable} from '@angular/core';
+import {ShoppingList} from '../model/shopping-list';
+import {ShoppingItem} from '../model/shopping-item';
 
-declare type DataReadCallback = (self: GroceryDataTransporter, data: HggsData) => Observable<boolean>;
+declare type DataReadCallback = (self: GroceryDataExporter, data: HggsData) => Observable<boolean>;
+
+export enum ShoppingListFormat {
+  Text,
+  Html
+};
 
 export interface GroceryStoreLocationsImport {
   groceryStoreId: number,
   locationMappings$: Observable<IdMapping[]>;
 };
 
-export interface IGroceryDataTransporter {
+export interface IGroceryDataExporter {
   dataHandler: (data: HggsData, state: any) => void;
 
   exportAll(): Observable<string>;
+
+  exportShoppingList(list: ShoppingList, format: ShoppingListFormat): Observable<string>;
 
   importFromFile(file: HggsFile, state: any): Observable<boolean>;
 
   getFilesAvailableToDownload(): Observable<HggsFile[]>;
 
-  importData(self: IGroceryDataTransporter, data: HggsData): Observable<boolean>;
+  importData(self: IGroceryDataExporter, data: HggsData): Observable<boolean>;
 
   listFolders(); // debugging
 }
@@ -32,7 +41,7 @@ export interface HggsFile extends Entry {
 }
 
 @Injectable()
-export class GroceryDataTransporter implements IGroceryDataTransporter {
+export class GroceryDataExporter implements IGroceryDataExporter {
   private dataExported: HggsData;
   private downloadedHggsFiles: Entry[];
   private hggsFiles: HggsFile[];
@@ -54,21 +63,68 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
     console.log(`in failedToCreateFileWriter: ${JSON.stringify(err)}`);
   }
 
-  private async writeDataToFile(): Promise<string> {
-    let fileName: string = '';
+  private async writeDataToFile(data: string, fileName: string): Promise<string> {
+    let fileNameUrl = '';
     try {
       // this.fileManager.tempDirectory
       console.log(`data directory: ${this.fileManager.dataDirectory}; app storage directory: ${this.fileManager.applicationStorageDirectory}`)
-      const fileEntry = await this.fileManager.createFile(this.fileManager.dataDirectory, 'grocery-data.hggs', true);
+      const fileEntry = await this.fileManager.createFile(this.fileManager.dataDirectory, fileName, true);
       fileEntry.createWriter((fileWriter => {
         console.log('writing file');
-        fileWriter.write(JSON.stringify(this.dataExported));
+        // fileWriter.write(JSON.stringify(this.dataExported));
+        fileWriter.write(JSON.stringify(data));
       }), this.failedToCreateFileWriter);
-      fileName = fileEntry.nativeURL;
-      return fileName;
+      fileNameUrl = fileEntry.nativeURL;
+      return fileNameUrl;
     }
     catch(err) {
       console.log(`error: ${JSON.stringify(err)} writing to file: ${JSON.stringify(fileName)}`);
+    }
+  }
+
+  public exportShoppingList(list: ShoppingList, format: ShoppingListFormat): Observable<string> {
+    let fileContents: string;
+    if (format === ShoppingListFormat.Text) {
+      fileContents =  this.exportTextShoppingList(list);
+    } else {
+      fileContents = this.exportHtmlShoppingList(list);
+    }
+    return from(this.writeDataToFile(fileContents, 'shoppingList.html'));
+  }
+
+  public exportTextShoppingList(list: ShoppingList): string {
+    const aislesSection =  this.buildAislesSection(list);
+    const sectionsSection = this.buildSectionsSection(list);
+    const result = `${aislesSection}${sectionsSection}`;
+    if (list.itemsWithNoStoreLocation?.length > 0) {
+      return result.concat(this.buildSectionWithNoLocations(list));
+    } else {
+      return result;
+    }
+  }
+
+  private createDOMDocument(): HTMLDocument {
+    const htmlAsString = '<html></html>';
+    const parser = new DOMParser();
+    return parser.parseFromString(htmlAsString, 'text/html');
+  }
+
+  public exportHtmlShoppingList(list: ShoppingList): string {
+    try {
+      const doc: HTMLDocument = this.createDOMDocument();
+      const body = doc.getElementsByTagName('body').item(0);
+      const shoppingListHeader = doc.createElement('h1');
+      shoppingListHeader.innerText = 'Shopping List';
+      body.appendChild(shoppingListHeader);
+      this.buildAislesHtmlSection(list, body);
+      this.buildSectionsHtml(list, body);
+      if (list.itemsWithNoStoreLocation?.length > 0) {
+        this.buildOtherSectionHtml(list, body);
+      }
+      return doc.documentElement.outerHTML;
+    } catch(e) {
+      console.log('exception occurred');
+      console.log(e);
     }
   }
 
@@ -93,7 +149,7 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
           groceryStoreAisles: storeAisles,
           pantryItemLocations: itemLocations
         };
-        return from(this.writeDataToFile());
+        return from(this.writeDataToFile(JSON.stringify(this.dataExported), 'grocery-data.hggs'));
         // return this.writeDataToFile().then((fileName) => fileName);
       }));
 
@@ -214,7 +270,7 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
       };
   }
 
-  public importData(self: GroceryDataTransporter, data: HggsData): Observable<boolean> {
+  public importData(self: GroceryDataExporter, data: HggsData): Observable<boolean> {
     return of(true);
   }
 
@@ -280,9 +336,95 @@ export class GroceryDataTransporter implements IGroceryDataTransporter {
         console.log('getting directory listing for: ', dirDesc.name);
         await this.getDirectoryListing(dirDesc.dir);
       }
-      //const listing = await this.getDirectoryListing(dirDesc.dir);
+      // const listing = await this.getDirectoryListing(dirDesc.dir);
     });
 //    const entries = await this.getDirectoryListing(this.fileManager.externalRootDirectory, 'Download');
+    return result;
+  }
+
+  private buildAislesSection(list: ShoppingList): string {
+    let result = '';
+    list.aisles.forEach(aisle => {
+      result = result.concat(`Aisle ${aisle.name}\n`);
+      aisle.sections.forEach(section => {
+        section.shoppingItems.forEach(item => {
+          result = result.concat(`\t${item.name}\n`);
+        });
+      });
+      aisle.shoppingItems.forEach(item => {
+        result = result.concat(`\t${item.name}\n`);
+      });
+    });
+    return result;
+  }
+
+  private buildAislesHtmlSection(list: ShoppingList, parent: HTMLElement) {
+    const doc = parent.ownerDocument;
+    list.aisles.forEach(aisle => {
+      const curAisleHeader = doc.createElement('h1');
+      const aisleList = doc.createElement('ul');
+      parent.appendChild(curAisleHeader);
+      curAisleHeader.innerText = `Aisle ${aisle.name}`;
+      parent.appendChild(aisleList);
+      aisle.sections.forEach(section => {
+        section.shoppingItems.forEach(item => {
+          this.addShoppingListItemHtml(aisleList, item);
+        });
+      });
+      aisle.shoppingItems.forEach(item => {
+        this.addShoppingListItemHtml(aisleList, item);
+      });
+    });
+  }
+
+  private buildSectionsHtml(list: ShoppingList, parent: HTMLElement) {
+    const doc = parent.ownerDocument;
+    list.sections.forEach(section => {
+      const sectionHeader = doc.createElement('h2');
+      sectionHeader.innerText = `${section.name} Section\n`;
+      parent.appendChild(sectionHeader);
+      const sectionList = doc.createElement('ul');
+      parent.appendChild(sectionList);
+      section.shoppingItems.forEach(item => {
+        this.addShoppingListItemHtml(sectionList, item);
+      });
+    });
+  }
+
+  private buildOtherSectionHtml(list: ShoppingList, parent: HTMLElement) {
+    const doc = parent.ownerDocument;
+    const otherHeader = doc.createElement('h2');
+    otherHeader.innerText = 'Other';
+    parent.appendChild(otherHeader);
+    const otherList = doc.createElement('ul');
+    parent.appendChild(otherList);
+    list.itemsWithNoStoreLocation.forEach(item => {
+      this.addShoppingListItemHtml(otherList, item);
+    });
+  }
+
+  private addShoppingListItemHtml(parent: HTMLElement, shoppingItem: ShoppingItem) {
+    const li = parent.ownerDocument.createElement('li');
+    li.innerText = shoppingItem.name;
+    parent.appendChild(li);
+  }
+
+  private buildSectionsSection(list: ShoppingList): string {
+    let result = '';
+    list.sections.forEach(section => {
+      result = result.concat(`Section ${section.name}\n`);
+      section.shoppingItems.forEach(item => {
+        result = result.concat(`\t${item.name}\n`);
+      });
+    });
+    return result;
+  }
+
+  private buildSectionWithNoLocations(list: ShoppingList) {
+    let result = 'Unknown Location\n';
+    list.itemsWithNoStoreLocation.forEach(item => {
+      result = result.concat(`\t${item.name}\n`);
+    });
     return result;
   }
 }

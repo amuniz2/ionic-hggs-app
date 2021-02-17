@@ -7,19 +7,11 @@ import {UiCrudAction} from '../../../../ui-crud-actions';
 import {CreateShoppingItemRequest} from '../../store/shopping.actions';
 import {GroceryStore} from '../../../../model/grocery-store';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
-import {CreatePantryItemRequest} from '../../../../helpers';
+import {Aisle, ShoppingItemGroup, ShoppingList} from '../../../../model/shopping-list';
+import {buildShoppingList} from '../../shopping-helpers';
 
 export interface AddPantryItemToStoreShoppingList {
   aisle: Aisle;
-}
-
-class ShoppingItemGroup {
-  name: string;
-  shoppingItems: ShoppingItem[];
-}
-
-class Aisle extends ShoppingItemGroup {
-  sections: ShoppingItemGroup[];
 }
 
 export class StoreShoppingItemUpdate {
@@ -41,13 +33,16 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
   }
 
   @Output()
+  notifyShoppingListAvailable: EventEmitter<ShoppingList> = new EventEmitter();
+
+  @Output()
   notifySaveShoppingItemRequested: EventEmitter<StoreShoppingItemUpdate> = new EventEmitter();
 
   @Output()
   notifyChangeShoppingItemLocationRequested: EventEmitter<EditItemLocationRequest> = new EventEmitter();
 
   @Input()
-  shoppingList: ShoppingItem[];
+  shoppingItems: ShoppingItem[];
 
   @Input()
   filter: string;
@@ -67,9 +62,7 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
   @Input()
   groceryStore: GroceryStore;
 
-  aisles: Aisle[];
-  sections: ShoppingItemGroup[];
-  itemsWithNoStoreLocation: ShoppingItem[];
+  shoppingList: ShoppingList;
 
   private filteredItems: ShoppingItem[];
 
@@ -119,67 +112,24 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ((changes.shoppingList || changes.filter) && this.shoppingList) {
-      this.buildShoppingList();
+    console.log('in shopping-item-list-component.ngOnChanges()');
+    console.log(changes);
+    console.log(`shoppingItems exist: ${!!this.shoppingItems}`);
+    if ((changes.shoppingItems || changes.filter) && !!this.shoppingItems) {
+      console.log('calling this.buildShoppingList()');
+      this.shoppingList = this.buildShoppingList();
+      this.notifyShoppingListAvailable.emit(this.shoppingList);
     }
     if (changes.addingShoppingItemInAisle) {
 
     }
   }
 
-  private buildAisle(groupName: string, itemsInGroup: ShoppingItem[]): Aisle {
-    /// const itemsInAisle = filteredAisleItems.filter(item => item.location.aisle === aisle);
-    const itemsInSectionWithinAisle = [];
-    const itemsInAisleWithNoSection = [];
 
-    itemsInGroup.forEach(item => {
-      if (!!item.location.section) {
-        itemsInSectionWithinAisle.push(item);
-      } else {
-        itemsInAisleWithNoSection.push(item);
-      }
-    });
-
-    const newAisle = {
-      name: groupName,
-      sections: [],
-      shoppingItems: itemsInAisleWithNoSection
-    };
-
-    const distinctSectionsInAisle = new Set(itemsInSectionWithinAisle.map(item => item.location.section));
-    distinctSectionsInAisle.forEach(section => {
-      newAisle.sections.push({
-        name: section,
-        shoppingItems: itemsInGroup.filter(item => item.location.section === section)
-      });
-    });
-    return newAisle;
-  }
-
-  buildShoppingList() {
-    this.aisles = [];
-    this.sections = [];
-
-    this.filteredItems = this.filteredShoppingItems(this.shoppingList);
-    console.log('filtered items', this.filteredItems);
-    const filteredAisleItems = this.filteredItems.filter(item => !!item.location?.aisle);
-
-    const distinctAisles: Set<string> = new Set(filteredAisleItems.map(x => x.location.aisle));
-    const filteredSectionItems = this.filteredItems.filter((item) => !distinctAisles.has(item.location?.aisle) && !!item.location?.section);
-
-    distinctAisles.forEach(aisle =>
-      this.aisles.push(this.buildAisle(aisle, filteredAisleItems.filter(item => item.location.aisle === aisle))));
-
-    const distinctSections: Set<string> = new Set(filteredSectionItems.map(x => x.location.section));
-
-    distinctSections.forEach(section => this.sections.push({
-      name: section,
-      shoppingItems: filteredSectionItems.filter(item => item.location.section === section)
-    }));
-
-    this.itemsWithNoStoreLocation = this.filteredItems.filter(item =>
-      !item.location ||
-      (!item.location || (!distinctAisles.has(item.location.aisle) && !distinctSections.has(item.location.section))));
+  buildShoppingList(): ShoppingList {
+    console.log('calling buildShoppingList with items:');
+    console.log(this.filteredShoppingItems(this.shoppingItems));
+    return buildShoppingList(this.filteredShoppingItems(this.shoppingItems));
   }
 
   editLocation(shoppingItem: ShoppingItem) {

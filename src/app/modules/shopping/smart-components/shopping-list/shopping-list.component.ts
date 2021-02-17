@@ -1,30 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {SelectStore} from '../../../../store';
-import {selectAllGroceryStores, selectCurrentGroceryStore, selectGroceryStoresLoading} from '../../../../store/store-management.selectors';
+import {
+  selectAllGroceryStores,
+  selectCurrentGroceryStore,
+  selectGroceryStoresLoading
+} from '../../../../store/store-management.selectors';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../../store/app.state';
 import {Observable, of} from 'rxjs';
 import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
 import {
-  CreateShoppingItemForNewPantryItem, CreateShoppingItemRequest,
+  CreateShoppingItemForNewPantryItem,
+  CreateShoppingItemRequest,
   ItemPlacedInOrRemovedFromCart,
   LoadShoppingList
 } from '../../store/shopping.actions';
 import {ShoppingItem} from '../../../../model/shopping-item';
-import {
-  selectStoreShoppingItems,
-} from '../../store/shopping.selectors';
+import {selectStoreShoppingItems,} from '../../store/shopping.selectors';
 import {
   AddPantryItemToStoreShoppingList,
   StoreShoppingItemUpdate
 } from '../../dumb-components/shopping-item-list/shopping-item-list.component';
 import {withLatestFrom} from 'rxjs/operators';
 import {EditItemLocationRequest} from '../../../pantry-management/dumb-components/pantry-item-locations/pantry-item-locations.component';
-import {
-  EditPantryItemLocationRequest
-} from '../../../pantry-management/store/pantry-management.actions';
+import {EditPantryItemLocationRequest} from '../../../pantry-management/store/pantry-management.actions';
 import {Router} from '@angular/router';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
+import {ToastController} from '@ionic/angular';
+import {File} from '@ionic-native/file/ngx';
+import {IGroceryDataExporter, ShoppingListFormat} from '../../../../services/grocery-data-exporter.service';
+import {ShoppingList} from '../../../../model/shopping-list';
 
 export class AddShoppingItemRequest {
   public itemId: number;
@@ -39,26 +45,32 @@ export class AddShoppingItemRequest {
 export class ShoppingListComponent implements OnInit {
   groceryStoresLoading$: Observable<boolean>;
   groceryStores$: Observable<GroceryStoreState[]>;
-  shoppingList$: Observable<ShoppingItem[]>;
+  shoppingItems$: Observable<ShoppingItem[]>;
   shoppingStore$: Observable<GroceryStoreState>;
   addingShoppingItem$: Observable<boolean>;
   addingShoppingItemInAisle$: Observable<string>;
 
   selectedStore: GroceryStore;
 
+  private shoppingList: ShoppingList;
   private filterList: boolean;
   filter: string;
 
 
-  constructor(private store: Store<AppState>, private router: Router) {
+  constructor(private store: Store<AppState>, private router: Router,
+              private socialSharing: SocialSharing,
+              private toastController: ToastController,
+              private fileManager: File,
+              @Inject('IGroceryDataExporter') private exporter: IGroceryDataExporter) {
     // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
     this.groceryStores$ = this.store.select(selectAllGroceryStores);
   }
 
   ngOnInit() {
+    console.log('in shopping-list-component.ngOnInit()');
     this.addingShoppingItem$ = of(false);
-    this.addingShoppingItemInAisle$ = of (null);
+    this.addingShoppingItemInAisle$ = of(null);
     this.shoppingStore$ = this.store.select(selectCurrentGroceryStore());
     this.shoppingStore$.pipe(
       withLatestFrom(store => {
@@ -67,7 +79,7 @@ export class ShoppingListComponent implements OnInit {
           aisles: new Set(store.aisles),
           sections: new Set(store.sections)
         };
-        this.shoppingList$ = this.store.select(selectStoreShoppingItems(this.selectedStore?.id));
+        this.shoppingItems$ = this.store.select(selectStoreShoppingItems(this.selectedStore?.id));
       }));
   }
 
@@ -75,7 +87,7 @@ export class ShoppingListComponent implements OnInit {
     this.store.dispatch(new SelectStore($event.id));
     this.selectedStore = $event;
     this.store.dispatch(new LoadShoppingList(this.selectedStore?.id));
-    this.shoppingList$ = this.store.select(selectStoreShoppingItems(this.selectedStore?.id));
+    this.shoppingItems$ = this.store.select(selectStoreShoppingItems(this.selectedStore?.id));
   }
 
   onItemPlacedInOrRemovedFromCart($event: StoreShoppingItemUpdate) {
@@ -135,5 +147,48 @@ export class ShoppingListComponent implements OnInit {
     this.addingShoppingItemInAisle$ = of(null);
     this.addingShoppingItem$ = of(false);
   }
-}
 
+  private async onSuccessExport(result) {
+    const toast = await this.toastController.create({message: 'List shared.', duration: 2000});
+    await toast.present();
+  };
+
+  private async onExportError(err) {
+    const toast = await this.toastController.create({
+      message: `Email failed to send with error: ${JSON.stringify(err)}.`,
+      duration: 10000
+    });
+    await toast.present();
+  };
+
+  async presentSharingOptions(ev: any) {
+    this.exporter.exportShoppingList(this.shoppingList, ShoppingListFormat.Html).subscribe(fileName => {
+      console.log(`shopping list file name returned: ${fileName}`)
+      this.socialSharing.shareWithOptions({
+        subject: 'Grocery shopping list',
+        chooserTitle: 'Select how to send shopping list',
+        message: 'Here is the list',
+        files: [fileName]
+      }).then(async r => await this.onSuccessExport(r)).catch(async err => await this.onExportError(err));
+    });
+
+
+   //  const listToShare = this.exporter.exportShoppingList(this.shoppingList, ShoppingListFormat.Html);
+   // // const listToShare = `Shopping List\n${this.exporter.exportShoppingList(this.shoppingList, ShoppingListFormat.Html)}`;
+   //  console.log('calling shareWithOptions');
+   //  this.socialSharing.shareWithOptions({
+   //    subject: 'Grocery shopping list',
+   //    chooserTitle: 'Select how to send shopping list',
+   //    message: listToShare,
+   //    files: []
+   //  })
+   //    .then(async r => {
+   //      await this.onSuccessExport(r)
+   //    })
+   //    .catch(async err => await this.onExportError(err));
+  }
+
+  updateShoppingList($event: ShoppingList) {
+    this.shoppingList = $event;
+  }
+}

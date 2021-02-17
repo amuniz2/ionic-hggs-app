@@ -18,7 +18,7 @@ import { PantryItemLocationsComponent } from './dumb-components/pantry-item-loca
 import { EditPantryItemLocationComponent } from '../shared-module/smart-components/edit-pantry-item-location/edit-pantry-item-location.component';
 import { AddPantryItemComponent } from './dumb-components/add-pantry-item/add-pantry-item.component';
 import {NgModule} from '@angular/core';
-import {GroceryDataTransporter} from '../../services/grocery-data-transporter.service';
+import {GroceryDataExporter} from '../../services/grocery-data-exporter.service';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
 
 @NgModule({
@@ -48,7 +48,7 @@ import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
         SocialSharing,
         File,
         BarcodeScanner,
-        [{provide: 'IGroceryDataExporter', useClass: GroceryDataTransporter}],
+        [{provide: 'IGroceryDataExporter', useClass: GroceryDataExporter}],
     ]
 })
 
