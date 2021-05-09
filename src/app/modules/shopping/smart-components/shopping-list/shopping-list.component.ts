@@ -31,6 +31,7 @@ import {ToastController} from '@ionic/angular';
 import {File} from '@ionic-native/file/ngx';
 import {IGroceryDataExporter, ShoppingListFormat} from '../../../../services/grocery-data-exporter.service';
 import {ShoppingList} from '../../../../model/shopping-list';
+import { htmlToText } from 'html-to-text';
 
 export class AddShoppingItemRequest {
   public itemId: number;
@@ -162,13 +163,15 @@ export class ShoppingListComponent implements OnInit {
   };
 
   async presentSharingOptions(ev: any) {
-    this.exporter.exportShoppingList(this.shoppingList, ShoppingListFormat.Html).subscribe(fileName => {
-      console.log(`shopping list file name returned: ${fileName}`)
+    this.exporter.exportShoppingList(this.shoppingList, ShoppingListFormat.Html).subscribe(ret => {
+      console.log(`shopping list file name returned: ${ret.fileName}`)
       this.socialSharing.shareWithOptions({
         subject: 'Grocery shopping list',
         chooserTitle: 'Select how to send shopping list',
-        message: 'Here is the list',
-        files: [fileName]
+        message: htmlToText(ret.contents, {
+          wordwrap: 130
+        })
+        // files: ret.fileName
       }).then(async r => await this.onSuccessExport(r)).catch(async err => await this.onExportError(err));
     });
 

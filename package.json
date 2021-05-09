@@ -39,6 +39,7 @@
     "cordova-plugin-splashscreen": "^6.0.0",
     "cordova-plugin-whitelist": "^1.3.4",
     "core-js": "^2.6.11",
+    "html-to-text": "^7.0.0",
     "install": "^0.13.0",
     "ionic": "^5.4.16",
     "ionic-selectable": "^4.7.1",

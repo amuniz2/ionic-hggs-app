@@ -22,9 +22,6 @@
     "cordova-plugin-ionic-webview": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-statusbar": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
     "cordova-plugin-x-socialsharing": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
@@ -38,6 +35,9 @@
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "es6-promise-plugin": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },

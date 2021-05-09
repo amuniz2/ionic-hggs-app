@@ -24,7 +24,7 @@ export interface IGroceryDataExporter {
 
   exportAll(): Observable<string>;
 
-  exportShoppingList(list: ShoppingList, format: ShoppingListFormat): Observable<string>;
+  exportShoppingList(list: ShoppingList, format: ShoppingListFormat): Observable<{contents: string, fileName: string}>;
 
   importFromFile(file: HggsFile, state: any): Observable<boolean>;
 
@@ -82,14 +82,17 @@ export class GroceryDataExporter implements IGroceryDataExporter {
     }
   }
 
-  public exportShoppingList(list: ShoppingList, format: ShoppingListFormat): Observable<string> {
+  public exportShoppingList(list: ShoppingList, format: ShoppingListFormat): Observable<
+    {contents: string, fileName: string}> {
     let fileContents: string;
     if (format === ShoppingListFormat.Text) {
       fileContents =  this.exportTextShoppingList(list);
+      // from(this.writeDataToFile(fileContents, 'shoppingList.html'));
     } else {
       fileContents = this.exportHtmlShoppingList(list);
     }
-    return from(this.writeDataToFile(fileContents, 'shoppingList.html'));
+    from(this.writeDataToFile(fileContents, 'shoppingList.html'));
+    return of({ contents: fileContents, fileName: 'shoppingList.html'});
   }
 
   public exportTextShoppingList(list: ShoppingList): string {

@@ -22,7 +22,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <allow-navigation href="http://localhost:8080/*" />
     <preference name="CordovaWebViewEngine" value="CDVUIWebViewEngine" />
-    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarStyle" value="lightcontent" />
     <preference name="AndroidXEnabled" value="true" />
     <platform name="android">
