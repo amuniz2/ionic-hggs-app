@@ -18,6 +18,7 @@ import {
   UpdateStoreAisleOrSectionActionRequest
 } from '../../dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {UiCrudAction} from '../../../../ui-crud-actions';
+import {DeleteGroceryStoreRequest} from '../../dumb-components/store-list/store-list.component';
 
 @Component({
   selector: 'app-edit-selected-grocery-store',
@@ -78,5 +79,9 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
     if ($event.action === UiCrudAction.Update) {
       this.store.dispatch(new fromAppActions.UpdateAisle($event));
     }
+  }
+
+  onDeleteGroceryStore($event: DeleteGroceryStoreRequest) {
+    this.store.dispatch(new fromActions.DeleteStore($event));
   }
 }

@@ -81,4 +81,18 @@ export class StoreManagementEffects {
         catchError(error => [new DisplayError(error)])
       );
     }));
+
+  // @Effect()
+  // public loadGroceryStores$ = this.actions$.pipe(
+  //   ofType(StoreManagerActionTypes.LoadGroceryStores),
+  //   switchMap(() => {
+  //     return this.storeManagementService.getGroceryStores.pipe(
+  //       map(data => new StoresLoadedSuccessfully(data)),
+  //       catchError(error => {
+  //         console.log('Error getting Grocery Stores');
+  //         return [new LoadGroceryStoresFailed(error)];
+  //       })
+  //     );
+  //   })
+  // );
 }

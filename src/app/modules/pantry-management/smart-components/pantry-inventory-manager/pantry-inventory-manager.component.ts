@@ -63,7 +63,6 @@ export class PantryInventoryManagerComponent implements OnInit {
   }
 
   ngOnInit() {
-    // dispatch action that list has been navigated to
     this.pantryItems$ = this.store.pipe(select(fromSelectors.selectAllPantryItems));
     this.error$ = this.store.pipe(select(fromSelectors.selectPantryItemsError));
   }

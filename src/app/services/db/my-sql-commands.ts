@@ -659,18 +659,24 @@ export class MySqlCommands {
       console.log('Error querying for grocery stores');
       console.log(err);
     }
-    console.log(groceryStores);
     return groceryStores;
   }
 
   public async deleteGroceryStore(id: number): Promise<number> {
-    const deleteSql = `DELETE FROM ${StoreTable.NAME} WHERE ${StoreTable.COLS.ID} = ${id}`;
+    const deleteSql = `
+    DELETE FROM ${StoreGroceryAisleTable.name} WHERE ${StoreGroceryAisleTable.COLS.STORE_ID} = ${id}
+    DELETE FROM ${StoreGrocerySectionTable.name} WHERE ${StoreGrocerySectionTable.COLS.STORE_ID} = ${id}
+    DELETE FROM ${PantryItemLocationTable.name} WHERE ${PantryItemLocationTable.COLS.LOCATION_ID}
+    IN (SELECT ${LocationTable.COLS.ID} FROM ${LocationTable.NAME} WHERE ${LocationTable.COLS.STORE_ID} = ${id})
+    DELETE FROM ${LocationTable.name} WHERE ${LocationTable.COLS.STORE_ID} = ${id}
+    DELETE FROM ${StoreTable.NAME} WHERE ${StoreTable.COLS.ID} = ${id}`;
     try {
       const data = await this.db.executeSql(deleteSql, []);
       return data.rowsAffected;
     } catch (err) {
       console.log(`Error deleting grocery store ${id}`);
       console.log(err);
+      console.log(deleteSql);
     }
   }
   // endregion
@@ -950,6 +956,7 @@ export class MySqlCommands {
   }
 
   public async cleanupLocations(): Promise<boolean> {
+    console.log('Inside cleanupLocatins()');
     let success = await this.deleteUnusedGroceryStoreLocations();
     if (success) {
       success = await this.deleteUnusedGroceryStoreAislesAndSections();
@@ -1128,7 +1135,7 @@ export class MySqlCommands {
 
   private async deleteUnusedGroceryStoreLocations() {
     const sql = `DELETE FROM ${LocationTable.NAME} WHERE NOT EXISTS (
-    SELECT * FROM ${PantryItemLocationTable.NAME} WHERE ${LocationTable.COLS.ID} = ${PantryItemLocationTable.COLS.LOCATION_ID})`;
+    SELECT 1 FROM ${PantryItemLocationTable.NAME} WHERE ${LocationTable.COLS.ID} = ${PantryItemLocationTable.COLS.LOCATION_ID})`;
 
     try {
       await this.db.executeSql(sql, []);
@@ -1142,12 +1149,12 @@ export class MySqlCommands {
 
   private async deleteUnusedGroceryStoreAislesAndSections(): Promise<boolean> {
     const deleteAislesSql = `DELETE FROM ${StoreGroceryAisleTable.NAME} WHERE NOT EXISTS (
-    SELECT * FROM ${LocationTable.NAME}
+    SELECT 1 FROM ${LocationTable.NAME}
     WHERE ${StoreGroceryAisleTable.COLS.GROCERY_AISLE} = ${LocationTable.COLS.AISLE}
     AND ${StoreGroceryAisleTable.COLS.STORE_ID} = ${LocationTable.COLS.STORE_ID})`;
 
     const deleteSectionsSql = `DELETE FROM ${StoreGrocerySectionTable.NAME} WHERE NOT EXISTS (
-    SELECT * FROM ${LocationTable.NAME}
+    SELECT 1 FROM ${LocationTable.NAME}
     WHERE ${StoreGrocerySectionTable.COLS.GROCERY_SECTION} = ${LocationTable.COLS.SECTION_NAME}
     AND ${StoreGrocerySectionTable.COLS.STORE_ID} = ${LocationTable.COLS.STORE_ID})`;
 

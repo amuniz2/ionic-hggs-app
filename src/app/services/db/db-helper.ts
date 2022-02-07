@@ -34,6 +34,7 @@ export class PantryDbHelper {
   cleanupLocations(): Observable<boolean> {
     return this.cleanupLocationsUsingPromise();
   }
+
   public getGroceryStoreByName(name: string): Observable<GroceryStore> {
     return new Observable<GroceryStore>((observer) => {
         // this.mySqlCommands.openOrCreateDb().then((result) => {

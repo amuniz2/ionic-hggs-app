@@ -83,6 +83,7 @@ export class AppEffects {
   @Effect()
   public loadGroceryStores$ = this.actions$.pipe(
     ofType(AppActionTypes.LoadGroceryStores),
+    tap(x => console.log('calling service getGroceryStores()')),
     switchMap(() => {
       return this.storeManagementService.getGroceryStores().pipe(
         map(data => {

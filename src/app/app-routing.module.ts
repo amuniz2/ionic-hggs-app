@@ -22,6 +22,9 @@ export const routes: Routes = [
       { path: 'shopping-list',
         loadChildren: './modules/shopping/shopping.module#ShoppingModule'
       },
+      { path: 'stores',
+        loadChildren: './modules/store-management/store-management.module#StoreManagementModule'
+      },
     ]
   },
   {

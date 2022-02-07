@@ -21,15 +21,16 @@ export class StoreInventoryManagerPageComponent implements OnInit {
   addingStore$: Observable<boolean>;
 
   constructor(private store: Store<AppState>) {
-    this.title = 'Manage Stores from page component';
+    this.title = 'Manage Stores';
     this.addingStore$ = of(false);
   }
 
   ngOnInit() {
     // dispatch action that list has been navigated to
     // this.store.dispatch(new LoadGroceryStores());
+    console.log('selecting stores');
+    this.groceryStores$ = this.store.pipe(select(fromSelectors.selectAllGroceryStores));
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
-    this.groceryStores$ = this.store.select(fromSelectors.selectAllGroceryStores);
   }
 
   onNotifyNewStoreRequest($event: NewGroceryStoreRequest) {

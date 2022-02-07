@@ -14,7 +14,7 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		gGWt2RSwl5XTD0SIf6JyC7+sGUw=
+		chSyonK2k+eszLsXEjIunTD1pmY=
 		</data>
 		<key>CDVBarcodeScanner.bundle/beep.caf</key>
 		<data>
@@ -34,11 +34,11 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib/objects-13.0+.nib</key>
 		<data>
-		g20nTmsWITqwsdPhuKb82y0l55A=
+		p40B2APXc1B4a+AIm/A1R+WJWGA=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib/runtime.nib</key>
 		<data>
-		lV9PmLRCUVVxA3CizVSBnDdpgz8=
+		IDRGIRKBM2If0mqAUOjxkG7l7Xs=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -46,19 +46,19 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib/objects-13.0+.nib</key>
 		<data>
-		YaCKHq4QYftYp8wDx3iV3xjxnBA=
+		U0x8EM0781fCPb62BbZIXKeDlZ4=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib/runtime.nib</key>
 		<data>
-		QG8eOIRH3HxsKpkNU4JMixCLk5I=
+		U0x8EM0781fCPb62BbZIXKeDlZ4=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		GaptW3fvwd5DgysJxzL5FkSJbCU=
+		aCnxZgfR7fcKSdw1HSXJqfr6f1E=
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		Qb/qS3bDkO9ukGDUpoo7OItyd+w=
+		kBolzoeuXzbCJ5/e2FPZZEkrlfs=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -66,15 +66,15 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		i2u8+UhdkUhmlYLMkmAoxUEZ2Bc=
+		gO1tL5jX9gn+2N6OMltr7UKO7qw=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		XX6MSr/wSwgSkF9UR1HHFQgRZbc=
+		SOKhvLmC0V1tme0NhwunzmQ1/3k=
 		</data>
 		<key>scannerOverlay.nib</key>
 		<data>
-		oDH/4b4AnHlDharAH6HUaZ6XKpk=
+		QKhE0r5OT/bm8eLQzRpDRjRIldk=
 		</data>
 		<key>www/0.js</key>
 		<data>
@@ -746,7 +746,7 @@
 		</data>
 		<key>www/cordova_plugins.js</key>
 		<data>
-		a+8BcIX9ZGWemfjta8fdQ+e4quA=
+		L0V9y3DAbAZO/zbhZHyqqB/ylqI=
 		</data>
 		<key>www/default~modules-pantry-management-pantry-management-module~modules-shopping-shopping-module.js</key>
 		<data>
@@ -790,19 +790,19 @@
 		</data>
 		<key>www/main.js</key>
 		<data>
-		KC5xt39T6/O8n/GolDvA1LwtqW8=
+		EVLZRKcT5aVjBugtiMOES5p/OO8=
 		</data>
 		<key>www/main.js.map</key>
 		<data>
-		RwZPviuz8ntsGMXpvGDgUHsp5VM=
+		QjIBeKcgKxlQKPvOTHPw/3sNceU=
 		</data>
 		<key>www/modules-pantry-management-pantry-management-module.js</key>
 		<data>
-		mhyT6/zjer138oxjWxjzkn1XWuU=
+		/A0aUZyM59PpXj/XLJdGPQ0K0eA=
 		</data>
 		<key>www/modules-pantry-management-pantry-management-module.js.map</key>
 		<data>
-		wMBEasv/wEuioCJL+Ipw36wAxE0=
+		6/33TgqbSn6dyUV+2aomB7bSGKs=
 		</data>
 		<key>www/modules-shopping-shopping-module.js</key>
 		<data>
@@ -811,6 +811,22 @@
 		<key>www/modules-shopping-shopping-module.js.map</key>
 		<data>
 		qaaXxtD5KW2VnhY9V8VKVdXiTi0=
+		</data>
+		<key>www/plugins/cordova-plugin-camera/www/Camera.js</key>
+		<data>
+		/Tl12sGFo/UZbPqnupaaV0Hg0vU=
+		</data>
+		<key>www/plugins/cordova-plugin-camera/www/CameraConstants.js</key>
+		<data>
+		pZ8wtQgKQ7VVvp54+LS0kEQWVxI=
+		</data>
+		<key>www/plugins/cordova-plugin-camera/www/CameraPopoverOptions.js</key>
+		<data>
+		wTQFdVOfKqX3vn6PORCY2efMoco=
+		</data>
+		<key>www/plugins/cordova-plugin-camera/www/ios/CameraPopoverHandle.js</key>
+		<data>
+		BCR7lBzNodH4jOKB9T+cIAd/6d4=
 		</data>
 		<key>www/plugins/cordova-plugin-device/www/device.js</key>
 		<data>
@@ -5969,7 +5985,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+PoZsw5MCMq5TFygV6uZtaPpVFmlOJEHw5ApI1TRPOQ=
+			PNbUd05l3dkkjY5UCp0mGCZ6R9+8ZJt/y9gvTLroIuc=
 			</data>
 		</dict>
 		<key>CDVBarcodeScanner.bundle/beep.caf</key>
@@ -6004,14 +6020,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zJwCAqMglz/xWYCb9++T8dMEI3bf0IKtdFjVQ9Ik9tU=
+			DhRJw4CtOTMevLCvYEAZWrwT7ZiGiB8eZhn8OuSXzj4=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib/runtime.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			2MtZGah5c33oDM6KArDKZos3DMr1+VSk0bBn2iYI/5s=
+			niseuYjLnw5alCV2JJcOfApYuE73/CkOXhp0LsXQcbI=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -6025,42 +6041,42 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			lcjPph7PKXsFhy8dwfZ2za81+soMW3Mc94H3qcBlZqM=
+			cWq7q+iQcmpSoaFGecnyPdKFEPFwRD3slgUmxFADkVs=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib/runtime.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			NegNyjwu/ZP+5HSDU2ciavlZJcFnIjZcnEll4n6dGgo=
+			cWq7q+iQcmpSoaFGecnyPdKFEPFwRD3slgUmxFADkVs=
 			</data>
 		</dict>
 		<key>MainViewController.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			OSuQd2E4QwjO3IRY79jQh9uZDCz4CdrbXC1qFdV6onQ=
+			vuk252NaW3ZzB752uWFQoPMwV/fGzsRnRxiH4UtieBI=
 			</data>
 		</dict>
 		<key>config.xml</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			OP8oUhtK1XoTNuVj0UovzhYWefqlSh6EcIZjuGyKjes=
+			3fUpOes7vckPWMRMkzRZ7JEDNY5zDMIIoy+vWed1Z7k=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			OvHA3jouf1HhBAptghtEW5lNrjSPzsQJn893nSm9VxE=
+			2qxdVdlc9WuK99uELoNDWCctFU5pa75oKMsSxzySaD8=
 			</data>
 		</dict>
 		<key>scannerOverlay.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Iwb1DH6MTr9+RwsbIeNvQiXfUNOpUAaVnOHu7VSvD4w=
+			DO3F1dBIXs7HQjj9mmwetPnfuC+Aay4Vce/1Z2Sicqc=
 			</data>
 		</dict>
 		<key>www/0.js</key>
@@ -7236,7 +7252,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			s4Nr9srcZmrNjAzMdZ0Fd0KcCcqPnl5hnIgEhqcZpj4=
+			1FRakafPTU5fLa66QnGYTAnu2dDbchPFCdmWvZ6JTbY=
 			</data>
 		</dict>
 		<key>www/default~modules-pantry-management-pantry-management-module~modules-shopping-shopping-module.js</key>
@@ -7313,28 +7329,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			lf+UHg2RV21nfxhSpi7IP/nnlSFtm26LXvFxRUBD6nE=
+			CsaQqP7vqxSjb6YmDOS0auUvCEE2+mYa9Ji5i0hV9bQ=
 			</data>
 		</dict>
 		<key>www/main.js.map</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			N89+oFu7JyUnr1PfRX27Yd4e76hrEhBq7gtRVW96dT4=
+			v5eVTdPDOP/89lV5XFLhSM7rI0ALkRYrogxQJCZNO1s=
 			</data>
 		</dict>
 		<key>www/modules-pantry-management-pantry-management-module.js</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			tnSB5YtquLAH5iO3K/X9tPyZs0ty5GG8hCIbCp2KPDs=
+			gr1rygaYB+uD6x06fdkgxYtRji98q82z5RMJToE+bnA=
 			</data>
 		</dict>
 		<key>www/modules-pantry-management-pantry-management-module.js.map</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ocNl4MHg2SJDWb33vZoqRDwqFFa0JwPf/lCPkj1iQI8=
+			lI0mVt4sDQAt9SAREUmUOyRukq7/XxPAvSscVIVDG24=
 			</data>
 		</dict>
 		<key>www/modules-shopping-shopping-module.js</key>
@@ -7349,6 +7365,34 @@
 			<key>hash2</key>
 			<data>
 			EIVLCjlPtkv7H060wZT0iMvbusUiSsmRvEBoSOV/EHA=
+			</data>
+		</dict>
+		<key>www/plugins/cordova-plugin-camera/www/Camera.js</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/DpMZq7FrbVwiAPbYjr190ea8NHGPLsnbwbi8KjR3Ws=
+			</data>
+		</dict>
+		<key>www/plugins/cordova-plugin-camera/www/CameraConstants.js</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+k005NyxBjTEPTZqMLIIM5Y0sGrzaXgX4a18Lh6lFqA=
+			</data>
+		</dict>
+		<key>www/plugins/cordova-plugin-camera/www/CameraPopoverOptions.js</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			fdqZsJujAwBDlyouy92pz8RsdJ2X+YvLd3nhcqDLQbk=
+			</data>
+		</dict>
+		<key>www/plugins/cordova-plugin-camera/www/ios/CameraPopoverHandle.js</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			oJ9wTGRFO5Wlr0eJO2JE7N4QQ//HjUvSKusjpEHUmNg=
 			</data>
 		</dict>
 		<key>www/plugins/cordova-plugin-device/www/device.js</key>

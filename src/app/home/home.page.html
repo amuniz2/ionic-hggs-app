@@ -6,11 +6,15 @@
 <!--        </ion-tab-button>-->
 
         <ion-tab-button tab="pantry-items" mode="md" #pantryItemsTab>
-          <ion-label>Pantry Items</ion-label>
+          <ion-label>{{managePantryItemsLabel}}}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="shopping-list" mode="md">
-          <ion-label>Shopping List</ion-label>
+          <ion-label>{{shoppingLabel}}</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="stores" mode="md">
+          <ion-label>{{manageStoresLabel}}</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
   </ion-tabs>

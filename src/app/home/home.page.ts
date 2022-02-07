@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 export class HomePageComponent {
   public manageStoresLabel = 'Stores';
   public managePantryItemsLabel = 'Pantry Items';
+  public shoppingLabel = 'Shopping'
 
   public constructor() {
   }

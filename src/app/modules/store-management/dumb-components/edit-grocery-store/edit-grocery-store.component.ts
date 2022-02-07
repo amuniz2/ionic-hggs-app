@@ -8,6 +8,7 @@ import {
 import {Observable, of} from 'rxjs';
 import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
 import {UiCrudAction} from '../../../../ui-crud-actions';
+import {DeleteGroceryStoreRequest} from "../store-list/store-list.component";
 
 export interface AccordionSections {
   [sectioName: string]: PageSection;
@@ -71,6 +72,9 @@ export class EditGroceryStoreComponent implements OnInit {
 
   @Output()
   notifyUpdateSection: EventEmitter<UpdateStoreAisleOrSectionActionRequest> = new EventEmitter();
+
+  @Output()
+  notifyDeleteGroceryStoreRequested: EventEmitter<DeleteGroceryStoreRequest> = new EventEmitter();
 
   constructor() {
   }

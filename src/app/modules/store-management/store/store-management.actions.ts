@@ -17,6 +17,7 @@ export enum StoreManagerActionTypes {
   GetGroceryStoreLocationsFailed = '[Store Manager] Store Locations Failed to Load',
   UpdateStoreAisle = '[Store Manager] Update Aisle',
   SelectStoreAisle = '[Store Manager] Select Aisle',
+  LoadGroceryStores = '[Store Manager] Load Grocery Store',
   GroceryStoresImportedSuccessfully = '[Store Manager] Grocery Stores Imported',
 }
 
