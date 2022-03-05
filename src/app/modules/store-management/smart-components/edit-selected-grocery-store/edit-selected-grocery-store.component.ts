@@ -19,6 +19,8 @@ import {
 } from '../../dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {UiCrudAction} from '../../../../ui-crud-actions';
 import {DeleteGroceryStoreRequest} from '../../dumb-components/store-list/store-list.component';
+import {AlertController, NavController} from '@ionic/angular';
+import {UpdateStoreAisle, UpdateStoreSection} from "../../store/store-management.actions";
 
 @Component({
   selector: 'app-edit-selected-grocery-store',
@@ -36,7 +38,9 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
   sectionsInUse$: Observable<string[]>;
 
   constructor(private store: Store<AppState>,
-              private router: Router) {
+              private router: Router,
+              private alertController: AlertController,
+              private navController: NavController) {
     this.groceryStoreId = this.router.getCurrentNavigation().extras.queryParams.id;
     this.groceryStore$ = this.store.pipe(select(selectGroceryStore(this.groceryStoreId)));
     this.groceryStoreAisles$ = this.store.pipe(select(selectGroceryStoreAisles(this.groceryStoreId)));
@@ -77,11 +81,42 @@ export class EditSelectedGroceryStoreComponent implements OnInit {
 
   onUpdateAisle($event: UpdateStoreAisleOrSectionActionRequest) {
     if ($event.action === UiCrudAction.Update) {
-      this.store.dispatch(new fromAppActions.UpdateAisle($event));
+      this.store.dispatch(new UpdateStoreAisle($event));
     }
   }
 
-  onDeleteGroceryStore($event: DeleteGroceryStoreRequest) {
-    this.store.dispatch(new fromActions.DeleteStore($event));
+  onUpdateSection($event: UpdateStoreAisleOrSectionActionRequest) {
+    if ($event.action === UiCrudAction.Update) {
+      this.store.dispatch(new UpdateStoreSection($event));
+    }
+  }
+
+  async onDeleteGroceryStore($event: DeleteGroceryStoreRequest) {
+    const alert = await this.alertController.create({
+      header: `Are you sure you want to delete ${$event.name}?`,
+      message:  'WARNING: all locations of items in the store will also be deleted',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.store.dispatch(new fromActions.DeleteStore($event));
+            this.navController.back();
+          }
+        },
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Delete cancelled');
+          }
+        }
+      ],
+    });
+    await alert.present();
+
+    // this.store.dispatch(new fromActions.DeleteStore({
+    //   id: this.groceryStoreId,
+    //   name: groceryStore.name
+    // }));
   }
 }

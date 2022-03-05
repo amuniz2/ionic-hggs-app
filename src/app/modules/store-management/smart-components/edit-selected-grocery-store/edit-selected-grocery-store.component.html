@@ -2,9 +2,6 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button>Back</ion-back-button>
-      <ion-button  fill="clear" outline="none" (click)="onDeleteGroceryStore()">
-        <ion-icon slot="icon-only" ios="trash-outline" md="trash-outline" ></ion-icon>
-      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -19,6 +16,7 @@
                           (notifyDeleteGroceryStoreSectionRequested) ="onDeleteGroceryStoreSectionRequest($event)"
                           (notifyExpandSections)="onNotifyExpandSections($event)"
                           (notifyUpdateAisle)="onUpdateAisle($event)"
+                          (notifyUpdateSection)="onUpdateSection($event)"
                           (notifyDeleteGroceryStoreRequested)="onDeleteGroceryStore($event)">
   </app-edit-grocery-store>
 </ion-content>

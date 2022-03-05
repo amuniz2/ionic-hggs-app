@@ -52,10 +52,10 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
   collectionName: string;
 
   @Input()
-  itemBeingEdited: string;
+  originalAisleOrSectionName: string;
 
   nameBeforeEdit: string;
-  newName: any;
+  newName: string;
   singleCollectionItemName: string;
 
   constructor() {
@@ -75,9 +75,9 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
 
   onCancelEditStoreAisleOrSectionClick() {
     this.notifyEditStoreAisleOrSectionRequested.emit({
-      originalName: "",
+      originalName: '',
       groceryStoreId: this.groceryStore.id,
-      aisleOrSectionName: this.itemBeingEdited,
+      aisleOrSectionName: this.originalAisleOrSectionName,
       action: UiCrudAction.Cancel});
     this.newName = '';
   }
@@ -89,13 +89,13 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
     this.newStoreAisleOrSection = '';
   }
 
-  editStoreAisle(slidingItem, asileName: string) {
+  editStoreAisleOrSection(slidingItem, aisleName: string) {
     slidingItem.el.close();
-    this.newName = asileName;
-    this.nameBeforeEdit = asileName;
+    this.newName = this.originalAisleOrSectionName;
+    this.nameBeforeEdit = aisleName;
     this.notifyStartEditStoreAisleOrSectionRequested.emit( {
       groceryStoreId: this.groceryStore.id,
-      aisleOrSectionName: asileName,
+      aisleOrSectionName: aisleName,
       action: UiCrudAction.RequestUpdate
     });
     // item.close();
@@ -112,12 +112,12 @@ export class GroceryStoreAislesOrSectionsComponent implements OnInit {
   }
 
   doneEditingItem() {
-    if (this.itemBeingEdited === this.newName) {
+    if (this.originalAisleOrSectionName === this.newName) {
       return;
     }
     this.notifyEditStoreAisleOrSectionRequested.emit( {
       groceryStoreId: this.groceryStore.id,
-      originalName: this.itemBeingEdited,
+      originalName: this.originalAisleOrSectionName,
       aisleOrSectionName: this.newName,
       action: UiCrudAction.Update
     });

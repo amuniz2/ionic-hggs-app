@@ -1,5 +1,12 @@
 <ion-toolbar>
-  <ion-back-button slot="start"></ion-back-button>
+  <ion-buttons slot="start">
+    <ion-back-button slot="start"></ion-back-button>
+  </ion-buttons>
+  <ion-buttons slot="end">
+    <ion-button  fill="clear" outline="none" (click)="onDeleteGroceryStore()">
+      <ion-icon slot="icon-only" ios="trash-outline" md="trash-outline" ></ion-icon>
+    </ion-button>
+  </ion-buttons>
   <ion-title>{{ groceryStore?.name}}</ion-title>
 </ion-toolbar>
 <ion-card>
@@ -13,7 +20,7 @@
                                         (notifyDeleteStoreAisleOrSectionRequested)="onNotifyDeleteStoreAisleRequest($event)"
                                         (notifyStartEditStoreAisleOrSectionRequested)="onStartEditAisle($event)"
                                         (notifyEditStoreAisleOrSectionRequested)="onUpdateAisle($event)"
-                                        [itemBeingEdited]="(aisleBeingEdited$ | async)"
+                                        [originalAisleOrSectionName]="(aisleBeingEdited$ | async)"
                                         [collectionName]="'aisles'">
   </app-grocery-store-aisles-or-sections>
   <app-hggs-accordion [sectionName]="grocerySectionsSection.label" [description]="" (change)="toggleGroceryStoreSectionsExpandState($event)" (addToList)="onAddSectionClicked()">
@@ -27,7 +34,7 @@
                                         [aislesOrSectionsInUse] = "sectionsInUse"
                                         (notifyStartEditStoreAisleOrSectionRequested)="onStartEditSection($event)"
                                         (notifyEditStoreAisleOrSectionRequested)="onUpdateSection($event)"
-                                        [itemBeingEdited]="(sectionBeingEdited$ | async)"
+                                        [originalAisleOrSectionName]="(sectionBeingEdited$ | async)"
   >
   </app-grocery-store-aisles-or-sections>
 </ion-card>

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GroceryStore, GroceryStoreState} from '../../../../model/grocery-store';
+import {GroceryStoreState} from '../../../../model/grocery-store';
 import {
   StoreAisleOrSection,
   StoreAisleOrSectionActionRequest,
@@ -8,10 +8,10 @@ import {
 import {Observable, of} from 'rxjs';
 import {CollapsedStatusChangedEvent, PageSection} from '../../../shared-module/widgets/hggs-accordion/hggs-accordion.component';
 import {UiCrudAction} from '../../../../ui-crud-actions';
-import {DeleteGroceryStoreRequest} from "../store-list/store-list.component";
+import {DeleteGroceryStoreRequest} from '../store-list/store-list.component';
 
 export interface AccordionSections {
-  [sectioName: string]: PageSection;
+  [sectionName: string]: PageSection;
 }
 
 @Component({
@@ -155,5 +155,12 @@ export class EditGroceryStoreComponent implements OnInit {
       return;
     }
     this.notifyUpdateSection.emit($event);
+  }
+
+  async onDeleteGroceryStore() {
+    this.notifyDeleteGroceryStoreRequested.emit({
+      id: this.groceryStore.id,
+      name: this.groceryStore.name
+    });
   }
 }

@@ -212,23 +212,23 @@ export class AppEffects {
       );
     }));
 
-  @Effect()
-  public updateStoreAisle$ = this.actions$.pipe(
-    ofType(AppActionTypes.UpdateAisle),
-    switchMap((payload) => {
-      return this.storeManagementService.updateGroceryStoreAisle(
-        payload.updateRequest.groceryStoreId,
-        payload.updateRequest.originalName,
-        payload.updateRequest.aisleOrSectionName).pipe(
-            switchMap(aisleUpdated => [
-              new LoadGroceryStoreAisles(payload.updateRequest.groceryStoreId),
-              new LoadGroceryStoreLocations(payload.updateRequest.groceryStoreId)
-            ]),
-            catchError(error => {
-              return of(new DisplayError(error));
-            }));
-    }),
-  );
+  // @Effect()
+  // public updateStoreAisle$ = this.actions$.pipe(
+  //   ofType(AppActionTypes.UpdateAisle),
+  //   switchMap((payload) => {
+  //     return this.storeManagementService.updateGroceryStoreAisle(
+  //       payload.updateRequest.groceryStoreId,
+  //       payload.updateRequest.originalName,
+  //       payload.updateRequest.aisleOrSectionName).pipe(
+  //           switchMap(aisleUpdated => [
+  //             new LoadGroceryStoreAisles(payload.updateRequest.groceryStoreId),
+  //             new LoadGroceryStoreLocations(payload.updateRequest.groceryStoreId)
+  //           ]),
+  //           catchError(error => {
+  //             return of(new DisplayError(error));
+  //           }));
+  //   }),
+  // );
 
   @Effect({ dispatch: false})
   public displayError$ = this.actions$.pipe(
@@ -272,5 +272,7 @@ export class AppEffects {
   @Effect({ dispatch: false})
   public databaseIsReady$ = this.actions$.pipe(
     ofType(AppActionTypes.DatabaseReady),
-    switchMap(() => this.storeManagementService.cleanupLocations()));
+    // todo: comment back in when  called from a button
+    // switchMap(() => this.storeManagementService.cleanupLocations())
+  );
 }

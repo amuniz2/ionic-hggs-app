@@ -3,7 +3,7 @@ import {GroceryStore} from '../../model/grocery-store';
 import {AppState} from '../../store/app.state';
 import {Store} from '@ngrx/store';
 import {Injectable} from '@angular/core';
-import {map, mergeMap, switchMap} from 'rxjs/operators';
+import {map, mergeMap, switchMap, tap} from 'rxjs/operators';
 import {PantryItem} from '../../model/pantry-item';
 import {MySqlCommands} from './my-sql-commands';
 import {GroceryStoreLocation} from '../../model/grocery-store-location';
@@ -12,6 +12,11 @@ import {ShoppingItem} from '../../model/shopping-item';
 import {GroceryStoreSection} from '../../model/grocery-store-section';
 import {GroceryStoreAisle} from '../../model/grocery-store-aisle';
 import {HggsData} from '../../model/hggs-data';
+
+export enum GroceryStoreComponentTypes {
+  Aisle,
+  Section
+}
 
 @Injectable()
 export class PantryDbHelper {
@@ -39,14 +44,14 @@ export class PantryDbHelper {
     return new Observable<GroceryStore>((observer) => {
         // this.mySqlCommands.openOrCreateDb().then((result) => {
         //   if (result) {
-            this.mySqlCommands.queryGroceryStoreByName(name).then((stores) => {
-              observer.next(stores);
-              observer.complete();
-            }).catch((err) => {
-              console.log('error in call to queryGroceryStoreByName');
-              observer.error(err)
-            });
-          // }
+        this.mySqlCommands.queryGroceryStoreByName(name).then((stores) => {
+          observer.next(stores);
+          observer.complete();
+        }).catch((err) => {
+          console.log('error in call to queryGroceryStoreByName');
+          observer.error(err)
+        });
+        // }
         // }).catch((err) => {
         //   console.log('error in call to openOrCreateDb');
         //   observer.error(err);
@@ -65,8 +70,9 @@ export class PantryDbHelper {
             }).catch((err) => {
               console.log('error in call to getAllGroceryStores');
               observer.error(err);
-          });
-        }}).catch((err) => {
+            });
+          }
+        }).catch((err) => {
           console.log('error in call to openOrCreateDb');
           observer.error(err);
         });
@@ -84,8 +90,9 @@ export class PantryDbHelper {
             }).catch((err) => {
               console.log('error in call to this.getAllPantryItems()');
               observer.error(err);
-          });
-        }}).catch((err) => {
+            });
+          }
+        }).catch((err) => {
           console.log('error in call to openOrCreateDb');
           observer.error(err);
         });
@@ -116,9 +123,11 @@ export class PantryDbHelper {
   public getAllGroceryStoreLocations(): Observable<GroceryStoreLocation[]> {
     return this.queryAllGroceryStoreLocations();
   }
+
   public getAllPantryItemLocations(): Observable<PantryItemLocation[]> {
     return this.queryAllPantryItemLocations();
   }
+
   public getGroceryStoreAislesInUse(groceryStoreId: number): Observable<string[]> {
     return this.queryGroceryStoreAislesInUse(groceryStoreId);
   }
@@ -133,18 +142,21 @@ export class PantryDbHelper {
 
   public addGroceryStore(name: string): Observable<GroceryStore> {
     return this.connect().pipe(
-      mergeMap(( _ ) => this.insertGroceryStore(name)),
-      switchMap(( _ ) => {
+      mergeMap((_) => this.insertGroceryStore(name)),
+      switchMap((_) => {
         return this.queryGroceryStoreByName(name);
       })
     );
   }
 
   public deleteGroceryStore(id: number): Observable<boolean> {
+    console.log('calling connect, then deleteGroceryStoreById in db-helper');
     return this.connect().pipe(
+      tap((success) => console.log('calling deleteGroceryStoreById in db-helper')),
       mergeMap((success) => this.deleteGroceryStoreById(id))
     );
   }
+
   public deletePantryItem(id: number): Observable<boolean> {
     return this.connect().pipe(
       mergeMap((success) => this.deletePantryItemById(id))
@@ -159,16 +171,16 @@ export class PantryDbHelper {
 
   public deleteGroceryStoreAisle(id: number, aisle: string): Observable<boolean> {
     return this.connect().pipe(
-      mergeMap((success) => success ? this.deleteStoreAisle(id, aisle) :  of(false)));
+      mergeMap((success) => success ? this.deleteStoreAisle(id, aisle) : of(false)));
   }
 
   public addPantryItem(
-  name: string,
-  description: string,
-  units: string,
-  quantityNeeded: number,
-  defaultQuantity: number,
-  need: boolean): Observable<PantryItem> {
+    name: string,
+    description: string,
+    units: string,
+    quantityNeeded: number,
+    defaultQuantity: number,
+    need: boolean): Observable<PantryItem> {
     return this.connect().pipe(
       mergeMap((success) => this.insertPantryItem(name, description, units, quantityNeeded, defaultQuantity, need)),
     );
@@ -176,7 +188,7 @@ export class PantryDbHelper {
 
   public deleteGroceryStoreSection(id: number, grocerySection: string): Observable<boolean> {
     return this.connect().pipe(
-      mergeMap((success) => success ? this.deleteStoreSection(id, grocerySection) :  of(false)));
+      mergeMap((success) => success ? this.deleteStoreSection(id, grocerySection) : of(false)));
   }
 
   public addGroceryStoreAisle(groceryStoreId: number, aisle: string): Observable<string> {
@@ -194,7 +206,7 @@ export class PantryDbHelper {
   }
 
   private queryAllGroceryStoreAisles(): Observable<GroceryStoreAisle[]> {
-    return new Observable<{storeId: number, aisle: string}[]>((observer) => {
+    return new Observable<{ storeId: number, aisle: string }[]>((observer) => {
       this.mySqlCommands.queryAllGroceryStoreAisles().then((aisles) => {
         observer.next(aisles);
         observer.complete();
@@ -239,7 +251,7 @@ export class PantryDbHelper {
   }
 
   private queryAllGroceryStoreSections(): Observable<GroceryStoreSection[]> {
-    return new Observable<{ storeId: number, section: string}[]>((observer) => {
+    return new Observable<{ storeId: number, section: string }[]>((observer) => {
       this.mySqlCommands.queryAllGroceryStoreSections().then((sections) => {
         observer.next(sections);
         observer.complete();
@@ -261,7 +273,10 @@ export class PantryDbHelper {
       this.mySqlCommands.deleteGroceryStore(id).then((rowsAffected) => {
         observer.next(rowsAffected > 0);
         observer.complete();
-      }).catch((err) => observer.error(err));
+      }).catch((err) => {
+        console.log(`Error deleting groceryStoreById ${id}`);
+        observer.error(err);
+      });
     });
   }
 
@@ -273,6 +288,7 @@ export class PantryDbHelper {
       }).catch((err) => observer.error(err));
     });
   }
+
   private deletePantryItemLocationUsingPromise(pantryItemId: number, locationId: number): Observable<boolean> {
     return new Observable<boolean>((observer) => {
       this.mySqlCommands.deletePantryItemLocation(pantryItemId, locationId).then((rowsAffected) => {
@@ -399,7 +415,7 @@ export class PantryDbHelper {
   public addNewPantryItemLocation(pantryItemId: number, storeId: number, aisle: string, section: string): Observable<GroceryStoreLocation> {
     return new Observable<GroceryStoreLocation>((observer) => {
       this.mySqlCommands.insertNewPantryItemLocation(pantryItemId, storeId,
-        (typeof aisle === 'undefined') ? '': aisle,
+        (typeof aisle === 'undefined') ? '' : aisle,
         (typeof section === 'undefined') ? '' : section).then((result) => {
         observer.next(result);
         observer.complete();
@@ -407,7 +423,7 @@ export class PantryDbHelper {
     });
   }
 
-  public addPantryItemLocation(pantryItemId: number, storeLocationId:number): Observable<boolean> {
+  public addPantryItemLocation(pantryItemId: number, storeLocationId: number): Observable<boolean> {
     return new Observable<boolean>((observer) => {
       this.mySqlCommands.insertPantryItemLocation(pantryItemId, storeLocationId).then((result) => {
         observer.next(result);
@@ -423,7 +439,7 @@ export class PantryDbHelper {
                                   section: string): Observable<GroceryStoreLocation> {
     return new Observable<GroceryStoreLocation>((observer) => {
       this.mySqlCommands.updatePantryItemLocation(pantryItemId, originalLocationId, storeId,
-        (typeof aisle === 'undefined') ? '': aisle,
+        (typeof aisle === 'undefined') ? '' : aisle,
         (typeof section === 'undefined') ? '' : section).then((result) => {
         observer.next(result);
         observer.complete();
@@ -534,7 +550,7 @@ export class PantryDbHelper {
   }
 
   addShoppingItemInNewLocation(newPantryItemRequest: PantryItem, storeLocation: GroceryStoreLocation): Observable<ShoppingItem> {
-    return new Observable<ShoppingItem>( (observer) => {
+    return new Observable<ShoppingItem>((observer) => {
       this.mySqlCommands.insertPantryItemInNewLocation(
         newPantryItemRequest.name,
         newPantryItemRequest.description,
@@ -543,13 +559,34 @@ export class PantryDbHelper {
         newPantryItemRequest.defaultQuantity,
         true,
         storeLocation.storeId, storeLocation.aisle, storeLocation.section).then((shoppingItemAdded) => {
-          observer.next(shoppingItemAdded);
-          observer.complete();
-        }).catch( (err) => {
+        observer.next(shoppingItemAdded);
+        observer.complete();
+      }).catch((err) => {
           console.log('Error adding shopping item', err);
           observer.error(err);
         }
       );
     });
+  }
+
+  updateGroceryStoreComponentName(type: GroceryStoreComponentTypes,
+                                  id: number,
+                                  old: string,
+                                  newName: string): Observable<boolean> {
+    if (type === GroceryStoreComponentTypes.Section)
+      return new Observable<boolean>((observer) => {
+        this.mySqlCommands.updateGroceryStoreSectionName(id, old, newName).then(result => {
+          observer.next(result);
+          observer.complete();
+        })
+    });
+    if (type === GroceryStoreComponentTypes.Aisle)
+      return new Observable<boolean>((observer) => {
+        console.log('calling mySql command to update aisle name');
+        this.mySqlCommands.updateGroceryStoreAisleName(id, old, newName).then(result => {
+          observer.next(result);
+          observer.complete();
+        })
+      });
   }
 }

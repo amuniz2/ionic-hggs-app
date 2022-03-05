@@ -2,9 +2,7 @@ import {Action} from '@ngrx/store';
 import {DeleteGroceryStoreRequest,
   NavigateToEditStoreRequest,
   NewGroceryStoreRequest} from '../dumb-components/store-list/store-list.component';
-import {PantryItem} from '../../../model/pantry-item';
-import {PantryActionTypes} from '../../pantry-management/store/pantry-management.actions';
-import {GroceryStore} from '../../../model/grocery-store';
+import {UpdateStoreAisleOrSectionActionRequest} from '../dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 
 export enum StoreManagerActionTypes {
   CreateStore = '[Store Manager] Create',
@@ -17,6 +15,8 @@ export enum StoreManagerActionTypes {
   GetGroceryStoreLocationsFailed = '[Store Manager] Store Locations Failed to Load',
   UpdateStoreAisle = '[Store Manager] Update Aisle',
   SelectStoreAisle = '[Store Manager] Select Aisle',
+  UpdateStoreSection = '[Store Manager] Update Section',
+  SelectStoreSection = '[Store Manager] Select Section',
   LoadGroceryStores = '[Store Manager] Load Grocery Store',
   GroceryStoresImportedSuccessfully = '[Store Manager] Grocery Stores Imported',
 }
@@ -74,7 +74,13 @@ export class SelectStoreAisle implements Action {
 }
 
 export class UpdateStoreAisle implements Action {
+  constructor(public updateRequest: UpdateStoreAisleOrSectionActionRequest) {}
   readonly type = StoreManagerActionTypes.UpdateStoreAisle;
+}
+
+export class UpdateStoreSection implements Action {
+  constructor(public updateRequest: UpdateStoreAisleOrSectionActionRequest) {}
+  readonly type = StoreManagerActionTypes.UpdateStoreSection;
 }
 
 export type StoreManagementActions =
@@ -82,4 +88,6 @@ export type StoreManagementActions =
   | DeleteStore
   | NavigateToStoreDetailsPage
   | NavigatedToStoreDetailsPage
-  | GetGroceryStoreLocationsFailed;
+  | GetGroceryStoreLocationsFailed
+  | UpdateStoreAisle
+  | UpdateStoreSection;

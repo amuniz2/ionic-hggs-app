@@ -2,14 +2,10 @@ import {Action} from '@ngrx/store';
 import {GroceryStore, GroceryStoreState} from '../model/grocery-store';
 // tslint:disable-next-line:max-line-length
 import {
-  StoreAisleOrSection,
-  UpdateStoreAisleOrSectionActionRequest
+  StoreAisleOrSection, UpdateStoreAisleOrSectionActionRequest
 } from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
 import {GroceryStoreLocation} from '../model/grocery-store-location';
 import {HggsData} from '../model/hggs-data';
-import {PantryActionTypes} from '../modules/pantry-management/store/pantry-management.actions';
-import {PantryItem} from '../model/pantry-item';
-import {StoreManagerActionTypes} from '../modules/store-management/store/store-management.actions';
 
 export const APP_READY = '[App] Ready';
 
@@ -56,7 +52,9 @@ export enum AppActionTypes {
   ImportData = '[HGGS] Import Grocery Data',
   LoadImportedData = '[HGGS] Load Imported Data',
   GroceryStoresImportedSuccessfully = '[Store Manager] Imported Grocery Stores Successfully',
-  SelectStore = '[Store Manager] Select Current Store'
+  SelectStore = '[Store Manager] Select Current Store',
+  SectionNameChanged = '[HGGS] Section name changed',
+  AisleNameChanged = '[HGGS] Aisle name changed',
 }
 
 export class StartAppInitializer implements Action {
@@ -253,16 +251,6 @@ export class GroceryStoreLocationsLoaded implements Action {
   readonly type = AppActionTypes.GroceryStoreLocationsLoaded;
 }
 
-export class UpdateAisle implements Action {
-  constructor(public updateRequest: UpdateStoreAisleOrSectionActionRequest) {}
-  readonly type = AppActionTypes.UpdateAisle;
-}
-
-export class UpdateSection implements Action {
-  constructor(public updateRequest: UpdateStoreAisleOrSectionActionRequest) {}
-  readonly type = AppActionTypes.UpdateSection;
-}
-
 export class ImportData implements Action {
   constructor(public data: HggsData, public returnUrl: string) {}
   readonly type = AppActionTypes.ImportData;
@@ -282,6 +270,16 @@ export class GroceryStoresImportedSuccessfully implements Action {
 export class SelectStore implements Action {
   readonly type = AppActionTypes.SelectStore;
   constructor(public id: number) {};
+}
+
+export class SectionNameChanged implements Action {
+  readonly type = AppActionTypes.SectionNameChanged;
+  constructor(public updatedInfo: UpdateStoreAisleOrSectionActionRequest) {}
+}
+
+export class AisleNameChanged implements Action {
+  readonly type = AppActionTypes.AisleNameChanged;
+  constructor(public updatedInfo: UpdateStoreAisleOrSectionActionRequest) {}
 }
 
 // endregion
@@ -321,7 +319,7 @@ export type AppActions = AppReady
   | DeleteStoreFailed
   | StoreDeleted
   | DeleteStoreSucceeded
-  | UpdateAisle
-  | UpdateSection
   | GroceryStoresImportedSuccessfully
-  | SelectStore;
+  | SelectStore
+  | SectionNameChanged
+  | AisleNameChanged;

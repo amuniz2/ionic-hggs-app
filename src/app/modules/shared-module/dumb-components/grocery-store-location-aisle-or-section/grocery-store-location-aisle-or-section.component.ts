@@ -88,7 +88,6 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
       console.log(`ngOnChanges for ${this.label}s`);
       this.sortedAislesOrSections =  !!this.groceryStoreAislesOrSections ?
         [...this.groceryStoreAislesOrSections].sort(sortAislesOrSections) : [];
-      console.log(JSON.stringify(this.sortedAislesOrSections));
       if (this.sortedAislesOrSections?.length > 0) {
         this.selectedGroceryStoreAisleOrSection = this.sortedAislesOrSections[0];
       } else {
@@ -150,7 +149,8 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
 
   private changeSelection(newValue: string) {
     // this.selectedGroceryStoreAisleOrSection = newValue;
-    this.aisleOrSectionChange.emit({name: newValue} );
+    this.aisleOrSectionChange.emit(
+      { name: newValue ?? ''} );
   }
 
   private deleteSelection(valueToDelete: string) {
@@ -161,7 +161,7 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
   saveItem(itemToSave: string){
     const renameItemEvent = {
       previousAisleOrSectionName: this.itemBeingEdited,
-      newAisleOrSectionName: this.editControl.value
+      newAisleOrSectionName: this.editControl.value ? this.editControl.value : ''
     };
     this.renameAisleOrSection.emit(renameItemEvent);
     console.log(renameItemEvent);

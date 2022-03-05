@@ -11,6 +11,7 @@ export interface NewGroceryStoreRequest {
 
 export interface DeleteGroceryStoreRequest {
   id: number;
+  name: string;
 }
 
 export interface NavigateToEditStoreRequest {
@@ -44,6 +45,6 @@ export class StoreListComponent implements OnInit {
     this.store.dispatch( new NavigateToStoreDetailsPage({ id: item.id } ));
   }
   remove(item: GroceryStoreState) {
-    this.notifyDeleteStoreRequested.emit({ id: item.id});
+    this.notifyDeleteStoreRequested.emit({ id: item.id, name: item.name });
   }
 }
