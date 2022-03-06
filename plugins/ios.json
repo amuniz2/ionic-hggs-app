@@ -41,6 +41,9 @@
     },
     "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },
   "dependent_plugins": {}
