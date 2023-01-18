@@ -30,13 +30,7 @@
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
     "es6-promise-plugin": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "phonegap-plugin-barcodescanner": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-statusbar": {

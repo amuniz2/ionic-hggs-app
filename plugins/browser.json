@@ -13,9 +13,6 @@
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "phonegap-plugin-barcodescanner": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
     "cordova-sqlite-storage": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
@@ -29,9 +26,6 @@
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "es6-promise-plugin": {
