@@ -7,7 +7,7 @@ import {
   ShoppingItemUpdateSucceeded, UpdateStoreShoppingList
 } from './shopping.actions';
 import {Store} from '@ngrx/store';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {IPantryDataService} from '../../../services/IPantryDataService';
@@ -30,8 +30,7 @@ export class ShoppingListManagementEffects {
               private router: Router) {
   }
 
-  @Effect()
-  public loadShoppingItems$ = this.actions$.pipe(
+  public loadShoppingItems$ = createEffect(() => this.actions$.pipe(
     ofType(ShoppingActionTypes.LoadShoppingList),
     switchMap((payload) => {
       return this.storeManagementService.getShoppingList(payload.storeId).pipe(
@@ -42,10 +41,9 @@ export class ShoppingListManagementEffects {
         })
       );
     }),
-  );
+  ));
 
-  @Effect()
-  public updateShoppingList = this.actions$.pipe(
+  public updateShoppingList = createEffect(() => this.actions$.pipe(
     ofType(ShoppingActionTypes.UpdateStoreShoppingList),
     switchMap((payload) => {
       return this.storeManagementService.getShoppingList(payload.storeId).pipe(
@@ -56,10 +54,9 @@ export class ShoppingListManagementEffects {
         })
       );
     }),
-  );
+  ));
 
-  @Effect()
-  public saveShoppingiItem$ = this.actions$.pipe(
+  public saveShoppingiItem$ = createEffect(() => this.actions$.pipe(
     ofType(ShoppingActionTypes.ItemPlacedInOrRemovedFromCart),
     switchMap((payload) => {
 
@@ -71,10 +68,9 @@ export class ShoppingListManagementEffects {
         })
       );
     }),
-  );
+  ));
 
-  @Effect()
-  public getShoppingItemDetails$ = this.actions$.pipe(
+  public getShoppingItemDetails$ = createEffect(() => this.actions$.pipe(
     ofType(ShoppingActionTypes.NavigatedToShoppingItemPage),
     switchMap(payload => this.storeManagementService.getPantryItem(payload)),
     switchMap((x) => {
@@ -84,10 +80,9 @@ export class ShoppingListManagementEffects {
       ];
     }),
     catchError(err => [new PantryLoadFailed(err)])
-  );
+  ));
 
-  @Effect()
-  public createShoppingItemInStore$ = this.actions$.pipe(
+  public createShoppingItemInStore$ = createEffect(() => this.actions$.pipe(
     ofType(ShoppingActionTypes.CreateShoppingItemForNewPantryItem),
     switchMap((payload) => {
       console.log('calling addShoppingItemInNewLocation');
@@ -112,12 +107,13 @@ export class ShoppingListManagementEffects {
               storeName: ''
             }],
             id: itemAdded.pantryItemId,
-            need: true,
             quantityNeeded: itemAdded.quantity,
             defaultQuantity: itemAdded.quantity,
+            need: true,
+            selectByDefault: payload.request.selectByDefault,            
           })]
         ),
         catchError(error => [new CreateItemFailed(payload.request.name, error)])
       );
-    }));
+    })));
 }

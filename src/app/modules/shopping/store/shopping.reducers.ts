@@ -147,6 +147,7 @@ export interface IStoreShoppingList {
 export interface ShoppingListManagementState {
   shoppingItems: EntityState<ShoppingItemState>;
   currentShoppingStoreId?: number;
+  currentShoppingItemId?: string;
   loading: boolean;
   error: Error;
 }
@@ -173,13 +174,24 @@ export function shoppingListManagementReducer(state = initialShoppingListManagem
 
     case ShoppingActionTypes.ShoppingItemUpdateSucceeded: {
         console.log('state before shoppingItemUpdateSucceeded:', state);
+        const shoppingItemId = buildShopppingItemId(action.shoppingItem.storeId, action.shoppingItem.pantryItemId);
+        const existingItemState = state.shoppingItems.entities[shoppingItemId];
         const newState = {
           ...state,
-          shoppingItems: shoppingAdapter.upsertOne({
-              id: buildShopppingItemId(action.shoppingItem.storeId, action.shoppingItem.pantryItemId),
-              shoppingItem: action.shoppingItem},
+          currentShoppingItemId: shoppingItemId,
+          shoppingItems: shoppingAdapter.updateOne
+          ({
+              id: shoppingItemId,
+              changes: {
+                shoppingItem: {
+                  ...existingItemState.shoppingItem,
+                  inCart: action.shoppingItem.inCart
+                }
+              }
+          } ,
             state.shoppingItems)
         };
+        console.log('state after shoppingItemUpdateSucceeded handled:', newState);
         return newState;
     }
 

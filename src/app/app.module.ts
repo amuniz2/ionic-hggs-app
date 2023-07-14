@@ -17,23 +17,16 @@ import {PantryDbHelper} from './services/db/db-helper';
 import {SQLite} from '@ionic-native/sqlite/ngx';
 import {SharedModule} from './modules/shared-module/shared.module';
 import {MySqlCommands} from './services/db/my-sql-commands';
-import {FakePantryDataService} from './services/fake-pantry-data.service';
 import {PantryDataService} from './services/pantry-data.service';
 import {HttpClientModule} from '@angular/common/http';
 import {ProductInfoService} from './services/product-info-service';
-import {IProductInfoService} from './services/IProductInfoService';
-import {BarcodeScanner} from '@ionic-native/barcode-scanner';
-import {FakeProductInfoService} from './services/fake-product-info-service';
-import {FakePantryDataServiceHelper} from './services/fake-pantry-data-service-helper';
 import {GroceryDataExporter} from "./services/grocery-data-exporter.service";
-import {SocialSharing} from "@ionic-native/social-sharing/ngx";
-import {File} from "@ionic-native/file/ngx";
-
+import { PantryManagementModule } from './modules/pantry-management/pantry-management.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent
+    HomePageComponent, 
   ],
   imports: [
     BrowserModule,
@@ -50,6 +43,7 @@ import {File} from "@ionic-native/file/ngx";
     }),
     SharedModule,
     StoreManagementModule,
+    PantryManagementModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
@@ -60,6 +54,7 @@ import {File} from "@ionic-native/file/ngx";
     StatusBar,
     [{provide: 'IPantryDataService', useClass: PantryDataService}],
     // [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
+    [{provide: 'IGroceryDataExpoter', useClass: GroceryDataExporter}],
     [{provide: 'IProductInfoService', useClass: ProductInfoService}],
     // [{provide: 'IProductInfoService', useClass: FakeProductInfoService}],
     // FakePantryDataServiceHelper,

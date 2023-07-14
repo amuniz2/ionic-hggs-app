@@ -7,6 +7,7 @@ interface Window {
 }
 
 interface Plugins {
+  intent: any
 	socialsharing: SocialSharing
 }
 

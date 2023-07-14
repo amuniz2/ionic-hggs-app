@@ -1,5 +1,5 @@
 import * as fromAdapter from './pantry.adapter';
-import {EntityState} from '@ngrx/entity';
+import {EntityState, Update} from '@ngrx/entity';
 import {PantryActions, PantryActionTypes} from './pantry-management.actions';
 import {PantryItem} from '../../../model/pantry-item';
 import {getPantryItem} from './pantry-management.selectors';
@@ -110,7 +110,8 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
                 defaultQuantity: action.pantryItem.defaultQuantity,
                 units: action.pantryItem.units,
                 quantityNeeded: action.pantryItem.quantityNeeded,
-                inCart: action.pantryItem.inCart
+                inCart: action.pantryItem.inCart,
+                selectByDefault: action.pantryItem.selectByDefault
               }
             }, state.pantryItems),
             error: null
@@ -248,6 +249,26 @@ export function pantryReducer(state = initialPantryManagementState, action: Pant
                   action.pantryItemLocation]
               }
             }, state.pantryItems),
+            error: null
+          }
+        };
+        return newState;
+      }
+
+      case PantryActionTypes.UpdatePantryItems:
+      {
+ 
+        const updates = []
+        
+        action.updatedPantryItems.forEach(itemUpdated =>
+          updates.push({
+            id: itemUpdated.id,
+            changes: { ... itemUpdated }
+          }));
+        const newState = {
+          ...state,
+          pantryItems: {
+            ...fromAdapter.pantryAdapter.updateMany(updates, state.pantryItems),
             error: null
           }
         };

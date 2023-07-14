@@ -44,6 +44,7 @@ export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
   pantryItemName: string;
   pantryItemDescription: string;
   pantryItemQuantity: number;
+  defaultItem: boolean;
   pantryItemQuantityUnit: string;
 
   locationsSection: PageSection = {
@@ -60,6 +61,7 @@ export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
       this.pantryItemDescription = this.pantryItem.description;
       this.pantryItemQuantity = this.pantryItem.defaultQuantity;
       this.pantryItemQuantityUnit = this.pantryItem.units;
+      this.defaultItem = this.pantryItem.selectByDefault;
       // include this in ngOnChanges?
       this.itemCanExistInOtherStores = this.groceryStores.length > this.pantryItemLocations.length;
     } else {
@@ -76,6 +78,7 @@ export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
     if (changes.pantryItem) {
       this.pantryItemDescription = changes.pantryItem.currentValue.description;
       this.pantryItemName = changes.pantryItem.currentValue.name;
+      this.defaultItem = changes.pantryItem.currentValue.selectByDefault;
     }
   }
 
@@ -131,7 +134,8 @@ export class EditPantryItemDetailsComponent implements OnInit, OnChanges {
       // quantityNeeded: (pantryItem.quantityNeeded === 0) ? this.pantryItemQuantity : pantryItem.quantityNeeded,
       units: this.pantryItemQuantityUnit,
       need: this.pantryItem.need,
-      inCart: this.pantryItem.inCart
+      inCart: this.pantryItem.inCart,
+      selectByDefault: this.defaultItem
     });
   }
 }

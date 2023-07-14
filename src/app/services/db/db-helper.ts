@@ -20,8 +20,7 @@ export enum GroceryStoreComponentTypes {
 
 @Injectable()
 export class PantryDbHelper {
-  constructor(private store: Store<AppState>, private mySqlCommands: MySqlCommands) {
-  }
+  
 
   // helpers
   public connect(): Observable<boolean> {
@@ -180,9 +179,10 @@ export class PantryDbHelper {
     units: string,
     quantityNeeded: number,
     defaultQuantity: number,
-    need: boolean): Observable<PantryItem> {
+    need: boolean,
+    selectByDefault: boolean): Observable<PantryItem> {
     return this.connect().pipe(
-      mergeMap((success) => this.insertPantryItem(name, description, units, quantityNeeded, defaultQuantity, need)),
+      mergeMap((success) => this.insertPantryItem(name, description, units, quantityNeeded, defaultQuantity, need, selectByDefault)),
     );
   }
 
@@ -358,9 +358,10 @@ export class PantryDbHelper {
                            units: string,
                            quantityNeeded: number,
                            defaultQuantity: number,
-                           need: boolean): Observable<PantryItem> {
+                           need: boolean,
+                           selectByDefault: boolean): Observable<PantryItem> {
     return new Observable<PantryItem>((observer) => {
-      this.mySqlCommands.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need).then((insertedItem) => {
+      this.mySqlCommands.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need, selectByDefault).then((insertedItem) => {
         observer.next(insertedItem);
         observer.complete();
       }).catch((err) => observer.error(err));
@@ -447,6 +448,18 @@ export class PantryDbHelper {
     });
   }
 
+  public setNeedForRecurringItems(setNeed: boolean): Observable<PantryItem[]> {
+    return new Observable<PantryItem[]>((observer) => {
+      this.mySqlCommands.setNeedForRecurringItems(setNeed).then((result) => {
+        observer.next(result);
+        observer.complete();
+      }).catch((err) => observer.error(err));
+  });
+}
+
+
+  constructor(private store: Store<AppState>, private mySqlCommands: MySqlCommands) {
+  }
   public queryGroceryStoreLocationById(id: number): Observable<GroceryStoreLocation> {
     return new Observable<GroceryStoreLocation>((observer) => {
       this.mySqlCommands.queryGroceryStoreLocationById(id).then((groceryStoreLocation) => {
@@ -558,7 +571,7 @@ export class PantryDbHelper {
         newPantryItemRequest.quantityNeeded,
         newPantryItemRequest.defaultQuantity,
         true,
-        storeLocation.storeId, storeLocation.aisle, storeLocation.section).then((shoppingItemAdded) => {
+        storeLocation.storeId, storeLocation.aisle, storeLocation.section, newPantryItemRequest.selectByDefault).then((shoppingItemAdded) => {
         observer.next(shoppingItemAdded);
         observer.complete();
       }).catch((err) => {

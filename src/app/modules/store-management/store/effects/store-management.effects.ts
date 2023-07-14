@@ -6,7 +6,7 @@ import {
   StoreManagerActionTypes,
 } from '../store-management.actions';
 import {Store} from '@ngrx/store';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {catchError, map, mapTo, switchMap, tap} from 'rxjs/operators';
 import {StoreManagementState} from '../store-management.reducers';
 import {NavigationExtras, Router} from '@angular/router';
@@ -28,8 +28,7 @@ export class StoreManagementEffects {
               private router: Router) {
   }
 
-  @Effect()
-  public addNewGroceryStore$ = this.actions$.pipe(
+  public addNewGroceryStore$ = createEffect(() => this.actions$.pipe(
     ofType(StoreManagerActionTypes.CreateStore),
     switchMap((payload) => {
       return this.storeManagementService.addGroceryStore(payload.createGroceryStorePayload).pipe(
@@ -45,10 +44,9 @@ export class StoreManagementEffects {
         })
       );
     }),
-  );
+  ));
 
-  @Effect()
-  public deleteGroceryStore$ = this.actions$.pipe(
+  public deleteGroceryStore$ = createEffect(() => this.actions$.pipe(
     ofType(StoreManagerActionTypes.DeleteStore),
     tap((payload) => console.log('Calling delete grocery store service', JSON.stringify(payload))),
     switchMap((payload) => {
@@ -57,35 +55,32 @@ export class StoreManagementEffects {
         catchError(error => [new DeleteStoreFailed(error)])
       );
     })
-  );
+  ));
 
-  @Effect({ dispatch: false })
-  public navigateToStoreDetailsPage$ = this.actions$.pipe(
+  public navigateToStoreDetailsPage$ = createEffect(() => this.actions$.pipe(
     ofType(StoreManagerActionTypes.NavigateToStoreDetailsPage),
     tap((navigateToEditStorePage: NavigateToStoreDetailsPage) => {
       const navigationExtras: NavigationExtras = { queryParams: { id: navigateToEditStorePage.navigateToEditStorePayload.id} };
       this.router.navigate([this.router.url, 'store-details'], navigationExtras);
-    }));
+    })), 
+    {dispatch: false });
 
-  @Effect()
-  public navigatedToStoreDetailsPage$ = this.actions$.pipe(
+  public navigatedToStoreDetailsPage$ = createEffect(() => this.actions$.pipe(
     ofType(StoreManagerActionTypes.NavigatedToStoreDetailsPage),
     map((navigatedToEditStorePage: NavigatedToStoreDetailsPage) => {
       return new LoadGroceryStoreLocations(navigatedToEditStorePage.groceryStoreId);
-    }));
+    })));
 
-  @Effect()
-  public loadGroceryStoreLocations$ = this.actions$.pipe(
+  public loadGroceryStoreLocations$ = createEffect(() => this.actions$.pipe(
     ofType(StoreManagerActionTypes.NavigatedToStoreDetailsPage),
     switchMap((payload) => {
       return this.storeManagementService.getGroceryStoreLocations(payload.groceryStoreId).pipe(
         map(success => new GroceryStoreLocationsLoaded(payload.groceryStoreId, success)),
         catchError(error => [new DisplayError(error)])
       );
-    }));
+    })));
 
-  @Effect()
-  public updateSectionName$ = this.actions$.pipe(
+  public updateSectionName$ = createEffect(() => this.actions$.pipe(
     ofType(StoreManagerActionTypes.UpdateStoreSection),
     switchMap((payload) => {
       return this.storeManagementService.updateGroceryStoreSection(
@@ -96,10 +91,9 @@ export class StoreManagementEffects {
         map((success) => new SectionNameChanged(payload.updateRequest))
       )
     })
-  )
+  ));
 
-  @Effect()
-  public updateAisleName$ = this.actions$.pipe(
+  public updateAisleName$ = createEffect(() => this.actions$.pipe(
     ofType(StoreManagerActionTypes.UpdateStoreAisle),
     switchMap((payload) => {
       return this.storeManagementService.updateGroceryStoreAisle(
@@ -110,5 +104,5 @@ export class StoreManagementEffects {
         map((success) => new AisleNameChanged(payload.updateRequest))
       )
     })
-  )
+  ));
 }

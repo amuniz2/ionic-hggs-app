@@ -62,7 +62,7 @@ export class MySqlCommands {
       }
     }
     catch(err) {
-      console.log('screate or open tables failed, err: ');
+      console.log('create or open tables failed in exception handler, err: ');
       console.log(err);
       return false;
     }
@@ -75,6 +75,7 @@ export class MySqlCommands {
   }
 
   private async createOrOpenTables(openedDb: SQLiteObject): Promise<boolean> {
+    console.log("inside createOrOpenTables()");
     const sectionColumnDefinitions =
       StoreGrocerySectionTable.COLS.GROCERY_SECTION + ' TEXT NOT NULL, ' +
       StoreGrocerySectionTable.COLS.STORE_ID + ' INT, ' +
@@ -173,7 +174,8 @@ export class MySqlCommands {
                                 units: string,
                                 quantityNeeded: number,
                                 defaultQuantity: number,
-                                need: boolean): Promise<PantryItem> {
+                                need: boolean,
+                                selectByDefault: boolean): Promise<PantryItem> {
     const insertSql = `INSERT INTO
      ${PantryItemTable.NAME}
      (${PantryItemTable.COLS.NAME},
@@ -181,8 +183,9 @@ export class MySqlCommands {
      ${PantryItemTable.COLS.UNITS},
      ${PantryItemTable.COLS.QUANTITY_NEEDED},
      ${PantryItemTable.COLS.DEFAULT_QUANTITY},
-     ${PantryItemTable.COLS.NEED})
-      VALUES(\'${pantryItemName}\', \'${description}\', '${units}', ${quantityNeeded}, ${defaultQuantity}, ${need ? 1 : 0})`;
+     ${PantryItemTable.COLS.NEED},
+     ${PantryItemTable.COLS.SELECT_BY_DEFAULT})
+      VALUES(\'${pantryItemName}\', \'${description}\', '${units}', ${quantityNeeded}, ${defaultQuantity}, ${need ? 1 : 0}, ${selectByDefault ? 1 : 0})`;
 
     try {
       const data = await this.db.executeSql(insertSql, []);
@@ -196,9 +199,9 @@ export class MySqlCommands {
                                 units: string,
                                 quantityNeeded: number,
                                 defaultQuantity: number,
-                                need: boolean, groceryStoreId: number, aisle: string, section: string): Promise<ShoppingItem>
+                                need: boolean, groceryStoreId: number, aisle: string, section: string, selectByDefault: boolean): Promise<ShoppingItem>
   {
-      const newPantryItem = await this.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need);
+      const newPantryItem = await this.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need, selectByDefault);
       if (newPantryItem) {
         await this.insertNewPantryItemLocation(newPantryItem.id, groceryStoreId, aisle, section);
         return await this.queryShoppingItem(groceryStoreId, newPantryItem.id);
@@ -212,10 +215,25 @@ export class MySqlCommands {
                                           quantityNeeded: number,
                                           defaultQuantity: number,
                                           need: boolean,
-                                          locationId: number): Promise<boolean>
+                                          locationId: number,
+                                          selectByDefault: boolean): Promise<boolean>
   {
-    const newItemId = (await this.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need)).id;
+    const newItemId = (await this.insertPantryItem(pantryItemName, description, units, quantityNeeded, defaultQuantity, need, selectByDefault)).id;
     return await this.insertPantryItemLocation(newItemId, locationId);
+  }
+
+  public async querySelectedPantryItems(): Promise<PantryItem[]> {
+    const pantryItems: PantryItem[] = [];
+    try {
+      const data = await this.db.executeSql(`SELECT * FROM ${PantryItemTable.NAME} WHERE ${PantryItemTable.COLS.NEED} = 1`, []);
+      for (let i = 0; i < data.rows.length; i++) {
+        pantryItems.push(DbRowConverters.rowToPantryItem(data.rows.item(i)));
+      }
+    } catch (err) {
+      console.log('Error querying for pantry items');
+      console.log(err);
+    }
+    return pantryItems;
   }
 
   public async queryPantryItems(): Promise<PantryItem[]> {
@@ -230,8 +248,8 @@ export class MySqlCommands {
       console.log(err);
     }
     return pantryItems;
-  }
 
+  }
   public async updatePantryItem(updatedPantryItem: PantryItem): Promise<PantryItem> {
     const sqlUpdate = `UPDATE ${PantryItemTable.NAME} SET
        ${PantryItemTable.COLS.NAME}=\'${updatedPantryItem.name}\'
@@ -240,6 +258,7 @@ export class MySqlCommands {
        , ${PantryItemTable.COLS.DEFAULT_QUANTITY}=${updatedPantryItem.defaultQuantity}
        , ${PantryItemTable.COLS.UNITS}=\'${updatedPantryItem.units}\'
        , ${PantryItemTable.COLS.NEED}=${updatedPantryItem.need ? 1 : 0}
+       , ${PantryItemTable.COLS.SELECT_BY_DEFAULT}=${updatedPantryItem.selectByDefault ? 1 : 0}
        , ${PantryItemTable.COLS.IN_CART}=${updatedPantryItem.inCart ? 1 : 0}
         WHERE ${PantryItemTable.COLS.ID} = ${updatedPantryItem.id}`;
     try {
@@ -251,6 +270,25 @@ export class MySqlCommands {
       return updatedPantryItem;
     }
   }
+
+  public async setNeedForRecurringItems(setNeed: boolean): Promise<PantryItem[]> {
+
+    const sqlUpdate = `Update ${PantryItemTable.NAME} SET 
+    ${PantryItemTable.COLS.NEED}=${setNeed ? 1 : 0}, 
+    ${PantryItemTable.COLS.IN_CART}=${setNeed ? 0 : 1}  
+    WHERE ${PantryItemTable.COLS.SELECT_BY_DEFAULT} = 1`;
+
+
+    try {
+      const data = await this.db.executeSql(sqlUpdate, []);
+      return this.queryDefaultPantryItems();
+    } catch (err) {
+      console.log(`Error updating pantry item. Sql: ${sqlUpdate}`);
+      console.log(err);
+      return [];
+    }
+  }
+
 
   public async updateShoppingItem(storeId: number, pantryItemId: number, inCart: boolean): Promise<ShoppingItem> {
     const sqlUpdate = `UPDATE ${PantryItemTable.NAME} SET
@@ -287,6 +325,27 @@ export class MySqlCommands {
     }
   }
 
+  public async queryDefaultPantryItems(): Promise<PantryItem[]> {
+    try {
+      const pantryItems: PantryItem[] = [];
+      const sqlQuery = `SELECT * from ${PantryItemTable.NAME}
+       WHERE ${PantryItemTable.COLS.SELECT_BY_DEFAULT} = 1`;
+      const data = await this.db.executeSql(sqlQuery, []);
+
+      if (data.rows.length > 0) {
+        for (let i = 0; i < data.rows.length; i++) {
+          pantryItems.push(DbRowConverters.rowToPantryItem(data.rows.item(i)));
+        }
+      } else {
+        console.log('no pantryItem returned for default pantry items');
+      }
+      return pantryItems;
+    } catch (err) {
+      console.log('Error querying pantry default pantry items');
+      console.log(err);
+      return null;
+    }
+  }
   public async deletePantryItem(id: number): Promise<number> {
     const deleteItemLocations = `DELETE FROM ${PantryItemLocationTable.NAME} WHERE ${PantryItemLocationTable.COLS.PANTRY_ITEM_ID} = ${id}`;
     const  deleteSql = `DELETE FROM ${PantryItemTable.NAME} WHERE ${PantryItemTable.COLS.ID} = ${id}`;
@@ -1038,7 +1097,8 @@ export class MySqlCommands {
           newPantryItem.units,
           newPantryItem.quantityNeeded,
           newPantryItem.defaultQuantity,
-          newPantryItem.need
+          newPantryItem.need,
+          newPantryItem.selectByDefault
         );
         result.push({ importedId: pantryItem.id, originalId: newPantryItem.id})
       } else {
@@ -1144,15 +1204,21 @@ export class MySqlCommands {
                                           newPantryItemLocations: PantryItemLocation[],
                                           groceryStoreMappings: GroceryStoreMapping[]/*,
                                            existingGroceryStoreLocations: GroceryStoreLocation[]*/) {
+
     const existingPantryItemLocations = await this.queryPantryItemLocations(pantryItemMapping.importedId);
     for (const newPantryItemLocation of newPantryItemLocations) {
-      const newGroceryStoreLocationMapping = this.findImportedGroceryStoreLocationMapping(newPantryItemLocation.groceryStoreLocationId, groceryStoreMappings);
-      if (!existingPantryItemLocations.some(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)) {
-        console.log('pantryItemLocation being added: ', newGroceryStoreLocationMapping.importedId, ' for pantry item: ', pantryItemMapping.originalId, ' imported id: ',pantryItemMapping.importedId);
-        await this.insertPantryItemLocation(pantryItemMapping.importedId, newGroceryStoreLocationMapping.importedId);
-      } else {
-          console.log('pantryItemLocation not being added, as it already exists: ',
-          JSON.stringify(existingPantryItemLocations.find(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)));
+      try {
+        const newGroceryStoreLocationMapping = this.findImportedGroceryStoreLocationMapping(newPantryItemLocation.groceryStoreLocationId, groceryStoreMappings);
+        if (!existingPantryItemLocations.some(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)) {
+          console.log('pantryItemLocation being added: ', newGroceryStoreLocationMapping.importedId, ' for pantry item: ', pantryItemMapping.originalId, ' imported id: ',pantryItemMapping.importedId);
+          await this.insertPantryItemLocation(pantryItemMapping.importedId, newGroceryStoreLocationMapping.importedId);
+        } else {
+            console.log('pantryItemLocation not being added, as it already exists: ',
+            JSON.stringify(existingPantryItemLocations.find(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)));
+        }
+      }
+      catch(ex) {
+        console.log(`error importing locations for pantry item id: ${JSON.stringify(pantryItemMapping)}, locations in import file: ${JSON.stringify(groceryStoreMappings)}`);
       }
     }
   }

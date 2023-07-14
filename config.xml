@@ -47,17 +47,25 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
-        <custom-config-file parent="./application/activity/[@android:name='MainActivity']" target="AndroidManifest.xml">
+        <custom-config-file parent="./application/activity" target="AndroidManifest.xml">
+            <intent-filter android:label="@string/launcher_name">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <intent-filter android:label="read_hggs_file">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.hggs" android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.hggs" />
+                <data android:pathPattern=".*\\.hggs.xml" />
             </intent-filter>
         </custom-config-file>
         <preference name="AndroidXEnabled" value="true" />
         <preference name="android-minSdkVersion" value="27" />
         <preference name="android-targetSdkVersion" value="30" />
+        <preference name="AndroidPersistentFileLocation" value="Internal" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

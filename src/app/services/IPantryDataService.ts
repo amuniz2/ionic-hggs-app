@@ -32,6 +32,7 @@ export interface UpdatePantryItemResult {
 };
 
 export interface IPantryDataService {
+  selectDefaulPantrytItems(setNeed: boolean): Observable<PantryItem[]>;
 
   initialize(): Observable<boolean>;
 
@@ -110,4 +111,5 @@ export interface IPantryDataService {
   isPantryItemNeeded(itemId: number): Observable<boolean>;
 
   cleanupLocations(): Observable<boolean>;
+
 }

@@ -19,7 +19,7 @@ export class ShoppingItemComponent implements OnInit {
   shoppingItem: ShoppingItem;
 
   @Output()
-  notifySaveRequested: EventEmitter<ShoppingItem> = new EventEmitter();
+  notifyItemMovedInOrOutOfCart: EventEmitter<ShoppingItem> = new EventEmitter<ShoppingItem>();
 
   @Output()
   notifyEditPantryItemLocationRequested: EventEmitter<EditItemLocationRequest> = new EventEmitter<EditItemLocationRequest>();
@@ -33,7 +33,7 @@ export class ShoppingItemComponent implements OnInit {
     const event = {
       ...this.shoppingItem,
       inCart: $event.detail.checked };
-    this.notifySaveRequested.emit(event);
+    this.notifyItemMovedInOrOutOfCart.emit(event);
   }
 
   getShoppingItemDescriptionLine1(shoppingItem: ShoppingItem) {

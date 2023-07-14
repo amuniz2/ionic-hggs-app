@@ -28,7 +28,7 @@ export class PantryItemLocationsComponent implements OnInit {
   private pantryItem: PantryItem;
 
   @Input()
-  private groceryLocations: GroceryStoreLocation[];
+  protected groceryLocations: GroceryStoreLocation[];
 
   @Input()
   private groceryStores: GroceryStoreState[];

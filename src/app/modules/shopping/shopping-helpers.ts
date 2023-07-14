@@ -8,16 +8,15 @@ export function buildShoppingList(shoppingItems: ShoppingItem[]): ShoppingList {
     itemsWithNoStoreLocation: []
   }
 
-  console.log('processing aisles');
-  const filteredAisleItems = shoppingItems.filter(item => !!item.location?.aisle);
+  const shoppingItemsLeft = shoppingItems.filter(item => !item.inCart);
+  const filteredAisleItems = shoppingItemsLeft.filter(item => !!item.location?.aisle);
 
   const distinctAisles: Set<string> = new Set(filteredAisleItems.map(x => x.location.aisle));
-  const filteredSectionItems = shoppingItems.filter((item) => !distinctAisles.has(item.location?.aisle) && !!item.location?.section);
+  const filteredSectionItems = shoppingItemsLeft.filter((item) => !distinctAisles.has(item.location?.aisle) && !!item.location?.section);
 
   distinctAisles.forEach(aisle =>
     shoppingList.aisles.push(buildAisle(aisle, filteredAisleItems.filter(item => item.location.aisle === aisle))));
 
-  console.log('processing sections');
   const distinctSections: Set<string> = new Set(filteredSectionItems.map(x => x.location.section));
 
   distinctSections.forEach(section => shoppingList.sections.push({
@@ -25,13 +24,11 @@ export function buildShoppingList(shoppingItems: ShoppingItem[]): ShoppingList {
     shoppingItems: filteredSectionItems.filter(item => item.location.section === section)
   }));
 
-  console.log('processing other items');
-  shoppingList.itemsWithNoStoreLocation = shoppingItems.filter(item =>
+  shoppingList.itemsWithNoStoreLocation = shoppingItemsLeft.filter(item =>
     !item.location ||
     (!item.location || (!distinctAisles.has(item.location.aisle) && !distinctSections.has(item.location.section))));
 
-  console.log(`returning ${JSON.stringify(shoppingList)}`);
-  return shoppingList;
+    return shoppingList;
 }
 
 function buildAisle(groupName: string, itemsInGroup: ShoppingItem[]): Aisle {

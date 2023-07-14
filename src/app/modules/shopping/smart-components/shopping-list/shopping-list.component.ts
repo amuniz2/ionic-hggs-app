@@ -16,7 +16,7 @@ import {
   LoadShoppingList
 } from '../../store/shopping.actions';
 import {ShoppingItem} from '../../../../model/shopping-item';
-import {selectStoreShoppingItems,} from '../../store/shopping.selectors';
+import {selectCurrrentStoreShoppingItem, selectStoreShoppingItems,} from '../../store/shopping.selectors';
 import {
   AddPantryItemToStoreShoppingList,
   StoreShoppingItemUpdate
@@ -28,7 +28,6 @@ import {Router} from '@angular/router';
 import {GroceryStoreLocation} from '../../../../model/grocery-store-location';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 import {ToastController} from '@ionic/angular';
-import {File} from '@ionic-native/file/ngx';
 import {IGroceryDataExporter, ShoppingListFormat} from '../../../../services/grocery-data-exporter.service';
 import {ShoppingList} from '../../../../model/shopping-list';
 import { htmlToText } from 'html-to-text';
@@ -50,18 +49,18 @@ export class ShoppingListComponent implements OnInit {
   shoppingStore$: Observable<GroceryStoreState>;
   addingShoppingItem$: Observable<boolean>;
   addingShoppingItemInAisle$: Observable<string>;
+  currentShoppingItem$: Observable<ShoppingItem>;
 
   selectedStore: GroceryStore;
 
   private shoppingList: ShoppingList;
-  private filterList: boolean;
+  protected filterList: boolean;
   filter: string;
-
+  currentPantryItemId: number;
 
   constructor(private store: Store<AppState>, private router: Router,
               private socialSharing: SocialSharing,
               private toastController: ToastController,
-              private fileManager: File,
               @Inject('IGroceryDataExporter') private exporter: IGroceryDataExporter) {
     // this.store.dispatch(new LoadGroceryStores());
     this.groceryStoresLoading$ = this.store.select(selectGroceryStoresLoading);
@@ -81,7 +80,9 @@ export class ShoppingListComponent implements OnInit {
           sections: new Set(store.sections)
         };
         this.shoppingItems$ = this.store.select(selectStoreShoppingItems(this.selectedStore?.id));
+        this.currentShoppingItem$ = this.store.select(selectCurrrentStoreShoppingItem(this.selectedStore?.id, this.currentPantryItemId));
       }));
+    
   }
 
   onGroceryStoreSelected($event: GroceryStore) {
@@ -92,6 +93,7 @@ export class ShoppingListComponent implements OnInit {
   }
 
   onItemPlacedInOrRemovedFromCart($event: StoreShoppingItemUpdate) {
+    this.currentPantryItemId = $event.id;
     this.store.dispatch(new ItemPlacedInOrRemovedFromCart($event))
   }
 
@@ -129,7 +131,8 @@ export class ShoppingListComponent implements OnInit {
         name: $event.name,
         aisle: $event.aisle,
         storeId: this.selectedStore?.id,
-        section: $event.section
+        section: $event.section,
+        selectByDefault: false // todo: is this correct?
       };
       this.store.dispatch(new CreateShoppingItemForNewPantryItem(request));
     }
@@ -162,7 +165,7 @@ export class ShoppingListComponent implements OnInit {
     await toast.present();
   };
 
-  async presentSharingOptions(ev: any) {
+  async presentSharingOptions() {
     this.exporter.exportShoppingList(this.shoppingList, ShoppingListFormat.Html).subscribe(ret => {
       console.log(`shopping list file name returned: ${ret.fileName}`)
       this.socialSharing.shareWithOptions({

@@ -5,31 +5,30 @@ import {EditPantryItemLocationRequest} from "./modules/pantry-management/store/p
 import {EditPantryItemLocationComponent} from "./modules/shared-module/smart-components/edit-pantry-item-location/edit-pantry-item-location.component";
 
 export const routes: Routes = [
-  // { path: 'manage-stores', component: StoreListComponent  },
-  // { path: 'stores',
-  //   loadChildren: './modules/store-management/store-management.module#StoreManagementModule'},
-  // { path: 'pantry-items',
-  //   loadChildren: './modules/pantry-management/pantry-management.module#PantryManagementModule'},
   { path: 'home',
     component: HomePageComponent,
     children: [
       // { path: 'grocery-stores',
       //   loadChildren: './modules/store-management/store-management.module#StoreManagementModule',
       // },
-      { path: 'pantry-items',
-        loadChildren: './modules/pantry-management/pantry-management.module#PantryManagementModule'
+      { 
+        path: 'pantry-items',
+//        loadChildren: () => import('./modules/pantry-management/pantry-management.module#PantryManagementModule').then(m => m.)}
+        loadChildren: () => import('./modules/pantry-management/pantry-management.module').then(m => m.PantryManagementModule)
       },
-      { path: 'shopping-list',
-        loadChildren: './modules/shopping/shopping.module#ShoppingModule'
+      { 
+        path: 'shopping-list',
+        loadChildren: () => import('./modules/shopping/shopping.module').then(m => m.ShoppingModule)
       },
-      { path: 'stores',
-        loadChildren: './modules/store-management/store-management.module#StoreManagementModule'
+      { 
+        path: 'stores',
+        loadChildren: () => import('./modules/store-management/store-management.module').then(m => m.StoreManagementModule)
       },
     ]
   },
   {
     path: 'shared',
-    loadChildren: './modules/shared-module/shared.module#SharedModule'
+    loadChildren: () => import('./modules/shared-module/shared.module').then(m => m.SharedModule)
   },
   { path: '', redirectTo: 'home', pathMatch: 'full'},
   // { path: '', redirectTo: 'manage-stores', pathMatch: 'full'},

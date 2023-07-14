@@ -11,6 +11,7 @@ export class PantryItem {
   units: string;
   defaultQuantity: number;
   inCart: boolean;
+  selectByDefault: boolean;
 
   constructor() {
     this.id = 0;
@@ -22,5 +23,6 @@ export class PantryItem {
     this.units = '';
     this.quantityNeeded = 1;
     this.inCart = false;
+    this.selectByDefault = false;
   }
 }

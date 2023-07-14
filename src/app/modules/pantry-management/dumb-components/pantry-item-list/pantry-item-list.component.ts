@@ -4,7 +4,10 @@ import {
   Component, DoCheck,
   EventEmitter,
   Input,
-  Output
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
 } from '@angular/core';
 import {PantryItem} from '../../../../model/pantry-item';
 import {NavigateToPantryItemPage} from '../../store/pantry-management.actions';
@@ -28,7 +31,7 @@ export interface NavigateToEditPantryItemRequest {
   styleUrls: ['./pantry-item-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
-export class PantryItemListComponent {
+export class PantryItemListComponent /*implements OnChanges*/ {
   @Output()
   notifyAddOrRemoveFromShoppingList: EventEmitter<PantryItem> = new EventEmitter<PantryItem>();
 
@@ -50,7 +53,7 @@ export class PantryItemListComponent {
   @Input()
   filter: string;
 
-  private get filteredPantryItems() {
+  get filteredPantryItems() {
     if (!!this.filter) {
       const lowerCaseFilter = this.filter.toLowerCase();
       return this.pantryItems.filter(item => item.name?.toLowerCase().includes(lowerCaseFilter) || item.description?.toLowerCase().includes(lowerCaseFilter));
@@ -59,6 +62,8 @@ export class PantryItemListComponent {
   }
 
   constructor(private router: Router, private store: Store<AppState>, private cd: ChangeDetectorRef) { }
+
+
 
   editPantryItem(item: PantryItem) {
     this.store.dispatch( new NavigateToPantryItemPage({ id: item.id, newItem: false }));

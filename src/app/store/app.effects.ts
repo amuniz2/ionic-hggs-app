@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {
   AppActions,
   AppActionTypes,
@@ -50,8 +50,7 @@ export class AppEffects {
               @Inject('IPantryDataService') private storeManagementService: IPantryDataService) {
   }
 
-  @Effect()
-  public openDatabase$ = this.actions$.pipe(
+  public openDatabase$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.StartAppInitializer),
     switchMap(() => {
       return this.storeManagementService.initialize().pipe(
@@ -67,10 +66,9 @@ export class AppEffects {
         // map(data => new DatabaseOpenedSuccessfully({groceryStores: data})),
         catchError(error => [new DatabaseOpenFailed(error)])
       );
-    }));
+    })));
 
-  @Effect()
-  public loadData = this.actions$.pipe(
+  public loadData = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.FinishAppInitializer),
     switchMap(() => {
         return [
@@ -78,12 +76,18 @@ export class AppEffects {
           new LoadGroceryStores()
         ];
       }
-    ));
+    )));
 
-  @Effect()
-  public loadGroceryStores$ = this.actions$.pipe(
+  public loadGroceryStores$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.LoadGroceryStores),
     tap(x => console.log('calling service getGroceryStores()')),
+    tap(x => {
+      if (this.storeManagementService === null) {
+        console.log('storeManagementService not created/injected successfully');
+      } else {
+        console.log('storeManagementService created successfullty');
+      }
+    }),
     switchMap(() => {
       return this.storeManagementService.getGroceryStores().pipe(
         map(data => {
@@ -99,10 +103,9 @@ export class AppEffects {
         catchError(error => [new LoadGroceryStoresFailed(error)])
       );
     })
-  );
+  ));
 
-  @Effect()
-  public loadGroceryStoresAislesAndSections$ = this.actions$.pipe(
+  public loadGroceryStoresAislesAndSections$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.LocationGroceryStoreSelected),
     switchMap((payload) => {
       return [
@@ -112,10 +115,9 @@ export class AppEffects {
         new LoadGroceryStoreLocations(payload.storeId)
       ];
     })
-  );
+  ));
 
-  @Effect()
-  public getStoreLocations$ = this.actions$.pipe(
+  public getStoreLocations$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.LoadGroceryStoreLocations),
     switchMap((payload) => {
       return this.storeManagementService.getGroceryStoreLocations(payload.groceryStoreId).pipe(
@@ -123,10 +125,9 @@ export class AppEffects {
           locations)),
         catchError(error => [new GetGroceryStoreLocationsFailed(error)])
       );
-    }));
+    })));
 
-  @Effect()
-  public getStoreAisles$ = this.actions$.pipe(
+  public getStoreAisles$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.LoadStoreAisles),
     switchMap((payload) => {
       return this.storeManagementService.getGroceryStoreAisles(payload.groceryStoreId).pipe(
@@ -136,10 +137,9 @@ export class AppEffects {
         })),
         catchError(error => [new GetStoreAislesFailed(error)])
       );
-    }));
+    })));
 
-  @Effect()
-  public getGroceryStoreSections$ = this.actions$.pipe(
+  public getGroceryStoreSections$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.LoacGroceryStoreSections),
     switchMap((payload) => {
       return this.storeManagementService.getGroceryStoreSections(payload.groceryStoreId).pipe(
@@ -152,10 +152,9 @@ export class AppEffects {
         })),
         catchError(error => [new GetStoreSectionsFailed(error)])
       );
-    }));
+    })));
 
-  @Effect()
-  public addNewStoreAisle$ = this.actions$.pipe(
+  public addNewStoreAisle$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.AddStoreAisle),
     switchMap((payload) => {
         return this.storeManagementService.addGroceryStoreAisle(payload.newStoreAisleRequest).pipe(
@@ -168,10 +167,9 @@ export class AppEffects {
           })
         );
       })
-    );
+    ));
 
-  @Effect()
-  public deleteStoreAisle$ = this.actions$.pipe(
+  public deleteStoreAisle$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.DeleteStoreAisle),
     switchMap((payload) => {
       return this.storeManagementService.deleteGroceryStoreAisle(payload.deleteStoreAisleRequest).pipe(
@@ -181,10 +179,9 @@ export class AppEffects {
         catchError(error => {
           return of(new DisplayError(error));
         }));
-    }));
+    })));
 
-  @Effect()
-  public addNewGroceryStoreSection$ = this.actions$.pipe(
+  public addNewGroceryStoreSection$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.AddGroceryStoreSection),
     switchMap((payload) => {
       return this.storeManagementService.addGroceryStoreSection(payload.newGroceryStoreSectionRequest).pipe(
@@ -196,10 +193,9 @@ export class AppEffects {
           newSection: sectionAdded })),
         catchError(error => of(new DisplayError(error)))
       );
-    }));
+    })));
 
-  @Effect()
-  public deleteGroceryStoreSection$ = this.actions$.pipe(
+  public deleteGroceryStoreSection$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.DeleteGroceryStoreSection),
     switchMap((payload) => {
       return this.storeManagementService.deleteGroceryStoreSection({
@@ -210,36 +206,17 @@ export class AppEffects {
           section: payload.deleteGroceryStoreSectionRequest.name })),
         catchError(error => [new DeleteGroceryStoreSectionFailed(error)])
       );
-    }));
+    })));
 
-  // @Effect()
-  // public updateStoreAisle$ = this.actions$.pipe(
-  //   ofType(AppActionTypes.UpdateAisle),
-  //   switchMap((payload) => {
-  //     return this.storeManagementService.updateGroceryStoreAisle(
-  //       payload.updateRequest.groceryStoreId,
-  //       payload.updateRequest.originalName,
-  //       payload.updateRequest.aisleOrSectionName).pipe(
-  //           switchMap(aisleUpdated => [
-  //             new LoadGroceryStoreAisles(payload.updateRequest.groceryStoreId),
-  //             new LoadGroceryStoreLocations(payload.updateRequest.groceryStoreId)
-  //           ]),
-  //           catchError(error => {
-  //             return of(new DisplayError(error));
-  //           }));
-  //   }),
-  // );
-
-  @Effect({ dispatch: false})
-  public displayError$ = this.actions$.pipe(
+  public displayError$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.DisplayError),
     tap((payload) => {
       window.alert(payload.error);
     })
-  );
+  ),
+  { dispatch: false });
 
-  @Effect()
-  public ImportData$ = this.actions$.pipe(
+  public ImportData$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.ImportData),
     switchMap((payload) => {
       return this.storeManagementService.importHggsData(payload.data).pipe(
@@ -250,10 +227,9 @@ export class AppEffects {
           return of(new DisplayError(error));
         }));
     }),
-  );
+  ));
 
-  @Effect()
-  public loadImportedData$ = this.actions$.pipe(
+  public loadImportedData$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.LoadImportedData),
     switchMap((payload) => {
       console.log('calling stateManagementService.getPantryItems()');
@@ -267,12 +243,12 @@ export class AppEffects {
         catchError(error => [new PantryLoadFailed(error)])
       );
     })
-  );
+  ));
 
-  @Effect({ dispatch: false})
-  public databaseIsReady$ = this.actions$.pipe(
+  public databaseIsReady$ = createEffect(() => this.actions$.pipe(
     ofType(AppActionTypes.DatabaseReady),
     // todo: comment back in when  called from a button
     // switchMap(() => this.storeManagementService.cleanupLocations())
-  );
+  ),
+  { dispatch: false });
 }

@@ -36,13 +36,16 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
   notifyShoppingListAvailable: EventEmitter<ShoppingList> = new EventEmitter();
 
   @Output()
-  notifySaveShoppingItemRequested: EventEmitter<StoreShoppingItemUpdate> = new EventEmitter();
+  notifyShoppingItemMovedInOrOutOfCart: EventEmitter<StoreShoppingItemUpdate> = new EventEmitter<StoreShoppingItemUpdate>();
 
   @Output()
   notifyChangeShoppingItemLocationRequested: EventEmitter<EditItemLocationRequest> = new EventEmitter();
 
   @Input()
   shoppingItems: ShoppingItem[];
+
+  @Input()
+  currentShoppingItem: ShoppingItem;
 
   @Input()
   filter: string;
@@ -101,10 +104,11 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
 
   ngOnInit() {
   //   this.getSortedShoppingItems();
+    //this.shoppingList = this.buildShoppingList();
   }
 
-  onSaveShoppingItem(shoppingItem: ShoppingItem) {
-    this.notifySaveShoppingItemRequested.emit({storeId: shoppingItem.storeId, id: shoppingItem.pantryItemId, inCart: shoppingItem.inCart});
+  onItemMovedInOrOutOfCart(shoppingItem: ShoppingItem) {
+    this.notifyShoppingItemMovedInOrOutOfCart.emit({storeId: shoppingItem.storeId, id: shoppingItem.pantryItemId, inCart: shoppingItem.inCart});
   }
 
   onChangeShoppingItemLocation($event: EditItemLocationRequest) {
@@ -115,10 +119,26 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
     console.log('in shopping-item-list-component.ngOnChanges()');
     console.log(changes);
     console.log(`shoppingItems exist: ${!!this.shoppingItems}`);
-    if ((changes.shoppingItems || changes.filter) && !!this.shoppingItems) {
-      console.log('calling this.buildShoppingList()');
+ 
+    if (changes.shoppingItems && changes.shoppingItems.isFirstChange) {
+      console.log('calling this.buildShoppingList() isFirstChange');
       this.shoppingList = this.buildShoppingList();
       this.notifyShoppingListAvailable.emit(this.shoppingList);
+
+    }
+    else {
+      if (changes.currentShoppingItem) {
+        //this.filteredItems.find(changes.currentShoppingItem.currentValue.)
+
+      }
+      else if ((changes.shoppingItems || changes.filter) && !!this.shoppingItems) {
+        console.log('calling this.buildShoppingList()');
+        this.shoppingList = this.buildShoppingList();
+
+      // why is this necessary; should it only be on initial load?
+      
+      //this.notifyShoppingListAvailable.emit(this.shoppingList);
+      }
     }
     if (changes.addingShoppingItemInAisle) {
 
@@ -156,7 +176,8 @@ export class ShoppingItemListComponent implements OnInit, OnChanges {
       aisle: aisle.name,
       storeId: this.groceryStore.id,
       name: '',
-      section: null
+      section: null,
+      selectByDefault: false
     });
   }
 

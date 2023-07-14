@@ -39,13 +39,13 @@ export interface NewItemLocation {
 })
 export class EditShoppingItemLocationComponent implements OnInit {
 
-  private groceryStores$: Observable<GroceryStoreState[]>;
-  private groceryStoreAisles$: Observable<string[]>;
-  private groceryStoreAislesWithSection$: Observable<string[]>;
-  private groceryStoreSections$: Observable<string[]>;
-  private groceryStoreSectionsInAisle$: Observable<string[]>;
-  private groceryStoreLocations$: Observable<GroceryStoreLocation[]>;
-  private selectedGroceryStore$: Observable<GroceryStoreState>;
+  protected groceryStores$: Observable<GroceryStoreState[]>;
+  protected groceryStoreAisles$: Observable<string[]>;
+  protected groceryStoreAislesWithSection$: Observable<string[]>;
+  protected groceryStoreSections$: Observable<string[]>;
+  protected groceryStoreSectionsInAisle$: Observable<string[]>;
+  protected groceryStoreLocations$: Observable<GroceryStoreLocation[]>;
+  protected selectedGroceryStore$: Observable<GroceryStoreState>;
 
   @Input()
   pantryItem: PantryItem;
@@ -66,7 +66,7 @@ export class EditShoppingItemLocationComponent implements OnInit {
   selectedGroceryStoreSection?: string;
   selectedGroceryStoreName?: string;
 
-  private groceryStoresLoading$: Observable<boolean>;
+  protected groceryStoresLoading$: Observable<boolean>;
   private readonly locationId: any;
   private readonly pantryItemId: number;
   private readonly returnUrl: string;

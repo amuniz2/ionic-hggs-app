@@ -39,6 +39,7 @@ import {AppEffects} from '../../store/app.effects';
   ],
   providers: [
   ]
+
 })
 
 export class StoreManagementModule { }

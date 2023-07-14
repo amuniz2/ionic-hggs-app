@@ -18,10 +18,10 @@ import {
   SavePantryItemSucceeded,
   PantryItemLocationDeleted,
   NoOp,
-  DeletePantryItem, DeletePantryItemFailed, SavePantryItem
+  DeletePantryItem, DeletePantryItemFailed, SavePantryItem, UpdatePantryItems
 } from './pantry-management.actions';
 import {Store} from '@ngrx/store';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {combineLatest} from 'rxjs'
 import {catchError, concatMap, map, mapTo, switchMap, tap, withLatestFrom} from 'rxjs/operators';
 import {PantryState} from './pantry-management.reducers';
@@ -42,8 +42,7 @@ export class PantryEffects {
               private router: Router) {
   }
 
-  @Effect()
-  public deletePantryItem = this.actions$.pipe(
+  public deletePantryItem = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.DeletePantryItem),
     withLatestFrom(this.store.select(selectCurrentGroceryStore())),
     switchMap(([action, groceryStore]: [DeletePantryItem, GroceryStoreState]) => {
@@ -54,10 +53,9 @@ export class PantryEffects {
           ]),
           catchError(error => [new DeletePantryItemFailed(error)]));
     })
-  );
+  ));
 
-  @Effect()
-  public loadPantryItems$ = this.actions$.pipe(
+  public loadPantryItems$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.LoadPantryItems),
     switchMap(() => {
         return this.pantryDataService.getPantryItems().pipe(
@@ -68,10 +66,9 @@ export class PantryEffects {
           })
         );
     })
-  );
+  ));
 
-  @Effect()
-  public getPantryItemDetails$ = this.actions$.pipe(
+  public getPantryItemDetails$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.NavigatedToPantryItemPage),
     switchMap(payload => this.pantryDataService.getPantryItem(payload.pantryItemId)),
     switchMap((x) => {
@@ -81,19 +78,17 @@ export class PantryEffects {
       ];
     }),
     catchError(err => [new PantryLoadFailed(err)])
-  );
+  ));
 
-  @Effect()
-  public getPantryItemLocations$ = this.actions$.pipe(
+  public getPantryItemLocations$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.LoadPantryItemLocations),
     switchMap(payload => this.pantryDataService.getPantryItemLocations(payload.itemId).pipe(
       map(locations => new PantryItemLocationsLoadedSuccessfully(payload.itemId, locations)),
       catchError(error => [new PantryLoadFailed(error)])
     ))
-  );
+  ));
 
-  @Effect()
-  public createPantryItem$ = this.actions$.pipe(
+  public createPantryItem$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.CreatePantryItem),
     switchMap((payload) => {
       return this.pantryDataService.addPantryItem( {
@@ -109,10 +104,9 @@ export class PantryEffects {
         ]),
         catchError(error => [new CreateItemFailed(payload.pantryItemRequest.name, error)])
       );
-    }));
+    })));
 
-  @Effect({ dispatch: false })
-  public navigateToPantryItemDetailsPage$ = this.actions$.pipe(
+  public navigateToPantryItemDetailsPage$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.NavigateToPantryItemPage),
     tap((navigateToPantryItemPageRequest: NavigateToPantryItemPage) => {
       const navigationExtras = { queryParams:
@@ -122,10 +116,9 @@ export class PantryEffects {
           }
       };
       this.router.navigate([this.router.url, 'pantry-item-details'], navigationExtras);
-    }));
+    })), { dispatch: false });
 
-  @Effect()
-  public saveNewPantryItem$ = this.actions$.pipe(
+  public saveNewPantryItem$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.SaveNewPantryItem),
     switchMap((payload) => {
       return this.pantryDataService.addPantryItem(payload.pantryItem).pipe(
@@ -135,37 +128,18 @@ export class PantryEffects {
           ]),
         catchError(error => [new CreateItemFailed(payload.pantryItem.name, error)])
       );
-    }));
+    })));
 
-  // @Effect()
-  // public editNewPantryItem$ = this.actions$.pipe(
-  //   ofType(PantryActionTypes.PantryItemCreated),
-  //   map((payload) => {
-  //       return new NavigateToPantryItemPage({ id: payload.pantryItem.id, newItem: false });
-  //     }));
-
-  @Effect()
-  public savePantryItem$ = this.actions$.pipe(
+  public savePantryItem$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.SavePantryItem),
     switchMap((payload) => {
       return this.pantryDataService.updatePantryItem(payload.pantryItem).pipe(
         map(itemUpdated => new SavePantryItemSucceeded( payload.pantryItem )),
         catchError(error => [new SavePantryItemFailed(error, payload.pantryItem)])
       );
-    }));
+    })));
 
-  // @Effect()
-  // public toggleNeedFlag$ = this.actions$.pipe(
-  //   ofType(PantryActionTypes.ToggleNeed),
-  //   switchMap((payload) => this.pantryDataService.updatePantryItem(payload.request)),
-  //   switchMap(itemUpdated => [
-  //             new SavePantryItemSucceeded(itemUpdated),
-  //             new AddOrRemoveItemFromShoppingLists(itemUpdated)
-  //       ]),
-  //   catchError(error => [new SavePantryItemFailed(error, null)]));
-
-  @Effect()
-  public toggleNeedFlag$ = this.actions$.pipe(
+  public toggleNeedFlag$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.ToggleNeed),
     switchMap((payload) =>
       combineLatest([this.pantryDataService.updatePantryItem(payload.request),
@@ -174,27 +148,24 @@ export class PantryEffects {
       new SavePantryItemSucceeded(itemUpdated),
       new AddOrRemoveItemFromShoppingLists(itemUpdated, locations)
     ]),
-    catchError(error => [new SavePantryItemFailed(error, null)]));
+    catchError(error => [new SavePantryItemFailed(error, null)])));
 
-  @Effect({ dispatch: false })
-  public navigateToNewLocationPage$ = this.actions$.pipe(
+  public navigateToNewLocationPage$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.AddPantryItemLocationRequest),
     tap((navigateToLocationPage: AddPantryItemLocationRequest) => {
       // todo: make this single '/pantry-items/{pantry-item-id}/new-pantry-item-location
       const route = `/home/pantry-items/${navigateToLocationPage.request.pantryItem.id}/new-pantry-item-location`;
       this.router.navigateByUrl(route, { state: { returnUrl: navigateToLocationPage.returnUrl}});
-    }));
+    })), { dispatch: false });
 
-  @Effect( {dispatch: false})
-  public importedPantry$ = this.actions$.pipe(
+  public importedPantry$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.PantryImportedSuccessfully),
     tap((payload: any) => {
       console.log('navigating to returnUrl: ', payload.returnUrl);
       this.router.navigateByUrl(payload.returnUrl);
-    }));
+    })), { dispatch: false });
 
-  @Effect({ dispatch: false })
-  public navigateToEditLocationPage$ = this.actions$.pipe(
+  public navigateToEditLocationPage$ = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.EditPantryItemLocationRequest),
     tap((navigateToLocationPage: EditPantryItemLocationRequest) => {
       const navigationExtras = {
@@ -214,21 +185,19 @@ export class PantryEffects {
       const route = `/shared/pantry-items/${navigateToLocationPage.request.pantryItemId}/pantry-item-location/${navigateToLocationPage.request.storeLocation.id}`;
       console.log('full url to navigate to: ', route);
       this.router.navigateByUrl(route, navigationExtras);
-    }));
+    })), { dispatch: false });
 
-  @Effect()
-  public deletePantryItemLocation = this.actions$.pipe(
+  public deletePantryItemLocation = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.DeletePantryItemLocation),
       switchMap((payload) => {
         console.log('calling deletePantryItemLocation');
         return this.pantryDataService.deletePantryItemLocation(payload.request.pantryItemId, payload.request.storeLocation.id).pipe(
           map((success) => new PantryItemLocationDeleted(payload.request.pantryItemId, payload.request.storeLocation))
         );
-      }));
+      })));
 
 
-  @Effect()
-  public addItemLocation = this.actions$.pipe(
+  public addItemLocation = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.AddPantryItemLocation),
     switchMap((payload) => {
       return this.pantryDataService.addNewPantryItemLocation(
@@ -243,10 +212,9 @@ export class PantryEffects {
           return [new AddPantryItemLocationFailed(error)];
         })
       );
-    }));
+    })));
 
-  @Effect()
-  public updateItemLocation = this.actions$.pipe(
+  public updateItemLocation = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.UpdatePantryItemLocation),
     switchMap((payload) => {
       return this.pantryDataService.updatePantryItemLocation(
@@ -261,10 +229,9 @@ export class PantryEffects {
           return [new AddPantryItemLocationFailed(error)];
         })
       );
-    }));
+    })));
 
-  @Effect()
-  public itemLocationAdded = this.actions$.pipe(
+  public itemLocationAdded = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.PantryItemLocationAdded),
     tap((navigateToItemPage: PantryItemLocationAdded) => {
       // todo: make this single '/pantry-items/{pantry-item-id}/new-pantry-item-location
@@ -278,10 +245,9 @@ export class PantryEffects {
         map(isNeeded => isNeeded ?
           new UpdateStoreShoppingList(locationAdded.pantryItemLocation.storeId)
           : new NoOp()));
-    }));
+    })));
 
-  @Effect()
-  public itemLocationUpdated = this.actions$.pipe(
+  public itemLocationUpdated = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.PantryItemLocationUpdated),
     // todo: route to previous page, not necessarilty to pantry item details
     // todo: update shopping list item if location of updated item is needed
@@ -293,10 +259,9 @@ export class PantryEffects {
         map(isNeeded => isNeeded ?
           new UpdateStoreShoppingList(locationUpdated.pantryItemLocation.storeId)
             : new NoOp()));
-    }));
+    })));
 
-  @Effect()
-  public itemLocationDeleted = this.actions$.pipe(
+  public itemLocationDeleted = createEffect(() => this.actions$.pipe(
     ofType(PantryActionTypes.PantryItemLocationDeleted),
     // todo: route to previous page, not necessarilty to pantry item details
     switchMap((locationDeleted: PantryItemLocationDeleted) => {
@@ -304,5 +269,14 @@ export class PantryEffects {
         map(isNeeded => isNeeded ?
           new UpdateStoreShoppingList(locationDeleted.location.storeId)
           : new NoOp()));
-    }));
+    })));
+
+    public selectDefaultPantryItems = createEffect(() => this.actions$.pipe(
+      ofType(PantryActionTypes.SelectDefaultPantryItems),
+      switchMap((setNeed: boolean) => {
+        return this.pantryDataService.selectDefaulPantrytItems(setNeed).pipe(
+          map(data => new UpdatePantryItems(data)));
+        
+      })
+    ));
 }

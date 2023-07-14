@@ -12,8 +12,7 @@ import {selectAllGroceryStores, selectGroceryStoresLoading} from '../../../../st
 import {GroceryStoreState} from '../../../../model/grocery-store';
 import {AlertController, ToastController} from '@ionic/angular';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
-import {HggsFile, IGroceryDataExporter} from '../../../../services/grocery-data-exporter.service';
-import {File} from  '@ionic-native/file/ngx';
+import {GroceryDataExporter, HggsFile, IGroceryDataExporter} from '../../../../services/grocery-data-exporter.service';
 import {HggsData} from '../../../../model/hggs-data';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
 import {Router} from '@angular/router';
@@ -25,7 +24,8 @@ import {CreatePantryItemRequest} from '../../../../helpers';
 @Component({
   selector: 'app-pantry-inventory-manager',
   templateUrl: './pantry-inventory-manager.component.html',
-  styleUrls: ['./pantry-inventory-manager.component.scss']
+  styleUrls: ['./pantry-inventory-manager.component.scss'],
+  providers: [GroceryDataExporter ]
 })
 export class PantryInventoryManagerComponent implements OnInit {
   title: string;
@@ -36,8 +36,8 @@ export class PantryInventoryManagerComponent implements OnInit {
   groceryStoresLoading$: Observable<boolean>;
   groceryStores$: Observable<GroceryStoreState[]>;
   private showSharingOptions: boolean;
-  private filterList: boolean;
-  private filter = '';
+  protected filterList: boolean;
+  protected filter = '';
 
   @ViewChild('#tab-button-pantry-items')
   private pantryItemsTab: HTMLElement;
@@ -45,7 +45,6 @@ export class PantryInventoryManagerComponent implements OnInit {
   constructor(private store: Store<AppState>,
               private socialSharing: SocialSharing,
               private toastController: ToastController,
-              private fileManager: File,
               @Inject('IGroceryDataExporter')  private exporter: IGroceryDataExporter,
               @Inject('IPantryDataService')  private pantryDataService: IPantryDataService,
               private alertContoller: AlertController,
@@ -87,6 +86,10 @@ export class PantryInventoryManagerComponent implements OnInit {
 
   onPantryItemModified($event: PantryItem) {
     this.store.dispatch(new fromActions.SavePantryItem($event));
+  }
+
+  onCheckDefaultItems() {
+    this.store.dispatch(new fromActions.SelectDefaultPantryItems(true));
   }
 
   onScanBarcode() {
@@ -165,10 +168,11 @@ export class PantryInventoryManagerComponent implements OnInit {
       await alert.present();
     }
 
-    private importDataRead = async (data: HggsData, state: any) => {
+    private importDataRead = async (data:string, state: any) => {
       // console.log('routing before dispatching');
       // await this.router.navigateByUrl('/home/pantry-items');
-        this.store.dispatch(new ImportData(data, '/home/pantry-items'));
+      console.log('data read from file: ', data);
+        this.store.dispatch(new ImportData(JSON.parse(data), '/home/pantry-items'));
     }
 
     private async confirm(hggsFile: HggsFile) {
@@ -195,18 +199,18 @@ export class PantryInventoryManagerComponent implements OnInit {
     }
 
     async importData() {
-    await this.exporter.listFolders();
+    
     this.exporter.getFilesAvailableToDownload().subscribe(
       async hggsFiles => {
         if (hggsFiles.length === 0) {
-          this.notifyNoImportFileAvailable();
+          await this.notifyNoImportFileAvailable();
         } else if (hggsFiles.length === 1) {
           console.log('found file, prompting for confirmation');
           await this.confirm(hggsFiles[0]);
         } else {
           console.log('todo: prompt user to choose which file, or process most recent file');
         }
-      }, error => {});
+      });
   }
 
   filterItems() {

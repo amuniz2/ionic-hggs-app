@@ -30,6 +30,7 @@ export class DbRowConverters {
       defaultQuantity,
       quantityNeeded: quantityNeeded === null ? defaultQuantity : quantityNeeded,
       inCart: row[PantryItemTable.COLS.IN_CART],
+      selectByDefault: row[PantryItemTable.COLS.SELECT_BY_DEFAULT] === 1 ? true : false,
     };
   }
 

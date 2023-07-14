@@ -9,10 +9,6 @@
         "parents": {
           "/*": [
             {
-              "xml": "<feature name=\"Device\"><param name=\"browser-package\" value=\"Device\" /></feature>",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"Camera\"><param name=\"browser-package\" value=\"Camera\" /></feature>",
               "count": 1
             }
@@ -22,25 +18,13 @@
     }
   },
   "installed_plugins": {
-    "cordova-custom-config": {
+    "com.napolitano.cordova.plugin.intent": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-sqlite-storage": {
+    "cordova-plugin-camera": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-ionic-webview": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "es6-promise-plugin": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-x-socialsharing": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-file": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-splashscreen": {
@@ -49,33 +33,50 @@
     "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-camera": {
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-x-socialsharing": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-sqlite-storage": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-file": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },
   "dependent_plugins": {},
   "modules": [
     {
-      "file": "plugins/cordova-plugin-device/www/device.js",
-      "id": "cordova-plugin-device.device",
-      "pluginId": "cordova-plugin-device",
+      "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+      "id": "cordova-plugin-camera.Camera",
+      "pluginId": "cordova-plugin-camera",
       "clobbers": [
-        "device"
+        "Camera"
       ]
     },
     {
-      "file": "plugins/cordova-plugin-device/src/browser/DeviceProxy.js",
-      "id": "cordova-plugin-device.DeviceProxy",
-      "pluginId": "cordova-plugin-device",
+      "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
+      "id": "cordova-plugin-camera.CameraPopoverOptions",
+      "pluginId": "cordova-plugin-camera",
+      "clobbers": [
+        "CameraPopoverOptions"
+      ]
+    },
+    {
+      "file": "plugins/cordova-plugin-camera/www/Camera.js",
+      "id": "cordova-plugin-camera.camera",
+      "pluginId": "cordova-plugin-camera",
+      "clobbers": [
+        "navigator.camera"
+      ]
+    },
+    {
+      "file": "plugins/cordova-plugin-camera/src/browser/CameraProxy.js",
+      "id": "cordova-plugin-camera.CameraProxy",
+      "pluginId": "cordova-plugin-camera",
       "runs": true
-    },
-    {
-      "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
-      "id": "cordova-sqlite-storage.SQLitePlugin",
-      "pluginId": "cordova-sqlite-storage",
-      "clobbers": [
-        "SQLitePlugin"
-      ]
     },
     {
       "file": "plugins/cordova-plugin-ionic-webview/src/www/util.js",
@@ -84,6 +85,34 @@
       "clobbers": [
         "Ionic.WebView"
       ]
+    },
+    {
+      "file": "plugins/cordova-plugin-splashscreen/src/browser/SplashScreenProxy.js",
+      "id": "cordova-plugin-splashscreen.SplashScreenProxy",
+      "pluginId": "cordova-plugin-splashscreen",
+      "runs": true
+    },
+    {
+      "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+      "id": "cordova-plugin-splashscreen.SplashScreen",
+      "pluginId": "cordova-plugin-splashscreen",
+      "clobbers": [
+        "navigator.splashscreen"
+      ]
+    },
+    {
+      "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+      "id": "cordova-plugin-statusbar.statusbar",
+      "pluginId": "cordova-plugin-statusbar",
+      "clobbers": [
+        "window.StatusBar"
+      ]
+    },
+    {
+      "file": "plugins/cordova-plugin-statusbar/src/browser/StatusBarProxy.js",
+      "id": "cordova-plugin-statusbar.StatusBarProxy",
+      "pluginId": "cordova-plugin-statusbar",
+      "runs": true
     },
     {
       "file": "plugins/es6-promise-plugin/www/promise.js",
@@ -98,6 +127,26 @@
       "clobbers": [
         "window.plugins.socialsharing"
       ]
+    },
+    {
+      "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+      "id": "cordova-sqlite-storage.SQLitePlugin",
+      "pluginId": "cordova-sqlite-storage",
+      "clobbers": [
+        "SQLitePlugin"
+      ]
+    },
+    {
+      "file": "plugins/cordova-sqlite-storage/node_modules/cordova-sqlite-storage-dependencies/sql-asm-memory-growth.js",
+      "id": "cordova-sqlite-storage.sql",
+      "pluginId": "cordova-sqlite-storage",
+      "runs": true
+    },
+    {
+      "file": "plugins/cordova-sqlite-storage/src/browser/SQLiteProxy.js",
+      "id": "cordova-sqlite-storage.SQLiteProxy",
+      "pluginId": "cordova-sqlite-storage",
+      "runs": true
     },
     {
       "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
@@ -277,76 +326,17 @@
       "merges": [
         "window.FileSystem"
       ]
-    },
-    {
-      "file": "plugins/cordova-plugin-splashscreen/src/browser/SplashScreenProxy.js",
-      "id": "cordova-plugin-splashscreen.SplashScreenProxy",
-      "pluginId": "cordova-plugin-splashscreen",
-      "runs": true
-    },
-    {
-      "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-      "id": "cordova-plugin-splashscreen.SplashScreen",
-      "pluginId": "cordova-plugin-splashscreen",
-      "clobbers": [
-        "navigator.splashscreen"
-      ]
-    },
-    {
-      "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-      "id": "cordova-plugin-statusbar.statusbar",
-      "pluginId": "cordova-plugin-statusbar",
-      "clobbers": [
-        "window.StatusBar"
-      ]
-    },
-    {
-      "file": "plugins/cordova-plugin-statusbar/src/browser/StatusBarProxy.js",
-      "id": "cordova-plugin-statusbar.StatusBarProxy",
-      "pluginId": "cordova-plugin-statusbar",
-      "runs": true
-    },
-    {
-      "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
-      "id": "cordova-plugin-camera.Camera",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "Camera"
-      ]
-    },
-    {
-      "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
-      "id": "cordova-plugin-camera.CameraPopoverOptions",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "CameraPopoverOptions"
-      ]
-    },
-    {
-      "file": "plugins/cordova-plugin-camera/www/Camera.js",
-      "id": "cordova-plugin-camera.camera",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "navigator.camera"
-      ]
-    },
-    {
-      "file": "plugins/cordova-plugin-camera/src/browser/CameraProxy.js",
-      "id": "cordova-plugin-camera.CameraProxy",
-      "pluginId": "cordova-plugin-camera",
-      "runs": true
     }
   ],
   "plugin_metadata": {
-    "cordova-custom-config": "5.1.0",
-    "cordova-plugin-device": "2.0.3",
-    "cordova-sqlite-storage": "5.0.1",
+    "com.napolitano.cordova.plugin.intent": "0.1.2",
+    "cordova-plugin-camera": "6.0.0",
     "cordova-plugin-ionic-webview": "5.0.0",
-    "es6-promise-plugin": "4.2.2",
-    "cordova-plugin-x-socialsharing": "6.0.1",
-    "cordova-plugin-file": "6.0.2",
     "cordova-plugin-splashscreen": "6.0.0",
     "cordova-plugin-statusbar": "2.4.3",
-    "cordova-plugin-camera": "6.0.0"
+    "es6-promise-plugin": "4.2.2",
+    "cordova-plugin-x-socialsharing": "6.0.1",
+    "cordova-sqlite-storage": "6.1.0",
+    "cordova-plugin-file": "7.0.0"
   }
 }

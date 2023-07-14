@@ -2,7 +2,7 @@
 
 platform :ios, '11.0'
 
-target 'hggs-app' do
-	project 'hggs-app.xcodeproj'
+target 'C:\projects\ionic\hggs-app\platforms\ios\hggs-app' do
+	project 'C:\projects\ionic\hggs-app\platforms\ios\hggs-app.xcodeproj'
 
 end

@@ -7,7 +7,11 @@
       <ion-input class="edit-box edit-box-left" inputmode="decimal" placeholder="Quantity" id="pantryItemQuantityInput" (ionChange)="onPropertyChange()" [(ngModel)]="pantryItemQuantity"></ion-input>
       <ion-input class="edit-box edit-box-right" placeholder="Units" id="pantryItemQuantityUnitInput" (ionChange)="onPropertyChange()" [(ngModel)]="pantryItemQuantityUnit"></ion-input>
     </div>
-      <app-hggs-accordion [sectionName]="locationsSection.label"
+    <ion-item>
+      <ion-checkbox [(ngModel)]="defaultItem" slot="start" (ionChange)="onPropertyChange()" ></ion-checkbox>
+      <ion-label>Recurring</ion-label>
+    </ion-item>
+    <app-hggs-accordion [sectionName]="locationsSection.label"
                           [description]=""
                           [isOpenInitially]="true"
                           (change)="toggleLocationsSection($event)"

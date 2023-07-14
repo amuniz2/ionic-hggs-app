@@ -61,9 +61,9 @@ export class GroceryStoreLocationAisleOrSectionComponent implements OnInit, OnCh
   private editControl: FormControl;
   private readonly editControlForm: FormGroup;
   private itemBeingEdited: string;
-  private sortedAislesOrSections: string[];
+  protected sortedAislesOrSections: string[];
 
-  constructor(private controlContainer: ControlContainer,
+  constructor(protected controlContainer: ControlContainer,
               public modalController: ModalController,
               private fb: FormBuilder,
               private toastController: ToastController) {

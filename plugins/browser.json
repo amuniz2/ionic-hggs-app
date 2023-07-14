@@ -7,34 +7,31 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-custom-config": {
+    "com.napolitano.cordova.plugin.intent": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-device": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-sqlite-storage": {
+    "cordova-plugin-camera": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-ionic-webview": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-x-socialsharing": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "es6-promise-plugin": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-camera": {
+    "cordova-plugin-x-socialsharing": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-sqlite-storage": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-file": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },

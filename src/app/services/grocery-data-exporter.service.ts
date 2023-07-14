@@ -20,7 +20,7 @@ export interface GroceryStoreLocationsImport {
 };
 
 export interface IGroceryDataExporter {
-  dataHandler: (data: HggsData, state: any) => void;
+  dataHandler: (data: string, state: any) => void;
 
   exportAll(): Observable<string>;
 
@@ -48,7 +48,7 @@ export class GroceryDataExporter implements IGroceryDataExporter {
   private parentDirectory: DirectoryEntry;
   public state: any;
 
-  public dataHandler: (data: HggsData, state: any) => void;
+  public dataHandler: (data: string, state: any) => void;
 
   constructor(@Inject('IPantryDataService') private pantryDataService: IPantryDataService, private fileManager: File) {
     this.dataExported = new HggsData();
@@ -71,7 +71,7 @@ export class GroceryDataExporter implements IGroceryDataExporter {
       const fileEntry = await this.fileManager.createFile(this.fileManager.dataDirectory, fileName, true);
       fileEntry.createWriter((fileWriter => {
         console.log('writing file');
-        fileWriter.write(JSON.stringify(data));
+        fileWriter.write(data);
       }), this.failedToCreateFileWriter);
       fileNameUrl = fileEntry.nativeURL;
       return fileNameUrl;
@@ -135,21 +135,21 @@ export class GroceryDataExporter implements IGroceryDataExporter {
     const tasks$ = [];
     tasks$.push(this.pantryDataService.getGroceryStores());
     tasks$.push(this.pantryDataService.getPantryItems());
-    tasks$.push(this.pantryDataService.getAllGroceryStoreAisles());
-    tasks$.push(this.pantryDataService.getAllGroceryStoreSections());
     tasks$.push(this.pantryDataService.getAllGroceryStoreLocations());
+    tasks$.push(this.pantryDataService.getAllGroceryStoreSections());
+    tasks$.push(this.pantryDataService.getAllGroceryStoreAisles());
     tasks$.push(this.pantryDataService.getAllPantryItemLocations());
 
-    const exportedFile$ = forkJoin(...tasks$).pipe(
+    const exportedFile$ = forkJoin(tasks$).pipe(
       take(1),
-      switchMap(([groceryStores, pantryItems, storeAisles, storeSections, storeLocations, itemLocations])=> {
+      switchMap((taskResults: any[])=> {
         this.dataExported = {
-          groceryStores,
-          pantryItems,
-          groceryStoreLocations: storeLocations,
-          groceryStoreSections: storeSections,
-          groceryStoreAisles: storeAisles,
-          pantryItemLocations: itemLocations
+          groceryStores: taskResults[0],
+          pantryItems: taskResults[1],
+          groceryStoreLocations: taskResults[2],
+          groceryStoreSections: taskResults[3],
+          groceryStoreAisles: taskResults[4],
+          pantryItemLocations: taskResults[5]
         };
         return from(this.writeDataToFile(JSON.stringify(this.dataExported), 'grocery-data.hggs'));
         // return this.writeDataToFile().then((fileName) => fileName);
@@ -176,16 +176,17 @@ export class GroceryDataExporter implements IGroceryDataExporter {
   private async getDirectoryListing(storageDir: string, directoryName: string = '') : Promise<Entry[]> {
     // const directoryName = this.getDirectoryName(storageDir);
     if (directoryName === null) {
+      console.log(`directory name is null for ${storageDir}`);
       return [];
     }
 
     const listing = await this.fileManager.listDir(storageDir, directoryName);
-    listing.forEach( entry => {
+    listing.forEach( async entry => {
       if (entry.isDirectory) {
-        this.getDirectoryListing(storageDir, entry.name);
+        await this.getDirectoryListing(storageDir, entry.name);
       }
-    })
-    this.logListing(storageDir, directoryName, listing);
+        this.logListing(storageDir, directoryName, listing);
+    });
     return listing;
   }
 
@@ -200,19 +201,21 @@ export class GroceryDataExporter implements IGroceryDataExporter {
 
   public getFilesAvailableToDownload() : Observable<HggsFile[]> {
     this.hggsFiles = [];
-    let parentFolder: string;
-    let subFolder: string;
-    if (this.fileManager.externalRootDirectory === null) {
-      parentFolder = this.fileManager.documentsDirectory;
-      subFolder = 'NoCloud';
-      subFolder = '';
-    } else {
+    let parentFolder: string = this.fileManager.externalDataDirectory;
+    //this.fileManager.documentsDirectory;;
+    let subFolder: string = '';
+
+    // resume here; this may have worked for ios, but what about android?
+
+    
+    if (parentFolder === null) {
       parentFolder = this.fileManager.externalRootDirectory;
-      subFolder = 'Download';
-    }
+    } 
+
     console.log(`parentFolder: ${parentFolder}, subFolder: ${subFolder}`);
     return from(this.fileManager.listDir(parentFolder,subFolder).then((entries) => {
-      console.log('files found in folder: ', JSON.stringify(entries));
+      console.log(`files found in folder (number; ${entries.length})`, JSON.stringify(entries));
+      debugger;
       this.downloadedHggsFiles = entries.filter(file => file.isFile && file.name.endsWith('.hggs'));
       console.log(`downloaded hggs files: ${JSON.stringify(this.downloadedHggsFiles)}`);
       this.downloadedHggsFiles.forEach((entry) => {
@@ -250,7 +253,7 @@ export class GroceryDataExporter implements IGroceryDataExporter {
 
             reader.onloadend = (e) => {
               if (this.dataHandler) {
-                this.dataHandler(JSON.parse(reader.result as string), this.state);
+                this.dataHandler(reader.result as string, this.state);
               } else {
                 returnHggsData(JSON.parse(reader.result as string));
               }
@@ -291,52 +294,52 @@ export class GroceryDataExporter implements IGroceryDataExporter {
     });
   }
 
-  public async listFolders(): Promise<any> {
+  public listFolders(): any {
     const result: Entry[][] = [];
-    await
     [
-    //   {
-    //   dir: this.fileManager.dataDirectory,
-    //   name: 'dataDirectory'
-    // },{
-    //     dir: this.fileManager.applicationStorageDirectory,
-    //     name: 'applicationStorageDirectory'
-    //   },
-    //   {
-    //     dir: this.fileManager.tempDirectory,
-    //     name: 'tempDirectory'
-    //   },{
-    //   dir: this.fileManager.applicationDirectory,
-    //   name: 'applicationDirectory'
-    // },{
-    //   dir: this.fileManager.cacheDirectory,
-    //   name: 'cacheDirectory'
-    // },
+      {
+      dir: this.fileManager.dataDirectory,
+      name: 'dataDirectory'
+    },
+    {
+        dir: this.fileManager.applicationStorageDirectory,
+        name: 'applicationStorageDirectory'
+      },
+      {
+        dir: this.fileManager.tempDirectory,
+        name: 'tempDirectory'
+      },{
+      dir: this.fileManager.applicationDirectory,
+      name: 'applicationDirectory'
+    },{
+      dir: this.fileManager.cacheDirectory,
+      name: 'cacheDirectory'
+    },
       {
       dir: this.fileManager.documentsDirectory,
       name: 'documentsDirectory'
     },
-    //   {
-    //   dir: this.fileManager.externalApplicationStorageDirectory,
-    //   name: 'externalApplicationStorageDirectory'
-    // },
-    //   {
-    //   dir: this.fileManager.externalCacheDirectory,
-    //   name: 'externalCacheDirectory'
-    // },
-    //   {
-    //   dir: this.fileManager.externalDataDirectory,
-    //   name: 'externalDataDirectory'
-    // },
-    //   {
-    //   dir: this.fileManager.externalRootDirectory,
-    //   name: 'externalRootDirectory'
-    // }
+    {
+      dir: this.fileManager.externalApplicationStorageDirectory,
+      name: 'externalApplicationStorageDirectory'
+    },
+      {
+      dir: this.fileManager.externalCacheDirectory,
+      name: 'externalCacheDirectory'
+    },
+      {
+      dir: this.fileManager.externalDataDirectory,
+      name: 'externalDataDirectory'
+    },
+      {
+      dir: this.fileManager.externalRootDirectory,
+      name: 'externalRootDirectory'
+    }
     ].forEach( async (dirDesc) => {
       console.log(`directory name: ${dirDesc.name}; directory:${dirDesc.dir}`);
       if (dirDesc.dir !== null) {
         console.log('getting directory listing for: ', dirDesc.name);
-        await this.getDirectoryListing(dirDesc.dir);
+        this.getDirectoryListing(dirDesc.dir);
       }
       // const listing = await this.getDirectoryListing(dirDesc.dir);
     });
@@ -350,11 +353,11 @@ export class GroceryDataExporter implements IGroceryDataExporter {
       result = result.concat(`Aisle ${aisle.name}\n`);
       aisle.sections.forEach(section => {
         section.shoppingItems.forEach(item => {
-          result = result.concat(`\t${item.name}\n`);
+          result = result.concat(this.formatShoppingItem(item));
         });
       });
       aisle.shoppingItems.forEach(item => {
-        result = result.concat(`\t${item.name}\n`);
+        result = result.concat(this.formatShoppingItem(item));
       });
     });
     return result;
@@ -407,8 +410,8 @@ export class GroceryDataExporter implements IGroceryDataExporter {
 
   private addShoppingListItemHtml(parent: HTMLElement, shoppingItem: ShoppingItem) {
     const li = parent.ownerDocument.createElement('li');
-    li.innerText = shoppingItem.name;
     parent.appendChild(li);
+    this.addShoppingItemHtml(li, shoppingItem);
   }
 
   private buildSectionsSection(list: ShoppingList): string {
@@ -416,7 +419,7 @@ export class GroceryDataExporter implements IGroceryDataExporter {
     list.sections.forEach(section => {
       result = result.concat(`Section ${section.name}\n`);
       section.shoppingItems.forEach(item => {
-        result = result.concat(`\t${item.name}\n`);
+        result = result.concat(this.formatShoppingItem(item));
       });
     });
     return result;
@@ -425,8 +428,34 @@ export class GroceryDataExporter implements IGroceryDataExporter {
   private buildSectionWithNoLocations(list: ShoppingList) {
     let result = 'Unknown Location\n';
     list.itemsWithNoStoreLocation.forEach(item => {
-      result = result.concat(`\t${item.name}\n`);
+      result = result.concat(this.formatShoppingItem(item));
     });
     return result;
+  }
+
+  private formatShoppingItem(item: ShoppingItem): string {
+    let formattedItem = `\t${item.name} (${item.quantity} ${item.units})\n`;
+    if (item.description) {
+      formattedItem =  formattedItem + `<i>\t\t\t${item.description}</i>\n`;
+    }
+    return formattedItem;
+  }
+
+  private addShoppingItemHtml(parent: HTMLElement, item: ShoppingItem) {
+    const p1 = parent.ownerDocument.createElement('p');
+
+    parent.appendChild(p1);
+    p1.innerHTML = `&nbsp; ${item.name} (${item.quantity} ${item.units})\n` 
+    
+    if (item.description) {
+      const p2 = parent.ownerDocument.createElement('p');
+      parent.appendChild(p2);
+      var italicizedElement = parent.ownerDocument.createElement('i');
+      p2.appendChild(italicizedElement);
+      p2.ownerDocument.createAttribute("style");
+      italicizedElement.style["font-style"] = "italic";
+      italicizedElement.innerHTML =  `&nbsp; ${item.description}`;
+    }
+    console.log(parent.outerHTML);
   }
 }

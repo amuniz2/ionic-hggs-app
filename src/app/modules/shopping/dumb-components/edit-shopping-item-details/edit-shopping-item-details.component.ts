@@ -24,7 +24,7 @@ export class EditShoppingItemDetailsComponent implements OnInit, OnChanges {
   pantryItem: PantryItem;
 
   @Input()
-  groceryStores: GroceryStoreState[];
+  groceryStore: GroceryStoreState[];
 
   @Input()
   error: Error;

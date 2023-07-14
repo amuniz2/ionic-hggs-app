@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-home',
@@ -11,5 +12,15 @@ export class HomePageComponent {
   public shoppingLabel = 'Shopping'
 
   public constructor() {
+  }
+
+  ngOnInit() {
+
+
+  }
+  
+  handleReceivedFile(event: Event): void {
+    console.log("Received:");
+    console.log(event);
   }
 }

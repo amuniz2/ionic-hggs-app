@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {ShoppingListComponent} from './smart-components/shopping-list/shopping-list.component';
 import {RouterModule} from '@angular/router';
@@ -14,10 +14,10 @@ import { ShoppingItemComponent } from './dumb-components/shopping-item/shopping-
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AddShoppingItemComponent} from './dumb-components/add-shopping-item/add-shopping-item.component';
 import {EditShoppingItemDetailsComponent} from './dumb-components/edit-shopping-item-details/edit-shopping-item-details.component';
-import {EditShoppingItemComponent} from './smart-components/edit-shopping-item/edit-shopping-item.component';
+// import {EditShoppingItemComponent} from './smart-components/edit-shopping-item/edit-shopping-item.component';
 import {EditShoppingItemLocationComponent} from './smart-components/edit-shopping-item-location/edit-shopping-item-location.component';
 import {SocialSharing} from "@ionic-native/social-sharing/ngx";
-import {File} from "@ionic-native/file/ngx";
+import {File} from "@ionic-native/file";
 import {BarcodeScanner} from "@ionic-native/barcode-scanner/ngx";
 import {GroceryDataExporter} from "../../services/grocery-data-exporter.service";
 // import {PantryManagementModule} from "../pantry-management/pantry-management.module";
@@ -38,14 +38,18 @@ import {GroceryDataExporter} from "../../services/grocery-data-exporter.service"
     ShoppingItemListComponent,
     ShoppingItemComponent,
     AddShoppingItemComponent,
-    EditShoppingItemComponent,
+//    EditShoppingItemComponent,
     EditShoppingItemDetailsComponent,
     EditShoppingItemLocationComponent
   ],
+  exports: [EditShoppingItemDetailsComponent],
+
   providers: [
     SocialSharing,
-    File,
     [{provide: 'IGroceryDataExporter', useClass: GroceryDataExporter}]
   ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
+  ]
 })
 export class ShoppingModule { }

@@ -31,7 +31,8 @@ export class FakePantryDataServiceHelper {
         locations: [],
         need: false,
         quantityNeeded: 1,
-        inCart: false
+        inCart: false,
+        selectByDefault: false
       },
     ];
     // this.shoppingItems = [];

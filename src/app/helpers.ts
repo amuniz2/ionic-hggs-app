@@ -1,4 +1,3 @@
-import {isNumeric} from 'rxjs/internal-compatibility';
 import {GroceryStoreLocation} from './model/grocery-store-location';
 
 // belongs someewhere else
@@ -6,6 +5,10 @@ export interface CreatePantryItemRequest {
   name: string;
   initialStoreLocation?: GroceryStoreLocation;
 }
+
+function isNumeric(s: string): boolean {
+  return !Number.isNaN(s);
+} 
 
 export function getAisleOrSectionDescription(name: string, label: string): string {
   if (name) {
@@ -18,7 +21,7 @@ export function getAisleOrSectionDescription(name: string, label: string): strin
   return '';
 };
 
-export function sortAislesOrSections(name1, name2): number {
+export function sortAislesOrSections(name1: string, name2: string): number {
   const name1IsNumeric = isNumeric(name1);
   const name2IsNumeric = isNumeric(name2);
 

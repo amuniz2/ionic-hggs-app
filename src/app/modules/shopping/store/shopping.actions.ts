@@ -26,6 +26,7 @@ export interface CreateShoppingItemRequest {
   storeId: number;
   aisle: string;
   section: string;
+  selectByDefault: boolean;
 }
 
 export class AddOrRemoveItemFromShoppingLists implements Action {

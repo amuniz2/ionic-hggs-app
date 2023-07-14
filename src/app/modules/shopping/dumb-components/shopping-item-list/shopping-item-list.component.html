@@ -1,5 +1,5 @@
 <ion-list *ngIf="!shoppingItemsLoading else showSpinner;">
-  <ion-item lines="none" *ngFor="let aisle of shoppingList.aisles">
+  <ion-item lines="none" *ngFor="let aisle of shoppingList?.aisles">
       <ion-grid>
         <ion-row class="aisleOrSectionHeading">
           <ion-col>
@@ -24,7 +24,7 @@
                     <ion-col>
                       <app-shopping-item [shoppingItem]="shoppingItem"
                                          (notifyEditPantryItemLocationRequested)="onChangeShoppingItemLocation($event)"
-                                         (notifySaveRequested)="onSaveShoppingItem($event)"></app-shopping-item>
+                                         (notifyItemMovedInOrOutOfCart)="onItemMovedInOrOutOfCart($event)"></app-shopping-item>
                       <hr *ngIf="!isLastItemInAisle(aisle, shoppingItem)" class="solid aisleOrSectionHeading" width="100%">
                     </ion-col>
                   </ion-row>
@@ -35,7 +35,7 @@
         </ion-row>
       </ion-grid>
   </ion-item>
-  <ion-item lines="none" *ngFor="let section of shoppingList.sections">
+  <ion-item lines="none" *ngFor="let section of shoppingList?.sections">
     <ion-grid>
       <ion-row class="aisleOrSectionHeading">
         <ion-col>
@@ -53,7 +53,7 @@
     </ion-grid>
   </ion-item>
   <ion-grid>
-    <ion-row *ngFor="let shoppingItem of shoppingList.itemsWithNoStoreLocation">
+    <ion-row *ngFor="let shoppingItem of shoppingList?.itemsWithNoStoreLocation">
       <ion-col>
         <app-shopping-item [shoppingItem]="shoppingItem"
                            (notifyEditPantryItemLocationRequested)="onChangeShoppingItemLocation($event)"

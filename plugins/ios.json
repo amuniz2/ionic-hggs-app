@@ -7,10 +7,21 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-custom-config": {
+    "cordova-plugin-camera": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-device": {
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-x-socialsharing": {
+      "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
+      "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "es6-promise-plugin": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-sqlite-storage": {
@@ -19,24 +30,10 @@
     "cordova-plugin-ionic-webview": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-x-socialsharing": {
-      "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
-      "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
+    "com.napolitano.cordova.plugin.intent": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "es6-promise-plugin": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-statusbar": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-camera": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },

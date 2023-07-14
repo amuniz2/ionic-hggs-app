@@ -22,6 +22,11 @@ import {HggsData} from '../model/hggs-data';
 export class PantryDataService implements IPantryDataService {
   constructor(private dbHelper: PantryDbHelper) {
   }
+ 
+  selectDefaulPantrytItems(setNeed: boolean): Observable<PantryItem[]> {
+    return this.dbHelper.setNeedForRecurringItems(setNeed);
+  }
+
 
   cleanupLocations(): Observable<boolean> {
     try {
@@ -69,15 +74,15 @@ export class PantryDataService implements IPantryDataService {
   }
 
   public addPantryItem(newPantryItemRequest: PantryItem): Observable<PantryItem> {
-   const { name, description, units, quantityNeeded, defaultQuantity, need } = newPantryItemRequest;
-    const newPantryItem$ = this.dbHelper.addPantryItem(name, description, units, quantityNeeded, defaultQuantity, need);
+   const { name, description, units, quantityNeeded, defaultQuantity, need, selectByDefault } = newPantryItemRequest;
+    const newPantryItem$ = this.dbHelper.addPantryItem(name, description, units, quantityNeeded, defaultQuantity, need, selectByDefault);
     return newPantryItem$;
   }
 
 
   public addPantryItemInLocation(newPantryItemRequest: PantryItem, storeLocation: GroceryStoreLocation): Observable<PantryItem> {
-    const { name, description, units, quantityNeeded, defaultQuantity, need } = newPantryItemRequest;
-    const newPantryItem$ = this.dbHelper.addPantryItem(name, description, units, quantityNeeded, defaultQuantity, need);
+    const { name, description, units, quantityNeeded, defaultQuantity, need, selectByDefault } = newPantryItemRequest;
+    const newPantryItem$ = this.dbHelper.addPantryItem(name, description, units, quantityNeeded, defaultQuantity, need, selectByDefault);
     return newPantryItem$;
   }
 

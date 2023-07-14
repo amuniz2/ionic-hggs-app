@@ -11,6 +11,7 @@ import {ProductInfo} from '../smart-components/edit-pantry-item/edit-pantry-item
 import {ToggleAction} from '@ngrx/store-devtools/src/actions';
 import {CreatePantryItemRequest} from '../../../helpers';
 
+
 export enum PantryActionTypes {
   ToggleNeed = '[Pantry Item] Toggle Need',
   PantryItemLoaded = '[Pantry Item] Loaded',
@@ -45,7 +46,9 @@ export enum PantryActionTypes {
   SaveNewPantryItem = '[Pantry Item] Save New Requested',
   UpdatePantryItemLocation = '[Pantry Item] Update Requested',
   PantryImportedSuccessfully = '[Pantry Item] Imported Successfully',
-  NoOp = '[Pantry Item] Do nothing, needed for conditional effect'
+  NoOp = '[Pantry Item] Do nothing, needed for conditional effect',
+  SelectDefaultPantryItems = "SelectDefaultPantryItems",
+  UpdatePantryItems = "UpdatePantryItems",
 }
 
 export class ToggleNeed implements Action {
@@ -207,7 +210,11 @@ export class SavePantryItem implements Action {
 
   constructor(public pantryItem: PantryItem) {}
 }
+export class SelectDefaultPantryItems implements Action {
+  readonly type = PantryActionTypes.SelectDefaultPantryItems;
 
+  constructor(public setNeed: boolean) {}
+}
 export class SaveNewPantryItem implements Action {
   readonly type = PantryActionTypes.SaveNewPantryItem;
 
@@ -230,6 +237,11 @@ export class UpdatePantryItemLocation implements Action {
   readonly type = PantryActionTypes.UpdatePantryItemLocation;
 
   constructor(public originalLocationId: number, public updatePantryItemLocation: NewItemLocation, public returnUrl: string) {}
+}
+
+export class UpdatePantryItems implements Action {
+  readonly type = PantryActionTypes.UpdatePantryItems;
+  constructor(public updatedPantryItems: PantryItem[]) {}
 }
 
 export class NoOp implements Action {
@@ -269,4 +281,5 @@ export type PantryActions =
   | UpdatePantryItemLocation
   | PantryImportedSuccessfully
   | ToggleNeed
+  | UpdatePantryItems
   | NoOp;

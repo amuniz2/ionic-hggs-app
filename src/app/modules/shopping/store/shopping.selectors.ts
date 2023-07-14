@@ -37,6 +37,9 @@ export const selectStoreShoppingItems = (storeId: number) => createSelector(
       return {...item.shoppingItem};
     }));
 
+ export const selectCurrrentStoreShoppingItem = (storeId?: number, locationId?: number, pantryItemId?: number) => createSelector(
+  selectAllShoppingItems, (state: ShoppingItemState[]) => state.find((item) => item.shoppingItem.storeId === storeId && item.shoppingItem.location.locationId === locationId)?.shoppingItem);
+
 // export const selectShoppingListItems = (id: number) => createSelector(
 //   selectAllShoppingLists, (state: ShoppingListState) => state.shoppingItems.sort(compareByStoreLocation));
 

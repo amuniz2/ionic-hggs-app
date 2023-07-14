@@ -12,6 +12,9 @@ export class AddShoppingItemComponent implements OnInit {
   @Input()
   initialStoreLocation: GroceryStoreLocation;
 
+  @Input()
+  selectbyDefault: boolean;
+
   @Output()
   notifyNewPantryItemRequested: EventEmitter<CreateShoppingItemRequest> = new EventEmitter();
 
@@ -35,7 +38,8 @@ export class AddShoppingItemComponent implements OnInit {
       name: this.newPantryItemName,
         storeId: this.initialStoreLocation.storeId,
       aisle: this.initialStoreLocation.aisle,
-      section: this.initialStoreLocation.section
+      section: this.initialStoreLocation.section,
+      selectByDefault: false,
     });
     this.newPantryItemName = '';
   }

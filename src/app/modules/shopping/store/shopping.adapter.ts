@@ -15,12 +15,12 @@ function sortShoppingItemsByLocation( item1: ShoppingItemState, item2: ShoppingI
     return item1.shoppingItem.storeId - item2.shoppingItem.storeId;
   }
 
-  if (item1.shoppingItem.location.aisle !== item2.shoppingItem.location.aisle) {
-    return sortAislesOrSections(item1.shoppingItem.location.aisle, item2.shoppingItem.location.aisle);
+  if (item1.shoppingItem.location?.aisle !== item2.shoppingItem.location?.aisle) {
+    return sortAislesOrSections(item1.shoppingItem.location?.aisle, item2.shoppingItem.location?.aisle);
   }
 
   if (item1.shoppingItem.location.section !== item2.shoppingItem.location.aisle) {
-    return sortAislesOrSections(item1.shoppingItem.location.section, item2.shoppingItem.location.section);
+    return sortAislesOrSections(item1.shoppingItem.location?.section, item2.shoppingItem.location?.section);
   }
 
   return item1.shoppingItem.name < item2.shoppingItem.name ? -1 : item1.shoppingItem.name > item2.shoppingItem.name ? 1 : 0;

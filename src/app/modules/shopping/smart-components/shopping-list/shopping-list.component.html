@@ -32,7 +32,9 @@
                           (notifyCancelAddItem)="onCancelAddShoppingItem($event)"
                           (notifyDoneAddingItem)="onCreateShoppingItem($event)"
                           [groceryStore]="selectedStore"
-                          [shoppingItems]="shoppingItems$ | async"
                           (notifyShoppingListAvailable) = updateShoppingList($event)
+                          [shoppingItems]="shoppingItems$ | async"
+                          [currentShoppingItem]="currentShoppingItem$ | async"
+                          (notifyShoppingItemMovedInOrOutOfCart) = onItemPlacedInOrRemovedFromCart($event)
                         ></app-shopping-item-list>
 </ion-content>
