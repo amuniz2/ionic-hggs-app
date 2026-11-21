@@ -62,7 +62,7 @@ import {File} from "@ionic-native/file/ngx";
     // [{provide: 'IPantryDataService', useClass: FakePantryDataService}],
     [{provide: 'IProductInfoService', useClass: ProductInfoService}],
     // [{provide: 'IProductInfoService', useClass: FakeProductInfoService}],
-    FakePantryDataServiceHelper,
+    // FakePantryDataServiceHelper,
     PantryDbHelper,
     MySqlCommands,
     SQLite

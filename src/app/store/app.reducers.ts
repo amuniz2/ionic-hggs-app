@@ -1,11 +1,9 @@
-import {ActionReducerMap, MetaReducer} from '@ngrx/store';
-import {environment} from '../../environments/environment';
+import {ActionReducerMap} from '@ngrx/store';
 import {AppState} from './app.state';
 import {AppActions, AppActionTypes} from './app.actions';
 import * as fromAppAdapter from './grocery-store.adapter';
 import {getGroceryStore} from './store-management.selectors';
 import {GroceryStoreState} from '../model/grocery-store';
-import {ofType} from '@ngrx/effects';
 
 export const reducers: ActionReducerMap<AppState> = {
   databaseReady: (databaseReady) => databaseReady,
@@ -126,22 +124,6 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
         },
       };
 
-    case AppActionTypes.GroceryStoreSectionsLoaded:
-      return {
-        ...state,
-        groceryStores: {
-          ...fromAppAdapter.sharedGroceryStoreAdapter.updateOne(
-            {
-              changes: {
-                sections: action.payload.sections
-              },
-              id: action.payload.groceryStoreId,
-            }, state.groceryStores),
-          loading: false,
-          error: null
-        },
-      };
-
     case AppActionTypes.StoreAisleAdded: {
       const groceryStore = getGroceryStore(state.groceryStores, action.payload.groceryStoreId);
       if (groceryStore.aisles.some(aisle => aisle === action.payload.newAisle)) {
@@ -208,9 +190,7 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
       };
     }
 
-
     case AppActionTypes.GroceryStoreSectionsLoaded: {
-      const groceryStore = getGroceryStore(state.groceryStores, action.payload.groceryStoreId);
       return {
         ...state,
         groceryStores: {
@@ -247,7 +227,6 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
 
     case AppActionTypes.GroceryStoreLocationPossiblyAdded: {
       const existingStoreLocations = state.groceryStores.entities[action.payload.storeId].locations;
-      const existingStoreLocation = existingStoreLocations.find((loc) => loc.id === action.payload.id);
       return {
         ...state,
         groceryStores: {
@@ -277,7 +256,8 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
           }, state.groceryStores)
         },
         groceryItemLocations: {
-          ...fromAppAdapter.sharedGroceryStoreLocationAdapter.upsertMany(action.storeLocations, state.groceryItemLocations),
+          ...fromAppAdapter.sharedGroceryStoreLocationAdapter.upsertMany(
+            action.storeLocations, state.groceryItemLocations),
           error: null,
         }
       };
@@ -320,25 +300,28 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
       };
 
     case AppActionTypes.DeleteStoreFailed:
-      // const { id, name } = action.payload;
       return {
         ...state,
-        // groceryStores: {
-        //   ...state.groceryStores,
-        //   error: action.error
-        // },
-        // selectedGroceryStoreId:
       };
 
     case AppActionTypes.CreateStoreFailed:
       return {
         ...state,
-        // groceryStores: {
-        //   ...state.groceryStores,
-        //   loading: false,
-        //   error: action.error
-        // },
       };
+
+    case AppActionTypes.AisleNameChanged:
+      return updateAisleOrSection (state,
+        action.updatedInfo.groceryStoreId,
+        action.updatedInfo.originalName,
+        action.updatedInfo.aisleOrSectionName,
+        'aisle', 'aisles');
+
+    case AppActionTypes.SectionNameChanged:
+      return updateAisleOrSection (state,
+        action.updatedInfo.groceryStoreId,
+        action.updatedInfo.originalName,
+        action.updatedInfo.aisleOrSectionName,
+        'section', 'sections');
 
     case AppActionTypes.SelectStore:
       const storeToSelect = getGroceryStore(state.groceryStores, action.id);
@@ -354,18 +337,55 @@ export function appRootReducers(state: AppState = initialAppState, action: AppAc
   }
 }
 
-// export function reducer(state = initialState, action: fromApp.AppActions): AppState {
-//   switch (action.type) {
-//     case fromApp.APP_READY:
-//       const { id, name } = action.payload;
-//       return {
-//
-//         stores: [
-//           ...state.stores,
-//           { id, name, aisles: [], sections: [], locations: [] }
-//         ]
-//       };
-//   }
-// }
+// helper functions
+function updateAisleOrSection(state: AppState,
+                              groceryStoreId: number,
+                              originalName: string,
+                              newName: string,
+                              locationPropertyName: string,
+                              collectionName: string): AppState {
+  const existingStoreState = state.groceryStores.entities[groceryStoreId];
+  const newStoreState = {
+    ...existingStoreState,
+    [collectionName]: existingStoreState[collectionName].map(entry => entry === originalName ?
+      newName : entry),
+    locations: existingStoreState.locations.map(locEntity => locEntity[locationPropertyName] === originalName ?
+      {
+        ...locEntity,
+        [locationPropertyName]: newName,
+      } :
+      {
+        ...locEntity,
+      }),
+  }
+  const locationsStateChanges = [];
+  existingStoreState.locations.forEach(loc => {
+    if (loc[locationPropertyName] === originalName) {
+      locationsStateChanges.push({
+        id: loc.id,
+        changes: {
+          [locationPropertyName]: newName,
+        }
+      });
+    }
+  })
 
-export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];
+  return {
+    ...state,
+    groceryStores: {
+      ...fromAppAdapter.sharedGroceryStoreAdapter.updateOne(
+        {
+          id: groceryStoreId,
+          changes: {
+            [collectionName]: newStoreState[collectionName],
+            locations: newStoreState.locations
+          }
+        },
+        state.groceryStores),
+    },
+    groceryItemLocations: {
+      ...fromAppAdapter.sharedGroceryStoreLocationAdapter.updateMany(locationsStateChanges,
+        state.groceryItemLocations)
+    },
+  };
+}

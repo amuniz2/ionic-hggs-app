@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {GroceryStore} from '../model/grocery-store';
 // tslint:disable-next-line:max-line-length
 import {StoreAisleOrSection} from '../modules/store-management/dumb-components/grocery-store-aisles-or-sections/grocery-store-aisles-or-sections.component';
-import {PantryDbHelper} from './db/db-helper';
+import {GroceryStoreComponentTypes, PantryDbHelper} from './db/db-helper';
 import {IPantryDataService, UpdatePantryItemResult} from './IPantryDataService';
 import {
   DeleteGroceryStoreRequest,
@@ -17,7 +17,6 @@ import {PantryItemLocation} from '../model/PantryItemLocation';
 import {GroceryStoreAisle} from '../model/grocery-store-aisle';
 import {GroceryStoreSection} from '../model/grocery-store-section';
 import {HggsData} from '../model/hggs-data';
-import {combineLatest} from 'rxjs'
 
 @Injectable()
 export class PantryDataService implements IPantryDataService {
@@ -103,7 +102,13 @@ export class PantryDataService implements IPantryDataService {
   }
 
   public deleteGroceryStore(deleteStoreRequest: DeleteGroceryStoreRequest): Observable<boolean> {
-    return this.dbHelper.deleteGroceryStore(deleteStoreRequest.id);
+    console.log('Calling dbHelper.deletegroceryStore');
+    try {
+      return this.dbHelper.deleteGroceryStore(deleteStoreRequest.id);
+    } catch(error) {
+      console.log('error occurred when calling dbHelper.deleteGroceryStore', error);
+      throwError(error);
+    }
   }
 
   public deleteGroceryStoreAisle(deleteStoreAisleRequest: StoreAisleOrSection): Observable<boolean> {
@@ -159,7 +164,21 @@ export class PantryDataService implements IPantryDataService {
   }
 
   updateGroceryStoreAisle(groceryStoreId: number, oldName: string, newName: string): Observable<boolean> {
-    return undefined;
+    console.log('in service to update aisle name.');
+    return this.dbHelper.updateGroceryStoreComponentName(
+      GroceryStoreComponentTypes.Aisle,
+      groceryStoreId,
+      oldName,
+      newName);
+  }
+
+  updateGroceryStoreSection(groceryStoreId: number, oldName: string, newName: string): Observable<boolean> {
+    console.log('in service to update section name.');
+    return this.dbHelper.updateGroceryStoreComponentName(
+      GroceryStoreComponentTypes.Section,
+      groceryStoreId,
+      oldName,
+      newName);
   }
 
   updateShoppingItem(storeId: number, pantryItemId: number, inCart: boolean): Observable<ShoppingItem> {

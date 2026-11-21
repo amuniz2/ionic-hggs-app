@@ -68,7 +68,6 @@ export const selectAllGroceryStoreLocations = createSelector(
   fromAdapter.selectAllGroceryStoreLocations
 );
 
-
 export const selectGroceryStoreLocation = (id: number) => createSelector(
   selectAllGroceryStoreLocations, (state: GroceryStoreLocation[]) => state.find((storeLocation) => storeLocation.id === id));
 

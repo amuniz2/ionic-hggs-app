@@ -659,18 +659,29 @@ export class MySqlCommands {
       console.log('Error querying for grocery stores');
       console.log(err);
     }
-    console.log(groceryStores);
     return groceryStores;
   }
 
   public async deleteGroceryStore(id: number): Promise<number> {
-    const deleteSql = `DELETE FROM ${StoreTable.NAME} WHERE ${StoreTable.COLS.ID} = ${id}`;
+    const sqlCommands = {
+      deleteStoreAisles: `DELETE FROM ${StoreGroceryAisleTable.NAME} WHERE ${StoreGroceryAisleTable.COLS.STORE_ID} = ${id}`,
+      deleteStoreSections: `DELETE FROM ${StoreGrocerySectionTable.NAME} WHERE ${StoreGrocerySectionTable.COLS.STORE_ID} = ${id}`,
+      deleteStoreItemLocations: `DELETE FROM ${PantryItemLocationTable.NAME} WHERE ${PantryItemLocationTable.COLS.LOCATION_ID}
+    IN (SELECT ${LocationTable.COLS.ID} FROM ${LocationTable.NAME} WHERE ${LocationTable.COLS.STORE_ID} = ${id})`,
+      deleteGroceryStoreLocations: `DELETE FROM ${LocationTable.NAME} WHERE ${LocationTable.COLS.STORE_ID} = ${id}`,
+      deleteStore: `DELETE FROM ${StoreTable.NAME} WHERE ${StoreTable.COLS.ID} = ${id}`
+    };
     try {
-      const data = await this.db.executeSql(deleteSql, []);
-      return data.rowsAffected;
+      await this.db.executeSql(sqlCommands.deleteStoreAisles, []);
+      await this.db.executeSql(sqlCommands.deleteGroceryStoreLocations, []);
+      await this.db.executeSql(sqlCommands.deleteStoreItemLocations, []);
+      await this.db.executeSql(sqlCommands.deleteGroceryStoreLocations, []);
+      const storesDeleted = await this.db.executeSql(sqlCommands.deleteStore, []);
+      return storesDeleted.rowsAffected;
     } catch (err) {
       console.log(`Error deleting grocery store ${id}`);
       console.log(err);
+      console.log(JSON.stringify(sqlCommands));
     }
   }
   // endregion
@@ -787,6 +798,41 @@ export class MySqlCommands {
       console.log(err);
     }
     return result;
+  }
+
+  public async updateGroceryStoreAisleName(storeId: number, oldName: string, newName: string): Promise<boolean> {
+    const updateSql1 = `UPDATE ${LocationTable.NAME} SET ${LocationTable.COLS.AISLE}='${newName}'
+     WHERE ${LocationTable.COLS.STORE_ID} = ${storeId} AND ${LocationTable.COLS.AISLE} = '${oldName}'`;
+
+    const updateSql2 = `UPDATE ${StoreGroceryAisleTable.NAME} SET ${StoreGroceryAisleTable.COLS.GROCERY_AISLE}='${newName}'
+     WHERE ${StoreGroceryAisleTable.COLS.STORE_ID} = ${storeId} AND ${StoreGroceryAisleTable.COLS.GROCERY_AISLE} = '${oldName}'`;
+
+    try {
+      await this.db.sqlBatch([updateSql1, updateSql2]);
+    } catch (err) {
+      console.log(`Error updating grocery aisle name: ${updateSql1} + ${updateSql2}`);
+      console.log(err);
+      return false;
+    }
+    return true;
+  }
+
+
+  public async updateGroceryStoreSectionName(storeId: number, oldName: string, newName: string): Promise<boolean> {
+    const updateSql1 = `UPDATE ${LocationTable.NAME} SET ${LocationTable.COLS.SECTION_NAME}='${newName}'
+     WHERE ${LocationTable.COLS.STORE_ID} = ${storeId} AND ${LocationTable.COLS.SECTION_NAME} = '${oldName}'`;
+
+    const updateSql2 = `UPDATE ${StoreGrocerySectionTable.NAME} SET ${StoreGrocerySectionTable.COLS.GROCERY_SECTION}='${newName}'
+     WHERE ${StoreGrocerySectionTable.COLS.STORE_ID} = ${storeId} AND ${StoreGrocerySectionTable.COLS.GROCERY_SECTION} = '${oldName}'`;
+
+    try {
+      await this.db.sqlBatch([updateSql1, updateSql2]);
+    } catch (err) {
+      console.log(`Error updating grocery section name: ${updateSql1} + ${updateSql2}`);
+      console.log(err);
+      return false;
+    }
+    return true;
   }
 
   public async queryAllPantryItemLocations(): Promise<PantryItemLocation[]> {
@@ -950,6 +996,7 @@ export class MySqlCommands {
   }
 
   public async cleanupLocations(): Promise<boolean> {
+    console.log('Inside cleanupLocatins()');
     let success = await this.deleteUnusedGroceryStoreLocations();
     if (success) {
       success = await this.deleteUnusedGroceryStoreAislesAndSections();
@@ -1098,11 +1145,6 @@ export class MySqlCommands {
                                           groceryStoreMappings: GroceryStoreMapping[]/*,
                                            existingGroceryStoreLocations: GroceryStoreLocation[]*/) {
     const existingPantryItemLocations = await this.queryPantryItemLocations(pantryItemMapping.importedId);
-    console.log('pantryItemMapping:');
-    console.log(pantryItemMapping);
-    console.log('existing locations for item Id: ', pantryItemMapping.originalId, ' are ', JSON.stringify(existingPantryItemLocations));
-    console.log('locations being imported: ', JSON.stringify(newPantryItemLocations));
-    // console.log('store mappings: ', JSON.stringify(groceryStoreMappings));
     for (const newPantryItemLocation of newPantryItemLocations) {
       const newGroceryStoreLocationMapping = this.findImportedGroceryStoreLocationMapping(newPantryItemLocation.groceryStoreLocationId, groceryStoreMappings);
       if (!existingPantryItemLocations.some(existingLocation => existingLocation.id === newGroceryStoreLocationMapping.importedId)) {
@@ -1128,7 +1170,7 @@ export class MySqlCommands {
 
   private async deleteUnusedGroceryStoreLocations() {
     const sql = `DELETE FROM ${LocationTable.NAME} WHERE NOT EXISTS (
-    SELECT * FROM ${PantryItemLocationTable.NAME} WHERE ${LocationTable.COLS.ID} = ${PantryItemLocationTable.COLS.LOCATION_ID})`;
+    SELECT 1 FROM ${PantryItemLocationTable.NAME} WHERE ${LocationTable.COLS.ID} = ${PantryItemLocationTable.COLS.LOCATION_ID})`;
 
     try {
       await this.db.executeSql(sql, []);
@@ -1142,12 +1184,12 @@ export class MySqlCommands {
 
   private async deleteUnusedGroceryStoreAislesAndSections(): Promise<boolean> {
     const deleteAislesSql = `DELETE FROM ${StoreGroceryAisleTable.NAME} WHERE NOT EXISTS (
-    SELECT * FROM ${LocationTable.NAME}
+    SELECT 1 FROM ${LocationTable.NAME}
     WHERE ${StoreGroceryAisleTable.COLS.GROCERY_AISLE} = ${LocationTable.COLS.AISLE}
     AND ${StoreGroceryAisleTable.COLS.STORE_ID} = ${LocationTable.COLS.STORE_ID})`;
 
     const deleteSectionsSql = `DELETE FROM ${StoreGrocerySectionTable.NAME} WHERE NOT EXISTS (
-    SELECT * FROM ${LocationTable.NAME}
+    SELECT 1 FROM ${LocationTable.NAME}
     WHERE ${StoreGrocerySectionTable.COLS.GROCERY_SECTION} = ${LocationTable.COLS.SECTION_NAME}
     AND ${StoreGrocerySectionTable.COLS.STORE_ID} = ${LocationTable.COLS.STORE_ID})`;
 

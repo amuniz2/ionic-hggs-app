@@ -15,6 +15,7 @@ import {selectAllGroceryStores} from '../../../../store/store-management.selecto
 import {UiCrudAction} from '../../../../ui-crud-actions';
 import {IProductInfoService} from '../../../../services/IProductInfoService';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
+import {Camera } from '@ionic-native/camera';
 
 export interface ProductInfo {
   name: string;
@@ -34,6 +35,7 @@ export class EditPantryItemComponent implements OnInit {
   pantryItemLocations$: Observable<GroceryStoreLocation[]>;
   isNewItem: boolean;
   error$: Observable<Error>;
+
 
   constructor(private store: Store<AppState>,
               private router: Router,
@@ -106,5 +108,14 @@ export class EditPantryItemComponent implements OnInit {
     }).catch(err => {
       console.log('Error', err);
     });
+  }
+
+  onTakePicture() {
+    Camera.getPicture({
+      allowEdit: true
+    }).then((result) => {
+      console.log('picture result ', result);
+    })
+
   }
 }

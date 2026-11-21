@@ -13,32 +13,29 @@
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-sqlite-storage": {
+    "cordova-plugin-file": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "cordova-plugin-ionic-webview": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-x-socialsharing": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-plugin-x-socialsharing": {
+      "PACKAGE_NAME": "com.amuniz.ionic"
+    },
+    "cordova-sqlite-storage": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
     "es6-promise-plugin": {
       "PACKAGE_NAME": "com.amuniz.ionic"
     },
-    "phonegap-plugin-barcodescanner": {
-      "ANDROID_SUPPORT_V4_VERSION": "27.+",
-      "PACKAGE_NAME": "com.amuniz.ionic"
-    },
-    "cordova-plugin-statusbar": {
+    "cordova-plugin-camera": {
+      "ANDROIDX_CORE_VERSION": "1.6.+",
       "PACKAGE_NAME": "com.amuniz.ionic"
     }
   },

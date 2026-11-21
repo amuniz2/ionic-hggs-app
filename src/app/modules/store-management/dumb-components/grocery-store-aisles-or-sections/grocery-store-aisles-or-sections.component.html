@@ -7,20 +7,22 @@
     </ion-card>
     <ion-list *ngIf="groceryStore?.aisles">
       <ion-card *ngFor="let groceryAisleOrSection of groceryStore[collectionName]">
-        <ion-item-sliding #itemSliding>
+        <ion-item-sliding #itemSliding *ngIf="!(originalAisleOrSectionName && groceryAisleOrSection === originalAisleOrSectionName); else showEditBox;">
           <ion-item>
-            <ion-label *ngIf="!(itemBeingEdited && groceryAisleOrSection === itemBeingEdited) else showEditBox;" >{{groceryAisleOrSection}}</ion-label>
-            <ng-template #showEditBox>
+            <ion-label>{{groceryAisleOrSection}}</ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option (click)="editStoreAisleOrSection(itemSliding, groceryAisleOrSection)">Edit</ion-item-option>
+            <ion-item-option *ngIf="itemCanBeDeleted(groceryAisleOrSection)" color="danger" (click)="remove(groceryAisleOrSection)">Delete</ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+        <ng-template #showEditBox>
+          <ion-item>
               <ion-input autocapitalize="words" [(ngModel)]="newName"></ion-input>
               <ion-button size="small" (click)="doneEditingItem()">Done</ion-button>
               <ion-button size="small" (click)="onCancelEditStoreAisleOrSectionClick()">Cancel</ion-button>
-            </ng-template>
           </ion-item>
-          <ion-item-options *ngIf="!(itemBeingEdited && groceryAisleOrSection === itemBeingEdited)" side="end">
-              <ion-item-option (click)="editStoreAisle(itemSliding, groceryAisleOrSection)">Edit</ion-item-option>
-              <ion-item-option *ngIf="itemCanBeDeleted(groceryAisleOrSection)" color="danger" (click)="remove(groceryAisleOrSection)">Delete</ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
+        </ng-template>
     </ion-card>
     </ion-list>
     <ion-label *ngIf="groceryStore[collectionName]?.length === 0 && !addingAisleOrSection">No {{collectionName}} defined</ion-label>

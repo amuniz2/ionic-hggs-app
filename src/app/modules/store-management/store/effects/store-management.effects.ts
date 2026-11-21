@@ -12,9 +12,10 @@ import {StoreManagementState} from '../store-management.reducers';
 import {NavigationExtras, Router} from '@angular/router';
 import {IPantryDataService} from '../../../../services/IPantryDataService';
 import {
+  AisleNameChanged,
   DeleteStoreFailed, DisplayError,
   GroceryStoreLocationsLoaded,
-  LoadGroceryStoreLocations,
+  LoadGroceryStoreLocations, SectionNameChanged,
   StoreCreated,
   StoreDeleted
 } from '../../../../store';
@@ -49,6 +50,7 @@ export class StoreManagementEffects {
   @Effect()
   public deleteGroceryStore$ = this.actions$.pipe(
     ofType(StoreManagerActionTypes.DeleteStore),
+    tap((payload) => console.log('Calling delete grocery store service', JSON.stringify(payload))),
     switchMap((payload) => {
       return this.storeManagementService.deleteGroceryStore(payload.deleteGroceryStorePayload).pipe(
         map(success => success ? new StoreDeleted(payload.deleteGroceryStorePayload.id) : null),
@@ -81,4 +83,32 @@ export class StoreManagementEffects {
         catchError(error => [new DisplayError(error)])
       );
     }));
+
+  @Effect()
+  public updateSectionName$ = this.actions$.pipe(
+    ofType(StoreManagerActionTypes.UpdateStoreSection),
+    switchMap((payload) => {
+      return this.storeManagementService.updateGroceryStoreSection(
+        payload.updateRequest.groceryStoreId,
+        payload.updateRequest.originalName,
+        payload.updateRequest.aisleOrSectionName
+      ).pipe(
+        map((success) => new SectionNameChanged(payload.updateRequest))
+      )
+    })
+  )
+
+  @Effect()
+  public updateAisleName$ = this.actions$.pipe(
+    ofType(StoreManagerActionTypes.UpdateStoreAisle),
+    switchMap((payload) => {
+      return this.storeManagementService.updateGroceryStoreAisle(
+        payload.updateRequest.groceryStoreId,
+        payload.updateRequest.originalName,
+        payload.updateRequest.aisleOrSectionName
+      ).pipe(
+        map((success) => new AisleNameChanged(payload.updateRequest))
+      )
+    })
+  )
 }

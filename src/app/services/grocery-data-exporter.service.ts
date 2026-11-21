@@ -71,7 +71,6 @@ export class GroceryDataExporter implements IGroceryDataExporter {
       const fileEntry = await this.fileManager.createFile(this.fileManager.dataDirectory, fileName, true);
       fileEntry.createWriter((fileWriter => {
         console.log('writing file');
-        // fileWriter.write(JSON.stringify(this.dataExported));
         fileWriter.write(JSON.stringify(data));
       }), this.failedToCreateFileWriter);
       fileNameUrl = fileEntry.nativeURL;

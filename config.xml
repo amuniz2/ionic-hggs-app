@@ -56,8 +56,8 @@
             </intent-filter>
         </custom-config-file>
         <preference name="AndroidXEnabled" value="true" />
-        <preference name="android-minSdkVersion" value="22" />
-        <preference name="android-targetSdkVersion" value="27" />
+        <preference name="android-minSdkVersion" value="27" />
+        <preference name="android-targetSdkVersion" value="30" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

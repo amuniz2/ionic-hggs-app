@@ -24,6 +24,10 @@ export class FakePantryDataService implements IPantryDataService {
 //    private readonly shoppingItems: ShoppingItem[];
 
     constructor(private helper: FakePantryDataServiceHelper){}
+
+  updateGroceryStoreSection(groceryStoreId: number, oldName: string, newName: string): Observable<boolean> {
+        throw new Error("Method not implemented.");
+    }
     getPantryItemsNeeded(storeId: number): Observable<PantryItem[]> {
         throw new Error('Method not implemented.');
     }
