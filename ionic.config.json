@@ -1,13 +1,19 @@
 {
-  "name": "hggs-app",
+  "name": "New Ionic App",
   "integrations": {
     "cordova": {}
   },
-  "type": "angular",
-  "watchPatterns": [
-    "scss/**/*",
-    "www/**/*",
-    "!www/lib/**/*",
-    "!www/**/*.map"
-  ]
+  "hggs-app": {
+    "name": "hggs-app",
+    "integrations": {
+      "cordova": {}
+    },
+    "type": "angular",
+    "watchPatterns": [
+      "scss/**/*",
+      "www/**/*",
+      "!www/lib/**/*",
+      "!www/**/*.map"
+    ]
+  }
 }
